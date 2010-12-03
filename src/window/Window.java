@@ -12,14 +12,14 @@ import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
-
 public class Window extends DesktopArea{
     private MainMenu mainMenu;
-	private boolean quit=false;
+	private static boolean quit=false;
+	//private Dimension screen_size = new Dimension(800,600);
 	
 	public static void main(String[] args){
 	    try {
-	        Display.setDisplayMode(new DisplayMode(800, 600));
+	        Display.setDisplayMode(new DisplayMode(800,600));
 	        Display.create();
 	        Display.setTitle("JGE3d");
 	        Display.setVSyncEnabled(true);
@@ -53,11 +53,15 @@ public class Window extends DesktopArea{
 	    }
 	}
 	
+	public static void setQuit() {
+		quit=true;
+	}
+	
 	public Window(){
         //Create the main menu
         mainMenu = new MainMenu();
         add(mainMenu);
-        mainMenu.setSize(400, 200);
-        mainMenu.setPosition(0, 0);
+        mainMenu.setSize(300, 225);
+        mainMenu.setPosition(250, 200);
 	}
 }

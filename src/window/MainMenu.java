@@ -1,33 +1,59 @@
 package window;
 
+import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.ResizableFrame;
-import de.matthiasmann.twl.ScrollPane;
-import de.matthiasmann.twl.TextArea;
-import de.matthiasmann.twl.textarea.HTMLTextAreaModel;
 
 public class MainMenu extends ResizableFrame {
-    private final HTMLTextAreaModel textAreaModel;
-    private final TextArea textArea;
-    private final EditField editField;
-    private final ScrollPane scrollPane;
-
+    private final Button new_game;
+    private final Button load_game;
+    private final Button options;
+    private final Button quit;
+    
     public MainMenu() {
-        setTitle("TEST");
+        setTitle("JGE3d test");
 
-        this.textAreaModel = new HTMLTextAreaModel();
-        this.textArea = new TextArea(textAreaModel);
-        this.editField = new EditField();
-
-        scrollPane = new ScrollPane(textArea);
-        scrollPane.setFixed(ScrollPane.Fixed.HORIZONTAL);
+        this.new_game = new Button();
+        this.load_game = new Button();
+        this.options = new Button();
+        this.quit = new Button();
 
         DialogLayout layout = new DialogLayout();
         layout.setTheme("content");
-        layout.setHorizontalGroup(layout.createParallelGroup(scrollPane, editField));
-        layout.setVerticalGroup(layout.createSequentialGroup(scrollPane, editField));
-
+        
+        layout.add(new_game);
+        layout.add(load_game);
+        layout.add(options);
+        layout.add(quit);
+        
+        new_game.setSize(100, 25);
+        new_game.setPosition(50, 25);
+        new_game.setText("New Game");
+        
+        load_game.setSize(100, 25);
+        load_game.setPosition(50, 75);
+        load_game.setText("New Game");
+        
+        options.setSize(100, 25);
+        options.setPosition(50, 125);
+        options.setText("Options");
+        
+        quit.setSize(100, 25);
+        quit.setPosition(50, 175);
+        quit.setText("Quit");
+        
+        quit.addCallback(
+        	new Runnable() {
+        		public void run() {
+        			Window.setQuit();
+        		}
+        	}
+        );
+        
+        //Group vgroup = layout.createSequentialGroup(new_game,load_game,options,quit);
+        //layout.setVerticalGroup(vgroup);
+        //layout.addDefaultGaps();
+        
         add(layout);
     }
 }
