@@ -33,7 +33,7 @@ public class Window extends DesktopArea{
 	        );
 	        gui.applyTheme(theme);
 	
-	        while(!Display.isCloseRequested() && !window.quit) {
+	        while(!Display.isCloseRequested() && !Window.quit) {
 	            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 	
 	            gui.update();

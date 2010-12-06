@@ -2,21 +2,42 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/TWL.jar">
+	<classpathentry kind="lib" path="lib/jar/lwjgl.jar" sourcepath="lib/jar_src/lwjgl.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.lwjgl.org/javadoc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jge3d_temp/lib/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jar/lwjgl_util.jar" sourcepath="lib/jar_src/lwjgl.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.lwjgl.org/javadoc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jge3d_temp/lib/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jar/TWL.jar" sourcepath="lib/jar_src/twl.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://twl.l33tlabs.org/dist/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/lwjgl_util.jar">
+	<classpathentry kind="lib" path="lib/jar/xpp3-1.1.4c.jar" sourcepath="lib/jar_src/xpp3-1.1.4c_src.zip">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jge3d_temp/lib/native"/>
+			<attribute name="javadoc_location" value="jar:file:/home/adam/workspace/jge3d_temp/lib/jar_src/xpp3-1.1.4c_all.zip!/xpp3-1.1.4c/doc/api"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/lwjgl.jar">
+	<classpathentry kind="lib" path="lib/jar/jbullet.jar" sourcepath="lib/jar_src/jbullet.zip">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jge3d_temp/lib/native"/>
+			<attribute name="javadoc_location" value="http://jbullet.advel.cz/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="lib/jar/slick.jar" sourcepath="lib/jar_src/slick.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://slick.cokeandcode.com/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jar_src/vecmath.zip" sourcepath="lib/jar_src/vecmath.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.java.net/media/java3d/javadoc/1.5.2-latest/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
