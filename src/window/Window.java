@@ -61,7 +61,6 @@ public class Window extends DesktopArea{
         //Create the main menu
         mainMenu = new MainMenu();
         add(mainMenu);
-        mainMenu.setSize(300, 225);
         mainMenu.setPosition(250, 200);
 	}
 }
