@@ -5,6 +5,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import render.Renderer;
 
 import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
@@ -35,15 +38,24 @@ public class Window extends DesktopArea{
 	
 	        while(!Display.isCloseRequested() && !Window.quit) {
 	            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-	
+	            GLU.gluLookAt(
+	    				-5,0,0,
+	    				0,0,0,
+	    				0,1,0
+	    		);
+	            
+	            
+	            Renderer.getInstance().draw();
 	            gui.update();
 	            Display.update();
-	
+	            
 	            //Reduce input lag
 	        	GL11.glGetError();          // this call will burn the time between vsyncs
 	        	Display.processMessages();  // process new native messages since Display.update();
 	        	Mouse.poll();               // now update Mouse events
 	        	Keyboard.poll();            // and Keyboard too
+	        	Thread.currentThread();
+				Thread.sleep(10);
 	        }
 	
 	        gui.destroy();
