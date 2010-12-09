@@ -1,5 +1,6 @@
 package window;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.LWJGLException;
@@ -25,17 +26,15 @@ public class Window extends DesktopArea {
 		try {
 			renderer = new LWJGLRenderer();
 		} catch (LWJGLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		gui = new GUI(this, renderer);
 		try {
 			theme = ThemeManager.createThemeManager(
-					Window.class.getResource("resources/themes/default.xml"),
+					(new File("resources/themes/default.xml")).toURI().toURL(),
 					renderer);
 			gui.applyTheme(theme);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
