@@ -168,7 +168,7 @@ public class Controller {
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.createRenderer();
+			renderer.initGL();
 			while (isRunning) {
 				renderer.draw();
 			}

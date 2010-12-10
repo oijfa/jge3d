@@ -227,7 +227,7 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>225</int></param>
         	<param name="maxHeight"><int>225</int></param>
-            <theme name="dialoglayout" ref="-defaults">
+            <theme name="mainmenu" ref="-defaults">
             	<param name="smallGap"><dimension>0,0</dimension></param>
 				<param name="mediumGap"><dimension>00,0</dimension></param>
 				<param name="largeGap"><dimension>0,0</dimension></param>
@@ -243,10 +243,56 @@
        				<param name="minHeight"><int>30</int></param>
         			<param name="maxHeight"><int>30</int></param>
                 </theme>
-                <theme name="new_game" ref="button"/>
-                <theme name="load_game" ref="button"/>
-                <theme name="options" ref="button"/>
-                <theme name="quit" ref="button"/>
+            </theme>
+        </theme>
+        <theme name="texturemenu" ref="resizableframe">
+        	<param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>300</int></param>
+       		<param name="minHeight"><int>225</int></param>
+        	<param name="maxHeight"><int>225</int></param>
+        	<param name="smallGap"><dimension>0,0</dimension></param>
+			<param name="mediumGap"><dimension>00,0</dimension></param>
+			<param name="largeGap"><dimension>0,0</dimension></param>
+			<param name="defaultGap"><dimension>10,10</dimension></param>
+			<param name="namedGaps">
+			    <map>
+					<param name="reggap"><gap>10</gap></param>
+        		</map>
+    		</param>
+            <theme name="button" ref="button">
+            	<param name="minWidth"><int>150</int></param>
+            	<param name="maxWidth"><int>150</int></param>
+   				<param name="minHeight"><int>30</int></param>
+    			<param name="maxHeight"><int>30</int></param>
+            </theme>
+            <theme name="label" ref="label">
+            	<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>100</int></param>
+   				<param name="minHeight"><int>100</int></param>
+    			<param name="maxHeight"><int>100</int></param>
+            </theme>
+        </theme>
+        <theme name="entitymenu" ref="resizableframe">
+        	<param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>300</int></param>
+       		<param name="minHeight"><int>225</int></param>
+        	<param name="maxHeight"><int>225</int></param>
+            <theme name="entitymenu" ref="-defaults">
+            	<param name="smallGap"><dimension>0,0</dimension></param>
+				<param name="mediumGap"><dimension>00,0</dimension></param>
+				<param name="largeGap"><dimension>0,0</dimension></param>
+				<param name="defaultGap"><dimension>10,10</dimension></param>
+				<param name="namedGaps">
+				    <map>
+						<param name="reggap"><gap>10</gap></param>
+            		</map>
+        		</param>
+                <theme name="button" ref="button">
+                	<param name="minWidth"><int>150</int></param>
+                	<param name="maxWidth"><int>150</int></param>
+       				<param name="minHeight"><int>30</int></param>
+        			<param name="maxHeight"><int>30</int></param>
+                </theme>
             </theme>
         </theme>
     </theme>

@@ -1,35 +1,27 @@
 package window;
 
-import controller.Controller;
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.ResizableFrame;
 
-public class MainMenu extends ResizableFrame {
+public class EntityMenu extends ResizableFrame {
 	private final DialogLayout layout;
 	private final Button new_game;
 	private final Button load_game;
 	private final Button options;
 	private final Button quit;
 
-	public MainMenu() {
-		setTitle("JGE3d test");
+	public EntityMenu() {
+		setTitle("Entity Editor");
 
 		// Create the layout and button instances
 		layout = new DialogLayout();
-		layout.setTheme("mainmenu");
+		layout.setTheme("entitymenu");
 		this.new_game = new Button("New Game");
 		this.load_game = new Button("Load Game");
 		this.options = new Button("Options");
 		this.quit = new Button("Quit");
-
-		// When the quit button is clicked run this command
-		quit.addCallback(new Runnable() {
-			public void run() {
-				Controller.quit();
-			}
-		});
 
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
