@@ -167,16 +167,16 @@ public class Renderer {
 		if(zoomVal <= 1.0 && zoomVal > 0){
 			zoom = zoomVal;
 		}else if(zoomVal > 1.0){
-			zoomVal = 1.0f;
+			zoom = 1.0f;
 		}else{
-			zoomVal = 0.1f; //TODO:  I guess this is the smallest zoom we'd want?
+			zoom = 0.1f; //TODO:  I guess this is the smallest zoom we'd want?
 		}
 		
 		//Calculate the shape of the screen and notify OpenGL
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(
-				20.0f, 
+				45.0f/zoom, 
 				(float) window.getWidth() / window.getHeight(), 
 				nearClipping, 
 				farClipping);
