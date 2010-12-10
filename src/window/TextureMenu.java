@@ -22,13 +22,12 @@ public class TextureMenu extends ResizableFrame {
 
 	public TextureMenu() {
 		setTitle("Texture Editor");
-		setTheme("texturemenu");
 	
 		preview = new Label();
-		LWJGLRenderer render;
+		
 		try {
 			//Create a temporary renderer instance
-			render = new LWJGLRenderer();
+			LWJGLRenderer render = new LWJGLRenderer();
 			
 			//Read image from file
 			ImageIcon icon = new ImageIcon("resources/themes/widgets.png");
