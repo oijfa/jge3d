@@ -21,7 +21,7 @@ public class Renderer {
 	
 	private float nearClipping = 1.0f;
 	private float farClipping = 1000.0f;
-	private float zoom = 1;
+	private float zoom = 1;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
     private float lightAmbient[]={ 0.5f, 0.5f, 0.5f, 1.0f };    // Ambient Light Values ( NEW )
