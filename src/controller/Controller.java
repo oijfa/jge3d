@@ -70,13 +70,13 @@ public class Controller {
 		// try {
 		// TextureList.getInstance().loadQueuedTexture();
 		// } catch (FileNotFoundException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// } catch (LWJGLException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// }
 		// }
@@ -122,13 +122,13 @@ public class Controller {
 		// } catch (InterruptedException e) {
 		// e.printStackTrace();
 		// } catch (FileNotFoundException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// } catch (LWJGLException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
+		// 
 		// e.printStackTrace();
 		// }
 	}

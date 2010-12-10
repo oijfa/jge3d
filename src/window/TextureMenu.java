@@ -62,7 +62,6 @@ public class TextureMenu extends ResizableFrame {
 			preview.setBackground(image);
 
 		} catch (LWJGLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 

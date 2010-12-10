@@ -19,6 +19,10 @@ public class Renderer {
 	private Window window;
 	private float x=0,y=0,z=0;
 	
+	private float nearClipping = 1.0f;
+	private float farClipping = 1000.0f;
+	private float zoom = 1;
+	
 	//Default light (needs turning into an entity
     private float lightAmbient[]={ 0.5f, 0.5f, 0.5f, 1.0f };    // Ambient Light Values ( NEW )
     private float lightDiffuse[]={ 1.0f, 1.0f, 1.0f, 1.0f };    // Diffuse Light Values ( NEW )
@@ -31,9 +35,7 @@ public class Renderer {
 		return uniqueInstance;
 	}
 
-	public Renderer() {
-
-	}
+	public Renderer(){}
 
 	public void draw() {
 		//while (!Display.isCloseRequested() && Controller.getRunning()) {
@@ -58,7 +60,7 @@ public class Renderer {
 
 			/*
 			 * Thread.currentThread(); try { Thread.sleep(10); } catch
-			 * (InterruptedException e) { // TODO Auto-generated catch block
+			 * (InterruptedException e) { 
 			 * e.printStackTrace(); }
 			 */
 		//}
@@ -124,7 +126,7 @@ public class Renderer {
 			Display.setDisplayMode(new DisplayMode(1024,768));
 			Display.create();
 		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("***Failed to create Display***");
 			e.printStackTrace();
 		}
 		
@@ -158,19 +160,28 @@ public class Renderer {
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 	}
 	
-	public void setPerspective() {
+	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}
+	public void setPerspective(float near, float far, float zoomVal) {
+		nearClipping = near;
+		farClipping = far;
+		if(zoomVal <= 1.0 && zoomVal > 0){
+			zoom = zoomVal;
+		}else if(zoomVal > 1.0){
+			zoomVal = 1.0f;
+		}else{
+			zoomVal = 0.1f; //TODO:  I guess this is the smallest zoom we'd want?
+		}
+		
 		//Calculate the shape of the screen and notify OpenGL
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(
-				45.0f, 
+				20.0f, 
 				(float) window.getWidth() / window.getHeight(), 
-				1.0f, 
-				1000.0f);
+				nearClipping, 
+				farClipping);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 	
-	public void destroy() {
-		window.destroy();
-	}
+	public void destroy() {window.destroy();}
 }
