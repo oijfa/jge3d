@@ -21,7 +21,7 @@ public class Renderer {
 	
 	private float nearClipping = 1.0f;
 	private float farClipping = 1000.0f;
-	private float zoom = 1;  //The closer this value is to 0, the farther you are zoomed in.
+	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
     private float lightAmbient[]={ 0.5f, 0.5f, 0.5f, 1.0f };    // Ambient Light Values ( NEW )
@@ -166,7 +166,7 @@ public class Renderer {
 		farClipping = far;
 		if(zoomVal <= 1.0 && zoomVal > 0){
 			zoom = zoomVal;
-		}else if(zoomVal > 1.0){
+		}else if(zoomVal > 1000.0){
 			zoom = 1.0f;
 		}else{
 			zoom = 0.1f; //TODO:  I guess this is the smallest zoom we'd want?
