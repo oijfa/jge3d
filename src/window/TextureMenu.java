@@ -22,15 +22,20 @@ public class TextureMenu extends ResizableFrame {
 
 	public TextureMenu() {
 		setTitle("Texture Editor");
-	
 		preview = new Label();
-		
+		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
+		add(preview);
+	}
+	
+	public DynamicImage loadImagePreview(String path) {
 		try {
 			//Create a temporary renderer instance
-			LWJGLRenderer render = new LWJGLRenderer();
+			LWJGLRenderer render;
+			
+				render = new LWJGLRenderer();
 			
 			//Read image from file
-			ImageIcon icon = new ImageIcon("resources/themes/widgets.png");
+			ImageIcon icon = new ImageIcon(path);
 		    Image imageicon = icon.getImage();
 			
 		    // Create empty BufferedImage, sized to Image
@@ -59,12 +64,13 @@ public class TextureMenu extends ResizableFrame {
 			image.update(bb,DynamicImage.Format.RGBA);
 			
 			//Set the label to the image
-			preview.setBackground(image);
-
-		} catch (LWJGLException e1) {
-			e1.printStackTrace();
+			return image;
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		return null;
 
-		add(preview);
 	}
 }
