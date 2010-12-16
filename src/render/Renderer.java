@@ -1,3 +1,9 @@
+/*
+ *	This is the thing that draws thing.  There's not much more to it.
+ * 
+ *	//TODO:  Add functions for modifying how light is produced/drawn
+ */
+
 package render;
 
 import java.nio.ByteBuffer;
@@ -11,6 +17,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import entity.EntityList;
 
 import window.Window;
 
@@ -37,15 +45,19 @@ public class Renderer {
 
 	public Renderer(){}
 
-	public void draw() {
+	public void draw(EntityList list) {
 		//while (!Display.isCloseRequested() && Controller.getRunning()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Clear The Screen And The Depth Buffer
 			GL11.glLoadIdentity();
 			GLU.gluLookAt(0, -5f, -10f, 0, 0, 0, 0, 1, 0);
 
 			// Draw a test object
-			drawPoly();
+			//drawPoly();
 
+			//Draw the 3d stuff
+			list.drawList();
+			
+			//Draw the window manager stuff
 			window.draw();
 			
 			GL11.glFlush();
@@ -66,6 +78,7 @@ public class Renderer {
 		//}
 	}
 
+	//TODO:  Get rid of this bullshit
 	private void drawPoly() {
 		x++;y++;z++;
 		for(int i=0;i<3;i++) {
