@@ -12,55 +12,25 @@ import javax.swing.ImageIcon;
 
 import org.lwjgl.LWJGLException;
 
-import window.components.Tree;
-
-import de.matthiasmann.twl.Button;
-import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ResizableFrame;
-import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.renderer.DynamicImage;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 
-public class TextureMenu extends ResizableFrame {
+public class EditorMenu extends ResizableFrame {
 	private final Label preview;
-    private final Button add_button, remove_button;
-    private final Tree textree;
-    private final DialogLayout layout;
 
-	public TextureMenu() {
+	public EditorMenu() {
 		setTitle("Texture Editor");
-		layout = new DialogLayout();
-		layout.setTheme("texturemenu");
-		add_button = new Button();
-		remove_button = new Button();
 		preview = new Label();
-		textree = new Tree();
 		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
+		add(preview);
 		
-		Group button_hgroup = layout.createSequentialGroup()
-		.addGap()
-		.addGroup(layout.createParallelGroup(preview, textree, add_button, remove_button))
-		.addGap();
-
-		// Group for holding the Vertical alignment of the buttons
-		Group button_vgroup = layout.createSequentialGroup()
-		.addGap()
-		.addWidget(preview)
-		.addWidget(textree)
-		.addWidget(add_button)
-		.addWidget(remove_button)
-		.addGap();
+		//tree
 		
-		// All Dialog layout groups must have both a HorizontalGroup and
-		// VerticalGroup
-		// Otherwise "incomplete" exception is thrown and layout is not applied
-		layout.setHorizontalGroup(button_hgroup);
-		layout.setVerticalGroup(button_vgroup);
+		//add
 		
-		// Make sure to add the layout to the frame
-		add(layout);
-		// !!! END EXAMPLE !!!//
+		//remove
 	}
 	
 	public DynamicImage loadImagePreview(String path) {
@@ -108,6 +78,4 @@ public class TextureMenu extends ResizableFrame {
 		
 		return null;
 	}
-
- 
 }
