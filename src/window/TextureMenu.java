@@ -16,14 +16,14 @@ import window.components.Tree;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.DynamicImage;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 
 public class TextureMenu extends ResizableFrame {
-	private final Label preview;
+	private final Widget preview;
     private final Button add_button, remove_button;
     private final Tree textree;
     private final DialogLayout layout;
@@ -33,9 +33,8 @@ public class TextureMenu extends ResizableFrame {
 		
 		add_button = new Button("add");
 		remove_button = new Button("remove");
-		preview = new Label();
+		preview = new Widget();
 		textree = new Tree();
-		preview.setOverlay(loadImagePreview("resources/themes/widgets.png"));
 		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
 		
 		layout = new DialogLayout();
@@ -106,7 +105,7 @@ public class TextureMenu extends ResizableFrame {
 			int[] data = ((DataBufferInt)buffImage.getRaster().getDataBuffer()).getData(); 
 			ByteBuffer bb = ByteBuffer.allocateDirect(data.length * 4); 
 			bb.order(ByteOrder.LITTLE_ENDIAN); 
-			bb.asIntBuffer().put(data); 
+			bb.asIntBuffer().put(data);
 			
 			//Create a TWL dynamic image
 			DynamicImage image = render.createDynamicImage(

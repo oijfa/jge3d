@@ -85,7 +85,6 @@
         <action name="paste">ctrl V</action>
         <action name="paste">cmd V</action>
     </inputMapDef>
-
     <theme name="-defaults">
         <param name="background"><image>none</image></param>
         <param name="font"><font>normal</font></param>
@@ -219,7 +218,7 @@
         <param name="fixedCellHeight"><bool>false</bool></param>
         <param name="rowMajor"><bool>true</bool></param>
     </theme>
-    <theme name="combobox" ref="widget">
+    <theme name="combobox" ref="label">
         <theme name="display" ref="-defaults">
         </theme>
         <param name="background"><image>border_round</image></param>
@@ -298,17 +297,12 @@
         <theme name="texturemenu" ref="resizableframe">
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>625</int></param>
-        	<param name="maxHeight"><int>625</int></param>
-        	<theme name="tree" ref="tree" />
-        	<theme name="textree" ref="tree" />
+       		<param name="minHeight"><int>400</int></param>
+        	<param name="maxHeight"><int>400</int></param>
             <theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*" />
-                <theme name="preview" ref="label">
-		          	<param name="minWidth"><int>100</int></param>
-		            <param name="maxWidth"><int>100</int></param>
-		       		<param name="minHeight"><int>100</int></param>
-		        	<param name="maxHeight"><int>100</int></param>              	
+                <theme name="preview" ref="widget">
+            	
                 </theme>
 				<theme name="textree" ref="tree" />
                 <theme name="new_game" ref="button"/>
