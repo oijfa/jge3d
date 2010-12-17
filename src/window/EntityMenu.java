@@ -17,7 +17,6 @@ public class EntityMenu extends ResizableFrame {
 
 		// Create the layout and button instances
 		layout = new DialogLayout();
-		layout.setTheme("entitymenu");
 		this.new_game = new Button("New Game");
 		this.load_game = new Button("Load Game");
 		this.options = new Button("Options");

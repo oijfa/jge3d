@@ -66,6 +66,7 @@
             <alias ref="none" if="pressed" center="true" inset="1" tint="#FF7AFF"/>
             <alias ref="none"/>
         </select>
+        <cursor name="cursor.horiz_resize" hotSpotX="0" hotSpotY="0" xywh="175,34,32,15"/>
     </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
@@ -121,7 +122,7 @@
         <theme name="closeButton" ref="-defaults"/>
         <theme name="resizeHandle" ref="-defaults"/>
     </theme>
-    <theme name="widget" ref="-defaults">
+    <theme name="widget" allowWildcard="true" ref="-defaults">
         <param name="border"><border>5</border></param>
         <param name="background"><image>border_round</image></param>
     </theme>
@@ -132,7 +133,7 @@
         <param name="border"><border>5</border></param>
         <param name="fadeInTime"><int>0</int></param>
     </theme>
-    <theme name="button" ref="-defaults">
+    <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
         <param name="border"><border>0,5,0,0</border></param>
     </theme>
@@ -256,7 +257,7 @@
         <param name="columnHeaderWidth"><int>256</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>3</int></param>
-        <param name="columnResizeCursor"><cursor>eforen.cursor.arrow.left</cursor></param>
+        <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
         <param name="columnDivider"><image>none</image></param>
         <param name="columnWidths"><map/></param>
         <param name="inputMap"><inputMapDef ref="-defaultInputMap">
@@ -270,6 +271,7 @@
             <param name="editFieldHeight"><int>20</int></param>
         </theme>
     </theme>
+    <theme name="tree" ref="table" allowWildcard="true"/>
     
     
     
@@ -301,9 +303,11 @@
         <theme name="texturemenu" ref="resizableframe">
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>225</int></param>
-        	<param name="maxHeight"><int>225</int></param>
+       		<param name="minHeight"><int>625</int></param>
+        	<param name="maxHeight"><int>625</int></param>
+        	<theme name="" ref="*"/>
             <theme name="texturemenu" ref="-defaults">
+            	<theme name="" ref="*"/>
             	<param name="smallGap"><dimension>0,0</dimension></param>
 				<param name="mediumGap"><dimension>0,0</dimension></param>
 				<param name="largeGap"><dimension>0,0</dimension></param>
@@ -313,27 +317,10 @@
 						<param name="reggap"><gap>10</gap></param>
             		</map>
         		</param>
-        		<theme name="label" ref="label">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
-                <theme name="button" ref="button">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
-                <theme name="tree" ref="tree">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
                 <theme name="preview" ref="label"/>
-                <theme name="new_game" ref="button"/>
-                <theme name="load_game" ref="button"/>
+                <theme name="textree" ref="tree"/>
+                <theme name="add" ref="button"/>
+                <theme name="remove" ref="button"/>
             </theme>
         </theme>
         <theme name="entitymenu" ref="resizableframe">

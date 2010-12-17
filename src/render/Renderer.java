@@ -25,7 +25,7 @@ import window.Window;
 public class Renderer {
 	private static Renderer uniqueInstance;
 	private Window window;
-	private float x=0,y=0,z=0;
+	//private float x=0,y=0,z=0;
 	
 	private float nearClipping = 1.0f;
 	private float farClipping = 1000.0f;
@@ -79,6 +79,7 @@ public class Renderer {
 	}
 
 	//TODO:  Get rid of this bullshit
+	/*
 	private void drawPoly() {
 		x++;y++;z++;
 		for(int i=0;i<3;i++) {
@@ -133,6 +134,7 @@ public class Renderer {
 			GL11.glPopMatrix();
 		}
 	}
+	*/
 	
 	public void initGL() {
 		try {
