@@ -39,6 +39,8 @@ public class Entity extends RigidBody{
 	//Keep track of number of entities for naming purposes
 	protected static int num_entities=0;
 	
+	private EntityList subEntities;
+	
 	/* Constructors */
 	public Entity(RigidBodyConstructionInfo r, boolean collide) {
 		super(r);
@@ -113,6 +115,7 @@ public class Entity extends RigidBody{
 	}
 
 	/* Getters */
+	public EntityList getSubEntities(){return subEntities;}
 	public String[] getKeys() {return (String[])data.keySet().toArray();}
 	public boolean keyExists(String prop_name){
 		for( int i = 0; i < data.keySet().size(); i++){
