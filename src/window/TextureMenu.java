@@ -36,6 +36,7 @@ public class TextureMenu extends ResizableFrame {
 		preview = new Widget();
 		textree = new Tree();
 		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
+		preview.setOverlay(loadImagePreview("resources/themes/widgets.png"));
 		
 		layout = new DialogLayout();
 		Group button_hgroup = layout.createSequentialGroup()
@@ -61,23 +62,6 @@ public class TextureMenu extends ResizableFrame {
 		// Make sure to add the layout to the frame
 		add(layout);
 		// !!! END EXAMPLE !!!//
-		 
-		/*
-		add_button.setSize(100,100);
-		remove_button.setSize(100,100);
-		preview.setSize(100,100);
-		textree.setSize(100,100);
-		
-		add_button.setPosition(100,100);
-		remove_button.setPosition(100,200);
-		preview.setPosition(100,300);
-		textree.setPosition(100,400);
-		
-		add(add_button);
-		add(remove_button);
-		add(preview);
-		add(textree);
-		*/
 	}
 	
 	public DynamicImage loadImagePreview(String path) {
