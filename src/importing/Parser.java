@@ -7,14 +7,13 @@
 package importing;
 
 import importing.pieces.Model;
-import importing.pieces.World;
 
 public abstract class Parser {
-	protected World world;
+	protected Model model;
 	
-	public void setWorld(World world) {this.world = world;}
-	public World getWorld() {return world;}
+	public void setWorld(Model _model) {this.model = _model;}
+	public Model getWorld() {return model;}
 
-	public abstract void readFile(String fileName);
+	public abstract void readFile(String fileName) throws Exception;
 	public abstract Model createModel();
 }

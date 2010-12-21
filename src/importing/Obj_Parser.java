@@ -5,16 +5,23 @@
  * 
  */
 package importing;
+import importing.pieces.Face;
+import importing.pieces.Mesh;
+import importing.pieces.Model;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.opengl.GL11;
 
 
-public class Obj_Parser {
-	private ArrayList<float[]> vertexsets = new ArrayList<float[]>(); // Vertex Coordinates
-	private ArrayList<float[]> vertexsetsnorms = new ArrayList<float[]>(); // Vertex Coordinates Normals
-	private ArrayList<float[]> vertexsetstexs = new ArrayList<float[]>(); // Vertex Coordinates Textures
+public class Obj_Parser extends Parser{
+	private ArrayList<Float[]> vertexsets = new ArrayList<Float[]>(); // Vertex Coordinates
+	private ArrayList<Float[]> vertexsetsnorms = new ArrayList<Float[]>(); // Vertex Coordinates Normals
+	private ArrayList<Float[]> vertexsetstexs = new ArrayList<Float[]>(); // Vertex Coordinates Textures
 	private ArrayList<int[]> faces = new ArrayList<int[]>(); // Array of Faces (vertex sets)
 	private ArrayList<int[]> facestexs = new ArrayList<int[]>(); // Array of of Faces textures
 	private ArrayList<int[]> facesnorms = new ArrayList<int[]>(); // Array of Faces normals
@@ -30,13 +37,19 @@ public class Obj_Parser {
 	public float farpoint = 0;		// z-
 	public float nearpoint = 0;		// z+	
 	
+	private Model model;
+	
 	public Obj_Parser(BufferedReader ref, boolean centerit) {
-		loadobject(ref);
-		if (centerit) {
-			centerit();
+		try {
+			loadobject(ref);
+			if (centerit) {
+				centerit();
+			}
+			numpolys = faces.size();
+			cleanup();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		numpolys = faces.size();
-		cleanup();
 	}
 	
 	private void cleanup() {
@@ -48,102 +61,25 @@ public class Obj_Parser {
 		facesnorms.clear();
 	}
 	
-	private void loadobject(BufferedReader br) {
+	private void loadobject(BufferedReader br) throws Exception {
 		int linecounter = 0;
 		try {
-			
 			String newline;
-			boolean firstpass = true;
 			
 			while (((newline = br.readLine()) != null)) {
 				linecounter++;
 				newline = newline.trim();
 				if (newline.length() > 0) {
 					if (newline.charAt(0) == 'v' && newline.charAt(1) == ' ') {
-						float[] coords = new float[4];
-						String[] coordstext = new String[4];
-						coordstext = newline.split("\\s+");
-						for (int i = 1;i < coordstext.length;i++) {
-							coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
-						}
-						//// check for far-points ////
-						if (firstpass) {
-							rightpoint = coords[0];
-							leftpoint = coords[0];
-							toppoint = coords[1];
-							bottompoint = coords[1];
-							nearpoint = coords[2];
-							farpoint = coords[2];
-							firstpass = false;
-						}
-						if (coords[0] > rightpoint) {
-							rightpoint = coords[0];
-						}
-						if (coords[0] < leftpoint) {
-							leftpoint = coords[0];
-						}
-						if (coords[1] > toppoint) {
-							toppoint = coords[1];
-						}
-						if (coords[1] < bottompoint) {
-							bottompoint = coords[1];
-						}
-						if (coords[2] > nearpoint) {
-							nearpoint = coords[2];
-						}
-						if (coords[2] < farpoint) {
-							farpoint = coords[2];
-						}
-						/////////////////////////////
-						vertexsets.add(coords);
-					}
-					if (newline.charAt(0) == 'v' && newline.charAt(1) == 't') {
-						float[] coords = new float[4];
-						String[] coordstext = new String[4];
-						coordstext = newline.split("\\s+");
-						for (int i = 1;i < coordstext.length;i++) {
-							coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
-						}
-						vertexsetstexs.add(coords);
-					}
-					if (newline.charAt(0) == 'v' && newline.charAt(1) == 'n') {
-						float[] coords = new float[4];
-						String[] coordstext = new String[4];
-						coordstext = newline.split("\\s+");
-						for (int i = 1;i < coordstext.length;i++) {
-							coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
-						}
-						vertexsetsnorms.add(coords);
-					}
-					if (newline.charAt(0) == 'f' && newline.charAt(1) == ' ') {
-						String[] coordstext = newline.split("\\s+");
-						int[] v = new int[coordstext.length - 1];
-						int[] vt = new int[coordstext.length - 1];
-						int[] vn = new int[coordstext.length - 1];
-						
-						for (int i = 1;i < coordstext.length;i++) {
-							String fixstring = coordstext[i].replaceAll("//","/0/");
-							String[] tempstring = fixstring.split("/");
-							v[i-1] = Integer.valueOf(tempstring[0]).intValue();
-							if (tempstring.length > 1) {
-								vt[i-1] = Integer.valueOf(tempstring[1]).intValue();
-							} else {
-								vt[i-1] = 0;
-							}
-							if (tempstring.length > 2) {
-								vn[i-1] = Integer.valueOf(tempstring[2]).intValue();
-							} else {
-								vn[i-1] = 0;
-							}
-						}
-						faces.add(v);
-						facestexs.add(vt);
-						facesnorms.add(vn);
-					}
-					if (newline.charAt(0) == 'g') {
-						if(newline.charAt(1) == ' '){
-							
-						}
+						readVertex(newline.substring(2));
+					} else if (newline.charAt(0) == 'v' && newline.charAt(1) == 't') {
+						readTextureCoordinate(newline.substring(3));
+					} else if (newline.charAt(0) == 'v' && newline.charAt(1) == 'n') {
+						readVertexNormal(newline.substring(3));
+					} else if (newline.charAt(0) == 'f' && newline.charAt(1) == ' ') {
+						readFace(newline.substring(3));
+					} else if (newline.charAt(0) == 'g') {
+						//DO NOTHING FUUU
 					}
 				}
 			}
@@ -164,7 +100,7 @@ public class Obj_Parser {
 		float zshift = (nearpoint - farpoint) /2f;
 		
 		for (int i=0; i < vertexsets.size(); i++) {
-			float[] coords = new float[4];
+			Float[] coords = new Float[4];
 			
 			coords[0] = ((vertexsets.get(i)))[0] - leftpoint - xshift;
 			coords[1] = ((vertexsets.get(i)))[1] - bottompoint - yshift;
@@ -238,4 +174,83 @@ public class Obj_Parser {
 		}
 
 	}
+	
+	private void readVertex(String data) throws Exception{
+		Float[] coords = new Float[4];
+		String[] coordstext = new String[4];
+		coordstext = data.split("\\s+");
+		
+		if( coordstext.length != 4 )
+			throw new Exception();
+	
+		for (int i = 1;i < coordstext.length;i++) {
+			coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
+		}
+		
+		vertexsets.add(coords);
+	}
+
+	private void readTextureCoordinate(String data) throws Exception{
+		Float[] coords = new Float[4];
+		String[] coordstext = new String[4];
+		coordstext = data.split("\\s+");
+		
+		if( coordstext.length != 4 )
+			throw new Exception();
+		
+		for (int i = 1;i < coordstext.length;i++) {
+			coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
+		}
+		vertexsetstexs.add(coords);
+	}
+	
+	private void readVertexNormal(String data) throws Exception{
+		Float[] coords = new Float[4];
+		String[] coordstext = new String[4];
+		coordstext = data.split("\\s+");
+		for (int i = 1;i < coordstext.length;i++) {
+			coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
+		}
+		vertexsetsnorms.add(coords);
+	}
+	
+	private void readFace(String data) throws Exception{
+		int[] v = new int[3];
+		int[] vt = new int[3];
+		int[] vn = new int[3];
+		String[] coordstext = data.split("\\s+");
+		
+		//Loop through data, finding vertexes, vertex textures, vertex normals
+		for (int i = 1;i < coordstext.length;i++) {
+			String fixstring = coordstext[i].replaceAll("//","/0/");
+			String[] tempstring = fixstring.split("/");
+			v[i-1] = Integer.valueOf(tempstring[0]).intValue();
+			if (tempstring.length > 1) {
+				vt[i-1] = Integer.valueOf(tempstring[1]).intValue();
+			} else {
+				vt[i-1] = 0;
+			}
+			if (tempstring.length > 2) {
+				vn[i-1] = Integer.valueOf(tempstring[2]).intValue();
+			} else {
+				vn[i-1] = 0;
+			}
+		}
+		
+		Float[][] verts = new Float[v.length][3];
+		for(int i = 0; i < v.length; i++){
+			verts[i] = vertexsets.get(v[i]);
+		}
+		Float[][] vertnorms = new Float[vn.length][3];
+		for(int i = 0; i < vn.length; i++){
+			vertnorms[i] = vertexsetsnorms.get(vn[i]);
+		}
+		Face face = new Face(verts, vertnorms);
+	}
+	
+	@Override
+	public void readFile(String fileName) {/*TODO*/ }
+
+	@Override
+	public Model createModel() {return new Model(world);}
 }

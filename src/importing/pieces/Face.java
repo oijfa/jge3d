@@ -1,49 +1,72 @@
 package importing.pieces;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Face {
-	private ArrayList<Integer> pref;
-	private ArrayList<Integer> nref;
-	private int material = 0;
+	ArrayList<float[]> vertices;
+	ArrayList<float[]> vertexNormals;
+	float[] normal;
+	
+	public Face(){ 
+		vertices = new ArrayList<float[]>();
+		vertexNormals = new ArrayList<float[]>();
+		normal =  new float[3];
+		normal[0] = 0.0f;
+		normal[1] = 0.0f;
+		normal[2] = 1.0f;
+	}
+	
+	public Face(float[][] verts, float[][] vertnorms, float[] norm){
+		for(int i = 0; i < verts.length; i++){
+			vertices.add(verts[i]);
+		}
+		for(int i = 0; i < vertnorms.length; i++){
+			vertexNormals.add(vertnorms[i]);
+		}
+		normal = norm;
+	}
+	
+	public Face(ArrayList<float[]> verts, ArrayList<float[]> vertnorms, float[] norm){
+		vertices = verts;
+		vertexNormals = vertnorms;
+		normal = norm;
+	}
+	
+	public Face(float[][] verts, float[][] vertnorms){
+		vertices = (ArrayList<float[]>) Arrays.asList(verts);
+		vertexNormals = (ArrayList<float[]>) Arrays.asList(vertnorms);
+		normal =  new float[3];
+		normal[0] = 0.0f;
+		normal[1] = 0.0f;
+		normal[2] = 1.0f;
+	}
 
-	Face()
-	{
-		pref = new ArrayList<Integer>();
-		nref = new ArrayList<Integer>();
+	/*Setters*/
+	public void setVertices(float[][] verts){
+		for(int i = 0; i < verts.length; i++){
+			vertices.add(verts[i]);
+		}
 	}
+	public void setVertexNormals(float[][] vertnorms){
+		for(int i = 0; i < vertnorms.length; i++){
+			vertexNormals.add(vertnorms[i]);
+		}
+	}
+	public void setVertices(ArrayList<float[]> verts){
+		vertices = verts;
+	}
+	public void setVertexNormals(ArrayList<float[]> vertnorms){
+		vertexNormals = vertnorms;
+	}
+	public void setNorm(float[] norm){normal = norm;}
+	public void addVertex(float[] fs){vertices.add(fs);}
 	
-	Face(ArrayList<Integer> _pref, ArrayList<Integer> _nref, int _material) {
-		pref = _pref;
-		nref = _nref;
-		material = _material;
-	}
-	
-	public ArrayList<Integer> getPointRefs() {
-		return pref;
-	}
-	
-	public ArrayList<Integer> getNormalRefs() {
-		return nref;
-	}
+	/*Getters*/
+	public float[] getNorm(){return normal;}
 
-	public int getMaterial() {
-		return material;
+	public void draw() {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	public void addPoint(int reference)
-	{
-		pref.add(reference);
-	}
-	
-	public void addNormal(int reference)
-	{
-		nref.add(reference);
-	}
-	
-	public void setMaterial(int reference)
-	{
-		material = reference;
-	}
-	
 }

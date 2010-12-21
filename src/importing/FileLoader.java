@@ -33,7 +33,12 @@ public class FileLoader {
 				System.out.println("No Parser implemented for that file type.");
 			}
 			
-			parser.readFile(filePaths[i]);
+			try {
+				parser.readFile(filePaths[i]);
+			} catch (Exception e) {
+				System.out.println("Unable to load Model file " + filePaths[i]);
+				e.printStackTrace();
+			}
 		}
 		return parser.createModel();
 	}
