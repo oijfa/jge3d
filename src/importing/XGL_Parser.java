@@ -5,330 +5,254 @@
 
 package importing;
 
+import importing.pieces.Face;
 import importing.pieces.Material;
+import importing.pieces.Mesh;
 import importing.pieces.Model;
-import importing.pieces.Object_3D;
-import importing.pieces.World;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class XGL_Parser extends Parser{
-	HashMap<String, String> nameConversion;
-	
-	XGL_Parser()
-	{
-		String[] tagNames = { "ALPHA", "SHINE", "AMB", "DIFF", "SPEC", "EMISS" };
-		String[] convertedNames = {"Alpha", "Shine", "Ambient", "Diffuse", "Specular", "Emission"};
-		
-		nameConversion = new HashMap<String, String>();
-		for(int i = 0; i < tagNames.length; i++)
-		{
-			nameConversion.put(tagNames[i], convertedNames[i]);
-		}
-	}
-	
-	private static Document parseXglFile(String filePath)
-	{
-		Document dom = null;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		try
-		{
-			//get instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			
-			//parse using builder to get DOM representation
-			dom = db.parse(filePath);
-		}catch(ParserConfigurationException pce) {
-			pce.printStackTrace();
-		}catch(SAXException se) {
-			se.printStackTrace();
-		}catch(IOException ioe) {
-			ioe.printStackTrace();
-		}
-		
-		return dom;
-	}
-	
-	private void parseDocument(Document dom) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
-	{
-		//.
-		//Now that we've got the file in dom format, loop through elements
-		Element rootElement = dom.getDocumentElement(); //Should be a WORLD tag
-		
-		String[] defineTags = { "MAT", "OBJECT", "MESH", "LINESTYLE", "POINTSTYLE", "TEXTURE", "TEXTURERGB", "TEXTURERGBA", "TC"};
-		String[] requiredTags = {"LIGHTING", "BACKGROUND" };
-		String[] optionalTags = { "DATA", "NAME" };
-		
-		NodeList tagList;
-		
-		World newWorld = new World();
-		
-		/*
-		for(Method m: this.getClass().getDeclaredMethods())
-		{
-			System.out.println(m.getName());
-		}
-		*/
-		/*tagList = rootElement.getChildNodes();
-		for(int i = 0; i < tagList.getLength(); i++ )
-		{
-			System.out.println( "Node " + i + ": " + tagList.item(i).getNodeName());
-		}*/
-		
-		//Handle define tags
-		for(String tagName : defineTags)
-		{
-			tagList = rootElement.getElementsByTagName(tagName);
-			if( tagList != null && tagList.getLength() > 0)
-			{
-				
-				for( int i =0; i < tagList.getLength(); i++)
-				{
-					Method method;
-
-					method = this.getClass().getDeclaredMethod("handle" + tagName, Element.class, Object.class);
-					method.invoke(this, tagList.item(i), newWorld);
-				}
-			}else
-			{
-				System.out.println("No define tag " + tagName + " in WORLD");
-				//throw exception?
-			}
-		}
-		
-		//Handle required tags
-		for(String tag : requiredTags)
-		{
-			tagList = rootElement.getElementsByTagName(tag);
-			if( tagList != null && tagList.getLength() == 1)
-			{
-				
-			}else
-			{
-				System.out.println("Missing " + tag + " in WORLD");
-				//TODO: throw exception?
-			}
-		}
-		
-		//Handle Optional Tags
-		for(String tag : optionalTags)
-		{
-			tagList = rootElement.getElementsByTagName(tag);
-			if( tagList != null && tagList.getLength() > 0)
-			{
-			
-			}else
-			{
-				//Everything's fine and dandy, but let us know for Debugging purposes
-				System.out.println("Missing optional " + tag + " in WORLD");
-			}
-		}
-	}
-
-	
-	
-	private void handleMAT(Element rootElement, Object_3D parent) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
-	{	
-		Material newMat = new Material();
-		String[] possibleSubTags = { "ALPHA", "SHINE", "AMB", "DIFF", "SPEC", "EMISS"};
-		String[] requiredTags = {"AMB", "DIFF"}; 
-	
-		NodeList tagList;
-		
-		//for each subtag
-		for( String tagName : possibleSubTags)
-		{
-			//all children for this tag(name)
-			tagList = rootElement.getElementsByTagName(tagName);
-			//if tags exist and do not occur more than once
-			if( tagList != null && tagList.getLength() == 1)
-			{
-				Method method;
-
-				//create an instance of the method
-				
-				if( !(tagList.item(0).getTextContent().contains(",")))
-				{
-					method = newMat.getClass().getDeclaredMethod("set" + nameConversion.get(tagName), float.class);
-					Object[] args = { (float) Float.parseFloat(tagList.item(0).getTextContent()) };
-					method.invoke(newMat, args );
-				}else
-				{
-					String[] temp = tagList.item(0).getTextContent().split(",");
-					if( temp.length == 3)
-					{
-						method = newMat.getClass().getDeclaredMethod("set" + nameConversion.get(tagName), Vector3f.class);
-						Object[] args = {new Vector3f(Float.parseFloat(temp[0]), Float.parseFloat(temp[1]),Float.parseFloat(temp[2])) };
-						method.invoke(newMat, args );
-					}else
-					{
-						System.out.println("Diffuse tag has wrong number of numbers");
-					}
-				}
-			}else
-			{
-				for( String reqTag : requiredTags)
-				{
-					if(reqTag.equals(tagName))
-					{
-						System.out.println("Problem with MAT Tag, " + tagName);
-					}
-				}
-			}
-		}
-				
-		//Set the material reference
-		newMat.setReference(Integer.parseInt(rootElement.getAttribute("ID")));
-		
-		//parent.addMaterial( newMat );
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleOBJECT(Element rootElement, Object parent) throws FileNotFoundException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
-	{
-		Object_3D newObj = new Object_3D();
-		//String[] possibleSubTags = { "MESH", "MESHREF", "TRANSFORM", "OBJECT", "DATA", "NAME"};
-	
-		NodeList tagList;
-		
-		//Pull in the Transform tag
-		tagList = rootElement.getElementsByTagName("TRANSFORM");
-		if( tagList != null && tagList.getLength() == 1)
-		{
-			handleTRANSFORM((Element)tagList.item(0), newObj);
-		}
-		
-		//Pull in the Mesh tag
-		tagList = rootElement.getElementsByTagName("MESH");
-		if( tagList != null && tagList.getLength() == 1)
-		{
-			handleMESH((Element)tagList.item(0), newObj);
-		}
-		else
-		{
-			tagList = rootElement.getElementsByTagName("MESHREF");
-			if( tagList != null && tagList.getLength() == 1)
-			{
-				newObj.setMeshRef(Integer.parseInt(tagList.item(0).getTextContent()));
-			}else
-			{
-				System.out.println("Funky Meshes inside an Object");
-			}
-		}
-		
-		//Pull in all data tags
-		tagList = rootElement.getElementsByTagName("DATA");
-		if( tagList != null && tagList.getLength() > 0)
-		{
-			for( int i = 0; i < tagList.getLength(); i++ )
-			{
-				handleDATA((Element)tagList.item(i), newObj);
-			}
-		}
-		
-		//Pull in name tag
-		tagList = rootElement.getElementsByTagName("NAME");
-		if( tagList != null && tagList.getLength() == 1)
-		{
-			newObj.setName(tagList.item(0).getTextContent());
-		}
-		
-		//Pull in all mat tags
-		tagList = rootElement.getElementsByTagName("MAT");
-		if( tagList != null && tagList.getLength() > 0)
-		{
-			for( int i = 0; i < tagList.getLength(); i++ )
-			{
-				handleMAT((Element)tagList.item(i), newObj);
-			}
-		}
-	}
-	
-	private void handleDATA(Element item, Object_3D newObj) {
-		
-	}
-
-	private void handleTRANSFORM(Element item, Object_3D newObj) {
-		
-	}
-
-	private void handleMESH( Element rootElement, Object parent)
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleLINESTYLE()
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handlePOINTSTYLE()
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleTEXTURE()
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleTEXTURERGB()
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleTEXTURERGBA()
-	{
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleTC()
-	{
-		
-	}
+	XGL_Parser(){}
 	
 	@Override
-	public void readFile(String fileName) {
+	public void readFile(String fileName) throws Exception {
 		Document dom;
-		dom = parseXglFile("./lib/legoman.xgl");
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
+		HashMap<Integer, Material> mats = new HashMap<Integer, Material>();
+		HashMap<Integer, Mesh> meshes = new HashMap<Integer, Mesh>();
+		HashMap<Integer, float[]> points = new HashMap<Integer, float[]>();
+		
+		//Create Dom Structure
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		dom = db.parse("./lib/legoman.xgl");
+		
+		NodeList tagList;
 		try {
-			parseDocument(dom);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+			//Now that we've got the file in DOM format, loop through elements
+			Element rootElement = dom.getDocumentElement();
+			
+			if( rootElement.getNodeName().equals("WORLD")){
+				//Get World Defines
+				readDefines(rootElement,mats,meshes,points);
+				
+				//Get any meshes from objects
+				tagList = rootElement.getElementsByTagName("OBJ");
+				for(int i = 0; i < tagList.getLength(); i++){
+					Mesh[] ms = readObjects((Element) tagList.item(i),mats,meshes,points);
+					for(Mesh m: ms){
+						meshes.put(meshes.size()+ 1, m);
+					}
+				}
+			}else{
+				throwException("World tag should be root element.");
+			}
+		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	//Add to the hashmaps containing references
+	private void readDefines(
+			Element root, 
+			HashMap<Integer,Material> mats, 
+			HashMap<Integer,Mesh> meshes,
+			HashMap<Integer,float[]> points
+	) throws Exception{
+		NodeList tagList;
+		tagList = root.getElementsByTagName("MAT");
+		if( tagList.getLength() != 0 ){
+			for(int i = 0; i < tagList.getLength(); i++){
+				//Get ID;
+				int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
+				
+				//Create material
+				Material m = readMaterial((Element)tagList.item(i));
+				
+				//Add to hashmap
+				mats.put(ID, m);
+			}
+		}
+		
+		tagList = root.getElementsByTagName("MESH");
+		if( tagList.getLength() != 0 ){
+			for(int i = 0; i < tagList.getLength(); i++){
+				//Get ID;
+				int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
+				
+				//Create Meshes
+				Mesh[] ms = readMeshes((Element)tagList.item(i), mats, points);
+				
+				//Shove them in hashmap
+				for(Mesh m: ms){
+					meshes.put(ID, m);	
+				}
+			}
+		}
+		
+		tagList = root.getElementsByTagName("P");
+		if( tagList.getLength() != 0 ){
+			for(int i = 0; i < tagList.getLength(); i++){
+				Element ele = (Element)tagList.item(i);
+				//Get ID;
+				int ID = Integer.parseInt(ele.getAttribute("ID"));
+				
+				//Get point values
+				float[] pos = readVector(ele.getTextContent());
+				
+				//Add to hashmap
+				points.put(ID, pos);
+			}
+		}
+	}
+	
+	private Mesh[] readObjects(Element rootElement,
+			HashMap<Integer, Material> _mats, 
+			HashMap<Integer, Mesh> _meshes,
+			HashMap<Integer, float[]> _points
+	) throws Exception {
+		//Create clones so we don't overwrite the parent's references
+		
+		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
+		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats.clone();
+		@SuppressWarnings("unchecked")
+		HashMap<Integer, float[]> points = (HashMap<Integer, float[]>) _points.clone();
+		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
+		HashMap<Integer, Mesh> meshes = (HashMap<Integer, Mesh>) _meshes.clone();
+		
+		//Add defines created in this tag
+		readDefines(rootElement,mats,meshes,points);
+		
+		//Holds all the meshes we create
+		ArrayList<Mesh> createdMeshes = new ArrayList<Mesh>();
+		
+		//Read any sub objects
+		 NodeList tagList = rootElement.getElementsByTagName("OBJ");
+		for(int i = 0; i < tagList.getLength(); i++){
+			//Get all defined Meshes
+			Mesh[] mtemp = readMeshes(rootElement, mats, points);
+			for(Mesh m: mtemp ){
+				createdMeshes.add(m);
+			}
+			//Get all Meshes from sub Objects
+			mtemp = readObjects((Element) tagList.item(i),mats,meshes,points);
+			for(Mesh m: mtemp ){
+				createdMeshes.add(m);
+			}
+		}
+		return (Mesh[]) createdMeshes.toArray();
+	}
+	
+	//Create meshes from a mesh tag.  Multiples because it groups based on assigned material.
+	private Mesh[] readMeshes(Element root, HashMap<Integer, Material> _mats, HashMap<Integer, float[]> _points) throws Exception {
+		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
+		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats.clone();
+		@SuppressWarnings("unchecked")
+		HashMap<Integer, float[]> points = (HashMap<Integer, float[]>) _points.clone();
+		
+		readDefines(root, mats, null, points);		
+		ArrayList<Mesh> created_meshes = new ArrayList<Mesh>();
+		
+		HashMap<Integer, ArrayList<Face>> faces = readFaces(root,mats,points);
+		
+		
+		for(Integer key: faces.keySet()){
+			Mesh m = new Mesh((Face[]) faces.get(key).toArray());
+			created_meshes.add(m);
+			m.setMaterial(mats.get(key));
+		}
+		
+		return (Mesh[])created_meshes.toArray();
+	}
+	
+	private HashMap<Integer, ArrayList<Face>> readFaces(Element root, HashMap<Integer, Material> _mats, HashMap<Integer, float[]> _points) throws Exception {
+		//Faces will be grouped by what material they are tied too
+		HashMap<Integer, ArrayList<Face>> faces = new HashMap<Integer, ArrayList<Face>>();
+		NodeList tagList = root.getElementsByTagName("F");
+		if(tagList.getLength() != 0){
+			for( int i = 0; i < tagList.getLength(); i++){
+				Element ele = (Element)tagList.item(i);
+				int MatID = (int)readScalarTag(root,"MATREF",true);
+				Face f = new Face();
+				
+				NodeList vertexList = ele.getElementsByTagName("FV*");
+				for(int j = 0; j < vertexList.getLength(); j++){
+					f.addVertex(readVectorTag((Element)vertexList.item(j),"PREF",true));
+				}
+				if(faces.get(MatID) == null){
+					faces.put(MatID, new ArrayList<Face>());
+				}
+				faces.get(MatID).add(f);
+			}
+		}else{
+			throwException("Faces sought, but none found.");
+		}
+		return faces;
+	}
+	
+	//Creates a new material from a MAT tag
+	private Material readMaterial(Element root) throws Exception {
+		Material m = new Material();
+		m.setAmbient(readVectorTag(root,"AMB",true));
+		m.setDiffuse(readVectorTag(root,"DIFF",true));
+		m.setSpecular(readVectorTag(root,"SPEC",false));
+		m.setEmission(readVectorTag(root,"EMISS",false));
+		m.setAlpha(readVectorTag(root,"ALPHA",false));
+		m.setShine(readVectorTag(root,"SHINE",false));
+		return m;
+	}
+
+	private float[] readVectorTag(Element root, String childName, boolean required) throws Exception {
+		NodeList tagList;
+		tagList = root.getElementsByTagName(childName);
+		if( tagList.getLength() == 1 ){
+			Element e = (Element)tagList.item(0);
+			return readVector(e.getTextContent());
+		}else if(tagList.getLength() == 0){
+			if(required){
+				throwException("Material Tag with no " + childName + " Tag");
+			}
+		}else if(tagList.getLength() > 1){
+			throwException("Material Tag with redundant " + childName + " Tag");
+		}
+		
+		return new float[3];
+	}
+	
+	private float[] readVector(String data){
+		String[] temp = data.split(",");
+		float[] ret = new float[3];
+		
+		for(int i = 0; i < 3; i++){
+			ret[i] = Float.parseFloat(temp[i]);
+		}
+		
+		return ret;
+	}
+	
+	private float readScalarTag(Element root, String childName, boolean required) throws Exception {
+		float[] f = readVectorTag(root, childName, required);
+		return f[0];
+	}
+	
+	private void throwException(String message) throws Exception{
+		Exception e = new Exception();
+		e.initCause(new Throwable(message));
+		throw e;
 	}
 
 	@Override
 	public Model createModel() {
-		return new Model(world);
+		// TODO
+		return null;
 	}
 }

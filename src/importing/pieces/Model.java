@@ -1,32 +1,21 @@
-/*
- * 	Not sure exactly what we want to do with this class yet.  I've just implemented
- * 		a skeleton that we can flesh out as we need to.
- * 
- * 	//TODO:	Add draw function that can draw the thing
- * 	//TODO:	Figure what else needs to be added?  Maybe should just revert to the
- * 			World holding everything, and renaming it.  But not sure.
- */
 package importing.pieces;
 
 import java.util.ArrayList;
 
 public class Model {
-	ArrayList<World> pieces;
-	
-	Model(World[] _pieces){
-		pieces = new ArrayList<World>();
-		
-		for(World w: _pieces)
-			this.pieces.add(w);
+	ArrayList<Mesh> meshes;
+	public Model(){meshes = new ArrayList<Mesh>();}
+	public Model(Mesh[] mesh_array){
+		meshes = new ArrayList<Mesh>();
+		for(Mesh m: mesh_array){
+			meshes.add(m);
+		}
 	}
+	/*Setters*/
+	public void addMesh(Mesh m){meshes.add(m);}
 	
-	public Model(World w){
-		pieces = new ArrayList<World>();
-		
-		this.pieces.add(w);
-	}
+	/*Getters*/
+	public Mesh getMesh(int i){ return meshes.get(i);}
 	
-	public void addWorld(World w){
-		this.pieces.add(w);
-	}
+	public void draw(){}
 }

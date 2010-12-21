@@ -5,18 +5,23 @@
  * 
  */
 package importing;
+import importing.pieces.Face;
+import importing.pieces.Mesh;
 import importing.pieces.Model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.opengl.GL11;
 
 
 public class Obj_Parser extends Parser{
-	private ArrayList<float[]> vertexsets = new ArrayList<float[]>(); // Vertex Coordinates
-	private ArrayList<float[]> vertexsetsnorms = new ArrayList<float[]>(); // Vertex Coordinates Normals
-	private ArrayList<float[]> vertexsetstexs = new ArrayList<float[]>(); // Vertex Coordinates Textures
+	private ArrayList<Float[]> vertexsets = new ArrayList<Float[]>(); // Vertex Coordinates
+	private ArrayList<Float[]> vertexsetsnorms = new ArrayList<Float[]>(); // Vertex Coordinates Normals
+	private ArrayList<Float[]> vertexsetstexs = new ArrayList<Float[]>(); // Vertex Coordinates Textures
 	private ArrayList<int[]> faces = new ArrayList<int[]>(); // Array of Faces (vertex sets)
 	private ArrayList<int[]> facestexs = new ArrayList<int[]>(); // Array of of Faces textures
 	private ArrayList<int[]> facesnorms = new ArrayList<int[]>(); // Array of Faces normals
@@ -32,6 +37,8 @@ public class Obj_Parser extends Parser{
 	public float farpoint = 0;		// z-
 	public float nearpoint = 0;		// z+	
 	
+	private Model model;
+	
 	public Obj_Parser(BufferedReader ref, boolean centerit) {
 		try {
 			loadobject(ref);
@@ -41,7 +48,6 @@ public class Obj_Parser extends Parser{
 			numpolys = faces.size();
 			cleanup();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -58,9 +64,7 @@ public class Obj_Parser extends Parser{
 	private void loadobject(BufferedReader br) throws Exception {
 		int linecounter = 0;
 		try {
-			
 			String newline;
-			boolean firstpass = true;
 			
 			while (((newline = br.readLine()) != null)) {
 				linecounter++;
@@ -96,7 +100,7 @@ public class Obj_Parser extends Parser{
 		float zshift = (nearpoint - farpoint) /2f;
 		
 		for (int i=0; i < vertexsets.size(); i++) {
-			float[] coords = new float[4];
+			Float[] coords = new Float[4];
 			
 			coords[0] = ((vertexsets.get(i)))[0] - leftpoint - xshift;
 			coords[1] = ((vertexsets.get(i)))[1] - bottompoint - yshift;
@@ -172,7 +176,7 @@ public class Obj_Parser extends Parser{
 	}
 	
 	private void readVertex(String data) throws Exception{
-		float[] coords = new float[4];
+		Float[] coords = new Float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		
@@ -187,7 +191,7 @@ public class Obj_Parser extends Parser{
 	}
 
 	private void readTextureCoordinate(String data) throws Exception{
-		float[] coords = new float[4];
+		Float[] coords = new Float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		
@@ -201,7 +205,7 @@ public class Obj_Parser extends Parser{
 	}
 	
 	private void readVertexNormal(String data) throws Exception{
-		float[] coords = new float[4];
+		Float[] coords = new Float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		for (int i = 1;i < coordstext.length;i++) {
@@ -216,6 +220,7 @@ public class Obj_Parser extends Parser{
 		int[] vn = new int[3];
 		String[] coordstext = data.split("\\s+");
 		
+		//Loop through data, finding vertexes, vertex textures, vertex normals
 		for (int i = 1;i < coordstext.length;i++) {
 			String fixstring = coordstext[i].replaceAll("//","/0/");
 			String[] tempstring = fixstring.split("/");
@@ -231,20 +236,21 @@ public class Obj_Parser extends Parser{
 				vn[i-1] = 0;
 			}
 		}
-		faces.add(v);
-		facestexs.add(vt);
-		facesnorms.add(vn);
+		
+		Float[][] verts = new Float[v.length][3];
+		for(int i = 0; i < v.length; i++){
+			verts[i] = vertexsets.get(v[i]);
+		}
+		Float[][] vertnorms = new Float[vn.length][3];
+		for(int i = 0; i < vn.length; i++){
+			vertnorms[i] = vertexsetsnorms.get(vn[i]);
+		}
+		Face face = new Face(verts, vertnorms);
 	}
 	
 	@Override
-	public void readFile(String fileName) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void readFile(String fileName) {/*TODO*/ }
 
 	@Override
-	public Model createModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Model createModel() {return new Model(world);}
 }

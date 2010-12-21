@@ -1,143 +1,177 @@
 package importing.pieces;
 
-import javax.vecmath.Vector3f;
-
 public class Material {
 	//For all of these:  x = red, y = green, b = blue
-	private Vector3f ambientReflect; 	
-	private Vector3f diffuseReflect;	
-	private Vector3f specularReflect;	//default 0.0f, 0.0f, 0.0f
-	private Vector3f emission; //default 0.0f, 0.0f, 0.0f
+	private float[] ambientReflect; 	
+	private float[] diffuseReflect;	
+	private float[] specularReflect;	//default 0.0f, 0.0f, 0.0f
+	private float[] emission; //default 0.0f, 0.0f, 0.0f
 	private float alpha; //default 1.0f
 	private float shine; //default 0.0f
 	private int reference;
 	
 	public Material()
 	{
-		ambientReflect = new Vector3f();
-		diffuseReflect = new Vector3f();
+		ambientReflect = new float[3];
+		diffuseReflect = new float[3];
 		
-		specularReflect = new Vector3f();
+		specularReflect = new float[3];
 		
-		emission = new Vector3f();	
+		emission = new float[3];	
 		
-		alpha = 1;
-		shine = 0;
+		alpha = 1.0f;
+		shine = 0.0f;
 	}
 	
-	public Material( Vector3f ambient, Vector3f diffuse)
+	public Material(float[] ambient, float[] diffuse)
 	{
 		ambientReflect = ambient;
 		diffuseReflect = diffuse;
 		
-		specularReflect = new Vector3f(0,0,0);
+		specularReflect = new float[3];
 		
-		emission = new Vector3f(0,0,0);
+		emission = new float[3];
 		
-		alpha = 1;
+		for(int i = 0; i < 3; i++){
+			specularReflect[i] = 0.0f;
+			emission[i] = 0.0f;
+		}
 		
-		shine = 0;
+		alpha = 1.0f;
+		
+		shine = 0.0f;
 	}
 	
-	public Material( Vector3f ambient, Vector3f diffuse, Vector3f specular)
-	{
-		ambientReflect = ambient;
-		diffuseReflect = diffuse;
-		
-		if( specular != null)
-			specularReflect = specular;
-		else
-			specularReflect = new Vector3f(0,0,0);
-		
-		emission = new Vector3f(0,0,0);
-		
-		alpha = 1;
-		
-		shine = 0;
-	}
-	
-	public Material( Vector3f ambient, Vector3f diffuse, Vector3f specular, Vector3f emis)
+	public Material( float[] ambient, float[] diffuse, float[] specular)
 	{
 		ambientReflect = ambient;
 		diffuseReflect = diffuse;
 		
 		if( specular != null)
 			specularReflect = specular;
-		else
-			specularReflect = new Vector3f(0,0,0);
+		else{
+			specularReflect = new float[3];
+			for(int i = 0; i < 3; i++){
+				specularReflect[i] = 0.0f;
+			}
+		}
+		
+		emission = new float[3];
+		for(int i = 0; i < 3; i++){
+			emission[i] = 0.0f;
+		}
+		
+		alpha = 1.0f;
+		
+		shine = 0.0f;
+	}
+	
+	public Material( float[] ambient, float[] diffuse, float[] specular, float[] emis)
+	{
+		ambientReflect = ambient;
+		diffuseReflect = diffuse;
+		
+		if( specular != null)
+			specularReflect = specular;
+		else{
+			specularReflect = new float[3];
+			for(int i = 0; i < 3; i++){
+				specularReflect[i] = 0.0f;
+			}
+		}
 		
 		if( emis != null)
 			emission = emis;
-		else
-			emission = new Vector3f(0,0,0);
+		else{
+			emission = new float[3];
+			for(int i = 0; i < 3; i++){
+				emission[i] = 0.0f;
+			}
+		}
 		
-		alpha = 1;
+		alpha = 1.0f;
 		
-		shine = 0;
+		shine = 0.0f;
 	}
 	
-	public Material( Vector3f ambient, Vector3f diffuse, Vector3f specular, Vector3f emis, float a)
+	public Material( float[] ambient, float[] diffuse, float[] specular, float[] emis, float a)
 	{
 		ambientReflect = ambient;
 		diffuseReflect = diffuse;
 		
 		if( specular != null)
 			specularReflect = specular;
-		else
-			specularReflect = new Vector3f(0,0,0);
+		else{
+			specularReflect = new float[3];
+			for(int i = 0; i < 3; i++){
+				specularReflect[i] = 0.0f;
+			}
+		}
 		
 		if( emis != null)
 			emission = emis;
-		else
-			emission = new Vector3f(0,0,0);
+		else{
+			emission = new float[3];
+			for(int i = 0; i < 3; i++){
+				emission[i] = 0.0f;
+			}
+		}
 		
 		if( !Float.isNaN(a) )
 			alpha = a;
 		else
-			alpha = 1;
+			alpha = 1.0f;
 		
-		shine = 0;
+		shine = 0.0f;
 	}
 	
-	public Material( Vector3f ambient, Vector3f diffuse, Vector3f specular, Vector3f emis, float a, float s)
+	public Material( float[] ambient, float[] diffuse, float[] specular, float[] emis, float a, float s)
 	{
 		ambientReflect = ambient;
 		diffuseReflect = diffuse;
 		
 		if( specular != null)
 			specularReflect = specular;
-		else
-			specularReflect = new Vector3f(0,0,0);
+		else{
+			specularReflect = new float[3];
+			for(int i = 0; i < 3; i++){
+				specularReflect[i] = 0.0f;
+			}
+		}
 		
 		if( emis != null)
 			emission = emis;
-		else
-			emission = new Vector3f(0,0,0);
+		else{
+			emission = new float[3];
+			for(int i = 0; i < 3; i++){
+				emission[i] = 0.0f;
+			}
+		}
 		
 		if( !Float.isNaN(a) )
 			alpha = a;
 		else
-			alpha = 1;
+			alpha = 1.0f;
 		
 		if( !Float.isNaN(s) )
 			shine = s;
 		else
-			shine = 0;
+			shine = 0.0f;
 	}
 	
-	public Vector3f getAmbient() {
+	public float[] getAmbient() {
 		return ambientReflect;
 	}
 	
-	public Vector3f getDiffuse() {
+	public float[] getDiffuse() {
 		return diffuseReflect;
 	}
 	
-	public Vector3f getSpecular() {
+	public float[] getSpecular() {
 		return specularReflect;
 	}
 	
-	public Vector3f getEmission() {
+	public float[] getEmission() {
 		return emission;
 	}
 	
@@ -154,7 +188,7 @@ public class Material {
 		return reference;
 	}
 	
-	public void setEmission(Vector3f emiss)
+	public void setEmission(float[] emiss)
 	{
 		emission = emiss;
 	}
@@ -164,26 +198,31 @@ public class Material {
 		alpha = alph;
 	}
 	
+	public void setAlpha( float[] alph )
+	{
+			alpha = alph[0];
+	}
+	
 	public void setShine( float _shine)
 	{
 		shine = _shine;
 	}
 	
-	public void setReference( int i)
+	public void setShine( float[] _shine)
 	{
-		reference = i;
+		shine = _shine[0];
 	}
 
-	public void setAmbient(Vector3f a) {
-		ambientReflect = a;
+	public void setAmbient(float[] floats) {
+		ambientReflect = floats;
 	}
 	
-	public void setDiffuse(Vector3f d)
+	public void setDiffuse(float[] d)
 	{
 		diffuseReflect = d;
 	}
 	
-	public void setSpecular(Vector3f s)
+	public void setSpecular(float[] s)
 	{
 		specularReflect = s;
 	}
