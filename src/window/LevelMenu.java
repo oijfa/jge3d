@@ -12,25 +12,13 @@ import javax.swing.ImageIcon;
 
 import org.lwjgl.LWJGLException;
 
-import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.renderer.DynamicImage;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 
 public class LevelMenu extends ResizableFrame {
-	private final Label preview;
-
 	public LevelMenu() {
-		setTitle("Texture Editor");
-		preview = new Label();
-		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
-		add(preview);
-		
-		//tree
-		
-		//add
-		
-		//remove
+
 	}
 	
 	public DynamicImage loadImagePreview(String path) {

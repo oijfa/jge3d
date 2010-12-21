@@ -13,9 +13,8 @@ import de.matthiasmann.twl.model.PersistentStringModel;
 import de.matthiasmann.twl.model.StringModel;
 import de.matthiasmann.twl.model.TreeTableNode;
 
-public class Tree extends Widget implements Runnable {
-    private ScrollPane scrollPane;
-    private MyNode dynamicNode;
+public class Tree extends ScrollPane implements Runnable {
+    //private MyNode dynamicNode;
     int state;
     MyNode subNode;
 
@@ -39,7 +38,7 @@ public class Tree extends Widget implements Runnable {
         b.insert("Ba", "7");
         b.insert("Bb", "8");
         b.insert("Bc", "9");
-        dynamicNode = b.insert("Dynamic", "stuff");
+        //dynamicNode = b.insert("Dynamic", "stuff");
         m.insert(new SpanString("This is a very long string which will span into the next column.", 2), "Not visible");
         m.insert("This is a very long string which will be clipped.", "This is visible");
 
@@ -49,59 +48,18 @@ public class Tree extends Widget implements Runnable {
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
         t.setDefaultSelectionManager();
 
-        scrollPane = new ScrollPane(t);
-        scrollPane.setTheme("/tableScrollPane");
+        setContent(t);
+        setTheme("/tableScrollPane");
     }
 
     public void run() {
-        //System.out.println("state="+state);
-        switch(state++) {
-        case 0:
-            dynamicNode.insert("Counting", "3...");
-            break;
-        case 1:
-            dynamicNode.insert("Counting", "2...");
-            break;
-        case 2:
-            dynamicNode.insert("Counting", "1...");
-            break;
-        case 3:
-            subNode = dynamicNode.insert("this is a", "folder");
-            break;
-        case 4:
-            subNode.insert("first", "entry");
-            break;
-        case 5:
-            subNode.insert("now starting to remove", "counter");
-            break;
-        case 6:
-        case 7:
-        case 8:
-            dynamicNode.remove(0);
-            break;
-        case 9:
-            subNode.insert("last", "entry");
-            break;
-        case 10:
-            dynamicNode.insert("now removing", "folder");
-            break;
-        case 11:
-            dynamicNode.remove(0);
-            break;
-        case 12:
-            dynamicNode.insert("starting", "again");
-            break;
-        case 13:
-            dynamicNode.removeAll();
-            state = 0;
-            break;
-        }
+    	
     }
-
+    
     public void centerScrollPane() {
-        scrollPane.updateScrollbarSizes();
-        scrollPane.setScrollPositionX(scrollPane.getMaxScrollPosX()/2);
-        scrollPane.setScrollPositionY(scrollPane.getMaxScrollPosY()/2);
+        updateScrollbarSizes();
+        setScrollPositionX(getMaxScrollPosX()/2);
+        setScrollPositionY(getMaxScrollPosY()/2);
     }
 
     static class MyNode extends AbstractTreeTableNode {
@@ -136,7 +94,7 @@ public class Tree extends Widget implements Runnable {
     }
 
     static class MyModel extends AbstractTreeTableModel {
-        private static final String[] COLUMN_NAMES = {"Left", "Right"};
+        private static final String[] COLUMN_NAMES = {"Tree", "Value"};
         public int getNumColumns() {
             return 2;
         }

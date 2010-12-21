@@ -32,16 +32,26 @@ public class TextureMenu extends ResizableFrame {
 		setTitle("Texture Editor");
 		
 		add_button = new Button("add");
+		add_button.setTheme("add");
 		remove_button = new Button("remove");
+		remove_button.setTheme("remove");
 		preview = new Widget();
+		//preview.setTheme("preview");
 		textree = new Tree();
+		textree.setTheme("textree");
+		
 		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));
-		preview.setOverlay(loadImagePreview("resources/themes/widgets.png"));
 		
 		layout = new DialogLayout();
 		Group button_hgroup = layout.createSequentialGroup()
 		.addGap()
-		.addGroup(layout.createParallelGroup(preview, textree, add_button, remove_button))
+		.addGroup(layout.createParallelGroup(
+				preview,
+				textree,
+				add_button,
+				remove_button
+			)
+		)
 		.addGap();
 
 		// Group for holding the Vertical alignment of the buttons
@@ -67,10 +77,8 @@ public class TextureMenu extends ResizableFrame {
 	public DynamicImage loadImagePreview(String path) {
 		try {
 			//Create a temporary renderer instance
-			LWJGLRenderer render;
-			
-				render = new LWJGLRenderer();
-			
+			LWJGLRenderer render = new LWJGLRenderer();
+
 			//Read image from file
 			ImageIcon icon = new ImageIcon(path);
 		    Image imageicon = icon.getImage();
@@ -81,11 +89,11 @@ public class TextureMenu extends ResizableFrame {
 		    	imageicon.getHeight(null), 
 		        BufferedImage.TYPE_INT_ARGB
 		    );
-
+		    
 		    // Draw Image into BufferedImage
 		    Graphics g = buffImage.getGraphics();
 		    g.drawImage(imageicon, 0, 0, null);
-		    
+            
 			int[] data = ((DataBufferInt)buffImage.getRaster().getDataBuffer()).getData(); 
 			ByteBuffer bb = ByteBuffer.allocateDirect(data.length * 4); 
 			bb.order(ByteOrder.LITTLE_ENDIAN); 
@@ -98,7 +106,7 @@ public class TextureMenu extends ResizableFrame {
 			);
 			
 			//Copy contents of bytebuffered image into dynamic image
-			image.update(bb,DynamicImage.Format.RGBA);
+			image.update(bb,DynamicImage.Format.BGRA);
 			
 			//Set the label to the image
 			return image;

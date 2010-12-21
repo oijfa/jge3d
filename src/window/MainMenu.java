@@ -20,9 +20,13 @@ public class MainMenu extends ResizableFrame {
 		layout = new DialogLayout();
 
 		this.new_game = new Button("New Game");
+		this.new_game.setTheme("new_game");
 		this.load_game = new Button("Load Game");
+		this.load_game.setTheme("load_game");
 		this.options = new Button("Options");
+		this.options.setTheme("options");
 		this.quit = new Button("Quit");
+		this.quit.setTheme("quit");
 
 		// When the quit button is clicked run this command
 		quit.addCallback(new Runnable() {
@@ -37,21 +41,30 @@ public class MainMenu extends ResizableFrame {
 		// Parallel groups align each start and size and can be cascaded
 		//
 		// Group for holding the Horizontal alignment of the buttons
-		Group button_hgroup = layout.createSequentialGroup().addGap()
-				// Keeps all the buttons in a single vertical line as opposed to
-				// staggering
-				// left to right per row
-				.addGroup(
-						layout.createParallelGroup(new_game, load_game,
-								options, quit)).addGap();
+		Group button_hgroup = layout.createSequentialGroup()
+			.addGap()
+			// Keeps all the buttons in a single vertical line as opposed to
+			// staggering
+			// left to right per row
+			.addGroup(
+				layout.createParallelGroup(
+					new_game,
+					load_game,
+					options,
+					quit)
+				)
+			.addGap();
 
 		// Group for holding the Vertical alignment of the buttons
 		Group button_vgroup = layout.createSequentialGroup()
-				.addGap()
-				// Add each widget without forming a group so that they rest one
-				// under the other
-				.addWidget(new_game).addWidget(load_game).addWidget(options)
-				.addWidget(quit).addGap();
+			.addGap()
+			// Add each widget without forming a group so that they rest one
+			// under the other
+			.addWidget(new_game)
+			.addWidget(load_game)
+			.addWidget(options)
+			.addWidget(quit)
+			.addGap();
 
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup

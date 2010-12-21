@@ -38,12 +38,15 @@ public class Window extends DesktopArea {
 		// Create the main menu
 		mainMenu = new MainMenu();
 		add(mainMenu);
+		mainMenu.setTheme("mainmenu");
 
 		textureMenu = new TextureMenu();
 		add(textureMenu);
+		textureMenu.setTheme("texturemenu");
 		
 		entityMenu = new EntityMenu();
 		add(entityMenu);
+		entityMenu.setTheme("entitymenu");
 		
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
