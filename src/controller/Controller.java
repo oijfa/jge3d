@@ -159,40 +159,39 @@ public class Controller {
 	
 	public void loadLevel(){
 		//TODO: Make a spinny triforce
+		Entity ent;
+		/*
 		Entity ent1;
 		Entity ent2;
 		Entity ent3;
+		*/
 		
-		Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0,0,0));
+		Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-1.0f,0.0f));
 		
 		Parser p = new XGL_Parser();
 		try{
-			p.readFile("");
+			p.readFile("./lib/box.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}
 		
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent1 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent2 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent3 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		for(int i = 1; i < 100; i++){
+			ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+			ent.setModel(p.createModel());
+			objectList.addItem(ent);
+			objectList.getItem("ent" + String.valueOf(i)).setPosition(new Vector3f(0.0f,1.0f+i*100,0.0f));
+			Physics.getInstance().addEntity(objectList.getItem("ent" + String.valueOf(i)));
+			
+			boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		}
 		
-		ent1.setModel(p.createModel());
-		ent2.setModel(p.createModel());
-		ent3.setModel(p.createModel());
+		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
+		ent.setModel(p.createModel());
+		objectList.addItem(ent);
 		
-		objectList.addItem(ent1);
-		objectList.getItem("ent1").setPosition(new Vector3f(0,0,5));
-		Physics.getInstance().addEntity(objectList.getItem("ent1"));
+		objectList.getItem("ent100").setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		
-		objectList.addItem(ent2);
-		objectList.getItem("ent2").setPosition(new Vector3f(0,5,0));
-		Physics.getInstance().addEntity(objectList.getItem("ent2"));
-		
-		objectList.addItem(ent3);
-		objectList.getItem("ent3").setPosition(new Vector3f(5,0,0));
-		Physics.getInstance().addEntity(objectList.getItem("ent3"));
+		Physics.getInstance().addEntity(objectList.getItem("ent100"));
 	}
 }

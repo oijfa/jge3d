@@ -40,7 +40,7 @@ public class XGL_Parser extends Parser{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse("./lib/legoman.xgl");
+		dom = db.parse(fileName);
 		
 		ArrayList<Node> tagList;
 		try {

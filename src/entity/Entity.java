@@ -77,6 +77,7 @@ public class Entity extends RigidBody{
 	}
 	
 	/* Setters */
+	//TODO:  MAkes thiss nots uses Vector3fs
 	public void setPosition(Object p) {
 		/*
 		 * There's no straight-forward way to move a RigidBody to some location
