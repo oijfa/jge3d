@@ -16,29 +16,22 @@ import de.matthiasmann.twl.model.TreeTableNode;
 public class Tree extends ScrollPane implements Runnable {
     //private MyNode dynamicNode;
     int state;
-    MyNode subNode;
+    Node subNode;
 
     public Tree() {
-        MyModel m = new MyModel();
+        Model m = new Model();
         PersistentStringModel psm = new PersistentStringModel(
             Preferences.userNodeForPackage(getClass()),
             "demoEditField",
         	"you can edit this"
         );
 
-        MyNode a = m.insert("A", "1");
+        Node a = m.insert("A", "1");
         a.insert("Aa", "2");
         a.insert("Ab", "3");
-        MyNode ac = a.insert("Ac", "4");
-        ac.insert("Ac1", "Hello");
-        ac.insert("Ac2", "World");
-        ac.insert("EditField", psm);
-        a.insert("Ad", "5");
-        MyNode b = m.insert("B", "6");
-        b.insert("Ba", "7");
-        b.insert("Bb", "8");
-        b.insert("Bc", "9");
-        //dynamicNode = b.insert("Dynamic", "stuff");
+        a.insert("EditField", psm);
+        Node b = m.insert("B", "4");
+        b.insert("hurrtest", "lawl");
         m.insert(new SpanString("This is a very long string which will span into the next column.", 2), "Not visible");
         m.insert("This is a very long string which will be clipped.", "This is visible");
 
@@ -62,11 +55,11 @@ public class Tree extends ScrollPane implements Runnable {
         setScrollPositionY(getMaxScrollPosY()/2);
     }
 
-    static class MyNode extends AbstractTreeTableNode {
+    static class Node extends AbstractTreeTableNode {
         private Object str0;
         private Object str1;
 
-        public MyNode(TreeTableNode parent, Object str0, Object str1) {
+        public Node(TreeTableNode parent, Object str0, Object str1) {
             super(parent);
             this.str0 = str0;
             this.str1 = str1;
@@ -77,8 +70,8 @@ public class Tree extends ScrollPane implements Runnable {
             return (column == 0) ? str0 : str1;
         }
 
-        public MyNode insert(Object str0, Object str1) {
-            MyNode n = new MyNode(this, str0, str1);
+        public Node insert(Object str0, Object str1) {
+            Node n = new Node(this, str0, str1);
             insertChild(n, getNumChildren());
             setLeaf(false);
             return n;
@@ -93,7 +86,7 @@ public class Tree extends ScrollPane implements Runnable {
         }
     }
 
-    static class MyModel extends AbstractTreeTableModel {
+    static class Model extends AbstractTreeTableModel {
         private static final String[] COLUMN_NAMES = {"Tree", "Value"};
         public int getNumColumns() {
             return 2;
@@ -101,8 +94,8 @@ public class Tree extends ScrollPane implements Runnable {
         public String getColumnHeaderText(int column) {
             return COLUMN_NAMES[column];
         }
-        public MyNode insert(Object str0, String str1) {
-            MyNode n = new MyNode(this, str0, str1);
+        public Node insert(Object str0, String str1) {
+            Node n = new Node(this, str0, str1);
             insertChild(n, getNumChildren());
             return n;
         }

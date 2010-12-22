@@ -26,7 +26,7 @@
         <area name="scrollbar.left_arrow" xywh="47,50,12,12"/>
         <area name="scrollbar.right_arrow" xywh="47,37,12,12"/>
         <area name="scrollbar.down_arrow" xywh="86,49,12,12"/>
-        <area name="scrollbar.thumb" xywh="27,40,12,12" splity="L5,B5"/>
+        <area name="scrollbar.thumb" xywh="27,40,12,12" splity="L5,B5" splitx="L5,B5"/>
         <select name="vscrollbar_up_state">
             <alias ref="scrollbar.up_arrow" tint="#D5D5D5" if="hover + !pressed"/>
             <alias ref="scrollbar.up_arrow" tint="#555555" if="pressed + hover"/>
@@ -140,7 +140,7 @@
         <param name="background"><image>border_round_state</image></param>
         <param name="border"><border>0,5,0,0</border></param>
     </theme>
-    <theme name="vscrollbar" ref="-defaults">
+    <theme name="vscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="upbutton" ref="-defaults">
             <param name="background"><image>vscrollbar_up_state</image></param>
         </theme>
@@ -156,7 +156,7 @@
         <param name="minWidth"><int>14</int></param>
         <param name="scaleThumb"><bool>true</bool></param>
     </theme>
-    <theme name="hscrollbar" ref="-defaults">
+    <theme name="hscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="leftbutton" ref="-defaults">
             <param name="background"><image>hscrollbar_left_state</image></param>
         </theme>
@@ -172,7 +172,7 @@
         <param name="minHeight"><int>14</int></param>
         <param name="scaleThumb"><bool>true</bool></param>
     </theme>
-    <theme name="scrollpane" ref="-defaults">
+    <theme name="scrollpane" allowWildcard="true" ref="-defaults">
         <theme name="hscrollbar" ref="hscrollbar"/>
         <theme name="vscrollbar" ref="vscrollbar"/>
         <param name="hasDragButton"><bool>true</bool></param>
@@ -241,38 +241,56 @@
         <param name="treeButtonSize"><dimension>20,19</dimension></param>
     </theme>
     <theme name="table" ref="-defaults" allowWildcard="true">
+    	<theme name="" ref="*"/>
         <param name="row.background"><image>none</image></param>
         <param name="row.overlay"><image>none</image></param>
-        <param name=""><image>table.*</image></param>
         <param name=""><image>table.*</image></param>
         <param name="rowHeight"><int>20</int></param> <!-- the font line height is 14 -->
         <theme name="stringcellrenderer" ref="-defaults"/>
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
         <theme name="spanrenderer" ref="-defaults"/>
-        <theme name="treeButton" ref="checkbox"/>
+        <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button">
         </theme>
         <param name="columnHeaderWidth"><int>256</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>3</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
-        <param name="columnDivider"><image>none</image></param>
+        <param name="columnDivider"><image>white</image></param>
         <param name="columnWidths"><map/></param>
-        <param name="inputMap"><inputMapDef ref="-defaultInputMap">
-            <action name="toggleSelectionOnLeadRow">ctrl SPACE</action>
-        </inputMapDef></param>
-        <theme name="" ref="*"/>
+        <param name="inputMap">
+        	<inputMapDef ref="-defaultInputMap">
+            	<action name="toggleSelectionOnLeadRow">ctrl SPACE</action>
+        	</inputMapDef>
+        </param>
         <theme name="ComboBoxCellRenderer">
             <param name="comboBoxHeight"><int>20</int></param>
         </theme>
         <theme name="EditFieldCellRenderer">
             <param name="editFieldHeight"><int>20</int></param>
         </theme>
+        <theme name="editfield" ref="editfield"/>
     </theme>
-    <theme name="tree" allowWildcard="true" ref="table"/>  
+    <theme name="tree" allowWildcard="true" ref="table">
+    	<param name="hasDragButton"><bool>true</bool></param>
+    	<theme name="dragButton" ref="-defaults"></theme>
+    </theme>  
     <theme name="tableScrollPane" ref="scrollpane"/>
-    
+    <!--
+    <theme name="menumanager" ref="-defaults">
+        <theme name="menupopup" ref="dialoglayout">
+            <param name="background"><image>border_round</image></param>
+            <param name="border"><border>background.border</border></param>
+            <theme name="button" ref="button"/>
+            <theme name="submenu" ref="button"/>
+            <theme name="spacer" ref="-defaults"/>
+            <param name="namedGaps"><map>
+                <param name="menuitem"><gap>0</gap></param>
+            </map></param>
+        </theme>
+    </theme>
+    -->
     <theme name="-default-gaps" ref="-defaults">
     	<param name="smallGap"><dimension>0,0</dimension></param>
 		<param name="mediumGap"><dimension>00,0</dimension></param>
@@ -292,66 +310,40 @@
        		<param name="minHeight"><int>225</int></param>
         	<param name="maxHeight"><int>225</int></param>
             <theme name="dialoglayout" ref="-default-gaps">
-                <theme name="button" ref="button">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
+                <theme name="new_game" ref="button"/>
+                <theme name="load_game" ref="button"/>
+                <theme name="options" ref="button"/>
+                <theme name="quit" ref="button"/>
             </theme>
         </theme>
         <theme name="texturemenu" ref="resizableframe">
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>400</int></param>
-        	<param name="maxHeight"><int>400</int></param>
+       		<param name="minHeight"><int>500</int></param>
+        	<param name="maxHeight"><int>500</int></param>
             <theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
-                <theme name="preview" ref="widget"/>
+                <theme name="preview" ref="widget">
+                    <param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>225</int></param>
+        			<param name="maxHeight"><int>225</int></param>
+                </theme>
 				<theme name="textree" ref="tree">
                     <param name="minWidth"><int>300</int></param>
             		<param name="maxWidth"><int>300</int></param>
        				<param name="minHeight"><int>225</int></param>
         			<param name="maxHeight"><int>225</int></param>
         		</theme>				
-                <theme name="new_game" ref="button"/>
-                <theme name="load_game" ref="button"/>
+                <theme name="add" ref="button"/>
+                <theme name="remove" ref="button"/>
             </theme>
         </theme>
         <theme name="entitymenu" ref="resizableframe">
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>225</int></param>
-        	<param name="maxHeight"><int>225</int></param>
-            <theme name="dialoglayout" ref="-default-gaps">
-                <theme name="button" ref="button">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
-            </theme>
-        </theme>
-        <theme name="test" ref="resizableframe">
-        	<param name="minWidth"><int>300</int></param>
-            <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>225</int></param>
-        	<param name="maxHeight"><int>225</int></param>
-            <theme name="dialoglayout" ref="-default-gaps">
-            	<theme name="" ref="*"/>
-                <theme name="t" ref="tree">
-                	<param name="minWidth"><int>225</int></param>
-                	<param name="maxWidth"><int>225</int></param>
-       				<param name="minHeight"><int>300</int></param>
-        			<param name="maxHeight"><int>300</int></param>
-                </theme>
-                <theme name="test" ref="button">
-                	<param name="minWidth"><int>150</int></param>
-                	<param name="maxWidth"><int>150</int></param>
-       				<param name="minHeight"><int>30</int></param>
-        			<param name="maxHeight"><int>30</int></param>
-                </theme>
-            </theme>
+       		<param name="minHeight"><int>200</int></param>
+        	<param name="maxHeight"><int>200</int></param>
         </theme>
     </theme>
 </themes>

@@ -2,6 +2,7 @@
 <!DOCTYPE themes PUBLIC "-//www.matthiasmann.de//TWL-Theme//EN" "http://hg.l33tlabs.org/twl/raw-file/tip/src/de/matthiasmann/twl/theme/theme.dtd">
 <themes>
     <images file="widgets.png">
+        <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true"/>
         <area name="white" xywh="1,36,1,1"/>
         <area name="black" xywh="23,57,1,1"/>
         <area name="border_round" xywh="2,1,40,34" splitx="L11,B11" splity="L9,B9" nocenter="true"/>
@@ -250,7 +251,7 @@
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
         <theme name="spanrenderer" ref="-defaults"/>
-        <theme name="treeButton" ref="checkbox"/>
+        <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button">
         </theme>
         <param name="columnHeaderWidth"><int>256</int></param>
@@ -270,16 +271,17 @@
         <theme name="EditFieldCellRenderer">
             <param name="editFieldHeight"><int>20</int></param>
         </theme>
+        <theme name="editfield" ref="editfield"/>
     </theme>
     <theme name="tree" allowWildcard="true" ref="table">
     	<param name="hasDragButton"><bool>true</bool></param>
-    	<theme name="dragButton" ref="-defaults"></theme>
+    	<theme name="dragButton" ref="-defaults"/>
     </theme>  
     <theme name="tableScrollPane" ref="scrollpane"/>
     <!--
     <theme name="menumanager" ref="-defaults">
         <theme name="menupopup" ref="dialoglayout">
-            <param name="background"><image>border_round</image></param>
+            <param name="background"><image>border_square</image></param>
             <param name="border"><border>background.border</border></param>
             <theme name="button" ref="button"/>
             <theme name="submenu" ref="button"/>
