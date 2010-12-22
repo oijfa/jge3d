@@ -11,6 +11,12 @@ public class Model {
 			meshes.add(m);
 		}
 	}
+	public Model(ArrayList<Mesh> mesh_array) {
+		meshes = new ArrayList<Mesh>();
+		for(Mesh m: mesh_array){
+			meshes.add(m);
+		}
+	}
 	/*Setters*/
 	public void addMesh(Mesh m){meshes.add(m);}
 	

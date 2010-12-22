@@ -42,6 +42,30 @@ public class Face {
 		normal[2] = 1.0f;
 	}
 
+	//Copy Constructor
+	public Face(Face f) {
+		this.vertices =  new ArrayList<float[]>();
+		vertexNormals =  new ArrayList<float[]>();
+		this.normal = new float[3];
+		
+		for(@SuppressWarnings("unused") float[] fa: f.vertices){
+			this.vertices.add(new float[3]);
+		}
+		for(@SuppressWarnings("unused") float[] fa: f.vertexNormals){
+			this.vertexNormals.add(new float[3]);
+		}
+		
+		for(int i = 0; i < 3; i++){
+			this.normal[i] = f.normal[i];
+			for(int j = 0; j < f.vertices.size(); j++){
+				(this.vertices.get(j))[i] = (f.vertices.get(j))[i]; 
+			}
+			for(int j = 0; j < f.vertexNormals.size(); j++){
+				(this.vertexNormals.get(j))[i] = (f.vertexNormals.get(j))[i];
+			}
+		}
+	}
+
 	/*Setters*/
 	public void setVertices(float[][] verts){
 		for(int i = 0; i < verts.length; i++){

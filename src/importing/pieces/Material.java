@@ -159,6 +159,22 @@ public class Material {
 			shine = 0.0f;
 	}
 	
+	//Deep Copy Constructor
+	public Material(Material mat) {
+		this.ambientReflect = new float[3]; 	
+		this.diffuseReflect = new float[3];	
+		this.specularReflect = new float[3];
+		this.emission = new float[3]; 
+		for(int i = 0; i < 3; i++){
+			this.ambientReflect[i] = mat.ambientReflect[i];
+			this.diffuseReflect[i] = mat.diffuseReflect[i];
+			this.specularReflect[i] = mat.specularReflect[i];
+			this.emission[i] = mat.emission[i];
+		}
+		this.alpha = mat.alpha;
+		this.shine = mat.shine;
+	}
+
 	public float[] getAmbient() {
 		return ambientReflect;
 	}
