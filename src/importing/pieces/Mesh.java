@@ -137,6 +137,19 @@ public class Mesh {
 		this.mat = new Material(m.mat);
 	}
 	
+	public Mesh(ArrayList<Face> _faces) {
+		location = new float[3];
+		
+		faces = _faces;
+		mat = null;
+		for(int i = 0; i < 3; i++){
+			location[i] = 0.0f;
+			forward[i] = 0.0f;
+			up[i] = 0.0f;
+		}
+		forward[2] = 1.0f;
+		up[1] = 1.0f;
+	}
 	/*Setters*/
 	public void setMaterial(Material m){ mat = m; }
 	public void addFace(Face f){ faces.add(f); }
@@ -164,9 +177,16 @@ public class Mesh {
 		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, FloatBuffer.wrap(mat.getEmission()));
 		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
 		
+		//Transform
+		GL11.glTranslatef(location[0], location[1], location[2]);
+		//TODO:  Rotate somehow based on forward and up vectors?
+		//GL11.glRotatef(angle, x, y, z);
+		
+		GL11.glBegin(GL11.GL_TRIANGLES);
 		//Draw faces
 		for(Face f : faces){
 			f.draw();
 		}
+		GL11.glEnd();
 	}
 }

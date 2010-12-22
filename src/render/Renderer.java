@@ -49,7 +49,11 @@ public class Renderer {
 		//while (!Display.isCloseRequested() && Controller.getRunning()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Clear The Screen And The Depth Buffer
 			GL11.glLoadIdentity();
-			GLU.gluLookAt(0, -5f, -10f, 0, 0, 0, 0, 1, 0);
+			GLU.gluLookAt(
+					0, -50f, -10f, 	//Camera Location
+					0, 0, 0, 		//Focus On Location
+					0, 1, 0			//Up Vector
+			);
 
 			// Draw a test object
 			//drawPoly();

@@ -1,7 +1,11 @@
+//TODO: In draw function, do something with normals
+
 package importing.pieces;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.lwjgl.opengl.GL11;
 
 public class Face {
 	ArrayList<float[]> vertices;
@@ -90,7 +94,41 @@ public class Face {
 	public float[] getNorm(){return normal;}
 
 	public void draw() {
-		// TODO Auto-generated method stub
 		
+		for(float[] f: vertices){
+			GL11.glVertex3f(f[0], f[1], f[2]);
+		}
+		
+		// Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+
+		// Right Side Facing Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
+
+		// Left Side Facing Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+
+		// Bottom
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.1f, 0.1f, 0.1f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.2f, 0.2f, 0.2f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
 	}
 }

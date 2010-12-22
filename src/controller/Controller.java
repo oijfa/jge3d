@@ -3,6 +3,9 @@
  */
 package controller;
 
+import importing.Parser;
+import importing.XGL_Parser;
+
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,7 +23,7 @@ import render.Renderer;
 public class Controller {
 	// the game always runs (except when it doesn't)
 	private static boolean isRunning = true;
-	private static Controller uniqueInstance = new Controller();
+	private static Controller uniqueInstance = null;
 	private Queue<Command> controller_queue = new LinkedList<Command>();
 	private static Controller controller;
 	private Renderer renderer;
@@ -34,6 +37,9 @@ public class Controller {
 	}
 
 	public static Controller getInstance() {
+		if( uniqueInstance == null)
+			uniqueInstance = new Controller();
+		
 		return uniqueInstance;
 	}
 	
@@ -153,37 +159,40 @@ public class Controller {
 	
 	public void loadLevel(){
 		//TODO: Make a spinny triforce
-		boolean ent1;
-		boolean ent2;
-		boolean ent3;
-		float temp = 0.3f;
+		Entity ent1;
+		Entity ent2;
+		Entity ent3;
+		
 		Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0,0,0));
 		
+		Parser p = new XGL_Parser();
+		try{
+			p.readFile("");
+		}catch(Exception e){
+			//TODO:  What to do here?
+		}
+		
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent1 = objectList.addItem(new Entity(1.0f, new DefaultMotionState(), boxShape, false));
+		ent1 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		ent2 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		ent3 = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		
+		ent1.setModel(p.createModel());
+		ent2.setModel(p.createModel());
+		ent3.setModel(p.createModel());
+		
+		objectList.addItem(ent1);
 		objectList.getItem("ent1").setPosition(new Vector3f(0,0,5));
-		//objectList.getItem("ent1").applyTorque(new Vector3f(temp,0,0));
-		objectList.getItem("ent1").applyImpulse(new Vector3f(temp,0,0),new Vector3f(1,0,0));
 		Physics.getInstance().addEntity(objectList.getItem("ent1"));
 		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent2 = objectList.addItem(new Entity(1.0f, new DefaultMotionState(), boxShape, false));
+		objectList.addItem(ent2);
 		objectList.getItem("ent2").setPosition(new Vector3f(0,5,0));
-		//objectList.getItem("ent2").applyTorque(new Vector3f(temp,0,0));
-		objectList.getItem("ent2").applyImpulse(new Vector3f(temp,0,0),new Vector3f(1,0,0));
-
 		Physics.getInstance().addEntity(objectList.getItem("ent2"));
 		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent3 = objectList.addItem(new Entity(1.0f, new DefaultMotionState(), boxShape, false));
+		objectList.addItem(ent3);
 		objectList.getItem("ent3").setPosition(new Vector3f(5,0,0));
-		//objectList.getItem("ent3").applyTorque(new Vector3f(temp,0,0));
-		objectList.getItem("ent3").applyImpulse(new Vector3f(temp,0,0),new Vector3f(1,0,0));
 		Physics.getInstance().addEntity(objectList.getItem("ent3"));
-		
-		System.out.println("ent1: " + String.valueOf(ent1));
-		System.out.println("ent2: " + String.valueOf(ent2));
-		System.out.println("ent3: " + String.valueOf(ent3));
-		System.out.println("Size: " + String.valueOf(objectList.size()));
 	}
 }

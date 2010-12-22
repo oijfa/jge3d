@@ -1,6 +1,9 @@
+//TODO: Maybe add transforms?
 package importing.pieces;
 
 import java.util.ArrayList;
+
+import org.lwjgl.opengl.GL11;
 
 public class Model {
 	ArrayList<Mesh> meshes;
@@ -17,11 +20,25 @@ public class Model {
 			meshes.add(m);
 		}
 	}
+	
+	//Copy Constructor
+	public Model(Model model) {
+		this.meshes = new ArrayList<Mesh>();
+		for(Mesh m: model.meshes){
+			this.meshes.add(new Mesh(m));
+		}
+	}
 	/*Setters*/
 	public void addMesh(Mesh m){meshes.add(m);}
 	
 	/*Getters*/
 	public Mesh getMesh(int i){ return meshes.get(i);}
 	
-	public void draw(){}
+	public void draw(){
+		for(Mesh m: meshes){
+			GL11.glPushMatrix();
+			m.draw();
+			GL11.glPopMatrix();
+		}
+	}
 }

@@ -23,7 +23,9 @@ import org.w3c.dom.NodeList;
 public class XGL_Parser extends Parser{
 	Model model;
 	
-	XGL_Parser(){}
+	int backup = 999999;
+	
+	public XGL_Parser(){}
 	
 	@Override
 	public void readFile(String fileName) throws Exception {
@@ -46,6 +48,7 @@ public class XGL_Parser extends Parser{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("WORLD")){
+				tagList = rootElement.getElementsByTagName("P");
 				//Get World Defines
 				readDefines(rootElement,mats,meshes,points);
 				
@@ -95,14 +98,20 @@ public class XGL_Parser extends Parser{
 		tagList = root.getElementsByTagName("MESH");
 		if( tagList.getLength() != 0 ){
 			for(int i = 0; i < tagList.getLength(); i++){
-				//Get ID;
-				int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
-				
-				//Create Meshes
-				ArrayList<Mesh> ms = readMeshes((Element)tagList.item(i), mats, points);
-				
-				//Shove them in hashmap
-				meshes.put(ID, ms);	
+				//Only load meshes that could be referenced later
+
+					//Create Meshes
+					ArrayList<Mesh> ms = readMeshes((Element)tagList.item(i), mats, points);
+					int ID;
+					if(tagList.item(i).hasAttributes()){
+						//Get ID;
+						ID = Integer.parseInt(((Element)tagList.item(i)).getAttribute("ID"));
+					}else{
+						ID = backup;
+						backup++;
+					}
+					//Shove them in hashmap
+					meshes.put(ID, ms);
 			}
 		}
 		
@@ -143,8 +152,7 @@ public class XGL_Parser extends Parser{
 			//Definitions outside of OBJ tags with no references from them will not be drawn
 		ArrayList<Mesh> createdMeshes = new ArrayList<Mesh>();
 		
-		//Get all defined Meshes
-		NodeList tagList = rootElement.getElementsByTagName("MESH");
+		NodeList tagList;
 		
 		//Transform information
 		float[] location = null;
@@ -152,6 +160,8 @@ public class XGL_Parser extends Parser{
 		float[] up = null;
 		readTransform(rootElement,location,forward,up);
 		
+		//Get all defined Meshes
+		tagList = rootElement.getElementsByTagName("MESH");
 		for( int i = 0; i < tagList.getLength(); i++){
 			int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
 			
@@ -214,7 +224,7 @@ public class XGL_Parser extends Parser{
 		
 		for(Integer key: faces.keySet()){
 			//For every Material, grab that set of faces and shove it into a Mesh
-			Mesh m = new Mesh((Face[]) faces.get(key).toArray());
+			Mesh m = new Mesh(faces.get(key));
 			
 			//Add to list of meshes created this call
 			created_meshes.add(m);
@@ -258,8 +268,8 @@ public class XGL_Parser extends Parser{
 		m.setDiffuse(readVectorTag(root,"DIFF",true));
 		m.setSpecular(readVectorTag(root,"SPEC",false));
 		m.setEmission(readVectorTag(root,"EMISS",false));
-		m.setAlpha(readVectorTag(root,"ALPHA",false));
-		m.setShine(readVectorTag(root,"SHINE",false));
+		m.setAlpha(readScalarTag(root,"ALPHA",false));
+		m.setShine(readScalarTag(root,"SHINE",false));
 		return m;
 	}
 
@@ -312,8 +322,20 @@ public class XGL_Parser extends Parser{
 	}
 	
 	private float readScalarTag(Element root, String childName, boolean required) throws Exception {
-		float[] f = readVectorTag(root, childName, required);
-		return f[0];
+		NodeList tagList;
+		tagList = root.getElementsByTagName(childName);
+		if( tagList.getLength() == 1 ){
+			Element e = (Element)tagList.item(0);
+			return Float.parseFloat(e.getTextContent());
+		}else if(tagList.getLength() == 0){
+			if(required){
+				throwException("Material Tag with no " + childName + " Tag");
+			}
+		}else if(tagList.getLength() > 1){
+			throwException(root.getNodeName() + " Tag with redundant " + childName + " Tag");
+		}
+		
+		return -500;
 	}
 	
 	private void throwException(String message) throws Exception{
@@ -324,7 +346,6 @@ public class XGL_Parser extends Parser{
 
 	@Override
 	public Model createModel() {
-		// TODO
-		return null;
+		return new Model(model);
 	}
 }

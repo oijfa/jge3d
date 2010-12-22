@@ -15,23 +15,25 @@
  */
 package entity;
 
+import importing.pieces.Model;
+
 import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
+	
+	private Model model;
 	
 	//Required keys
 	private String[] reqKeys = {"name", "collidable", "TTL"};
@@ -127,7 +129,7 @@ public class Entity extends RigidBody{
 	}
 	public Object getProperty(String key){return data.get(key);}
 	
-	
+	/*
 	public void draw(){
 		float[] body_matrix = new float[16];
 		java.nio.FloatBuffer buf = BufferUtils.createFloatBuffer(16);
@@ -191,5 +193,23 @@ public class Entity extends RigidBody{
 			//clear the fucking float buffer
 			buf.clear();
 		GL11.glPopMatrix();
+	}
+	*/
+	public void draw(){
+		Vector3f pos = new Vector3f();
+		this.getCenterOfMassPosition(pos);
+		
+		GL11.glPushMatrix();
+			GL11.glTranslatef(pos.x, pos.y, pos.z);
+			if( model != null)
+				model.draw();
+		GL11.glPopMatrix();
+	}
+	
+	public void setModel(Model model) {
+		this.model = model;
+	}
+	public Model getModel() {
+		return model;
 	}
 }
