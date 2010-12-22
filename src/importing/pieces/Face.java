@@ -1,7 +1,11 @@
+//TODO: In draw function, do something with normals
+
 package importing.pieces;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.lwjgl.opengl.GL11;
 
 public class Face {
 	ArrayList<float[]> vertices;
@@ -42,6 +46,30 @@ public class Face {
 		normal[2] = 1.0f;
 	}
 
+	//Copy Constructor
+	public Face(Face f) {
+		this.vertices =  new ArrayList<float[]>();
+		vertexNormals =  new ArrayList<float[]>();
+		this.normal = new float[3];
+		
+		for(@SuppressWarnings("unused") float[] fa: f.vertices){
+			this.vertices.add(new float[3]);
+		}
+		for(@SuppressWarnings("unused") float[] fa: f.vertexNormals){
+			this.vertexNormals.add(new float[3]);
+		}
+		
+		for(int i = 0; i < 3; i++){
+			this.normal[i] = f.normal[i];
+			for(int j = 0; j < f.vertices.size(); j++){
+				(this.vertices.get(j))[i] = (f.vertices.get(j))[i]; 
+			}
+			for(int j = 0; j < f.vertexNormals.size(); j++){
+				(this.vertexNormals.get(j))[i] = (f.vertexNormals.get(j))[i];
+			}
+		}
+	}
+
 	/*Setters*/
 	public void setVertices(float[][] verts){
 		for(int i = 0; i < verts.length; i++){
@@ -66,7 +94,41 @@ public class Face {
 	public float[] getNorm(){return normal;}
 
 	public void draw() {
-		// TODO Auto-generated method stub
 		
+		for(float[] f: vertices){
+			GL11.glVertex3f(f[0], f[1], f[2]);
+		}
+		
+		// Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+
+		// Right Side Facing Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
+
+		// Left Side Facing Front
+		GL11.glColor3f(0.0f, 1.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
+		GL11.glColor3f(0.0f, 0.0f, 1.0f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+
+		// Bottom
+		GL11.glColor3f(0.0f, 0.0f, 0.0f);
+		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.1f, 0.1f, 0.1f);
+		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
+		GL11.glColor3f(0.2f, 0.2f, 0.2f);
+		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
 	}
 }

@@ -5,15 +5,11 @@
  * 
  */
 package importing;
-import importing.pieces.Face;
-import importing.pieces.Mesh;
 import importing.pieces.Model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
@@ -37,7 +33,7 @@ public class Obj_Parser extends Parser{
 	public float farpoint = 0;		// z-
 	public float nearpoint = 0;		// z+	
 	
-	private Model model;
+	//private Model model;
 	
 	public Obj_Parser(BufferedReader ref, boolean centerit) {
 		try {
@@ -245,12 +241,12 @@ public class Obj_Parser extends Parser{
 		for(int i = 0; i < vn.length; i++){
 			vertnorms[i] = vertexsetsnorms.get(vn[i]);
 		}
-		Face face = new Face(verts, vertnorms);
+		//Face face = new Face(verts, vertnorms);
 	}
 	
 	@Override
 	public void readFile(String fileName) {/*TODO*/ }
 
 	@Override
-	public Model createModel() {return new Model(world);}
+	public Model createModel() {return null; /*new Model(world);*/}
 }
