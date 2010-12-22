@@ -37,6 +37,7 @@ public class XGL_Parser extends Parser{
 		HashMap<Integer, Material> mats = new HashMap<Integer, Material>();
 		HashMap<Integer, ArrayList<Mesh>> meshes = new HashMap<Integer, ArrayList<Mesh>>();
 		HashMap<Integer, float[]> points = new HashMap<Integer, float[]>();
+		HashMap<Integer, float[]> normals = new HashMap<Integer, float[]>();
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -49,13 +50,13 @@ public class XGL_Parser extends Parser{
 			
 			if( rootElement.getNodeName().equals("WORLD")){
 				//Get World Defines
-				readDefines(rootElement,mats,meshes,points);
+				readDefines(rootElement,mats,meshes,points,normals);
 				
 				//Get any meshes from objects
 				
 				tagList = findChildrenByName(rootElement, "OBJECT");
 				for(int i = 0; i < tagList.size(); i++){
-					ArrayList<Mesh> ms = readObjects((Element) tagList.get(i),mats,meshes,points);
+					ArrayList<Mesh> ms = readObjects((Element) tagList.get(i),mats,meshes,points,normals);
 					for(Mesh m: ms){
 						drawableMeshes.add(m);
 					}
@@ -77,7 +78,8 @@ public class XGL_Parser extends Parser{
 			Element root, 
 			HashMap<Integer,Material> mats, 
 			HashMap<Integer, ArrayList<Mesh>> meshes,
-			HashMap<Integer,float[]> points
+			HashMap<Integer,float[]> points,
+			HashMap<Integer,float[]> normals
 	) throws Exception{
 		ArrayList<Node> tagList;
 		tagList = findChildrenByName(root, "MAT");
@@ -101,7 +103,7 @@ public class XGL_Parser extends Parser{
 				//Only load meshes that could be referenced later
 
 				//Create Meshes
-				ArrayList<Mesh> ms = readMeshes((Element)tagList.get(i), mats, points);
+				ArrayList<Mesh> ms = readMeshes((Element)tagList.get(i), mats, meshes, points, normals);
 				int ID;
 				if(tagList.get(i).hasAttributes()){
 					//Get ID;
@@ -117,6 +119,21 @@ public class XGL_Parser extends Parser{
 		}
 		
 		tagList = findChildrenByName(root,"P");
+		if( tagList.size() != 0 ){
+			for(int i = 0; i < tagList.size(); i++){
+				Element ele = (Element)tagList.get(i);
+				//Get ID;
+				int ID = Integer.parseInt(ele.getAttribute("ID"));
+				
+				//Get point values
+				float[] pos = readVector(ele.getTextContent());
+				
+				//Add to hashmap
+				points.put(ID, pos);
+			}
+		}
+		
+		tagList = findChildrenByName(root,"N");
 		if( tagList.size() != 0 ){
 			for(int i = 0; i < tagList.size(); i++){
 				Element ele = (Element)tagList.get(i);
@@ -172,7 +189,7 @@ public class XGL_Parser extends Parser{
 				backup++;
 			}
 			
-			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats, points);
+			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats, meshes, points);
 			
 			//Add to references
 			meshes.put(ID, mtemp);
@@ -212,6 +229,7 @@ public class XGL_Parser extends Parser{
 	private ArrayList<Mesh> readMeshes(
 			Element root, 
 			HashMap<Integer, Material> _mats, 
+			HashMap<Integer, ArrayList<Mesh>> _meshes,
 			HashMap<Integer, float[]> _points
 	) throws Exception {
 		//Create clones so we don't overwrite the parent's references
@@ -219,6 +237,8 @@ public class XGL_Parser extends Parser{
 		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats.clone();
 		@SuppressWarnings("unchecked")
 		HashMap<Integer, float[]> points = (HashMap<Integer, float[]>) _points.clone();
+		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
+		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 		
 		readDefines(root, mats, null, points);
 		
@@ -228,6 +248,26 @@ public class XGL_Parser extends Parser{
 		//Faces created this call
 		HashMap<Integer, ArrayList<Face>> faces = readFaces(root,mats,points);
 		
+		//Get all defined Meshes
+		ArrayList<Node> tagList = findChildrenByName(root,"PATCH");
+		for( int i = 0; i < tagList.size(); i++){
+			int ID;
+			if(tagList.get(i).hasAttributes()){
+				ID = Integer.parseInt((((Element)tagList.get(i)).getAttribute("PATCHID")));
+			}else{
+				ID = backup;
+				backup++;
+			}
+			
+			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats,meshes, points);
+			
+			//Add to references
+			meshes.put(ID, mtemp);
+			for(Mesh m: mtemp ){
+				//Add to list being returned
+				created_meshes.add(m);
+			}
+		}
 		
 		for(Integer key: faces.keySet()){
 			//For every Material, grab that set of faces and shove it into a Mesh
@@ -243,7 +283,12 @@ public class XGL_Parser extends Parser{
 		return created_meshes;
 	}
 	
-	private HashMap<Integer, ArrayList<Face>> readFaces(Element root, HashMap<Integer, Material> _mats, HashMap<Integer, float[]> _points) throws Exception {
+	private HashMap<Integer, ArrayList<Face>> readFaces(
+			Element root, 
+			HashMap<Integer, Material> _mats, 
+			HashMap<Integer, float[]> _points,
+			HashMap<Integer, float[]> _normals
+	) throws Exception {
 		//Faces will be grouped by what material they are tied too
 		HashMap<Integer, ArrayList<Face>> faces = new HashMap<Integer, ArrayList<Face>>();
 		ArrayList<Node> tagList = findChildrenByName(root,"F");
@@ -258,6 +303,9 @@ public class XGL_Parser extends Parser{
 				for(int j = 0; j < vertexList.size(); j++){
 					float[] temp1 = _points.get((int)readScalarTag((Element)vertexList.get(j),"PREF",true));
 					f.addVertex(temp1);
+					
+					temp1 = _normals.get((int)readScalarTag((Element)vertexList.get(j),"NREF",true));
+					f.addVertexNorm(temp1);
 				}
 				if(faces.get(MatID) == null){
 					faces.put(MatID, new ArrayList<Face>());
@@ -265,7 +313,7 @@ public class XGL_Parser extends Parser{
 				faces.get(MatID).add(f);
 			}
 		}else{
-			throwException("Faces sought, but none found.");
+			//throwException("Faces sought, but none found.");
 		}
 		return faces;
 	}

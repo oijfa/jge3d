@@ -89,6 +89,7 @@ public class Face {
 	}
 	public void setNorm(float[] norm){normal = norm;}
 	public void addVertex(float[] fs){vertices.add(fs);}
+	public void addVertexNorm(float[] fs){vertexNormals.add(fs);}
 	
 	/*Getters*/
 	public float[] getNorm(){return normal;}
