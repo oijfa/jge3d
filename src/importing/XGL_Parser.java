@@ -22,8 +22,6 @@ import org.w3c.dom.NodeList;
 
 public class XGL_Parser extends Parser{
 	Model model;
-	int i;
-	int iiiiii;
 	
 	XGL_Parser(){}
 	
