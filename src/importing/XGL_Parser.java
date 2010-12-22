@@ -48,7 +48,8 @@ public class XGL_Parser extends Parser{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("WORLD")){
-				tagList = rootElement.getElementsByTagName("P");
+				tagList = rootElement.("P");
+				tagList.getLength();
 				//Get World Defines
 				readDefines(rootElement,mats,meshes,points);
 				
