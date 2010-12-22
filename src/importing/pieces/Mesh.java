@@ -1,6 +1,5 @@
 package importing.pieces;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +15,8 @@ public class Mesh {
 	public Mesh(){
 		faces = new ArrayList<Face>();
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		mat = null;
 		for(int i = 0; i < 3; i++){
@@ -28,6 +29,8 @@ public class Mesh {
 	}
 	public Mesh(Face[] _faces){
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		faces = (ArrayList<Face>) Arrays.asList(_faces );
 		mat = null;
@@ -42,6 +45,8 @@ public class Mesh {
 	public Mesh(Material m){
 		faces = new ArrayList<Face>();
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		mat = m;
 		for(int i = 0; i < 3; i++){
@@ -54,6 +59,8 @@ public class Mesh {
 	}
 	public Mesh(Face[] _faces, Material m){
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		faces = (ArrayList<Face>) Arrays.asList(_faces );
 		mat = m;
@@ -68,6 +75,8 @@ public class Mesh {
 	public Mesh(float[] loc){
 		faces = new ArrayList<Face>();
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		mat = null;
 		for(int i = 0; i < 3; i++){
@@ -80,6 +89,8 @@ public class Mesh {
 	}
 	public Mesh(Face[] _faces, float[] loc){
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		faces = (ArrayList<Face>) Arrays.asList(_faces );
 		mat = null;
@@ -94,6 +105,8 @@ public class Mesh {
 	public Mesh(Material m, float[] loc){
 		faces = new ArrayList<Face>();
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		mat = m;
 		for(int i = 0; i < 3; i++){
@@ -106,6 +119,8 @@ public class Mesh {
 	}
 	public Mesh(Face[] _faces, Material m, float[] loc){
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		faces = (ArrayList<Face>) Arrays.asList(_faces );
 		mat = m;
@@ -139,6 +154,8 @@ public class Mesh {
 	
 	public Mesh(ArrayList<Face> _faces) {
 		location = new float[3];
+		forward = new float[3];
+		up = new float[3];
 		
 		faces = _faces;
 		mat = null;
@@ -171,10 +188,11 @@ public class Mesh {
 	
 	public void draw(){
 		//Set Material
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, FloatBuffer.wrap(mat.getAmbient()));
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, FloatBuffer.wrap(mat.getDiffuse()));
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, FloatBuffer.wrap(mat.getSpecular()));
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, FloatBuffer.wrap(mat.getEmission()));
+		
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
 		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
 		
 		//Transform

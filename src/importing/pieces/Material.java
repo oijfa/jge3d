@@ -1,5 +1,9 @@
 package importing.pieces;
 
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
+
 public class Material {
 	//For all of these:  x = red, y = green, b = blue
 	private float[] ambientReflect; 	
@@ -179,16 +183,47 @@ public class Material {
 		return ambientReflect;
 	}
 	
+	public FloatBuffer getAmbientAsBuffer(){
+		FloatBuffer f = BufferUtils.createFloatBuffer(4);
+		f.put(ambientReflect);
+		f.put(1.0f);
+		f.flip();
+		return f;
+	}
+	
+	
 	public float[] getDiffuse() {
 		return diffuseReflect;
+	}
+	public FloatBuffer getDiffuseAsBuffer(){
+		FloatBuffer f = BufferUtils.createFloatBuffer(4);
+		f.put(diffuseReflect);
+		f.put(1.0f);
+		f.flip();
+		return f;
 	}
 	
 	public float[] getSpecular() {
 		return specularReflect;
 	}
+	public FloatBuffer getSpecularAsBuffer(){
+		FloatBuffer f = BufferUtils.createFloatBuffer(4);
+		f.put(specularReflect);
+		f.put(1.0f);
+		f.flip();
+		return f;
+	}
+	
 	
 	public float[] getEmission() {
 		return emission;
+	}
+	public FloatBuffer getEmissionAsBuffer(){
+		FloatBuffer f = BufferUtils.createFloatBuffer(4);
+		f.put(emission);
+		f.put(1.0f);
+		f.flip();
+		return f;
 	}
 	
 	public float getAlpha() {

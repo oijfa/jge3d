@@ -18,7 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 public class XGL_Parser extends Parser{
 	Model model;
@@ -42,7 +42,7 @@ public class XGL_Parser extends Parser{
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		dom = db.parse("./lib/legoman.xgl");
 		
-		NodeList tagList;
+		ArrayList<Node> tagList;
 		try {
 			//Now that we've got the file in DOM format, loop through elements
 			Element rootElement = dom.getDocumentElement();
@@ -53,9 +53,9 @@ public class XGL_Parser extends Parser{
 				
 				//Get any meshes from objects
 				
-				tagList = rootElement.getElementsByTagName("OBJ");
-				for(int i = 0; i < tagList.getLength(); i++){
-					ArrayList<Mesh> ms = readObjects((Element) tagList.item(i),mats,meshes,points);
+				tagList = findChildrenByName(rootElement, "OBJECT");
+				for(int i = 0; i < tagList.size(); i++){
+					ArrayList<Mesh> ms = readObjects((Element) tagList.get(i),mats,meshes,points);
 					for(Mesh m: ms){
 						drawableMeshes.add(m);
 					}
@@ -79,45 +79,47 @@ public class XGL_Parser extends Parser{
 			HashMap<Integer, ArrayList<Mesh>> meshes,
 			HashMap<Integer,float[]> points
 	) throws Exception{
-		NodeList tagList;
-		tagList = root.getElementsByTagName("MAT");
-		if( tagList.getLength() != 0 ){
-			for(int i = 0; i < tagList.getLength(); i++){
+		ArrayList<Node> tagList;
+		tagList = findChildrenByName(root, "MAT");
+		if( tagList.size() != 0 ){
+			for(int i = 0; i < tagList.size(); i++){
 				//Get ID;
-				int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
+				int ID = Integer.parseInt((((Element)tagList.get(i)).getAttribute("ID")));
 				
 				//Create material
-				Material m = readMaterial((Element)tagList.item(i));
+				Material m = readMaterial((Element)tagList.get(i));
 				
 				//Add to hashmap
 				mats.put(ID, m);
 			}
 		}
 		
-		tagList = root.getElementsByTagName("MESH");
-		if( tagList.getLength() != 0 ){
-			for(int i = 0; i < tagList.getLength(); i++){
+		root.getNodeName();
+		tagList = findChildrenByName(root, "MESH");
+		if( tagList.size() != 0 ){
+			for(int i = 0; i < tagList.size(); i++){
 				//Only load meshes that could be referenced later
 
-					//Create Meshes
-					ArrayList<Mesh> ms = readMeshes((Element)tagList.item(i), mats, points);
-					int ID;
-					if(tagList.item(i).hasAttributes()){
-						//Get ID;
-						ID = Integer.parseInt(((Element)tagList.item(i)).getAttribute("ID"));
-					}else{
-						ID = backup;
-						backup++;
-					}
-					//Shove them in hashmap
-					meshes.put(ID, ms);
+				//Create Meshes
+				ArrayList<Mesh> ms = readMeshes((Element)tagList.get(i), mats, points);
+				int ID;
+				if(tagList.get(i).hasAttributes()){
+					//Get ID;
+					ID = Integer.parseInt(((Element)tagList.get(i)).getAttribute("ID"));
+				}else{
+					ID = backup;
+					backup++;
+				}
+				
+				//Shove them in hashmap
+				meshes.put(ID, ms);
 			}
 		}
 		
-		tagList = root.getElementsByTagName("P");
-		if( tagList.getLength() != 0 ){
-			for(int i = 0; i < tagList.getLength(); i++){
-				Element ele = (Element)tagList.item(i);
+		tagList = findChildrenByName(root,"P");
+		if( tagList.size() != 0 ){
+			for(int i = 0; i < tagList.size(); i++){
+				Element ele = (Element)tagList.get(i);
 				//Get ID;
 				int ID = Integer.parseInt(ele.getAttribute("ID"));
 				
@@ -151,20 +153,26 @@ public class XGL_Parser extends Parser{
 			//Definitions outside of OBJ tags with no references from them will not be drawn
 		ArrayList<Mesh> createdMeshes = new ArrayList<Mesh>();
 		
-		NodeList tagList;
+		ArrayList<Node> tagList;
 		
 		//Transform information
-		float[] location = null;
-		float[] forward = null;
-		float[] up = null;
+		float[] location = {0.0f,0.0f,0.0f};
+		float[] forward = {0.0f,0.0f,1.0f};
+		float[] up = {0.0f,1.0f,0.0f};
 		readTransform(rootElement,location,forward,up);
 		
 		//Get all defined Meshes
-		tagList = rootElement.getElementsByTagName("MESH");
-		for( int i = 0; i < tagList.getLength(); i++){
-			int ID = Integer.parseInt((((Element)tagList.item(i)).getAttribute("ID")));
+		tagList = findChildrenByName(rootElement,"MESH");
+		for( int i = 0; i < tagList.size(); i++){
+			int ID;
+			if(tagList.get(i).hasAttributes()){
+				ID = Integer.parseInt((((Element)tagList.get(i)).getAttribute("ID")));
+			}else{
+				ID = backup;
+				backup++;
+			}
 			
-			ArrayList<Mesh> mtemp = readMeshes(rootElement, mats, points);
+			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats, points);
 			
 			//Add to references
 			meshes.put(ID, mtemp);
@@ -176,19 +184,19 @@ public class XGL_Parser extends Parser{
 		}
 		
 		//Read any sub objects
-		tagList = rootElement.getElementsByTagName("OBJ");
-		for(int i = 0; i < tagList.getLength(); i++){
+		tagList = findChildrenByName(rootElement,"OBJ");
+		for(int i = 0; i < tagList.size(); i++){
 			//Get all Meshes from sub Objects
-			ArrayList<Mesh> mtemp = readObjects((Element) tagList.item(i),mats,meshes,points);
+			ArrayList<Mesh> mtemp = readObjects((Element) tagList.get(i),mats,meshes,points);
 			for(Mesh m: mtemp ){
 				createdMeshes.add(m);
 			}
 		}
 		
 		//Handle Mesh reference tags
-		tagList = rootElement.getElementsByTagName("MREF");
-		for(int i = 0; i < tagList.getLength(); i++){
-			int mref = Integer.parseInt(tagList.item(i).getTextContent());
+		tagList = findChildrenByName(rootElement,"MREF");
+		for(int i = 0; i < tagList.size(); i++){
+			int mref = Integer.parseInt(tagList.get(i).getTextContent());
 			ArrayList<Mesh> refrenced_meshes = meshes.get(mref);
 			for(Mesh m : refrenced_meshes){
 				//Transform the Mesh
@@ -238,16 +246,18 @@ public class XGL_Parser extends Parser{
 	private HashMap<Integer, ArrayList<Face>> readFaces(Element root, HashMap<Integer, Material> _mats, HashMap<Integer, float[]> _points) throws Exception {
 		//Faces will be grouped by what material they are tied too
 		HashMap<Integer, ArrayList<Face>> faces = new HashMap<Integer, ArrayList<Face>>();
-		NodeList tagList = root.getElementsByTagName("F");
-		if(tagList.getLength() != 0){
-			for( int i = 0; i < tagList.getLength(); i++){
-				Element ele = (Element)tagList.item(i);
-				int MatID = (int)readScalarTag(root,"MATREF",true);
+		ArrayList<Node> tagList = findChildrenByName(root,"F");
+		if(tagList.size() != 0){
+			for( int i = 0; i < tagList.size(); i++){
+				Element ele = (Element)tagList.get(i);
+				int MatID = (int)readScalarTag(ele,"MATREF",true);
 				Face f = new Face();
 				
-				NodeList vertexList = ele.getElementsByTagName("FV*");
-				for(int j = 0; j < vertexList.getLength(); j++){
-					f.addVertex(readVectorTag((Element)vertexList.item(j),"PREF",true));
+				String[] temp = {"FV1", "FV2", "FV3"};
+				ArrayList<Node> vertexList = findChildrenByName(ele,temp);
+				for(int j = 0; j < vertexList.size(); j++){
+					float[] temp1 = _points.get((int)readScalarTag((Element)vertexList.get(j),"PREF",true));
+					f.addVertex(temp1);
 				}
 				if(faces.get(MatID) == null){
 					faces.put(MatID, new ArrayList<Face>());
@@ -273,36 +283,36 @@ public class XGL_Parser extends Parser{
 	}
 
 	private void readTransform(Element ele, float[] location, float[] forward, float[] up) throws Exception{
-		NodeList tagList;
-		tagList = ele.getElementsByTagName("TRANSFORM");
-		if( tagList.getLength() == 1 ){
-			float[] local_location = readVectorTag((Element) tagList.item(0),"POSITION",true);
-			float[] local_forward = readVectorTag((Element) tagList.item(0),"FORWARD",true);
-			float[] local_up = readVectorTag((Element) tagList.item(0),"UP",true);
+		ArrayList<Node> tagList;
+		tagList = findChildrenByName(ele,"TRANSFORM");
+		if( tagList.size() == 1 ){
+			float[] local_location = readVectorTag((Element) tagList.get(0),"POSITION",true);
+			float[] local_forward = readVectorTag((Element) tagList.get(0),"FORWARD",true);
+			float[] local_up = readVectorTag((Element) tagList.get(0),"UP",true);
 			
 			for(int i = 0; i < 3; i++){
 				location[i] += local_location[i];
 				forward[i] += local_forward[i];
 				up[i] += local_up[i];
 			}
-		}else if(tagList.getLength() == 0){
-			throwException("Transform sought, but none found.");
-		}else if(tagList.getLength() > 1){
+		}else if(tagList.size() == 0){
+			//Do nothing, its fine.
+		}else if(tagList.size() > 1){
 			throwException("Multiple Transform in one tag");
 		}
 	}
 	
 	private float[] readVectorTag(Element root, String childName, boolean required) throws Exception {
-		NodeList tagList;
-		tagList = root.getElementsByTagName(childName);
-		if( tagList.getLength() == 1 ){
-			Element e = (Element)tagList.item(0);
+		ArrayList<Node> tagList;
+		tagList = findChildrenByName(root,childName);
+		if( tagList.size() == 1 ){
+			Element e = (Element)tagList.get(0);
 			return readVector(e.getTextContent());
-		}else if(tagList.getLength() == 0){
+		}else if(tagList.size() == 0){
 			if(required){
 				throwException("Material Tag with no " + childName + " Tag");
 			}
-		}else if(tagList.getLength() > 1){
+		}else if(tagList.size() > 1){
 			throwException("Material Tag with redundant " + childName + " Tag");
 		}
 		
@@ -320,21 +330,40 @@ public class XGL_Parser extends Parser{
 		return ret;
 	}
 	
-	private float readScalarTag(Element root, String childName, boolean required) throws Exception {
-		NodeList tagList;
-		tagList = root.getElementsByTagName(childName);
-		if( tagList.getLength() == 1 ){
-			Element e = (Element)tagList.item(0);
-			return Float.parseFloat(e.getTextContent());
-		}else if(tagList.getLength() == 0){
-			if(required){
-				throwException("Material Tag with no " + childName + " Tag");
+	private ArrayList<Node> findChildrenByName(Node root, String name){
+		String[] names = new String[1];
+		names[0] = name;
+		return findChildrenByName(root,names);
+	}
+	private ArrayList<Node> findChildrenByName(Node root, String[] names){
+		ArrayList<Node> list = new ArrayList<Node>();
+		for( int i = 0; i < names.length; i++){
+			Node e = root.getFirstChild();
+			while(e != null){
+				if(e.getNodeName().equals(names[i])){
+					list.add(e);
+				}
+				e = e.getNextSibling();
 			}
-		}else if(tagList.getLength() > 1){
+		}
+		return list;
+	}
+	
+	private float readScalarTag(Element root, String childName, boolean required) throws Exception {
+		ArrayList<Node> tagList;
+		tagList = findChildrenByName(root,childName);
+		if( tagList.size() == 1 ){
+			Element e = (Element)tagList.get(0);
+			return Float.parseFloat(e.getTextContent());
+		}else if(tagList.size() == 0){
+			if(required){
+				throwException(root.getNodeName() + " Tag with no " + childName + " Tag");
+			}
+		}else if(tagList.size() > 1){
 			throwException(root.getNodeName() + " Tag with redundant " + childName + " Tag");
 		}
 		
-		return -500;
+		return -500;//? TODO
 	}
 	
 	private void throwException(String message) throws Exception{

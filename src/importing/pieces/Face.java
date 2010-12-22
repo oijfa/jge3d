@@ -99,6 +99,7 @@ public class Face {
 			GL11.glVertex3f(f[0], f[1], f[2]);
 		}
 		
+		/*
 		// Front
 		GL11.glColor3f(0.0f, 1.0f, 1.0f);
 		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
@@ -130,5 +131,6 @@ public class Face {
 		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
 		GL11.glColor3f(0.2f, 0.2f, 0.2f);
 		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
+		*/
 	}
 }
