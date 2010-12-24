@@ -1766,17 +1766,17 @@
 	<P ID="106">30.846790,3.599234,15.223709</P>
 	<P ID="107">29.240910,3.599234,15.223709</P>
 	<F>
-	<MATREF>1</MATREF>
-	<S>16</S>
-	<FV1>
-	<PREF>32</PREF>
-	</FV1>
-	<FV2>
-	<PREF>31</PREF>
-	</FV2>
-	<FV3>
-	<PREF>30</PREF>
-	</FV3>
+		<MATREF>1</MATREF>
+		<S>16</S>
+		<FV1>
+			<PREF>32</PREF>
+		</FV1>
+		<FV2>
+			<PREF>31</PREF>
+		</FV2>
+		<FV3>
+			<PREF>30</PREF>
+		</FV3>
 	</F>
 	<F>
 	<MATREF>1</MATREF>

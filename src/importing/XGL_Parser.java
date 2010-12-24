@@ -67,6 +67,9 @@ public class XGL_Parser extends Parser{
 			
 			//Everything read in, create the model
 			model = new Model(drawableMeshes);
+			
+			//TODO: Remove this debug
+			System.out.println(model.toString());
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -152,7 +155,8 @@ public class XGL_Parser extends Parser{
 	private ArrayList<Mesh> readObjects(Element rootElement,
 			HashMap<Integer, Material> _mats, 
 			HashMap<Integer, ArrayList<Mesh>> _meshes,
-			HashMap<Integer, float[]> _points
+			HashMap<Integer, float[]> _points,
+			HashMap<Integer, float[]> _normals
 	) throws Exception {
 		//Create clones so we don't overwrite the parent's references
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
@@ -161,9 +165,11 @@ public class XGL_Parser extends Parser{
 		HashMap<Integer, float[]> points = (HashMap<Integer, float[]>) _points.clone();
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
 		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
+		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
+		HashMap<Integer, float[]> normals = (HashMap<Integer, float[]>) _normals.clone();
 		
 		//Add defines created in this tag
-		readDefines(rootElement,mats,meshes,points);
+		readDefines(rootElement,mats,meshes,points,normals);
 		
 		//Holds all the meshes we create
 			//Since these are in objects, these are what will actually be added to the model in the end.
@@ -189,7 +195,7 @@ public class XGL_Parser extends Parser{
 				backup++;
 			}
 			
-			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats, meshes, points);
+			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats, meshes, points, normals);
 			
 			//Add to references
 			meshes.put(ID, mtemp);
@@ -204,7 +210,7 @@ public class XGL_Parser extends Parser{
 		tagList = findChildrenByName(rootElement,"OBJ");
 		for(int i = 0; i < tagList.size(); i++){
 			//Get all Meshes from sub Objects
-			ArrayList<Mesh> mtemp = readObjects((Element) tagList.get(i),mats,meshes,points);
+			ArrayList<Mesh> mtemp = readObjects((Element) tagList.get(i),mats,meshes,points,normals);
 			for(Mesh m: mtemp ){
 				createdMeshes.add(m);
 			}
@@ -230,23 +236,26 @@ public class XGL_Parser extends Parser{
 			Element root, 
 			HashMap<Integer, Material> _mats, 
 			HashMap<Integer, ArrayList<Mesh>> _meshes,
-			HashMap<Integer, float[]> _points
+			HashMap<Integer, float[]> _points,
+			HashMap<Integer, float[]> _normals
 	) throws Exception {
 		//Create clones so we don't overwrite the parent's references
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
 		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats.clone();
 		@SuppressWarnings("unchecked")
 		HashMap<Integer, float[]> points = (HashMap<Integer, float[]>) _points.clone();
+		@SuppressWarnings("unchecked")
+		HashMap<Integer, float[]> normals = (HashMap<Integer, float[]>) _normals.clone();
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
 		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 		
-		readDefines(root, mats, null, points);
+		readDefines(root, mats, null, points, normals);
 		
 		//Meshes created this call
 		ArrayList<Mesh> created_meshes = new ArrayList<Mesh>();
 		
 		//Faces created this call
-		HashMap<Integer, ArrayList<Face>> faces = readFaces(root,mats,points);
+		HashMap<Integer, ArrayList<Face>> faces = readFaces(root,mats,points,normals);
 		
 		//Get all defined Meshes
 		ArrayList<Node> tagList = findChildrenByName(root,"PATCH");
@@ -259,7 +268,7 @@ public class XGL_Parser extends Parser{
 				backup++;
 			}
 			
-			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats,meshes, points);
+			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats,meshes, points, normals);
 			
 			//Add to references
 			meshes.put(ID, mtemp);
@@ -304,8 +313,10 @@ public class XGL_Parser extends Parser{
 					float[] temp1 = _points.get((int)readScalarTag((Element)vertexList.get(j),"PREF",true));
 					f.addVertex(temp1);
 					
-					temp1 = _normals.get((int)readScalarTag((Element)vertexList.get(j),"NREF",true));
-					f.addVertexNorm(temp1);
+					temp1 = _normals.get((int)readScalarTag((Element)vertexList.get(j),"NREF",false));
+					if(temp1 != null){
+						f.addVertexNorm(temp1);
+					}
 				}
 				if(faces.get(MatID) == null){
 					faces.put(MatID, new ArrayList<Face>());

@@ -207,4 +207,22 @@ public class Mesh {
 		}
 		GL11.glEnd();
 	}
+	
+	/*Debug*/
+	public String toString(){
+		String ret = "";
+		ret += "		location: (" + location[0] + "," + location[1] + "," + location[2] + ")\n";
+		ret += "		forward: (" + forward[0] + "," + forward[1] + "," + forward[2] + ")\n";
+		ret += "		up: (" + up[0] + "," + up[1] + "," + up[2] + ")\n";
+		ret += "		Material{\n";
+		ret += mat.toString();
+		ret += "		}\n";	
+		ret += "		# of Faces: " + faces.size() + "\n";	
+		for( Integer i = 0; i < faces.size(); i++){
+			ret += "		Face" + i.toString() + "{\n";
+			ret += faces.get(i).toString();
+			ret += "		}\n";
+		}
+		return ret;
+	}
 }

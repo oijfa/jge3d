@@ -134,4 +134,17 @@ public class Face {
 		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
 		*/
 	}
+	
+	/*Debug*/
+	public String toString(){
+		String ret = "";
+		for(int i = 0; i < vertices.size(); i++){
+			ret += "			vert " + String.valueOf(i) + ": (" + vertices.get(i)[0] + "," + vertices.get(i)[1] + "," + vertices.get(i)[2] + ")\n";
+		}
+		for(int i = 0; i < vertexNormals.size(); i++){
+			ret += "			vert norm " + String.valueOf(i) + ": (" + vertexNormals.get(i)[0] + "," + vertexNormals.get(i)[1] + "," + vertexNormals.get(i)[2] + ")\n";
+		}
+		ret += "			normal: (" + normal[0] + "," + normal[1] + "," + normal[2] + ")\n";	
+		return ret;
+	}
 }

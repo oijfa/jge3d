@@ -41,4 +41,17 @@ public class Model {
 			GL11.glPopMatrix();
 		}
 	}
+	
+	/*Debug*/
+	public String toString(){
+		String ret = "Model{\n";
+		ret += "	# of Meshes:" + meshes.size() + "\n";
+		for( Integer i = 0; i < meshes.size(); i++){
+			ret += "	Mesh " + i.toString() + "{\n";
+			ret += meshes.get(i).toString();
+			ret += "	}\n";	
+		}
+		ret += "}\n";
+		return ret;
+	}
 }

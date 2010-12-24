@@ -1,3 +1,4 @@
+//TODO: Remove reference variable, its useless
 package importing.pieces;
 
 import java.nio.FloatBuffer;
@@ -276,5 +277,16 @@ public class Material {
 	public void setSpecular(float[] s)
 	{
 		specularReflect = s;
+	}
+	
+	public String toString(){
+		String ret = "";
+		ret += "			ambientReflect: (" + ambientReflect[0] + "," + ambientReflect[1] + "," + ambientReflect[2] + ")\n";
+		ret += "			diffuseReflect: (" + diffuseReflect[0] + "," + diffuseReflect[1] + "," + diffuseReflect[2] + ")\n";
+		ret += "			specularReflect: (" + specularReflect[0] + "," + specularReflect[1] + "," + specularReflect[2] + ")\n";
+		ret += "			emission: (" + emission[0] + "," + emission[1] + "," + emission[2] + ")\n";
+		ret += "			alpha: " + String.valueOf(alpha) + "\n";
+		ret += "			shine: " + String.valueOf(shine) + "\n";
+		return ret;
 	}
 }
