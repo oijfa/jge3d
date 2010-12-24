@@ -1,4 +1,12 @@
 <WORLD>
+	<P ID="0">1.0,1.0,1.0</P>
+	<P ID="1">1.0,1.0,-1.0</P>
+	<P ID="2">1.0,-1.0,1.0</P>
+	<P ID="3">1.0,-1.0,-1.0</P>
+	<P ID="4">-1.0,1.0,1.0</P>
+	<P ID="5">-1.0,1.0,-1.0</P>
+	<P ID="6">-1.0,-1.0,1.0</P>
+	<P ID="7">-1.0,-1.0,-1.0</P>
 	<MAT ID="0">
 		<ALPHA>1.000</ALPHA>
 		<AMB>1.000,1.000,0.500</AMB>
@@ -14,6 +22,31 @@
 		<SPEC>0.996,0.996,0.996</SPEC>
 		<SHINE>64.000</SHINE>
 	</MAT>
+	<MESH ID=0>
+		<COMMENT>RIGHT SIDE</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>0</PREF></FV1><FV2><PREF>1</PREF></FV2><FV3><PREF>2</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>1</PREF></FV1><FV2><PREF>2</PREF></FV2><FV3><PREF>3</PREF></FV3></F>
+
+		<COMMENT>LEFT SIDE</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>4</PREF></FV1><FV2><PREF>5</PREF></FV2><FV3><PREF>6</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>5</PREF></FV1><FV2><PREF>6</PREF></FV2><FV3><PREF>7</PREF></FV3></F>
+
+		<COMMENT>FRONT</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>0</PREF></FV1><FV2><PREF>2</PREF></FV2><FV3><PREF>4</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>2</PREF></FV1><FV2><PREF>4</PREF></FV2><FV3><PREF>6</PREF></FV3></F>
+
+		<COMMENT>BOTTOM</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>2</PREF></FV1><FV2><PREF>3</PREF></FV2><FV3><PREF>6</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>3</PREF></FV1><FV2><PREF>6</PREF></FV2><FV3><PREF>7</PREF></FV3></F>
+
+		<COMMENT>TOP</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>0</PREF></FV1><FV2><PREF>1</PREF></FV2><FV3><PREF>4</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>1</PREF></FV1><FV2><PREF>4</PREF></FV2><FV3><PREF>5</PREF></FV3></F>
+
+		<COMMENT>BACK</COMMENT>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>1</PREF></FV1><FV2><PREF>3</PREF></FV2><FV3><PREF>5</PREF></FV3></F>
+		<F><MATREF>1</MATREF><S>16</S><FV1><PREF>3</PREF></FV1><FV2><PREF>5</PREF></FV2><FV3><PREF>7</PREF></FV3></F>
+	</MESH>
 	<OBJECT>
 		<TRANSFORM>
 			<FORWARD>0.0,0.0,1.0</FORWARD>
@@ -21,185 +54,6 @@
 			<POSITION>0.0,0.0,0.0</POSITION>
 			<SCALE>1.0</SCALE>
 		</TRANSFORM>
-		<MESH>
-			<P ID="0">1.0,1.0,1.0</P>
-			<P ID="1">1.0,1.0,-1.0</P>
-			<P ID="2">1.0,-1.0,1.0</P>
-			<P ID="3">1.0,-1.0,-1.0</P>
-			<P ID="4">-1.0,1.0,1.0</P>
-			<P ID="5">-1.0,1.0,-1.0</P>
-			<P ID="6">-1.0,-1.0,1.0</P>
-			<P ID="7">-1.0,-1.0,-1.0</P>
-			
-			<COMMENT>RIGHT SIDE</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>0</PREF>
-				</FV1>
-				<FV2>
-					<PREF>1</PREF>
-				</FV2>
-				<FV3>
-					<PREF>2</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>1</PREF>
-				</FV1>
-				<FV2>
-					<PREF>2</PREF>
-				</FV2>
-				<FV3>
-					<PREF>3</PREF>
-				</FV3>
-			</F>
-
-			<COMMENT>LEFT SIDE</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>4</PREF>
-				</FV1>
-				<FV2>
-					<PREF>5</PREF>
-				</FV2>
-				<FV3>
-					<PREF>6</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>5</PREF>
-				</FV1>
-				<FV2>
-					<PREF>6</PREF>
-				</FV2>
-				<FV3>
-					<PREF>7</PREF>
-				</FV3>
-			</F>
-
-			<COMMENT>FRONT</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>0</PREF>
-				</FV1>
-				<FV2>
-					<PREF>2</PREF>
-				</FV2>
-				<FV3>
-					<PREF>4</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>2</PREF>
-				</FV1>
-				<FV2>
-					<PREF>4</PREF>
-				</FV2>
-				<FV3>
-					<PREF>6</PREF>
-				</FV3>
-			</F>
-
-			<COMMENT>BOTTOM</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>2</PREF>
-				</FV1>
-				<FV2>
-					<PREF>3</PREF>
-				</FV2>
-				<FV3>
-					<PREF>6</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>3</PREF>
-				</FV1>
-				<FV2>
-					<PREF>6</PREF>
-				</FV2>
-				<FV3>
-					<PREF>7</PREF>
-				</FV3>
-			</F>
-
-
-			<COMMENT>TOP</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>0</PREF>
-				</FV1>
-				<FV2>
-					<PREF>1</PREF>
-				</FV2>
-				<FV3>
-					<PREF>4</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>1</PREF>
-				</FV1>
-				<FV2>
-					<PREF>4</PREF>
-				</FV2>
-				<FV3>
-					<PREF>5</PREF>
-				</FV3>
-			</F>
-
-
-			<COMMENT>BACK</COMMENT>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>1</PREF>
-				</FV1>
-				<FV2>
-					<PREF>3</PREF>
-				</FV2>
-				<FV3>
-					<PREF>5</PREF>
-				</FV3>
-			</F>
-			<F>
-				<MATREF>1</MATREF>
-				<S>16</S>
-				<FV1>
-					<PREF>3</PREF>
-				</FV1>
-				<FV2>
-					<PREF>5</PREF>
-				</FV2>
-				<FV3>
-					<PREF>7</PREF>
-				</FV3>
-			</F>
-		</MESH>
+		<OBJECT><MESHREF>0</MESHREF></OBJECT>
 	</OBJECT>
 </WORLD>

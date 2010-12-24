@@ -207,7 +207,7 @@ public class XGL_Parser extends Parser{
 		}
 		
 		//Read any sub objects
-		tagList = findChildrenByName(rootElement,"OBJ");
+		tagList = findChildrenByName(rootElement,"OBJECT");
 		for(int i = 0; i < tagList.size(); i++){
 			//Get all Meshes from sub Objects
 			ArrayList<Mesh> mtemp = readObjects((Element) tagList.get(i),mats,meshes,points,normals);
