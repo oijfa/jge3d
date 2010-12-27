@@ -189,11 +189,11 @@ public class Mesh {
 	public void draw(){
 		//Set Material
 		
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, mat.getShine());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
+		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
 		
 		//Transform
 		GL11.glTranslatef(location[0], location[1], location[2]);
