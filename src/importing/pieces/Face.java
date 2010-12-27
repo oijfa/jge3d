@@ -95,13 +95,34 @@ public class Face {
 	public float[] getNorm(){return normal;}
 
 	public void draw() {
-		
+		float[] norm = calculateNormal(vertices.get(0),vertices.get(1),vertices.get(2));
+		GL11.glNormal3f(norm[0], norm[1], norm[2]);
 		for(int i = 0; i < vertices.size(); i++){
 			float[] f = vertices.get(i);
-			float[] n = vertexNormals.get(i);
-			GL11.glVertex3f(f[0], f[1], f[2]);
-			GL11.glNormal3f(n[0], n[1], n[2]);
+			//float[] n = vertexNormals.get(i);
+			GL11.glVertex3f(f[0], f[1], f[2]);	
 		}
+	}
+	
+	private float[] calculateNormal(float[] p1, float[] p2, float[] p3){
+		int x = 0;
+		int y = 1;
+		int z = 2;
+		
+		float[] U = new float[3];
+		float[] V = new float[3];
+		float[] norm = new float[3];
+		
+		for(int i = 0; i < 3; i++){
+			U[i] = p2[i] - p3[i];
+			V[i] = p3[i] - p1[i];
+		}
+		
+		norm[x] = (U[y]*V[z]) - (U[z]*V[y]);
+		norm[y] = (U[z]*V[x]) - (U[x]*V[z]);
+		norm[z] = (U[x]*V[y]) - (U[y]*V[x]);
+		
+		return norm;
 	}
 	
 	/*Debug*/
