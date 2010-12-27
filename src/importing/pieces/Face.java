@@ -96,43 +96,12 @@ public class Face {
 
 	public void draw() {
 		
-		for(float[] f: vertices){
+		for(int i = 0; i < vertices.size(); i++){
+			float[] f = vertices.get(i);
+			float[] n = vertexNormals.get(i);
 			GL11.glVertex3f(f[0], f[1], f[2]);
+			GL11.glNormal3f(n[0], n[1], n[2]);
 		}
-		
-		/*
-		// Front
-		GL11.glColor3f(0.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-
-		// Right Side Facing Front
-		GL11.glColor3f(0.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-
-		// Left Side Facing Front
-		GL11.glColor3f(0.0f, 1.0f, 1.0f);
-		GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-
-		// Bottom
-		GL11.glColor3f(0.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-		GL11.glColor3f(0.1f, 0.1f, 0.1f);
-		GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-		GL11.glColor3f(0.2f, 0.2f, 0.2f);
-		GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-		*/
 	}
 	
 	/*Debug*/

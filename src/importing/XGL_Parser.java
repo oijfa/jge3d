@@ -68,7 +68,7 @@ public class XGL_Parser extends Parser{
 			//Everything read in, create the model
 			model = new Model(drawableMeshes);
 			
-			//TODO: Remove this debug
+			//: Remove this debug
 			System.out.println(model.toString());
 
 		}catch(Exception e){
@@ -140,7 +140,8 @@ public class XGL_Parser extends Parser{
 				if(tagList.get(i).hasAttributes()){
 					//Get ID;
 					ID = Integer.parseInt(((Element)tagList.get(i)).getAttribute("ID"));
-					System.out.println("Reading Mesh ID: " + String.valueOf(ID));
+					
+					//System.out.println("Reading Mesh ID: " + String.valueOf(ID));
 				}else{
 					ID = backup;
 					backup++;
@@ -262,6 +263,7 @@ public class XGL_Parser extends Parser{
 		//Get all defined Patches
 		ArrayList<Node> tagList = findChildrenByName(root,"PATCH");
 		for( int i = 0; i < tagList.size(); i++){
+			/*
 			int ID;
 			if(tagList.get(i).hasAttributes()){
 				ID = Integer.parseInt((((Element)tagList.get(i)).getAttribute("PATCHID")));
@@ -269,7 +271,9 @@ public class XGL_Parser extends Parser{
 				ID = backup;
 				backup++;
 			}
+			
 			System.out.println("Reading PATCH ID: " + String.valueOf(ID));
+			*/
 			
 			ArrayList<Mesh> mtemp = readMeshes((Element)tagList.get(i), mats,meshes, points, normals);
 			
