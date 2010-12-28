@@ -61,6 +61,7 @@ public class Controller {
 		renderer = new Renderer();
 		render_thread.start();
 		physics_thread.start();
+		input_thread.start();
 	}
 
 	public void run_queue() {
@@ -101,24 +102,31 @@ public class Controller {
 	// Create the Input Listening thread
 	Thread input_thread = new Thread() {
 		public void run() {
+			try{
+				Keyboard.create();
+				Keyboard.enableRepeatEvents(true);
+			}
+			catch(Exception ex){
+					ex.printStackTrace();
+			}
 			while (isRunning) {
 				Keyboard.poll();
 				Mouse.poll();
 				Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 				// read keyboard and mouse
 				if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-					
+					System.out.println("W");
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-					
+					System.out.println("S");
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-					
+					System.out.println("D");
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-					
+					System.out.println("A");
 				}
 				// Input.getInstance().updateInput();
 			}
 		}
-	}; //FUCK THIS SHIT!!!!!!
+	}; 
 	
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
