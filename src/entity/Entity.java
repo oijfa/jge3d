@@ -23,6 +23,8 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
+import physics.Physics;
+
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -32,8 +34,10 @@ import com.bulletphysics.linearmath.Transform;
 public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
-	
 	private Model model;
+	
+	/*Properties the engine uses alot*/
+	public static String NAME = "name";
 	
 	//Required keys
 	private String[] reqKeys = {"name", "collidable", "TTL"};
@@ -74,6 +78,7 @@ public class Entity extends RigidBody{
 		data.put("name", "ent" + String.valueOf(num_entities));
 		data.put("collidable", c);
 		data.put("TTL", 0);
+		Physics.getInstance().addEntity(this);
 	}
 	
 	/* Setters */
@@ -130,72 +135,6 @@ public class Entity extends RigidBody{
 	}
 	public Object getProperty(String key){return data.get(key);}
 	
-	/*
-	public void draw(){
-		float[] body_matrix = new float[16];
-		java.nio.FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-		Transform transformMatrix = new Transform();
-		
-		GL11.glPushMatrix();
-			//Get the transform Matrix
-			if (this.getMotionState() != null) {
-				DefaultMotionState myMotionState = (DefaultMotionState) this.getMotionState();
-				transformMatrix.set(myMotionState.graphicsWorldTrans);
-			}
-			
-			//use it to get the body matrix
-			transformMatrix.getOpenGLMatrix(body_matrix);
-			
-			//Put all this matrix shit in a float buffer
-			buf.put(body_matrix);
-			buf.flip();
-	
-			//draw the damn float butter
-			GL11.glMultMatrix(buf);
-			
-			Vector3f pos = new Vector3f();
-			this.getCenterOfMassPosition(pos);
-			GL11.glTranslatef(pos.x, pos.y, pos.z);
-			
-			GL11.glBegin(GL11.GL_TRIANGLES);
-			// Front
-			GL11.glColor3f(0.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-			GL11.glColor3f(0.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glColor3f(0.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-	
-			// Right Side Facing Front
-			GL11.glColor3f(0.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-			GL11.glColor3f(0.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glColor3f(0.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-	
-			// Left Side Facing Front
-			GL11.glColor3f(0.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(0.0f, 1.0f, 0.0f);
-			GL11.glColor3f(0.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-			GL11.glColor3f(0.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-	
-			// Bottom
-			GL11.glColor3f(0.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glColor3f(0.1f, 0.1f, 0.1f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glColor3f(0.2f, 0.2f, 0.2f);
-			GL11.glVertex3f(0.0f, -1.0f, -1.0f);
-		GL11.glEnd();
-			
-			//clear the fucking float buffer
-			buf.clear();
-		GL11.glPopMatrix();
-	}
-	*/
 	public void draw(){
 		Vector3f pos = new Vector3f();
 		this.getCenterOfMassPosition(pos);

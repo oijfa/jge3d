@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -18,6 +20,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import entity.Camera;
 import entity.EntityList;
 
 import window.Window;
@@ -46,9 +49,13 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		
 		//Setup Camera
+		Camera cam = (Camera) objectList.getItem("camera");
+		Vector3f camPos = new Vector3f();
+		float[] focusPos = cam.getFocus();
+		cam.getCenterOfMassPosition(camPos);
 		GLU.gluLookAt(
-				-15, -25f, -10f, 	//Camera Location
-				0, 0, 0, 		//Focus On Location
+				camPos.x, camPos.y, camPos.z, 	//Camera Location
+				focusPos[0], focusPos[1], focusPos[2], 		//Focus On Location
 				0, 1, 0			//Up Vector
 		);
 
