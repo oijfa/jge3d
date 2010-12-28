@@ -100,7 +100,7 @@ public class Controller {
 				// Input.getInstance().updateInput();
 			}
 		}
-	};
+	}; //FUCK THIS SHIT!!!!!!
 	
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
