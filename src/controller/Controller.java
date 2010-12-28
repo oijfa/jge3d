@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import physics.Physics;
 
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -30,6 +33,7 @@ public class Controller {
 	private static Controller controller;
 	private Renderer renderer;
 	private long frames = 0;
+	private Camera camera;
 
 	private EntityList objectList;
 	
@@ -98,7 +102,19 @@ public class Controller {
 	Thread input_thread = new Thread() {
 		public void run() {
 			while (isRunning) {
+				Keyboard.poll();
+				Mouse.poll();
+				Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 				// read keyboard and mouse
+				if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+					
+				}else if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+					
+				}else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+					
+				}else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+					
+				}
 				// Input.getInstance().updateInput();
 			}
 		}

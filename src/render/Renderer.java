@@ -49,7 +49,7 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		
 		//Setup Camera
-		Camera cam = (Camera) objectList.getItem("camera");
+		Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		Vector3f camPos = new Vector3f();
 		float[] focusPos = cam.getFocus();
 		cam.getCenterOfMassPosition(camPos);

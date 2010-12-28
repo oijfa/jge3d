@@ -8,6 +8,7 @@ import com.bulletphysics.linearmath.MotionState;
 
 public class Camera extends Entity{
 	private float[] focus;
+	public static String CAMERA_NAME = "camera";
 	
 	/* Constructors */
 	public Camera(RigidBodyConstructionInfo r, boolean collide) {
