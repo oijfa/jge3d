@@ -91,8 +91,7 @@ public class Controller {
 	*/
 	//=================================
 
-	//TODO:  Reimplement this block
-	/*
+	
 	// Create the Input Listening thread
 	Thread input_thread = new Thread() {
 		public void run() {
@@ -102,7 +101,7 @@ public class Controller {
 			}
 		}
 	};
-	*/
+	
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
