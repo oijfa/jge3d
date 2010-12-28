@@ -69,7 +69,7 @@ public class XGL_Parser extends Parser{
 			model = new Model(drawableMeshes);
 			
 			//: Remove this debug
-			System.out.println(model.toString());
+			//System.out.println(model.toString());
 
 		}catch(Exception e){
 			e.printStackTrace();

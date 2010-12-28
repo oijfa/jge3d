@@ -11,6 +11,7 @@ public class Material {
 	private float[] diffuseReflect;	
 	private float[] specularReflect;	//default 0.0f, 0.0f, 0.0f
 	private float[] emission; //default 0.0f, 0.0f, 0.0f
+	static private FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 	private float alpha; //default 1.0f
 	private float shine; //default 0.0f
 	private int reference;
@@ -185,11 +186,11 @@ public class Material {
 	}
 	
 	public FloatBuffer getAmbientAsBuffer(){
-		FloatBuffer f = BufferUtils.createFloatBuffer(4);
-		f.put(ambientReflect);
-		f.put(1.0f);
-		f.flip();
-		return f;
+		buffer.clear();
+		buffer.put(ambientReflect);
+		buffer.put(1.0f);
+		buffer.flip();
+		return buffer;
 	}
 	
 	
@@ -197,22 +198,22 @@ public class Material {
 		return diffuseReflect;
 	}
 	public FloatBuffer getDiffuseAsBuffer(){
-		FloatBuffer f = BufferUtils.createFloatBuffer(4);
-		f.put(diffuseReflect);
-		f.put(1.0f);
-		f.flip();
-		return f;
+		buffer.clear();
+		buffer.put(diffuseReflect);
+		buffer.put(1.0f);
+		buffer.flip();
+		return buffer;
 	}
 	
 	public float[] getSpecular() {
 		return specularReflect;
 	}
 	public FloatBuffer getSpecularAsBuffer(){
-		FloatBuffer f = BufferUtils.createFloatBuffer(4);
-		f.put(specularReflect);
-		f.put(1.0f);
-		f.flip();
-		return f;
+		buffer.clear();
+		buffer.put(specularReflect);
+		buffer.put(1.0f);
+		buffer.flip();
+		return buffer;
 	}
 	
 	
@@ -220,11 +221,11 @@ public class Material {
 		return emission;
 	}
 	public FloatBuffer getEmissionAsBuffer(){
-		FloatBuffer f = BufferUtils.createFloatBuffer(4);
-		f.put(emission);
-		f.put(1.0f);
-		f.flip();
-		return f;
+		buffer.clear();
+		buffer.put(emission);
+		buffer.put(1.0f);
+		buffer.flip();
+		return buffer;
 	}
 	
 	public float getAlpha() {

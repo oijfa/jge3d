@@ -120,9 +120,9 @@ public class Controller {
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL();
+			renderer.initGL(objectList);
 			while (isRunning) {
-				renderer.draw(objectList);
+				renderer.draw();
 			}
 		}
 	};
@@ -166,8 +166,8 @@ public class Controller {
 		Parser p = new XGL_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
-			//p.readFile("./lib/10010260.xgl");
-			p.readFile("./lib/box.xgl");
+			p.readFile("./lib/10010260.xgl");
+			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?

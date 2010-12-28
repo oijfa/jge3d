@@ -23,7 +23,6 @@ import entity.EntityList;
 import window.Window;
 
 public class Renderer {
-	private static Renderer uniqueInstance;
 	private Window window;
 	//private float x=0,y=0,z=0;
 	
@@ -32,21 +31,16 @@ public class Renderer {
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
-    private float lightAmbient[]={ 0.5f, 0.5f, 0.5f, 1.0f };    // Ambient Light Values ( NEW )
-    private float lightDiffuse[]={ 1f, 1f, 1f, 1.0f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
+    private float lightAmbient[]={ 0.2f, 0.2f, 0.2f, 1.0f };    // Ambient Light Values ( NEW )
+    private float lightDiffuse[]={ 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
     private float lightSpecular[]={ 1f, 1f, 1f, 1.0f };
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
-	
-	public static Renderer getInstance() {
-		if (uniqueInstance == null)
-			uniqueInstance = new Renderer();
 
-		return uniqueInstance;
-	}
-
+    private EntityList objectList;
+    
 	public Renderer(){}
 
-	public void draw(EntityList list) {
+	public void draw() {
 		// Clear The Screen And The Depth Buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
 		GL11.glLoadIdentity();
@@ -59,7 +53,7 @@ public class Renderer {
 		);
 
 		//Draw the 3d stuff
-		list.drawList();
+		objectList.drawList();
 		
 		//Draw the window manager stuff
 		window.draw();
@@ -77,7 +71,10 @@ public class Renderer {
 		Keyboard.poll(); // and Keyboard too
 	}
 	
-	public void initGL() {
+	public void initGL(EntityList objectList) {
+		//Set reference to entity list
+		this.objectList = objectList;
+		
 		//Setup Display
 		try {
 			Display.setDisplayMode(new DisplayMode(1024,768));
@@ -103,7 +100,6 @@ public class Renderer {
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		
 		//ENABLE SHIT
-		
 		GL11.glEnable(GL11.GL_LIGHTING);
 		
 		//Initialize default settings
