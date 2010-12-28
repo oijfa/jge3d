@@ -16,6 +16,8 @@ import physics.Physics;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.DefaultMotionState;
+
+import entity.Camera;
 import entity.Entity;
 import entity.EntityList;
 import render.Renderer;
@@ -173,41 +175,39 @@ public class Controller {
 		}
 		
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		ent = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		ent.setPosition(new Vector3f(0,0,-15));
+		objectList.addItem(ent);
+		
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(10.0f,25.0f,0.0f));
 		objectList.addItem(ent);
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(-10.0f,25.0f,0.0f));
 		objectList.addItem(ent);
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(0.0f,25.0f,10.0f));
 		objectList.addItem(ent);
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(0.0f,25.0f,-10.0f));
 		objectList.addItem(ent);
-		
-		objectList.getItem("ent1").setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.getItem("ent2").setPosition(new Vector3f(10.0f,25.0f,0.0f));
-		objectList.getItem("ent3").setPosition(new Vector3f(-10.0f,25.0f,0.0f));
-		objectList.getItem("ent4").setPosition(new Vector3f(0.0f,25.0f,10.0f));
-		objectList.getItem("ent5").setPosition(new Vector3f(0.0f,25.0f,-10.0f));
-		
-		Physics.getInstance().addEntity(objectList.getItem("ent1"));
-		Physics.getInstance().addEntity(objectList.getItem("ent2"));
-		Physics.getInstance().addEntity(objectList.getItem("ent3"));
-		Physics.getInstance().addEntity(objectList.getItem("ent4"));
-		Physics.getInstance().addEntity(objectList.getItem("ent5"));
 	}
 }
