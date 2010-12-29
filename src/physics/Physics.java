@@ -64,7 +64,7 @@ public class Physics {
 		
 		//Create the dynamics world and set default options
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-		dynamicsWorld.setGravity(new Vector3f(0,-30,0));
+		dynamicsWorld.setGravity(new Vector3f(0,-100,0));
 		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0f;
 		
 		//Preset the previous time so deltaT isn't enormous on first run

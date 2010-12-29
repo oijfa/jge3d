@@ -166,7 +166,6 @@ public class Controller {
 			while (isRunning) {
 				// Update the physics world
 				Physics.getInstance().clientUpdate();
-
 				// Rejoin the controller thread
 			}
 		}
@@ -230,41 +229,49 @@ public class Controller {
 			//TODO:  What to do here?
 		}
 		
+		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Camera(0.0f, new DefaultMotionState(), boxShape, false, objectList);
+		ent = new Camera(10.0f, new DefaultMotionState(), boxShape, false, objectList);
 		ent.setPosition(new Vector3f(0,0,-15));
 		objectList.addItem(ent);
 		
-		
+		//make a cathode
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
-		
+		//ent.applyImpulse(new Vector3f(100,0,0), new Vector3f(0,-10,0));
+
+		/*
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(10.0f,25.0f,0.0f));
 		objectList.addItem(ent);
+		System.out.println(ent.getProperty("name"));
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(-10.0f,25.0f,0.0f));
 		objectList.addItem(ent);
+		System.out.println(ent.getProperty("name"));
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,25.0f,10.0f));
 		objectList.addItem(ent);
+		System.out.println(ent.getProperty("name"));
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,25.0f,-10.0f));
 		objectList.addItem(ent);
+		System.out.println(ent.getProperty("name"));
+		*/
 	}
 }
