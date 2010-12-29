@@ -109,6 +109,10 @@ public class Entity extends RigidBody{
 			e.printStackTrace();
 		}
 	}
+	public Vector3f getPosition(){
+		Transform newTransform = new Transform();
+		return this.getMotionState().getWorldTransform(newTransform).origin;
+	}
 	public void setProperty(String key, Object val){data.put(key,val);}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!

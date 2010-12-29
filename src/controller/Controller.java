@@ -11,8 +11,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 import physics.Physics;
 
@@ -61,6 +63,12 @@ public class Controller {
 		renderer = new Renderer();
 		render_thread.start();
 		physics_thread.start();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		input_thread.start();
 	}
 
@@ -102,26 +110,50 @@ public class Controller {
 	// Create the Input Listening thread
 	Thread input_thread = new Thread() {
 		public void run() {
-			try{
-				Keyboard.create();
-				Keyboard.enableRepeatEvents(true);
-			}
-			catch(Exception ex){
-					ex.printStackTrace();
-			}
+				try {
+					Keyboard.create();
+				} catch (LWJGLException e) {
+					e.printStackTrace();
+				}
+			Keyboard.poll();
+			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+			camera.setFocusEntity("ent2");
 			while (isRunning) {
 				Keyboard.poll();
-				Mouse.poll();
-				Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+				
 				// read keyboard and mouse
 				if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-					System.out.println("W");
+					float[]blah = {2,1,3};
+					try {
+						camera.setFocus(blah);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-					System.out.println("S");
+					camera.setFocusEntity("ent2");
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-					System.out.println("D");
+					float[]blah = {3,2,1};
+					try {
+						camera.setFocus(blah);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-					System.out.println("A");
+					float[]blah = {1,3,2};
+					try {
+						camera.setFocus(blah);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}else if (Keyboard.isKeyDown(Keyboard.KEY_E)){
+					float[]blah = {3,1,2};
+					try {
+						camera.setFocus(blah);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}else{
+					//something other
 				}
 				// Input.getInstance().updateInput();
 			}
@@ -199,16 +231,17 @@ public class Controller {
 		}
 		
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		ent = new Camera(0.0f, new DefaultMotionState(), boxShape, false, objectList);
 		ent.setPosition(new Vector3f(0,0,-15));
 		objectList.addItem(ent);
 		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
+		System.out.println(ent.getProperty("name"));
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);

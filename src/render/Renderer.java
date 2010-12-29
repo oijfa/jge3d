@@ -90,6 +90,7 @@ public class Renderer {
 			System.out.println("***Failed to create Display***");
 			e.printStackTrace();
 		}
+
 		Display.setTitle("JGE3d");
 		
 		//Sync refresh with MONITOR D: //TODO
