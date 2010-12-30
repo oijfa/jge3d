@@ -31,8 +31,6 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
-import controller.Controller;
-
 public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
@@ -81,7 +79,6 @@ public class Entity extends RigidBody{
 		data.put("name", "ent" + String.valueOf(num_entities));
 		data.put("collidable", c);
 		data.put("TTL", 0);
-		Controller.getInstance().getPhysics().addEntity(this);
 	}
 	
 	/* Setters */
@@ -113,8 +110,9 @@ public class Entity extends RigidBody{
 		}
 	}
 	public Vector3f getPosition(){
-		Transform newTransform = new Transform();
-		return this.getMotionState().getWorldTransform(newTransform).origin;
+		Vector3f out = new Vector3f();
+		this.getCenterOfMassPosition(out);
+		return out;
 	}
 	public void setProperty(String key, Object val){data.put(key,val);}
 	public void removeProperty(String key){

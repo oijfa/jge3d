@@ -12,9 +12,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-
 import physics.Physics;
 
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -29,9 +26,7 @@ import render.Renderer;
 public class Controller {
 	// the game always runs (except when it doesn't)
 	private static boolean isRunning = true;
-	private static Controller uniqueInstance = null;
 	private Queue<Command> controller_queue = new LinkedList<Command>();
-	private static Controller controller;
 	
 	private Renderer renderer;
 	private Physics physics;
@@ -42,28 +37,26 @@ public class Controller {
 	private EntityList objectList;
 	
 	public static void main(String[] args) {
-		controller = Controller.getInstance();
+		new Controller();
 	}
 
-	public static Controller getInstance() {
-		if( uniqueInstance == null)
-			uniqueInstance = new Controller();
+	public Controller() {
+		start();
 		
-		return uniqueInstance;
-	}
-	
-	private Controller() {
-		objectList = new EntityList();
 		loadLevel();
-		// controller_thread.start();
-		// input_thread.start();
-		
 	}
 
 	private void start() {
+		physics_thread.start();
+		objectList = new EntityList(physics);
 		input_thread.start();
 		render_thread.start();
-		physics_thread.start();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void run_queue() {
@@ -169,6 +162,7 @@ public class Controller {
 	
 	public void loadLevel(){
 		Entity ent;
+		Camera cam;
 
 		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
 		
@@ -184,11 +178,11 @@ public class Controller {
 		
 		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
-		ent.setPosition(new Vector3f(0,0,-15));
+		cam = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
+		cam.setPosition(new Vector3f(0,0,-15));
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		
-		objectList.addItem(ent);
+		objectList.addItem(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
 		//Make a cathode
@@ -198,6 +192,8 @@ public class Controller {
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
+		
+		cam.setFocusEntity("ent2");
 		//ent.applyImpulse(new Vector3f(100,0,0), new Vector3f(0,-10,0));
 		//objectList.getItem("ent2").applyCentralImpulse(new Vector3f(1.0f, 1.0f, 0.5f));
 		/*

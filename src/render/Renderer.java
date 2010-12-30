@@ -13,8 +13,6 @@ import java.nio.FloatBuffer;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -47,38 +45,36 @@ public class Renderer {
 	}
 
 	public void draw() {
-		// Clear The Screen And The Depth Buffer
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
-		GL11.glLoadIdentity();
-		
 		//Setup Camera
-		Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
-		Vector3f camPos = new Vector3f();
-		float[] focusPos = cam.getFocus();
-		cam.getCenterOfMassPosition(camPos);
-		GLU.gluLookAt(
-				camPos.x, camPos.y, camPos.z, 	//Camera Location
-				focusPos[0], focusPos[1], focusPos[2], 		//Focus On Location
-				0, 1, 0			//Up Vector
-		);
-
-		//Draw the 3d stuff
-		objectList.drawList();
 		
-		//Draw the window manager stuff
-		window.draw();
-		
-		//TODO: What is this doing?
-		GL11.glFlush();
-		Display.update();
+		if(objectList.getItem(Camera.CAMERA_NAME)!=null) {
+			Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+			Vector3f camPos = new Vector3f();
+			float[] focusPos = cam.getFocus();
+			cam.getCenterOfMassPosition(camPos);
 
+			// Clear The Screen And The Depth Buffer
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
+			GL11.glLoadIdentity();
+			
+	
+			GLU.gluLookAt(
+					camPos.x, camPos.y, camPos.z, 	//Camera Location
+					focusPos[0], focusPos[1], focusPos[2], 		//Focus On Location
+					0, 1, 0			//Up Vector
+			);
+	
+			//Draw the 3d stuff
+			objectList.drawList();
+			
+			//Draw the window manager stuff
+			window.draw();
+			
+			GL11.glFlush();
+			Display.update();
+		}
 		// Reduce input lag
-		Display.processMessages(); // process new native messages since
-									// Display.update();
-		
-		
-		Mouse.poll(); // now update Mouse events
-		Keyboard.poll(); // and Keyboard too
+		//Display.processMessages(); // process new native messages since
 	}
 	
 	public void initGL() {		

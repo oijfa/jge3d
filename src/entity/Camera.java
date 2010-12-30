@@ -10,7 +10,7 @@ public class Camera extends Entity{
 	private float[] focus;
 	public static String CAMERA_NAME = "camera";
 	private Vector3f linVelocity = new Vector3f();
-	private Entity FocusEntity;
+	private Entity focusEntity;
 	private EntityList objectList;
 	
 	/* Constructors */
@@ -25,7 +25,6 @@ public class Camera extends Entity{
 		setProperty(Entity.NAME, "camera");
 		setFocus(0.0f,0.0f,0.0f);
 		this.objectList = objectList;
-		physics.addEntity(this);
 	}
 	
 	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
@@ -77,10 +76,9 @@ public class Camera extends Entity{
 	}
 	
 	public void setFocusEntity(String newFocus){
-		FocusEntity = objectList.getItem(newFocus);
-		Vector3f EntPosition = FocusEntity.getPosition();
+		focusEntity = objectList.getItem(newFocus);
+		Vector3f EntPosition = focusEntity.getPosition();
 		setFocus(EntPosition);
-		Vector3f camPos = this.getPosition();
 	}
 	
 	public float[] getFocus(){

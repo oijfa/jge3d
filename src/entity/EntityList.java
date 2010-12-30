@@ -12,14 +12,21 @@ package entity;
 
 import java.util.HashMap;
 
+import physics.Physics;
+
 public class EntityList {
 	private HashMap<String,Entity> names;
+	private Physics physics;
 	
-	public EntityList(){ names = new HashMap<String,Entity>();}
+	public EntityList(Physics physics){
+		names = new HashMap<String,Entity>();
+		this.physics=physics;
+	}
 	public boolean addItem(Entity e){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
+			physics.addEntity(e);
 			return true;
 		}else{
 			return false;
