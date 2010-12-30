@@ -12,7 +12,10 @@ package entity;
 
 import java.util.HashMap;
 
-public class EntityList {
+import monitoring.Observer;
+import monitoring.Subject;
+
+public class EntityList implements Subject{
 	private HashMap<String,Entity> names;
 	
 	public EntityList(){ names = new HashMap<String,Entity>();}
@@ -38,4 +41,16 @@ public class EntityList {
 	}
 	
 	public int size(){return names.size();}
+	@Override
+	public void registerObserver(Observer o) {
+		
+	}
+	@Override
+	public void removeObserver(Observer o) {
+		
+	}
+	@Override
+	public void notifyObservers() {
+		
+	}
 }

@@ -53,8 +53,8 @@ public class Physics {
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 		
 		//Min and Max collision boundaries for world (needs changing)
-		worldAabbMin = new Vector3f(-10,-10,-10);
-		worldAabbMax = new Vector3f(10,10,10);
+		worldAabbMin = new Vector3f(-100,-100,-100);
+		worldAabbMax = new Vector3f(100,100,100);
 		
 		//algorithm for finding collision proximity (there are better ones)
 		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
@@ -64,7 +64,7 @@ public class Physics {
 		
 		//Create the dynamics world and set default options
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-		dynamicsWorld.setGravity(new Vector3f(0,-30,0));
+		dynamicsWorld.setGravity(new Vector3f(0,-100,0));
 		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0f;
 		
 		//Preset the previous time so deltaT isn't enormous on first run
@@ -97,7 +97,7 @@ public class Physics {
 		// rigid body is dynamic if and only if mass is non zero, otherwise static
 		boolean isDynamic = (mass != 0f);
 
-		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
+		Vector3f localInertia = new Vector3f(255f, 255f, 255f);
 		if (isDynamic) {
 			shape.calculateLocalInertia(mass, localInertia);
 		}

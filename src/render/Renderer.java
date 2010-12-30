@@ -63,7 +63,7 @@ public class Renderer {
 		Display.update();
 
 		// Reduce input lag
-		Display.processMessages(); // process new native messages since
+		//Display.processMessages(); // process new native messages since
 									// Display.update();
 		
 		
