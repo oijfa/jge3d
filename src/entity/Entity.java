@@ -31,10 +31,13 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
+import controller.Controller;
+
 public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
 	private Model model;
+	protected Physics physics;
 	
 	/*Properties the engine uses alot*/
 	public static String NAME = "name";
@@ -78,7 +81,7 @@ public class Entity extends RigidBody{
 		data.put("name", "ent" + String.valueOf(num_entities));
 		data.put("collidable", c);
 		data.put("TTL", 0);
-		Physics.getInstance().addEntity(this);
+		Controller.getInstance().getPhysics().addEntity(this);
 	}
 	
 	/* Setters */

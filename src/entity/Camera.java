@@ -2,14 +2,9 @@ package entity;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.util.glu.GLU;
-
-import physics.Physics;
-
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.MotionState;
-import com.bulletphysics.linearmath.Transform;
 
 public class Camera extends Entity{
 	private float[] focus;
@@ -29,7 +24,7 @@ public class Camera extends Entity{
 		setProperty(Entity.NAME, "camera");
 		setFocus(0.0f,0.0f,0.0f);
 		this.objectList = objectList;
-		Physics.getInstance().addEntity(this);
+		physics.addEntity(this);
 	}
 	
 	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {

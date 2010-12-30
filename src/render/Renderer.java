@@ -41,7 +41,10 @@ public class Renderer {
 
     private EntityList objectList;
     
-	public Renderer(){}
+	public Renderer(EntityList objectList){
+		this.objectList=objectList;
+		initGL();
+	}
 
 	public void draw() {
 		// Clear The Screen And The Depth Buffer
@@ -78,10 +81,7 @@ public class Renderer {
 		Keyboard.poll(); // and Keyboard too
 	}
 	
-	public void initGL(EntityList objectList) {
-		//Set reference to entity list
-		this.objectList = objectList;
-		
+	public void initGL() {		
 		//Setup Display
 		try {
 			Display.setDisplayMode(new DisplayMode(1024,768));

@@ -13,8 +13,6 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 
 import physics.Physics;
 
@@ -33,7 +31,10 @@ public class Controller {
 	private static Controller uniqueInstance = null;
 	private Queue<Command> controller_queue = new LinkedList<Command>();
 	private static Controller controller;
+	
 	private Renderer renderer;
+	private Physics physics;
+	
 	private long frames = 0;
 	private Camera camera;
 
@@ -41,7 +42,6 @@ public class Controller {
 	
 	public static void main(String[] args) {
 		controller = Controller.getInstance();
-		controller.start();
 	}
 
 	public static Controller getInstance() {
@@ -51,18 +51,18 @@ public class Controller {
 		return uniqueInstance;
 	}
 	
-	private Controller() {
-		objectList = new EntityList();
-		loadLevel();
-		// controller_thread.start();
-		// input_thread.start();
-		
-	}
-
-	private void start() {
-		renderer = new Renderer();
+	private Controller() {	
 		render_thread.start();
 		physics_thread.start();
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		objectList = new EntityList();
+		loadLevel();
 		
 		try {
 			Thread.sleep(1000);
@@ -70,6 +70,11 @@ public class Controller {
 			e.printStackTrace();
 		}
 		input_thread.start();
+		
+		
+		// controller_thread.start();
+		// input_thread.start();
+		
 	}
 
 	public void run_queue() {
@@ -110,11 +115,11 @@ public class Controller {
 	// Create the Input Listening thread
 	Thread input_thread = new Thread() {
 		public void run() {
-				try {
-					Keyboard.create();
-				} catch (LWJGLException e) {
-					e.printStackTrace();
-				}
+			try {
+				Keyboard.create();
+			} catch (LWJGLException e) {
+				e.printStackTrace();
+			}
 			Keyboard.poll();
 			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 			camera.setFocusEntity("ent2");
@@ -163,9 +168,10 @@ public class Controller {
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
+			physics = new Physics();
 			while (isRunning) {
 				// Update the physics world
-				Physics.getInstance().clientUpdate();
+				physics.clientUpdate();
 				// Rejoin the controller thread
 			}
 		}
@@ -176,14 +182,12 @@ public class Controller {
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL(objectList);
+			renderer = new Renderer(objectList);
 			while (isRunning) {
 				renderer.draw();
 			}
 		}
 	};
-
-	
 
 	public void enqueue(Object classInstance, String methodToInvoke) {
 		controller_queue.add(new Command(classInstance, methodToInvoke));
@@ -217,7 +221,7 @@ public class Controller {
 		//TODO: Make a spinny triforce
 		Entity ent;
 		
-		Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-1.0f,0.0f));
+		physics.getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
 		
 		Parser p = new XGL_Parser();
 		try{
@@ -273,5 +277,9 @@ public class Controller {
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
 		*/
+	}
+	
+	public Physics getPhysics() {
+		return physics;
 	}
 }
