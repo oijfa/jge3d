@@ -40,9 +40,11 @@ public class Renderer {
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
 
     private EntityList objectList;
-    
-	public Renderer(){}
-
+	
+	public Renderer(EntityList objectList){
+		this.objectList = objectList;
+		initGL();
+	}
 	public void draw() {
 		// Clear The Screen And The Depth Buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
@@ -78,9 +80,7 @@ public class Renderer {
 		Keyboard.poll(); // and Keyboard too
 	}
 	
-	public void initGL(EntityList objectList) {
-		//Set reference to entity list
-		this.objectList = objectList;
+	public void initGL() {
 		
 		//Setup Display
 		try {
@@ -91,8 +91,8 @@ public class Renderer {
 			e.printStackTrace();
 		}
 
-		Display.setTitle("JGE3d");
-		
+		//Display.setTitle("JGE3d");
+		Display.setTitle("CAMERA CONTROLS");
 		//Sync refresh with MONITOR D: //TODO
 		Display.setVSyncEnabled(true);
 		

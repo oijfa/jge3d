@@ -14,6 +14,7 @@ import com.bulletphysics.linearmath.Transform;
 public class Camera extends Entity{
 	private float[] focus;
 	public static String CAMERA_NAME = "camera";
+	private Vector3f linVelocity = new Vector3f();
 	private Entity FocusEntity;
 	private EntityList objectList;
 	
@@ -29,7 +30,7 @@ public class Camera extends Entity{
 		setProperty(Entity.NAME, "camera");
 		setFocus(0.0f,0.0f,0.0f);
 		this.objectList = objectList;
-		Physics.getInstance().addEntity(this);
+		//Physics.getInstance().addEntity(this);
 	}
 	
 	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
@@ -90,6 +91,13 @@ public class Camera extends Entity{
 	
 	public float[] getFocus(){
 		return focus;
+	}
+	
+	public Vector3f getVelocity(){
+		return this.getLinearVelocity(linVelocity);
+	}
+	public void setVelocity(Vector3f velo){
+		this.setLinearVelocity(velo);
 	}
 
 }

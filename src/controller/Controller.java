@@ -5,6 +5,7 @@ package controller;
 
 import importing.Parser;
 import importing.XGL_Parser;
+import input.Input;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
@@ -35,7 +36,7 @@ public class Controller {
 	private static Controller controller;
 	private Renderer renderer;
 	private long frames = 0;
-	private Camera camera;
+	private Input input;
 
 	private EntityList objectList;
 	
@@ -60,16 +61,9 @@ public class Controller {
 	}
 
 	private void start() {
-		renderer = new Renderer();
+		input_thread.start();
 		render_thread.start();
 		physics_thread.start();
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		input_thread.start();
 	}
 
 	public void run_queue() {
@@ -110,56 +104,18 @@ public class Controller {
 	// Create the Input Listening thread
 	Thread input_thread = new Thread() {
 		public void run() {
-				try {
-					Keyboard.create();
-				} catch (LWJGLException e) {
-					e.printStackTrace();
-				}
-			Keyboard.poll();
-			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
-			camera.setFocusEntity("ent2");
-			while (isRunning) {
-				Keyboard.poll();
-				
-				// read keyboard and mouse
-				if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-					float[]blah = {2,1,3};
-					try {
-						camera.setFocus(blah);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}else if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-					camera.setFocusEntity("ent2");
-				}else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-					float[]blah = {3,2,1};
-					try {
-						camera.setFocus(blah);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-					float[]blah = {1,3,2};
-					try {
-						camera.setFocus(blah);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}else if (Keyboard.isKeyDown(Keyboard.KEY_E)){
-					float[]blah = {3,1,2};
-					try {
-						camera.setFocus(blah);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}else{
-					//something other
-				}
-				// Input.getInstance().updateInput();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+			}
+			System.out.println("SLEEP");
+			input = new Input(objectList);
+			while(isRunning){
+				input.run();
 			}
 		}
-	}; 
-	
+	};
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
@@ -170,13 +126,12 @@ public class Controller {
 			}
 		}
 	};
-	// };
-	
 
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL(objectList);
+			renderer = new Renderer(objectList);
+			input_thread.interrupt();
 			while (isRunning) {
 				renderer.draw();
 			}
@@ -214,10 +169,10 @@ public class Controller {
 	}
 	
 	public void loadLevel(){
-		//TODO: Make a spinny triforce
 		Entity ent;
 		
-		Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-1.0f,0.0f));
+		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
+		
 		
 		Parser p = new XGL_Parser();
 		try{
@@ -231,19 +186,22 @@ public class Controller {
 		
 		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Camera(10.0f, new DefaultMotionState(), boxShape, false, objectList);
+		ent = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
 		ent.setPosition(new Vector3f(0,0,-15));
-		objectList.addItem(ent);
+		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		
-		//make a cathode
+		objectList.addItem(ent);
+		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
+		
+		//Make a cathode
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
+		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
 		//ent.applyImpulse(new Vector3f(100,0,0), new Vector3f(0,-10,0));
-
+		//objectList.getItem("ent2").applyCentralImpulse(new Vector3f(1.0f, 1.0f, 0.5f));
 		/*
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
