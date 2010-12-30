@@ -40,9 +40,9 @@ public class Renderer {
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
 
     private EntityList objectList;
-    
+
 	public Renderer(EntityList objectList){
-		this.objectList=objectList;
+		this.objectList = objectList;
 		initGL();
 	}
 
@@ -91,8 +91,8 @@ public class Renderer {
 			e.printStackTrace();
 		}
 
-		Display.setTitle("JGE3d");
-		
+		//Display.setTitle("JGE3d");
+		Display.setTitle("CAMERA CONTROLS");
 		//Sync refresh with MONITOR D: //TODO
 		Display.setVSyncEnabled(true);
 		

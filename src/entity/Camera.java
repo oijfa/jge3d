@@ -9,6 +9,7 @@ import com.bulletphysics.linearmath.MotionState;
 public class Camera extends Entity{
 	private float[] focus;
 	public static String CAMERA_NAME = "camera";
+	private Vector3f linVelocity = new Vector3f();
 	private Entity FocusEntity;
 	private EntityList objectList;
 	
@@ -80,11 +81,17 @@ public class Camera extends Entity{
 		Vector3f EntPosition = FocusEntity.getPosition();
 		setFocus(EntPosition);
 		Vector3f camPos = this.getPosition();
-
 	}
 	
 	public float[] getFocus(){
 		return focus;
+	}
+	
+	public Vector3f getVelocity(){
+		return this.getLinearVelocity(linVelocity);
+	}
+	public void setVelocity(Vector3f velo){
+		this.setLinearVelocity(velo);
 	}
 
 }
