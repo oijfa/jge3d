@@ -47,16 +47,13 @@ public class Controller {
 	}
 
 	private void start() {
+		physics = new Physics();
 		physics_thread.start();
+		while(physics == null){}
+		System.out.println("Physics created");
 		objectList = new EntityList(physics);
 		input_thread.start();
 		render_thread.start();
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void run_queue() {
@@ -112,7 +109,6 @@ public class Controller {
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
-			physics = new Physics();
 			while (isRunning) {
 				// Update the physics world
 				physics.clientUpdate();
