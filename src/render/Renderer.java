@@ -49,7 +49,7 @@ public class Renderer {
 		if(objectList.getItem(Camera.CAMERA_NAME)!=null) {
 			Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 			Vector3f camPos = new Vector3f();
-			float[] focusPos = cam.getFocus();
+			Vector3f focusPos = cam.getFocusPosition();
 			cam.getCenterOfMassPosition(camPos);
 
 			// Clear The Screen And The Depth Buffer
@@ -59,7 +59,7 @@ public class Renderer {
 	
 			GLU.gluLookAt(
 					camPos.x, camPos.y, camPos.z, 	//Camera Location
-					focusPos[0], focusPos[1], focusPos[2], 		//Focus On Location
+					focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
 					0, 1, 0			//Up Vector
 			);
 	
@@ -86,9 +86,9 @@ public class Renderer {
 			e.printStackTrace();
 		}
 
-		//Display.setTitle("JGE3d");
-		Display.setTitle("CAMERA CONTROLS");
-		//Sync refresh with MONITOR D: //TODO
+		Display.setTitle("JGE3d");
+		
+		//TODO:  Make Configurable by User
 		Display.setVSyncEnabled(true);
 		
 		window = new Window();
