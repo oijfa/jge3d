@@ -24,9 +24,6 @@ public class Controller {
 	// the game always runs (except when it doesn't)
 	private static boolean isRunning = true;
 	
-	//TODO: Need to talk to Adam to decide if this is needed along with Queueing section below --Robert
-	//private Queue<Command> controller_queue = new LinkedList<Command>();
-	
 	private Renderer renderer;
 	private Physics physics;
 	
@@ -57,7 +54,7 @@ public class Controller {
 	 * 						\------(Input)
 	 */
 	private void start() {
-		//Instatiate Physics first, as it depends on nothing
+		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
 		physics_thread.start();
 		
@@ -107,46 +104,10 @@ public class Controller {
 		}
 	};
 	
-/*
- 	// QUEUE HANDLING
- 	//TODO: Might not be necessary anymore, leaving until I can talk to Adam about it --Robert
-	public void run_queue() {
-		Command commandToRunCommand;
-		try {
-			for (int i = 0; i < controller_queue.size(); i++) {
-				commandToRunCommand = controller_queue.poll();
-				Method methodToInvoke = commandToRunCommand
-						.getClassInstance()
-						.getClass()
-						.getDeclaredMethod(
-								commandToRunCommand.getMethodToInvoke());
-				methodToInvoke.invoke(commandToRunCommand.getClassInstance());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
 
-		++frames;
-	}
-	
-	public void enqueue(Object classInstance, String methodToInvoke) {
-		controller_queue.add(new Command(classInstance, methodToInvoke));
-	}
-
-	public Boolean hasQueuedItems() {
-		if (controller_queue.size() == 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-*/
 	//TODO:  What are these two here for? If you don't know, Adam, delete them --Robert
 	public long getFrames() { return frames; }
 	public void resetFrames() {	frames = 0;	}
-
-	
-	
 	
 	public static void quit() { isRunning = false;	}
 	
@@ -183,7 +144,7 @@ public class Controller {
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
 		
-		cam.setFocusEntity("ent2");
+		cam.focusOn(ent);
 		//ent.applyImpulse(new Vector3f(100,0,0), new Vector3f(0,-10,0));
 		//objectList.getItem("ent2").applyCentralImpulse(new Vector3f(1.0f, 1.0f, 0.5f));
 		/*

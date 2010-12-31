@@ -50,18 +50,22 @@ public class Input {
 			//asdf
 			camera.activate();
 			//checks the speed of the camera so it doesn't fly off.
-			Vector3f cam_velocity = camera.getVelocity();
-			if(camera.getVelocity().x > 15 || camera.getVelocity().x < -15){
+			Vector3f cam_velocity = new Vector3f();
+			camera.getLinearVelocity(cam_velocity);
+			if(cam_velocity.x > 15 || cam_velocity.x < -15){
 				cam_velocity.x = 0;
 			}
-			if(camera.getVelocity().y > 15 || camera.getVelocity().y < -15){
+			if(cam_velocity.y > 15 || cam_velocity.y < -15){
 				cam_velocity.y = 0;
 			}
-			if(camera.getVelocity().z > 15 || camera.getVelocity().z < -15){
+			if(cam_velocity.z > 15 || cam_velocity.z < -15){
 				cam_velocity.z = 0;
 			}
+			
 			//assigns the camera a reasonable speed.
-			camera.setVelocity(cam_velocity);
+			//(cam_velocity);
+			
+			
 			// Input.getInstance().updateInput();
 		} else {
 			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
