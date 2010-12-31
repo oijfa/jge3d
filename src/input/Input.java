@@ -9,7 +9,6 @@ import entity.Camera;
 import entity.EntityList;
 
 public class Input {
-	private Camera camera;
 	private EntityList objectList;
 	
 	public Input (EntityList objectList){
@@ -30,19 +29,22 @@ public class Input {
 	
 	public void run(){
 		Keyboard.poll();
+		
+		Camera camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		if(camera != null) {
-			// read keyboard and mouse
+			
+			//These Impulses should be kept very very very small.  Otherwise you fly into the ether.
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-				camera.applyCentralImpulse(new Vector3f(-100,0,0));
+				camera.applyCentralImpulse(new Vector3f(-0.0001f,0,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-				camera.applyCentralImpulse(new Vector3f(100,0,0));
+				camera.applyCentralImpulse(new Vector3f(0.0001f,0,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				camera.applyCentralImpulse(new Vector3f(0,100,0));
+				camera.applyCentralImpulse(new Vector3f(0,0.0001f,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				camera.applyCentralImpulse(new Vector3f(0,-100,0));
+				camera.applyCentralImpulse(new Vector3f(0,-0.0001f,0));
 			}
 	
 			//TODO: unfuck this scenario what with all the damn 
