@@ -23,8 +23,6 @@ import com.bulletphysics.linearmath.Transform;
 import entity.Entity;
 
 public class Physics {
-	private static Physics uniqueInstance = new Physics();
-	
 	//World Definitions
 	private DefaultCollisionConfiguration collisionConfiguration;
 	private CollisionDispatcher dispatcher;
@@ -37,15 +35,10 @@ public class Physics {
 	float deltaT;
 	long frames=0;
 
-	public static Physics getInstance()
-	{
-		return uniqueInstance;
-	}
-	
 	//For holding the previous time in microseconds to calculate deltaT
 	private long prev_time;
 	
-	private Physics() {		
+	public Physics() {		
 		//Default collision constructor
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		
@@ -64,7 +57,9 @@ public class Physics {
 		
 		//Create the dynamics world and set default options
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
 		dynamicsWorld.setGravity(new Vector3f(0,-100,0));
+
 		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0f;
 		
 		//Preset the previous time so deltaT isn't enormous on first run

@@ -35,6 +35,7 @@ public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
 	private Model model;
+	protected Physics physics;
 	
 	/*Properties the engine uses alot*/
 	public static String NAME = "name";
@@ -78,7 +79,6 @@ public class Entity extends RigidBody{
 		data.put("name", "ent" + String.valueOf(num_entities));
 		data.put("collidable", c);
 		data.put("TTL", 0);
-		Physics.getInstance().addEntity(this);
 	}
 	
 	/* Setters */
@@ -108,6 +108,11 @@ public class Entity extends RigidBody{
 			System.out.print(p.toString() + "<< Possible Incorrect data type for position, must be Vector3f\n");
 			e.printStackTrace();
 		}
+	}
+	public Vector3f getPosition(){
+		Vector3f out = new Vector3f();
+		this.getCenterOfMassPosition(out);
+		return out;
 	}
 	public void setProperty(String key, Object val){data.put(key,val);}
 	public void removeProperty(String key){
