@@ -46,16 +46,71 @@ public class Controller {
 		loadLevel();
 	}
 
+	
+	/* Diagram of dependencies (:D).  Arrows mean "depends on"
+	 * 
+	 * 						/------(Renderer)
+	 * 						|			^
+	 * 						V			|
+	 * (Physics) <-- (Entity List)		|
+	 * 						^			|
+	 * 						|			|
+	 * 						\------(Input)
+	 */
 	private void start() {
+		//Instatiate Physics first, as it depends on nothing
 		physics = new Physics();
 		physics_thread.start();
-		while(physics == null){}
-		System.out.println("Physics created");
+		
+		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
-		input_thread.start();
+		
+		//Renderer has to be after entity list
+		renderer = new Renderer(objectList);
 		render_thread.start();
+		
+		//Input has to be after entity list and after the render thread has been started (Display must be created)
+		input = new Input(objectList);
+		input_thread.start();
 	}
+	
+	/* THREAD DEFINITIONS */
+	// Create the Input Listening thread
+	Thread input_thread = new Thread() {
+		public void run() {
+			//Wait for display to be created
+			try {
+				render_thread.join();
+			} catch (InterruptedException e) {/*Nothing to do, render thread is telling us its done creating display*/}
+			input.init();
+			while(isRunning){
+				input.run();
+			}
+		}
+	};
+	// Create the Physics Listening thread
+	Thread physics_thread = new Thread() {
+		public void run() {
+			while (isRunning) {
+				physics.clientUpdate();
+			}
+		}
+	};
 
+	// Create the vidya thread
+	Thread render_thread = new Thread() {
+		public void run() {
+			renderer.initGL();
+			input_thread.interrupt(); //If input thread is waiting (it should be) let it go
+			while (isRunning) {
+				renderer.draw();
+			}
+		}
+	};
+	
+/*
+ 	// QUEUE HANDLING
+ 	//TODO: Might not be necessary anymore, leaving until I can talk to Adam about it --Robert
 	public void run_queue() {
 		Command commandToRunCommand;
 		try {
@@ -74,60 +129,7 @@ public class Controller {
 
 		++frames;
 	}
-
-	//TODO:  MAYBE GET RID OF THIS SHIT D:!~!!!!!
-	//===============================
-	/*
-	public void monitor() {}
-	// Create the Controller Listening thread
-	Thread controller_thread = new Thread() {
-		public void run() {
-			while (isRunning) {
-				Controller.getInstance().monitor();
-			}
-		}
-	};
-	*/
-	//=================================
-
 	
-	// Create the Input Listening thread
-	Thread input_thread = new Thread() {
-		public void run() {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				//e.printStackTrace();
-			}
-			System.out.println("SLEEP");
-			input = new Input(objectList);
-			while(isRunning){
-				input.run();
-			}
-		}
-	};
-	// Create the Physics Listening thread
-	Thread physics_thread = new Thread() {
-		public void run() {
-			while (isRunning) {
-				// Update the physics world
-				physics.clientUpdate();
-				// Rejoin the controller thread
-			}
-		}
-	};
-
-	// Create the vidya thread
-	Thread render_thread = new Thread() {
-		public void run() {
-			renderer = new Renderer(objectList);
-			input_thread.interrupt();
-			while (isRunning) {
-				renderer.draw();
-			}
-		}
-	};
-
 	public void enqueue(Object classInstance, String methodToInvoke) {
 		controller_queue.add(new Command(classInstance, methodToInvoke));
 	}
@@ -139,22 +141,15 @@ public class Controller {
 			return true;
 		}
 	}
+*/
+	//TODO:  What are these two here for? If you don't know, Adam, delete them --Robert
+	public long getFrames() { return frames; }
+	public void resetFrames() {	frames = 0;	}
 
-	public long getFrames() {
-		return frames;
-	}
-
-	public void resetFrames() {
-		frames = 0;
-	}
-
-	public static void quit() {
-		isRunning = false;
-	}
-
-	public static boolean getRunning() {
-		return isRunning;
-	}
+	
+	
+	
+	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel(){
 		Entity ent;
@@ -221,9 +216,5 @@ public class Controller {
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
 		*/
-	}
-	
-	public Physics getPhysics() {
-		return physics;
 	}
 }

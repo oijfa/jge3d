@@ -10,8 +10,13 @@ import entity.EntityList;
 
 public class Input {
 	private Camera camera;
-
+	private EntityList objectList;
+	
 	public Input (EntityList objectList){
+		this.objectList = objectList;
+	}
+	
+	public void init(){
 		try {
 			Keyboard.create();
 			//Mouse.create();

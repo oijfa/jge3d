@@ -41,7 +41,6 @@ public class Renderer {
 
 	public Renderer(EntityList objectList){
 		this.objectList = objectList;
-		initGL();
 	}
 
 	public void draw() {
