@@ -33,16 +33,16 @@ public class Input {
 		if(camera != null) {
 			// read keyboard and mouse
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-				camera.applyCentralImpulse(new Vector3f(-100,0,0));
+				camera.applyCentralImpulse(new Vector3f(-0.001f,0,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-				camera.applyCentralImpulse(new Vector3f(100,0,0));
+				camera.applyCentralImpulse(new Vector3f(0.001f,0,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				camera.applyCentralImpulse(new Vector3f(0,100,0));
+				camera.applyCentralImpulse(new Vector3f(0,0.001f,0));
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				camera.applyCentralImpulse(new Vector3f(0,-100,0));
+				camera.applyCentralImpulse(new Vector3f(0,-0.001f,0));
 			}
 	
 			//TODO: unfuck this scenario what with all the damn 
@@ -63,6 +63,9 @@ public class Input {
 			//assigns the camera a reasonable speed.
 			camera.setVelocity(cam_velocity);
 			// Input.getInstance().updateInput();
+		} else {
+			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		}
+			
 	}
 }
