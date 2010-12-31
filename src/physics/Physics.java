@@ -58,8 +58,7 @@ public class Physics {
 		//Create the dynamics world and set default options
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-		//dynamicsWorld.setGravity(new Vector3f(0,-100,0));
-		dynamicsWorld.setGravity(new Vector3f(0,-1,0));
+		dynamicsWorld.setGravity(new Vector3f(0,-100,0));
 
 		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0f;
 		
