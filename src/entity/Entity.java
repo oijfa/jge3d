@@ -45,7 +45,8 @@ public class Entity extends RigidBody{
 	private Model model;
 	protected Physics physics;
 	protected ArrayList<EntityObserver> observers;
-	/*Properties the engine uses alot*/
+
+	/*Properties the engine uses a lot*/
 	public static String NAME = "name";
 	
 	//Required keys
@@ -93,7 +94,6 @@ public class Entity extends RigidBody{
 	}
 	
 	/* Setters */
-	//TODO:  MAkes thiss nots uses Vector3fs
 	public void setPosition(Object p) {
 		/*
 		 * There's no straight-forward way to move a RigidBody to some location
@@ -104,16 +104,11 @@ public class Entity extends RigidBody{
 		try {
 			Vector3f pos = ((Vector3f) p);
 			Transform trans = new Transform();
-			float[] f = new float[3];
 		
 			this.getCenterOfMassTransform(trans);
 			trans.setIdentity();
 			
-			f[0] = pos.x;
-			f[1] = pos.y;
-			f[2] = pos.z;
-			
-			trans.origin.set(f);
+			trans.origin.set(pos);
 			this.setCenterOfMassTransform(trans);
 		} catch (Exception e) {
 			System.out.print(p.toString() + "<< Possible Incorrect data type for position, must be Vector3f\n");
