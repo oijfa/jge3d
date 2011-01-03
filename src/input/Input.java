@@ -6,10 +6,12 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 
 import entity.Camera;
+import entity.Entity;
 import entity.EntityList;
 
 public class Input {
 	private Camera camera;
+	private Entity ent;
 	private EntityList objectList;
 	
 	public Input (EntityList objectList){
@@ -69,6 +71,7 @@ public class Input {
 			// Input.getInstance().updateInput();
 		} else {
 			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+			ent = (Entity) objectList.getItem("ent2");
 		}
 			
 	}

@@ -17,9 +17,14 @@ package entity;
 
 import importing.pieces.Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
+
+import monitoring.EntityObserver;
+import monitoring.Observer;
+import monitoring.Subject;
 
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +44,7 @@ public class Entity extends RigidBody{
 	protected HashMap<String,TypedConstraint> constraints;
 	private Model model;
 	protected Physics physics;
-	
+	protected ArrayList<EntityObserver> observers;
 	/*Properties the engine uses alot*/
 	public static String NAME = "name";
 	
@@ -84,6 +89,7 @@ public class Entity extends RigidBody{
 		data.put("TTL", 0);
 		
 		constraints = new HashMap<String,TypedConstraint>();
+		observers = new ArrayList<EntityObserver>();
 	}
 	
 	/* Setters */
@@ -119,7 +125,13 @@ public class Entity extends RigidBody{
 		this.getCenterOfMassPosition(out);
 		return out;
 	}
-	public void setProperty(String key, Object val){data.put(key,val);}
+	
+	// SET PROPERTY!!!
+	public void setProperty(String key, Object val){
+		String old_key_val = (String) data.get(key);
+		data.put(key,val);
+		notifyObservers();
+	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
 		boolean req = false;
@@ -178,5 +190,28 @@ public class Entity extends RigidBody{
 		}
 		constraints.put(name,ballJoint);
 		physics.getDynamicsWorld().addConstraint(ballJoint);
+	}
+	public void registerObserver(EntityObserver o) {
+		observers.add(o);
+	}
+	public void removeObserver(EntityObserver o) {
+		int i = observers.indexOf(o);
+		if (i >= 0){
+			observers.remove(i);
+		}
+	}
+	public void notifyObservers() {
+		for(int i = 0; i < observers.size(); i++){
+			Observer observer = (Observer)observers.get(i);
+			observer.update();
+		}
+		
+	}
+	public void notifyObservers(String key, String old_name, String new_name) {
+		for(int i = 0; i < observers.size(); i++){
+			EntityObserver observer = (EntityObserver)observers.get(i);
+			observer.update(key, old_name, new_name);
+		}
+		
 	}
 }

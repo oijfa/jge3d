@@ -10,26 +10,32 @@
  */
 package entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import monitoring.EntityObserver;
 import monitoring.Observer;
 import monitoring.Subject;
 
 import physics.Physics;
 
-public class EntityList implements Subject{
+public class EntityList implements Subject, EntityObserver{
 	private HashMap<String,Entity> names;
 	private Physics physics;
+	private ArrayList<Observer> observers;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
+		observers = new ArrayList<Observer>();
 	}
 	public boolean addItem(Entity e){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
 			physics.addEntity(e);
+			e.registerObserver(this);
+			//e.setProperty("name", "cookies");
 			return true;
 		}else{
 			return false;
@@ -50,7 +56,7 @@ public class EntityList implements Subject{
 	public int size(){return names.size();}
 	@Override
 	public void registerObserver(Observer o) {
-		
+	
 	}
 	@Override
 	public void removeObserver(Observer o) {
@@ -58,6 +64,19 @@ public class EntityList implements Subject{
 	}
 	@Override
 	public void notifyObservers() {
+		
+	}
+
+	@Override
+	public void update() {
+		
+	}
+	@Override
+	public void update(String key, String old_val, String new_val) {
+		if(key == "name"){
+			
+			
+		}
 		
 	}
 }
