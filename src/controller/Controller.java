@@ -145,36 +145,11 @@ public class Controller {
 		System.out.println(ent.getProperty("name"));
 		
 		cam.focusOn(ent);
-		//ent.applyImpulse(new Vector3f(100,0,0), new Vector3f(0,-10,0));
-		//objectList.getItem("ent2").applyCentralImpulse(new Vector3f(1.0f, 1.0f, 0.5f));
-		/*
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(10.0f,25.0f,0.0f));
-		objectList.addItem(ent);
+		ent.setProperty("name", "new_ent");
 		System.out.println(ent.getProperty("name"));
-		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(-10.0f,25.0f,0.0f));
-		objectList.addItem(ent);
-		System.out.println(ent.getProperty("name"));
-		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,25.0f,10.0f));
-		objectList.addItem(ent);
-		System.out.println(ent.getProperty("name"));
-		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,25.0f,-10.0f));
-		objectList.addItem(ent);
-		System.out.println(ent.getProperty("name"));
-		*/
+		Vector3f blah = new Vector3f();
+		objectList.getItem("new_ent").getCenterOfMassPosition(blah);
+		System.out.println(blah.toString());
+
 	}
 }

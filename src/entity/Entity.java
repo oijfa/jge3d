@@ -123,9 +123,9 @@ public class Entity extends RigidBody{
 	
 	// SET PROPERTY!!!
 	public void setProperty(String key, Object val){
-		String old_key_val = (String) data.get(key);
+		Object old_key_val = data.get(key);
 		data.put(key,val);
-		notifyObservers();
+		notifyObservers(key, old_key_val, val);
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -186,23 +186,26 @@ public class Entity extends RigidBody{
 		constraints.put(name,ballJoint);
 		physics.getDynamicsWorld().addConstraint(ballJoint);
 	}
+	
 	public void registerObserver(EntityObserver o) {
 		observers.add(o);
 	}
+	
 	public void removeObserver(EntityObserver o) {
 		int i = observers.indexOf(o);
 		if (i >= 0){
 			observers.remove(i);
 		}
 	}
+	
 	public void notifyObservers() {
 		for(int i = 0; i < observers.size(); i++){
 			Observer observer = (Observer)observers.get(i);
 			observer.update();
 		}
-		
 	}
-	public void notifyObservers(String key, String old_name, String new_name) {
+	
+	public void notifyObservers(String key, Object old_name, Object new_name) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
 			observer.update(key, old_name, new_name);

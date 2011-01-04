@@ -35,13 +35,16 @@ public class EntityList implements Subject, EntityObserver{
 			names.size();
 			physics.addEntity(e);
 			e.registerObserver(this);
-			//e.setProperty("name", "cookies");
 			return true;
 		}else{
 			return false;
 		}
 	}
-	public void removeItem(String name){names.remove(name);}
+	public void removeItem(String name){
+		Entity ent = this.getItem(name);
+		names.remove(name);
+		ent.removeObserver(this);
+		}
 	public Entity getItem(String name){
 		//System.out.println("Length of list: " + String.valueOf(names.size()));
 		//System.out.println("List: " + names.toString());
@@ -68,14 +71,13 @@ public class EntityList implements Subject, EntityObserver{
 	}
 
 	@Override
-	public void update() {
-		
-	}
-	@Override
-	public void update(String key, String old_val, String new_val) {
+	public void update(String key, Object old_val, Object new_val) {
 		if(key == "name"){
-			
-			
+			Entity ent = this.getItem((String) old_val);
+			this.removeItem((String) old_val);
+			this.addItem(ent);
+			System.out.println(this.size());
+			System.out.println("UPDATE RAN!");
 		}
 		
 	}
