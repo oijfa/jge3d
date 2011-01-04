@@ -13,6 +13,10 @@ package entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.vecmath.Vector3f;
+
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
+
 import monitoring.EntityObserver;
 import monitoring.Observer;
 import monitoring.Subject;
@@ -57,6 +61,25 @@ public class EntityList implements Subject, EntityObserver{
 	}
 	
 	public int size(){return names.size();}
+	
+	/*Physics Constraints*/
+	public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
+		//Setup a Ball joint between the two objects, at the point given
+		Point2PointConstraint ballJoint = new Point2PointConstraint(
+			object1,
+			object2,
+			point1,
+			point2
+		);
+		
+		physics.getDynamicsWorld().addConstraint(ballJoint);
+	}
+	
+	public void removeJoint(String constraint_name,String entity_name ){
+		this.getItem(entity_name).removeConstraint(constraint_name);
+	}
+	
+	/* Subject implementation */
 	@Override
 	public void registerObserver(Observer o) {
 	

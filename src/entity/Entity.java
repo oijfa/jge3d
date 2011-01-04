@@ -21,22 +21,17 @@ import monitoring.Observer;
 
 import org.lwjgl.opengl.GL11;
 
-import physics.Physics;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
-import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class Entity extends RigidBody{
 	//Properties
 	protected HashMap<String,Object> data;
-	protected HashMap<String,TypedConstraint> constraints;
 	private Model model;
-	protected Physics physics;
 	protected ArrayList<EntityObserver> observers;
 
 	/*Properties the engine uses a lot*/
@@ -82,7 +77,6 @@ public class Entity extends RigidBody{
 		data.put("collidable", c);
 		data.put("TTL", 0);
 		
-		constraints = new HashMap<String,TypedConstraint>();
 		observers = new ArrayList<EntityObserver>();
 	}
 	
@@ -163,25 +157,6 @@ public class Entity extends RigidBody{
 		return model;
 	}
 	
-	/*Physics Constraints*/
-	public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
-		//Setup a Ball joint between the two objects, at the point given
-		Point2PointConstraint ballJoint = new Point2PointConstraint(
-			object1,
-			object2,
-			point1,
-			point2
-		);
-		if(constraints.containsKey(name)){
-			removeJoint(name);
-			System.out.println("WARNING: Added new joint with existing name.  Old joint with name " + name + " deleted.");
-		}
-		constraints.put(name,ballJoint);
-		physics.getDynamicsWorld().addConstraint(ballJoint);
-	}
-	
-	public void removeJoint(String name){constraints.remove(name);}
-	
 	/* Functions for EntityObservers */
 	public void registerObserver(EntityObserver o) {
 		observers.add(o);
@@ -208,4 +183,5 @@ public class Entity extends RigidBody{
 		}
 		
 	}
+	
 }
