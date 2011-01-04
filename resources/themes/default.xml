@@ -345,6 +345,15 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>200</int></param>
         	<param name="maxHeight"><int>200</int></param>
+        	<theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+				<theme name="textree" ref="tree">
+                    <param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>225</int></param>
+        			<param name="maxHeight"><int>225</int></param>
+        		</theme>				
+            </theme>
         </theme>
     </theme>
 </themes>

@@ -145,6 +145,7 @@ public class Controller {
 		System.out.println(ent.getProperty("name"));
 		
 		cam.focusOn(ent);
+		//Testing to see if the interface for EntityObserver works properly
 		ent.setProperty("name", "new_ent");
 		System.out.println(ent.getProperty("name"));
 		Vector3f blah = new Vector3f();
