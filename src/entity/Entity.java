@@ -3,12 +3,6 @@
  * 	The user can add/remove custom properties (though a few are 
  * 	unremovable for internal engine reasons)
  * 
- * 	//TODO: Needs to store models, etc
- * 
- * 	//TODO: Needs a draw function so it can draw itself
- * 
- * 	//TODO: Needs to be listenable.  That way the Entity List can know when the name changes
- * 
  *	//TODO: Maybe come up with actions like rotate, etc that a user might want to access
  *			Programmatically, and use skynet code to queue them up and play them back?
  *			Would function for animations and such too?
@@ -24,7 +18,6 @@ import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
 import monitoring.Observer;
-import monitoring.Subject;
 
 import org.lwjgl.opengl.GL11;
 
@@ -180,13 +173,16 @@ public class Entity extends RigidBody{
 			point2
 		);
 		if(constraints.containsKey(name)){
-			constraints.remove(name);
-			System.out.println("WARNING: Added new constriant with existing name.  Old constraint with name " + name + " deleted.");
+			removeJoint(name);
+			System.out.println("WARNING: Added new joint with existing name.  Old joint with name " + name + " deleted.");
 		}
 		constraints.put(name,ballJoint);
 		physics.getDynamicsWorld().addConstraint(ballJoint);
 	}
 	
+	public void removeJoint(String name){constraints.remove(name);}
+	
+	/* Functions for EntityObservers */
 	public void registerObserver(EntityObserver o) {
 		observers.add(o);
 	}

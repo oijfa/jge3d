@@ -8,6 +8,7 @@ import com.bulletphysics.linearmath.MotionState;
 
 public class Camera extends Entity{
 	public static final String CAMERA_NAME = "camera";
+	private static final String FOCUS_JOINT = "focus"; 
 	
 	private Entity focus;
 	
@@ -42,6 +43,11 @@ public class Camera extends Entity{
 	
 	public void focusOn(Entity newFocus){
 		focus = newFocus;
+		removeJoint(FOCUS_JOINT);
+		addBallJoint(FOCUS_JOINT, 
+				newFocus, new Vector3f(0.0f,0.0f,0.0f),
+				this, new Vector3f(0.0f, 0.0f, -15.0f)
+		);
 	}
 	
 	public Vector3f getFocusPosition(){
