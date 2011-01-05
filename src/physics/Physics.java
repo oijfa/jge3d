@@ -123,6 +123,7 @@ public class Physics {
 		int vertexcount=0;
 		int trianglecount=0;
 		CollisionShape meshshape;
+		int index=0;
 		
 		//get the total number of vertices so we can declare our stupid ass
 		//directly allocated buffer
@@ -147,9 +148,12 @@ public class Physics {
 					vertexbuffer.asFloatBuffer().put(v.x);
 					vertexbuffer.asFloatBuffer().put(v.y);
 					vertexbuffer.asFloatBuffer().put(v.z);
-					indexbuffer.asIntBuffer().put(i*3*j);
-					indexbuffer.asIntBuffer().put(i*3*j+1);
-					indexbuffer.asIntBuffer().put(i*3*j+2);
+					indexbuffer.asIntBuffer().put(index);
+					index++;
+					indexbuffer.asIntBuffer().put(index);
+					index++;
+					indexbuffer.asIntBuffer().put(index);
+					index++;
 				}
 			}	
 		}
