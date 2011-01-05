@@ -24,7 +24,6 @@ import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
 import monitoring.Observer;
-import monitoring.Subject;
 
 import org.lwjgl.opengl.GL11;
 

@@ -6,7 +6,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 
 import entity.Camera;
-import entity.Entity;
 import entity.EntityList;
 
 public class Input {

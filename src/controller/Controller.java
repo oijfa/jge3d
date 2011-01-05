@@ -143,6 +143,7 @@ public class Controller {
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
 		System.out.println(ent.getProperty("name"));
+		physics.reduceHull(ent);
 		
 		cam.focusOn(ent);
 		ent.setProperty("name", "new_ent");

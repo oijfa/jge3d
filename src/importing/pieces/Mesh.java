@@ -225,4 +225,8 @@ public class Mesh {
 		}
 		return ret;
 	}
+
+	public int getFaceCount() {
+		return faces.size();
+	}
 }

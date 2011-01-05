@@ -34,6 +34,8 @@ public class Model {
 	/*Getters*/
 	public Mesh getMesh(int i){ return meshes.get(i);}
 	
+	public int getMeshCount() { return meshes.size();}
+	
 	public void draw(){
 		for(Mesh m: meshes){
 			GL11.glPushMatrix();

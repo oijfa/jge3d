@@ -5,6 +5,8 @@ package importing.pieces;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.opengl.GL11;
 
 public class Face {
@@ -93,6 +95,29 @@ public class Face {
 	
 	/*Getters*/
 	public float[] getNorm(){return normal;}
+	
+	public Vector3f[] getVertices(){
+		ArrayList<Vector3f> vertexlist = new ArrayList<Vector3f>();
+		Vector3f vertex = new Vector3f();
+		for(int i=0; i<vertices.size();i++) {
+			vertex.x = vertices.get(i)[0];
+			vertex.y = vertices.get(i)[1];
+			vertex.z = vertices.get(i)[2];
+			vertexlist.add(vertex);
+		}
+		
+		return (Vector3f[])vertexlist.toArray();
+	}
+	
+	public Vector3f getVertex(int i){
+		Vector3f vertex = new Vector3f();
+		
+		vertex.x = vertices.get(i)[0];
+		vertex.y = vertices.get(i)[1];
+		vertex.z = vertices.get(i)[2];
+		
+		return vertex;
+	}
 
 	public void draw() {
 		/*
@@ -140,5 +165,9 @@ public class Face {
 		}
 		ret += "			normal: (" + normal[0] + "," + normal[1] + "," + normal[2] + ")\n";	
 		return ret;
+	}
+	
+	public int getVertexCount() {
+		return vertices.size();
 	}
 }

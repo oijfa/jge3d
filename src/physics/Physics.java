@@ -1,7 +1,7 @@
 package physics;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import javax.vecmath.Vector3f;
 
@@ -9,8 +9,13 @@ import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
-import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
+
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.ConvexHullShape;
+import com.bulletphysics.collision.shapes.ConvexShape;
+import com.bulletphysics.collision.shapes.ShapeHull;
+import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -31,7 +36,7 @@ public class Physics {
 	private BroadphaseInterface overlappingPairCache;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
-	private List<CollisionShape> collisionShapes = new ArrayList<CollisionShape>();
+	//private List<CollisionShape> collisionShapes = new ArrayList<CollisionShape>();
 	float deltaT;
 	long frames=0;
 
@@ -65,29 +70,7 @@ public class Physics {
 		//Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();
 	}
-		
-	public RigidBody addLevelBlock(float x, float y, float z, float cube_size) {
-		//Levels are static since we don't want them moving due to interactions with
-		//other physics objects; Static objects must have a mass of 0 and no inertia
-		float mass=0.0f;
-		
-		//Collision shape is a box since a level is just a bunch of boxes
-		CollisionShape colShape = new BoxShape(new Vector3f(cube_size, cube_size, cube_size));
-		collisionShapes.add(colShape);
-	
-		// Create level transformation and default position
-		Transform startTransform = new Transform();
-		startTransform.setIdentity();
-		startTransform.origin.set(cube_size*x, cube_size*y, cube_size*z);
 
-		//Create a rigid body to represent the object
-		RigidBody body = createRigidBody(mass, startTransform, colShape);
-	
-		dynamicsWorld.addRigidBody(body);
-		
-		return body;
-	}
-	
 	public RigidBody createRigidBody(float mass, Transform startTransform, CollisionShape shape) {
 		// rigid body is dynamic if and only if mass is non zero, otherwise static
 		boolean isDynamic = (mass != 0f);
@@ -135,4 +118,65 @@ public class Physics {
 	}
 	
 	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
+	
+	public void reduceHull(Entity e) {
+		int vertexcount=0;
+		int trianglecount=0;
+		CollisionShape meshshape;
+		
+		//get the total number of vertices so we can declare our stupid ass
+		//directly allocated buffer
+		for(int i=0;i<e.getModel().getMeshCount()-1;i++) {
+			trianglecount += e.getModel().getMesh(i).getFaceCount()-1;
+			for(int j=0;j<e.getModel().getMesh(i).getFaceCount()-1;j++) {
+				vertexcount += e.getModel().getMesh(i).getFace(j).getVertexCount();
+			}	
+		}
+
+		//Declare the shitty ass directly allocated buffer
+		ByteBuffer vertexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
+		vertexbuffer.order(ByteOrder.nativeOrder());
+		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
+		indexbuffer.order(ByteOrder.nativeOrder());
+		
+		//Insert the vectors in to our fucking awful directly allocated buffer
+		for(int i=0;i<e.getModel().getMeshCount();i++) {
+			for(int j=0;j<e.getModel().getMesh(i).getFaceCount()-1;j++) {
+				for(int k=0;k<e.getModel().getMesh(i).getFace(j).getVertexCount()-1;k++) {
+					Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
+					vertexbuffer.asFloatBuffer().put(v.x);
+					vertexbuffer.asFloatBuffer().put(v.y);
+					vertexbuffer.asFloatBuffer().put(v.z);
+					indexbuffer.asIntBuffer().put(i*3*j);
+					indexbuffer.asIntBuffer().put(i*3*j+1);
+					indexbuffer.asIntBuffer().put(i*3*j+2);
+				}
+			}	
+		}
+		
+		//flip that shit dawg
+		vertexbuffer.flip();
+		
+		//Oh great, let's throw data at this undocumented function and hope
+		//something useful comes out the other side!
+		TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(
+			trianglecount,
+			indexbuffer,
+			3*4,//indexStride,
+			vertexcount,
+			vertexbuffer,
+			3*4//vertStride
+		);
+
+		//put vertices in triangle mesh array
+		boolean useQuantizedAabbCompression = true;
+		meshshape = new BvhTriangleMeshShape(indexVertexArrays, useQuantizedAabbCompression);
+		
+		//create a hull approximation
+		ShapeHull hull = new ShapeHull((ConvexShape)meshshape);
+		float margin = e.getCollisionShape().getMargin();
+		hull.buildHull(margin);
+		ConvexHullShape simplifiedConvexShape = new ConvexHullShape(hull.getVertexPointer());
+		e.setCollisionShape(simplifiedConvexShape);
+	}
 }
