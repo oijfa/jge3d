@@ -119,7 +119,7 @@ public class Physics {
 	
 	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
 	
-	public void reduceHull(Entity e) {
+	public void reduceHull(Entity e) throws Exception {
 		int vertexcount=0;
 		int trianglecount=0;
 		CollisionShape meshshape;
@@ -137,8 +137,10 @@ public class Physics {
 		//Declare the shitty ass directly allocated buffer
 		ByteBuffer vertexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
 		vertexbuffer.order(ByteOrder.nativeOrder());
-		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3*trianglecount*4);
+		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
 		indexbuffer.order(ByteOrder.nativeOrder());
+		
+		indexbuffer.clear();
 		
 		//Insert the vectors in to our fucking awful directly allocated buffer
 		
@@ -149,23 +151,30 @@ public class Physics {
 				//for every vertex
 				for(int k=0;k<e.getModel().getMesh(i).getFace(j).getVertexCount();k++) {
 					
-					//get current vertex
-					Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
-					
-					//shove x,y,z into buffer
-					vertexbuffer.asFloatBuffer().put(v.x);
-					vertexbuffer.asFloatBuffer().put(v.y);
-					vertexbuffer.asFloatBuffer().put(v.z);
-					
-					//push index for this vertex 
-					indexbuffer.asIntBuffer().put(index);
+					try{
+						//get current vertex
+						Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
+						
+						//shove x,y,z into buffer
+						vertexbuffer.putFloat(v.x);
+						vertexbuffer.putFloat(v.y);
+						vertexbuffer.putFloat(v.z);
+						
+						//push indices for this vertex 
+						indexbuffer.putInt(index);
+						index++;
+						
+					}catch(Exception ex){
+						System.out.println("*****************----");
+						System.out.println(index);
+						System.out.println("*****************----");
+						ex.printStackTrace();
+						throw ex;
+					}
+					indexbuffer.putInt(index);
 					index++;
-					/*
-					indexbuffer.asIntBuffer().put(index);
+					indexbuffer.putInt(index);
 					index++;
-					indexbuffer.asIntBuffer().put(index);
-					index++;
-					*/
 				}
 			}	
 		}
@@ -184,12 +193,12 @@ public class Physics {
 		TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(
 			trianglecount,
 			indexbuffer,
-			3*4,//indexStride,
+			4,//indexStride,
 			vertexcount,
 			vertexbuffer,
 			3*4//vertStride
 		);
-
+		
 		//put vertices in triangle mesh array
 		boolean useQuantizedAabbCompression = true;
 		meshshape = new BvhTriangleMeshShape(indexVertexArrays, useQuantizedAabbCompression);
@@ -200,5 +209,6 @@ public class Physics {
 		hull.buildHull(margin);
 		ConvexHullShape simplifiedConvexShape = new ConvexHullShape(hull.getVertexPointer());
 		e.setCollisionShape(simplifiedConvexShape);
+		
 	}
 }

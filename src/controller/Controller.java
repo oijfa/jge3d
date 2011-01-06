@@ -32,11 +32,11 @@ public class Controller {
 
 	private EntityList objectList;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		new Controller();
 	}
 
-	public Controller() {
+	public Controller() throws Exception {
 		start();
 		
 		loadLevel();
@@ -111,7 +111,7 @@ public class Controller {
 	
 	public static void quit() { isRunning = false;	}
 	
-	public void loadLevel(){
+	public void loadLevel() throws Exception{
 		Entity ent;
 		Camera cam;
 
