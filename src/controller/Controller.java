@@ -120,8 +120,8 @@ public class Controller {
 		Parser p = new XGL_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
-			p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/10010260.xgl");
+			p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?

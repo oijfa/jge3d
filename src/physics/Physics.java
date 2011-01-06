@@ -127,9 +127,9 @@ public class Physics {
 		
 		//get the total number of vertices so we can declare our stupid ass
 		//directly allocated buffer
-		for(int i=0;i<e.getModel().getMeshCount()-1;i++) {
-			trianglecount += e.getModel().getMesh(i).getFaceCount()-1;
-			for(int j=0;j<e.getModel().getMesh(i).getFaceCount()-1;j++) {
+		for(int i=0;i<e.getModel().getMeshCount();i++) {
+			trianglecount += e.getModel().getMesh(i).getFaceCount();
+			for(int j=0;j<e.getModel().getMesh(i).getFaceCount();j++) {
 				vertexcount += e.getModel().getMesh(i).getFace(j).getVertexCount();
 			}	
 		}
@@ -137,32 +137,50 @@ public class Physics {
 		//Declare the shitty ass directly allocated buffer
 		ByteBuffer vertexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
 		vertexbuffer.order(ByteOrder.nativeOrder());
-		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3*vertexcount*4);
+		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3*trianglecount*4);
 		indexbuffer.order(ByteOrder.nativeOrder());
 		
 		//Insert the vectors in to our fucking awful directly allocated buffer
+		
+		//for every mesh
 		for(int i=0;i<e.getModel().getMeshCount();i++) {
-			for(int j=0;j<e.getModel().getMesh(i).getFaceCount()-1;j++) {
-				for(int k=0;k<e.getModel().getMesh(i).getFace(j).getVertexCount()-1;k++) {
+			//for every face
+			for(int j=0;j<e.getModel().getMesh(i).getFaceCount();j++) {
+				//for every vertex
+				for(int k=0;k<e.getModel().getMesh(i).getFace(j).getVertexCount();k++) {
+					
+					//get current vertex
 					Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
+					
+					//shove x,y,z into buffer
 					vertexbuffer.asFloatBuffer().put(v.x);
 					vertexbuffer.asFloatBuffer().put(v.y);
 					vertexbuffer.asFloatBuffer().put(v.z);
+					
+					//push index for this vertex 
+					indexbuffer.asIntBuffer().put(index);
+					index++;
+					/*
 					indexbuffer.asIntBuffer().put(index);
 					index++;
 					indexbuffer.asIntBuffer().put(index);
 					index++;
-					indexbuffer.asIntBuffer().put(index);
-					index++;
+					*/
 				}
 			}	
 		}
 		
+		System.out.println("****************************");
+		System.out.println(index);
+		System.out.println("****************************");
+		
 		//flip that shit dawg
+		indexbuffer.flip();
 		vertexbuffer.flip();
 		
 		//Oh great, let's throw data at this undocumented function and hope
 		//something useful comes out the other side!
+			//*Clearly you are frustrated --Robert
 		TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(
 			trianglecount,
 			indexbuffer,
