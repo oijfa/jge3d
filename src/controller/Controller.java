@@ -129,8 +129,7 @@ public class Controller {
 		
 		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		cam = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
-		cam.setPosition(new Vector3f(0,0,-15));
+		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false, objectList);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		
 		objectList.addItem(cam);
@@ -140,16 +139,31 @@ public class Controller {
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
+		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
+		objectList.addItem(ent);
+		
+		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
+		
+		//Make a green box thing
+		try{
+			//p.readFile("./lib/legoman.xgl");
+			//p.readFile("./lib/10010260.xgl");
+			p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/cath.xgl");
+		}catch(Exception e){
+			//TODO:  What to do here?
+		}
+		
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent);
-		System.out.println(ent.getProperty("name"));
-		
-		cam.focusOn(ent);
 		ent.setProperty("name", "new_ent");
-		System.out.println(ent.getProperty("name"));
-		Vector3f blah = new Vector3f();
-		objectList.getItem("new_ent").getCenterOfMassPosition(blah);
-		System.out.println(blah.toString());
-
+		
+		cam.setDistance(25.0f);
+		cam.focusOn(ent);
+		
+		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
 	}
 }

@@ -48,6 +48,11 @@ public class Renderer {
 		
 		if(objectList.getItem(Camera.CAMERA_NAME)!=null) {
 			Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+			
+			//Move the camera with its focus
+			cam.updatePosition();
+			
+			//Get its new position
 			Vector3f camPos = new Vector3f();
 			Vector3f focusPos = cam.getFocusPosition();
 			cam.getCenterOfMassPosition(camPos);
@@ -56,7 +61,7 @@ public class Renderer {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
 			GL11.glLoadIdentity();
 			
-	
+			//Look at the camera's focus
 			GLU.gluLookAt(
 					camPos.x, camPos.y, camPos.z, 	//Camera Location
 					focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location

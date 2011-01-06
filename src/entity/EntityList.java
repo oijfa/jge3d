@@ -78,7 +78,10 @@ public class EntityList implements Subject, EntityObserver{
 	}
 	
 	public void removeJoint(String constraint_name){
-		constraints.remove(constraint_name);
+		if( constraints.containsKey(constraint_name) ){
+			physics.getDynamicsWorld().removeConstraint(constraints.get(constraint_name));
+			constraints.remove(constraint_name);
+		}
 	}
 	
 	/* Subject implementation */
