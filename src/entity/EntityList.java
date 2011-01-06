@@ -12,6 +12,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import monitoring.EntityObserver;
 import monitoring.Observer;
@@ -35,6 +36,7 @@ public class EntityList implements Subject, EntityObserver{
 			names.size();
 			physics.addEntity(e);
 			e.registerObserver(this);
+			notifyObservers();
 			return true;
 		}else{
 			return false;
@@ -44,6 +46,7 @@ public class EntityList implements Subject, EntityObserver{
 		Entity ent = this.getItem(name);
 		names.remove(name);
 		ent.removeObserver(this);
+		notifyObservers();
 		}
 	public Entity getItem(String name){
 		//System.out.println("Length of list: " + String.valueOf(names.size()));
@@ -57,17 +60,25 @@ public class EntityList implements Subject, EntityObserver{
 	}
 	
 	public int size(){return names.size();}
+	
+	public Set<String> getKeySet(){
+		return names.keySet();
+	}
+	
 	@Override
 	public void registerObserver(Observer o) {
-	
+		observers.add(o);
 	}
 	@Override
 	public void removeObserver(Observer o) {
-		
+		observers.remove(o);
 	}
 	@Override
 	public void notifyObservers() {
-		
+		for(int i = 0; i < observers.size(); i++){
+			Observer observer = (Observer)observers.get(i);
+			observer.update();
+		}
 	}
 
 	@Override
@@ -76,8 +87,6 @@ public class EntityList implements Subject, EntityObserver{
 			Entity ent = this.getItem((String) old_val);
 			this.removeItem((String) old_val);
 			this.addItem(ent);
-			System.out.println(this.size());
-			System.out.println("UPDATE RAN!");
 		}
 		
 	}

@@ -2,6 +2,8 @@ package window.components;
 
 import java.util.prefs.Preferences;
 
+import monitoring.Observer;
+
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.ThemeInfo;
@@ -12,12 +14,15 @@ import de.matthiasmann.twl.model.AbstractTreeTableNode;
 import de.matthiasmann.twl.model.PersistentStringModel;
 import de.matthiasmann.twl.model.StringModel;
 import de.matthiasmann.twl.model.TreeTableNode;
+import entity.Entity;
+import entity.EntityList;
 
-public class Tree extends ScrollPane implements Runnable {
+public class Tree extends ScrollPane implements Runnable, Observer {
     //private MyNode dynamicNode;
     int state;
     Node subNode;
-
+    EntityList objectList;
+    private Model model;
     public Tree() {
         Model m = new Model();
         PersistentStringModel psm = new PersistentStringModel(
@@ -35,6 +40,7 @@ public class Tree extends ScrollPane implements Runnable {
         m.insert(new SpanString("This is a very long string which will span into the next column.", 2), "Not visible");
         m.insert("This is a very long string which will be clipped.", "This is visible");
 
+        
         TreeTable t = new TreeTable(m);
         t.setTheme("/table");
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
@@ -44,7 +50,51 @@ public class Tree extends ScrollPane implements Runnable {
         setContent(t);
         setTheme("/tableScrollPane");
     }
+    
+    public Tree(EntityList objectList){
+    	this.objectList = objectList;
+    	System.out.println("Tree Constructor");
+    	model = new Model();
+    	Node node;
+    	
+    	//loop through objects in EntityList and add each item to the Tree,
+    	node = model.insert("A" , "MAIN");
+    	node.insert("B", "BRANCH1");
+   		node.insert("C", "BRANCH2");
+   
+    	
+        TreeTable t = new TreeTable(model);
+        t.setTheme("/table");
+        t.registerCellRenderer(SpanString.class, new SpanRenderer());
+        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        t.setDefaultSelectionManager();
 
+        setContent(t);
+        setTheme("/tableScrollPane");
+        this.update();
+    }
+    
+	@Override
+	public void update() {
+		model.removeAll();
+		System.out.println("Update Tree Method");
+		this.entityListNode();
+	}
+	
+	public void entityListNode(){
+		Node entityNode;
+		for( String key : objectList.getKeySet()){
+			Entity ent = objectList.getItem(key);
+			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
+			this.entityNode(ent, entityNode);
+		}
+	}
+	public void entityNode(Entity ent, Node entityNode){
+		for(String key : ent.getKeys()){
+			Object obj = ent.getProperty(key);
+			entityNode.insert(key, obj);
+		}
+	}
     public void run() {
     	
     }
@@ -98,6 +148,9 @@ public class Tree extends ScrollPane implements Runnable {
             Node n = new Node(this, str0, str1);
             insertChild(n, getNumChildren());
             return n;
+        }
+        public void removeAll(){
+        	this.removeAllChildren();
         }
     }
 
@@ -173,4 +226,6 @@ public class Tree extends ScrollPane implements Runnable {
             return null;
         }
     }
+
+
 }

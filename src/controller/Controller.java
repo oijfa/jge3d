@@ -38,7 +38,6 @@ public class Controller {
 
 	public Controller() {
 		start();
-		
 		loadLevel();
 	}
 
@@ -132,7 +131,7 @@ public class Controller {
 		cam = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
 		cam.setPosition(new Vector3f(0,0,-15));
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		
+		System.out.println("CAMERA ADDED!");
 		objectList.addItem(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
@@ -141,16 +140,15 @@ public class Controller {
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
+		System.out.println("Cathode added!");
 		objectList.addItem(ent);
-		System.out.println(ent.getProperty("name"));
 		
+		//Setting the camera to focus on the entity
 		cam.focusOn(ent);
-		//Testing to see if the interface for EntityObserver works properly
+		
+		//Name change to test EntityObserver
+		System.out.println("Name Change!");
 		ent.setProperty("name", "new_ent");
-		System.out.println(ent.getProperty("name"));
-		Vector3f blah = new Vector3f();
-		objectList.getItem("new_ent").getCenterOfMassPosition(blah);
-		System.out.println(blah.toString());
-
+		
 	}
 }

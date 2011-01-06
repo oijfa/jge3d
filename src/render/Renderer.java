@@ -91,7 +91,7 @@ public class Renderer {
 		//TODO:  Make Configurable by User
 		Display.setVSyncEnabled(true);
 		
-		window = new Window();
+		window = new Window(objectList);
 		
 		setPerspective();
 

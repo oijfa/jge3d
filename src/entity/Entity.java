@@ -19,12 +19,12 @@ import importing.pieces.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
 import monitoring.Observer;
-import monitoring.Subject;
 
 import org.lwjgl.opengl.GL11;
 
@@ -141,7 +141,7 @@ public class Entity extends RigidBody{
 
 	/* Getters */
 	public EntityList getSubEntities(){return subEntities;}
-	public String[] getKeys() {return (String[])data.keySet().toArray();}
+	public Set<String> getKeys() {return data.keySet();}
 	public boolean keyExists(String prop_name){
 		for( int i = 0; i < data.keySet().size(); i++){
 			//TODO: Probably a better way to loop through the keys, but I'm lazy
