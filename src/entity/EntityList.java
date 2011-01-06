@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 
 import monitoring.EntityObserver;
@@ -22,7 +23,6 @@ import monitoring.Observer;
 import monitoring.Subject;
 
 import physics.Physics;
-import physics.joints.BallJoint;
 
 public class EntityList implements Subject, EntityObserver{
 	private HashMap<String,Entity> names;
@@ -68,7 +68,7 @@ public class EntityList implements Subject, EntityObserver{
 	/*Physics Constraints*/
 	public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
 		//Setup a Ball joint between the two objects, at the point given
-		BallJoint ballJoint = new BallJoint(
+		Point2PointConstraint ballJoint = new Point2PointConstraint(
 			object1,
 			object2,
 			point1,
