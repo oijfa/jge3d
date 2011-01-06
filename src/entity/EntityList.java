@@ -15,23 +15,26 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 
 import monitoring.EntityObserver;
 import monitoring.Observer;
 import monitoring.Subject;
 
 import physics.Physics;
+import physics.joints.BallJoint;
 
 public class EntityList implements Subject, EntityObserver{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 	private ArrayList<Observer> observers;
+	private HashMap<String,TypedConstraint> constraints;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
 		observers = new ArrayList<Observer>();
+		constraints = new HashMap<String,TypedConstraint>();
 	}
 	public boolean addItem(Entity e){
 		if(e.keyExists("name")){
@@ -65,18 +68,17 @@ public class EntityList implements Subject, EntityObserver{
 	/*Physics Constraints*/
 	public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
 		//Setup a Ball joint between the two objects, at the point given
-		Point2PointConstraint ballJoint = new Point2PointConstraint(
+		BallJoint ballJoint = new BallJoint(
 			object1,
 			object2,
 			point1,
 			point2
 		);
-		
 		physics.getDynamicsWorld().addConstraint(ballJoint);
 	}
 	
-	public void removeJoint(String constraint_name,String entity_name ){
-		this.getItem(entity_name).removeConstraint(constraint_name);
+	public void removeJoint(String constraint_name){
+		constraints.remove(constraint_name);
 	}
 	
 	/* Subject implementation */

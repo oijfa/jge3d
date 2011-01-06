@@ -12,39 +12,42 @@ public class Camera extends Entity{
 	
 	private Entity focus;
 	
+	private EntityList parentList;
+	
 	/* Constructors */
-	public Camera(RigidBodyConstructionInfo r, boolean collide) {
+	public Camera(RigidBodyConstructionInfo r, boolean collide, EntityList pList) {
 		super(r, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	public Camera(float f, MotionState m, CollisionShape c, boolean collide, EntityList objectList ) {
+	public Camera(float f, MotionState m, CollisionShape c, boolean collide, EntityList objectList, EntityList pList ) {
 		super(f,m,c, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
+	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide, EntityList pList ) {
 		super(f,m,c,v, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	public Camera(String _name, RigidBodyConstructionInfo r, boolean collide) {
+	public Camera(String _name, RigidBodyConstructionInfo r, boolean collide, EntityList pList) {
 		super(r, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	public Camera(String _name,float f, MotionState m, CollisionShape c, boolean collide ) {
+	public Camera(String _name,float f, MotionState m, CollisionShape c, boolean collide, EntityList pList ) {
 		super(f,m,c, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	public Camera(String _name,float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
+	public Camera(String _name,float f, MotionState m, CollisionShape c, Vector3f v, boolean collide, EntityList pList ) {
 		super(f,m,c,v, collide);
-		cameraInit();
+		cameraInit(pList);
 	}
-	private void cameraInit(){
+	private void cameraInit(EntityList pList){
 		setProperty(Entity.NAME, "camera");
+		parentList = pList;
 	}
 	
 	public void focusOn(Entity newFocus){
 		focus = newFocus;
-		removeJoint(FOCUS_JOINT);
-		addBallJoint(FOCUS_JOINT, 
+		parentList.removeJoint(FOCUS_JOINT);
+		parentList.addBallJoint(FOCUS_JOINT, 
 				newFocus, new Vector3f(0.0f,0.0f,0.0f),
 				this, new Vector3f(0.0f, 0.0f, -15.0f)
 		);
