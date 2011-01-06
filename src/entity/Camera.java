@@ -19,7 +19,7 @@ public class Camera extends Entity{
 		super(r, collide);
 		cameraInit(pList);
 	}
-	public Camera(float f, MotionState m, CollisionShape c, boolean collide, EntityList objectList, EntityList pList ) {
+	public Camera(float f, MotionState m, CollisionShape c, boolean collide, EntityList pList ) {
 		super(f,m,c, collide);
 		cameraInit(pList);
 	}
