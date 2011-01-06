@@ -30,7 +30,7 @@ public class Input {
 	public void init(){
 		try {
 			Keyboard.create();
-			Mouse.create();
+			//Mouse.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
