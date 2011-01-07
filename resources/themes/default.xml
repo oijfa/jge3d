@@ -235,7 +235,7 @@
     <theme name="comboboxPopup" ref="-defaults">
         <theme name="listbox" ref="listbox">
         </theme>
-        <param name="background"><i.clone()mage>black</image></param>
+        <param name="background"><image>black</image></param>
     </theme>
     <theme name="-treecellrenderer" ref="-defaults">
         <param name="treeIndent"><int>13</int></param>
