@@ -195,7 +195,7 @@
         <param name="background"><image>checkbox.state</image></param>
     </theme>
     <theme name="editfield" ref="-defaults">
-        <param name="background"><image>border_round</image></param>
+        <param name="background"><image>border_square</image></param>
         <param name="border"><border>5</border></param>
         <theme name="renderer" ref="-defaults">
         </theme>
@@ -235,7 +235,7 @@
     <theme name="comboboxPopup" ref="-defaults">
         <theme name="listbox" ref="listbox">
         </theme>
-        <param name="background"><i.clone()mage>black</image></param>
+        <param name="background"><image>black</image></param>
     </theme>
     <theme name="-treecellrenderer" ref="-defaults">
         <param name="treeIndent"><int>13</int></param>

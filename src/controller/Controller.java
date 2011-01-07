@@ -135,6 +135,8 @@ public class Controller {
 		objectList.addItem(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
+		
+		/*
 		for( int i = 0; i < 4; i++){
 			//Make a cathode
 			boxShape = new BoxShape(new Vector3f(1, 1, 1));
@@ -143,6 +145,7 @@ public class Controller {
 			ent.setPosition(new Vector3f((float)Math.random(),(float)Math.random(),(float)Math.random()));
 			objectList.addItem(ent);
 		}
+		*/
 		
 		//Make a cathode
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.lwjgl.LWJGLException;
 
-import window.MainMenu;
+//import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
