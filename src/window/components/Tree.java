@@ -1,9 +1,7 @@
 package window.components;
 
 import java.util.prefs.Preferences;
-
 import monitoring.Observer;
-
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.ThemeInfo;
@@ -92,7 +90,13 @@ public class Tree extends ScrollPane implements Runnable, Observer {
 	public void entityNode(Entity ent, Node entityNode){
 		for(String key : ent.getKeys()){
 			Object obj = ent.getProperty(key);
-			entityNode.insert(key, obj);
+			System.out.println(obj.toString());
+			PersistentStringModel psm = new PersistentStringModel(
+					Preferences.userNodeForPackage(getClass()),
+					"editField",
+						obj.toString()
+			);
+			entityNode.insert(key, psm);
 		}
 	}
     public void run() {

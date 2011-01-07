@@ -195,7 +195,7 @@
         <param name="background"><image>checkbox.state</image></param>
     </theme>
     <theme name="editfield" ref="-defaults">
-        <param name="background"><image>border_round</image></param>
+        <param name="background"><image>border_square</image></param>
         <param name="border"><border>5</border></param>
         <theme name="renderer" ref="-defaults">
         </theme>
