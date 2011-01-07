@@ -17,7 +17,7 @@ import de.matthiasmann.twl.model.StringModel;
 import entity.Entity;
 import entity.EntityList;
 
-public class Tree extends ScrollPane implements Runnable, EntityListObserver {
+public class Tree extends ScrollPane implements EntityListObserver {
     //private MyNode dynamicNode;
     int state;
     Node subNode;
@@ -65,34 +65,40 @@ public class Tree extends ScrollPane implements Runnable, EntityListObserver {
 	public void update(Object starter) {
 		if(starter != this){
 			model.removeAll();
-			this.entityListNode(starter);
-			System.out.println("Tree Ran");
+			this.createEntityListNode(starter);
+			System.out.println("Tree.update");
 		}
 	}
 	
-	public void entityListNode(Object starter){
+	public void createEntityListNode(Object starter){
 		Node entityNode;
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
 			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
-			System.out.println(ent.getProperty("name"));
-			this.entityNode(ent, entityNode, starter);
+			
+			this.createEntityNode(ent, entityNode, starter);
+			
+			System.out.println("Entity List Node Created");
 		}
 	}
-	public void entityNode(Entity ent, Node entityNode, Object starter){
+	
+	public void createEntityNode(Entity ent, Node entityNode, Object starter){
 		for(String key : ent.getKeys()){
 			Object obj = ent.getProperty(key);
 			EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
 			entityNode.insert(key, esm);
 		}
 	}
-    public void run() {
-    	
-    }
     
     public void centerScrollPane() {
         updateScrollbarSizes();
         setScrollPositionX(getMaxScrollPosX()/2);
         setScrollPositionY(getMaxScrollPosY()/2);
     }
+
+	public void init() {	
+		model.removeAll();
+		this.createEntityListNode(this);
+		System.out.println("Tree.init");
+	}
 }

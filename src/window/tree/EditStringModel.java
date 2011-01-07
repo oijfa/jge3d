@@ -11,14 +11,14 @@ public class EditStringModel extends HasCallback implements StringModel{
 	private Object starter;
 	public EditStringModel(String key, String defaultValue, Entity observer, Object starter){
 		if(defaultValue == null){
-			throw new NullPointerException("defaultValue");
+			throw new NullPointerException("defaultValue Missing when creating EditStringModel");
 		}
 		this.value = defaultValue;
 		this.key = key;
 		this.observer = observer;
 		this.starter = starter;
-		
 	}
+	
 	public Entity getObserver(){
 		return this.observer;
 	}

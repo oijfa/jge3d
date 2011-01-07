@@ -203,18 +203,11 @@ public class Entity extends RigidBody{
 		}
 	}
 	
-	public void notifyObservers() {
-		for(int i = 0; i < observers.size(); i++){
-			Observer observer = (Observer)observers.get(i);
-			observer.update();
-		}
-	}
-	
 	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
 			//checks to see if the starter was the entity list.
-			System.out.println(starter.toString());
+			System.out.println("Entity " + this.getProperty("name") + " Notifying Observers.  Started by:" + starter.toString());
 			if(starter != observer){	
 				observer.update(key, old_name, new_name, starter);
 			}
