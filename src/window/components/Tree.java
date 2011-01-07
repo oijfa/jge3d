@@ -1,21 +1,23 @@
 package window.components;
 
-import java.util.prefs.Preferences;
-import monitoring.Observer;
-import de.matthiasmann.twl.EditField;
+import window.tree.EditFieldCellRenderer;
+import window.tree.EditStringModel;
+import window.tree.Model;
+import window.tree.Node;
+import window.tree.SpanRenderer;
+import window.tree.SpanString;
+import monitoring.EntityListObserver;
+
 import de.matthiasmann.twl.ScrollPane;
-import de.matthiasmann.twl.ThemeInfo;
+
 import de.matthiasmann.twl.TreeTable;
-import de.matthiasmann.twl.Widget;
-import de.matthiasmann.twl.model.AbstractTreeTableModel;
-import de.matthiasmann.twl.model.AbstractTreeTableNode;
-import de.matthiasmann.twl.model.PersistentStringModel;
+
 import de.matthiasmann.twl.model.StringModel;
-import de.matthiasmann.twl.model.TreeTableNode;
+
 import entity.Entity;
 import entity.EntityList;
 
-public class Tree extends ScrollPane implements Runnable, Observer {
+public class Tree extends ScrollPane implements Runnable, EntityListObserver {
     //private MyNode dynamicNode;
     int state;
     Node subNode;
@@ -23,16 +25,11 @@ public class Tree extends ScrollPane implements Runnable, Observer {
     private Model model;
     public Tree() {
         Model m = new Model();
-        PersistentStringModel psm = new PersistentStringModel(
-            Preferences.userNodeForPackage(getClass()),
-            "demoEditField",
-        	"you can edit this"
-        );
-
+        
         Node a = m.insert("A", "1");
         a.insert("Aa", "2");
         a.insert("Ab", "3");
-        a.insert("EditField", psm);
+        a.insert("EditField", "Not anymore");
         Node b = m.insert("B", "4");
         b.insert("hurrtest", "lawl");
         m.insert(new SpanString("This is a very long string which will span into the next column.", 2), "Not visible");
@@ -53,14 +50,6 @@ public class Tree extends ScrollPane implements Runnable, Observer {
     	this.objectList = objectList;
     	//System.out.println("Tree Constructor");
     	model = new Model();
-    	Node node;
-    	
-    	//loop through objects in EntityList and add each item to the Tree,
-    	node = model.insert("A" , "MAIN");
-    	node.insert("B", "BRANCH1");
-   		node.insert("C", "BRANCH2");
-   
-    	
         TreeTable t = new TreeTable(model);
         t.setTheme("/table");
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
@@ -69,34 +58,32 @@ public class Tree extends ScrollPane implements Runnable, Observer {
 
         setContent(t);
         setTheme("/tableScrollPane");
-        this.update();
+        this.update(this);
     }
     
 	@Override
-	public void update() {
-		model.removeAll();
-		//System.out.println("Update Tree Method");
-		this.entityListNode();
+	public void update(Object starter) {
+		if(starter != this){
+			model.removeAll();
+			this.entityListNode(starter);
+			System.out.println("Tree Ran");
+		}
 	}
 	
-	public void entityListNode(){
+	public void entityListNode(Object starter){
 		Node entityNode;
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
 			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
-			this.entityNode(ent, entityNode);
+			System.out.println(ent.getProperty("name"));
+			this.entityNode(ent, entityNode, starter);
 		}
 	}
-	public void entityNode(Entity ent, Node entityNode){
+	public void entityNode(Entity ent, Node entityNode, Object starter){
 		for(String key : ent.getKeys()){
 			Object obj = ent.getProperty(key);
-			System.out.println(obj.toString());
-			PersistentStringModel psm = new PersistentStringModel(
-					Preferences.userNodeForPackage(getClass()),
-					"editField",
-						obj.toString()
-			);
-			entityNode.insert(key, psm);
+			EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
+			entityNode.insert(key, esm);
 		}
 	}
     public void run() {
@@ -108,128 +95,4 @@ public class Tree extends ScrollPane implements Runnable, Observer {
         setScrollPositionX(getMaxScrollPosX()/2);
         setScrollPositionY(getMaxScrollPosY()/2);
     }
-
-    static class Node extends AbstractTreeTableNode {
-        private Object str0;
-        private Object str1;
-
-        public Node(TreeTableNode parent, Object str0, Object str1) {
-            super(parent);
-            this.str0 = str0;
-            this.str1 = str1;
-            setLeaf(true);
-        }
-
-        public Object getData(int column) {
-            return (column == 0) ? str0 : str1;
-        }
-
-        public Node insert(Object str0, Object str1) {
-            Node n = new Node(this, str0, str1);
-            insertChild(n, getNumChildren());
-            setLeaf(false);
-            return n;
-        }
-
-        public void remove(int idx) {
-            removeChild(idx);
-        }
-
-        public void removeAll() {
-            removeAllChildren();
-        }
-    }
-
-    static class Model extends AbstractTreeTableModel {
-        private static final String[] COLUMN_NAMES = {"Tree", "Value"};
-        public int getNumColumns() {
-            return 2;
-        }
-        public String getColumnHeaderText(int column) {
-            return COLUMN_NAMES[column];
-        }
-        public Node insert(Object str0, String str1) {
-            Node n = new Node(this, str0, str1);
-            insertChild(n, getNumChildren());
-            return n;
-        }
-        public void removeAll(){
-        	this.removeAllChildren();
-        }
-    }
-
-    static class SpanString {
-        private final String str;
-        private final int span;
-
-        public SpanString(String str, int span) {
-            this.str = str;
-            this.span = span;
-        }
-
-        @Override
-        public String toString() {
-            return str;
-        }
-    }
-    
-    static class SpanRenderer extends TreeTable.StringCellRenderer {
-        int span;
-
-        @Override
-        public void setCellData(int row, int column, Object data) {
-            super.setCellData(row, column, data);
-            span = ((SpanString)data).span;
-        }
-
-        @Override
-        public int getColumnSpan() {
-            return span;
-        }
-    }
-
-    static class EditFieldCellRenderer implements TreeTable.CellWidgetCreator {
-        private StringModel model;
-        private int editFieldHeight;
-
-        public Widget updateWidget(Widget existingWidget) {
-            EditField ef = (EditField)existingWidget;
-            if(ef == null) {
-                ef = new EditField();
-            }
-            ef.setModel(model);
-            return ef;
-        }
-
-        public void positionWidget(Widget widget, int x, int y, int w, int h) {
-            widget.setPosition(x, y);
-            widget.setSize(w, h);
-        }
-
-        public void applyTheme(ThemeInfo themeInfo) {
-            editFieldHeight = themeInfo.getParameter("editFieldHeight", 10);
-        }
-
-        public String getTheme() {
-            return "EditFieldCellRenderer";
-        }
-
-        public void setCellData(int row, int column, Object data) {
-            this.model = (StringModel)data;
-        }
-
-        public int getColumnSpan() {
-            return 1;
-        }
-
-        public int getPreferredHeight() {
-            return editFieldHeight;
-        }
-
-        public Widget getCellRenderWidget(int x, int y, int width, int height, boolean isSelected) {
-            return null;
-        }
-    }
-
-
 }

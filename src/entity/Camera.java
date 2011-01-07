@@ -37,7 +37,7 @@ public class Camera extends Entity{
 		cameraInit();
 	}
 	private void cameraInit(){
-		setProperty(Entity.NAME, "camera");
+		setProperty(Entity.NAME, "camera", this);
 	}
 	
 	public void focusOn(Entity newFocus){

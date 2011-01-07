@@ -2,7 +2,6 @@ package window;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.lwjgl.LWJGLException;
 
 //import window.MainMenu;

@@ -122,10 +122,15 @@ public class Entity extends RigidBody{
 	}
 	
 	// SET PROPERTY!!!
-	public void setProperty(String key, Object val){
-		Object old_key_val = data.get(key);
-		data.put(key,val);
-		notifyObservers(key, old_key_val, val);
+	public void setProperty(String key, Object val, Object starter){
+			Object old_key_val = data.get(key);
+			data.put(key,val);
+			//starter is passed to tell when to end the horrible infinite loop
+			notifyObservers(key, old_key_val, val, starter);
+	}
+	public void nodeUpdate(String key, Object val, Object starter){
+			this.setProperty(key, val, starter);
+			System.out.println("ENITIY RAN!");
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -205,10 +210,14 @@ public class Entity extends RigidBody{
 		}
 	}
 	
-	public void notifyObservers(String key, Object old_name, Object new_name) {
+	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
-			observer.update(key, old_name, new_name);
+			//checks to see if the starter was the entity list.
+			System.out.println(starter.toString());
+			if(starter != observer){	
+				observer.update(key, old_name, new_name, starter);
+			}
 		}
 		
 	}
