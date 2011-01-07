@@ -13,40 +13,37 @@ package entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-
+import monitoring.EntityListObserver;
 import monitoring.EntityObserver;
-import monitoring.Observer;
-import monitoring.Subject;
-
 import physics.Physics;
 
-public class EntityList implements Subject, EntityObserver{
+public class EntityList implements EntityObserver{
 	private HashMap<String,Entity> names;
 	private Physics physics;
-	private ArrayList<Observer> observers;
+	private ArrayList<EntityListObserver> observers;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
-		observers = new ArrayList<Observer>();
+		observers = new ArrayList<EntityListObserver>();
 	}
-	public boolean addItem(Entity e){
+	public boolean addItem(Entity e, Object starter){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
 			physics.addEntity(e);
 			e.registerObserver(this);
-			notifyObservers();
+			notifyObservers(starter);
 			return true;
 		}else{
 			return false;
 		}
 	}
-	public void removeItem(String name){
+	public void removeItem(String name, Object starter){
 		Entity ent = this.getItem(name);
 		names.remove(name);
 		ent.removeObserver(this);
-		notifyObservers();
+		notifyObservers(starter);
 		}
 	public Entity getItem(String name){
 		//System.out.println("Length of list: " + String.valueOf(names.size()));
@@ -61,34 +58,39 @@ public class EntityList implements Subject, EntityObserver{
 		}
 	}
 	
-	public int size(){return names.size();}
+	public int size(){
+		return names.size();
+	}
 	
 	public Set<String> getKeySet(){
 		return names.keySet();
 	}
 	
-	@Override
-	public void registerObserver(Observer o) {
+	
+	public void registerObserver(EntityListObserver o) {
 		observers.add(o);
 	}
-	@Override
-	public void removeObserver(Observer o) {
+	
+	public void removeObserver(EntityListObserver o) {
 		observers.remove(o);
 	}
-	@Override
-	public void notifyObservers() {
-		for(int i = 0; i < observers.size(); i++){
-			Observer observer = (Observer)observers.get(i);
-			observer.update();
-		}
+	
+	public void notifyObservers(Object starter) {
+		if(starter != this)
+			for(int i = 0; i < observers.size(); i++){
+				EntityListObserver observer = (EntityListObserver)observers.get(i);
+				observer.update(starter);
+			}
 	}
 
 	@Override
-	public void update(String key, Object old_val, Object new_val) {
+	public void update(String key, Object old_val, Object new_val, Object starter) {
+		//starter check for the EntityList
 		if(key == "name"){
 			Entity ent = this.getItem((String) old_val);
-			this.removeItem((String) old_val);
-			this.addItem(ent);
+			this.removeItem((String) old_val, starter);
+			this.addItem(ent, starter);
+			System.out.println("List Ran!");
 		}
 		
 	}

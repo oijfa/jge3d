@@ -32,5 +32,7 @@ public class EntityMenu extends ResizableFrame {
 		//textree.setSize(getWidth()/3, getHeight()/3);
 		
 		add(layout);
+		//upgrade the tree after it has been added.
+		textree.update(this);
 	}
 }
