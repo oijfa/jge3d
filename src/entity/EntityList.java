@@ -54,7 +54,9 @@ public class EntityList implements Subject, EntityObserver{
 		return names.get(name);
 	}
 	public void drawList(){ 
-		for(String key:names.keySet()){ 
+		//Have to change keySet into array so that a clone will be made
+			//Avoids concurrency issues
+		for(Object key:names.keySet().toArray()){ 
 			names.get(key).draw(); 
 		}
 	}

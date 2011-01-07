@@ -9,27 +9,6 @@ import entity.EntityList;
 public class EntityMenu extends ResizableFrame {
 	private final Tree textree;
 	private final DialogLayout layout;
-	public EntityMenu() {
-		setTitle("Entity Editor");
-		
-		textree = new Tree();
-		textree.setTheme("textree");
-		layout = new DialogLayout();
-		Group hgroup = layout.createSequentialGroup()
-		.addGap()
-		.addGroup(layout.createParallelGroup(textree)
-		.addGap()
-		);
-		
-		Group vgroup = layout.createSequentialGroup()
-		.addWidget(textree)
-		;
-		
-		layout.setHorizontalGroup(hgroup);
-		layout.setVerticalGroup(vgroup);
-		
-		add(layout);
-	}
 	
 	public EntityMenu(EntityList objectList) {
 		setTitle("Entity Editor");
@@ -49,6 +28,8 @@ public class EntityMenu extends ResizableFrame {
 		
 		layout.setHorizontalGroup(hgroup);
 		layout.setVerticalGroup(vgroup);
+		
+		//textree.setSize(getWidth()/3, getHeight()/3);
 		
 		add(layout);
 	}

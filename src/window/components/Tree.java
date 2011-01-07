@@ -53,7 +53,7 @@ public class Tree extends ScrollPane implements Runnable, Observer {
     
     public Tree(EntityList objectList){
     	this.objectList = objectList;
-    	System.out.println("Tree Constructor");
+    	//System.out.println("Tree Constructor");
     	model = new Model();
     	Node node;
     	
@@ -77,7 +77,7 @@ public class Tree extends ScrollPane implements Runnable, Observer {
 	@Override
 	public void update() {
 		model.removeAll();
-		System.out.println("Update Tree Method");
+		//System.out.println("Update Tree Method");
 		this.entityListNode();
 	}
 	
