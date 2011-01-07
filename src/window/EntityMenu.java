@@ -1,6 +1,5 @@
 package window;
 
-import window.components.Tree;
 import de.matthiasmann.twl.ResizableFrame;
 
 public class EntityMenu extends ResizableFrame {

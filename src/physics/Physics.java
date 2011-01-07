@@ -12,9 +12,7 @@ import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.collision.shapes.ConvexHullShape;
-import com.bulletphysics.collision.shapes.ConvexShape;
-import com.bulletphysics.collision.shapes.ShapeHull;
+import com.bulletphysics.collision.shapes.OptimizedBvh;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
@@ -119,10 +117,10 @@ public class Physics {
 	
 	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
 	
-	public void reduceHull(Entity e) throws Exception {
+	public void reduceHull(Entity e){
 		int vertexcount=0;
 		int trianglecount=0;
-		CollisionShape meshshape;
+		BvhTriangleMeshShape meshshape;
 		int index=0;
 		
 		//get the total number of vertices so we can declare our stupid ass
@@ -150,27 +148,17 @@ public class Physics {
 			for(int j=0;j<e.getModel().getMesh(i).getFaceCount();j++) {
 				//for every vertex
 				for(int k=0;k<e.getModel().getMesh(i).getFace(j).getVertexCount();k++) {
+					//get current vertex
+					Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
 					
-					try{
-						//get current vertex
-						Vector3f v = e.getModel().getMesh(i).getFace(j).getVertex(k);
-						
-						//shove x,y,z into buffer
-						vertexbuffer.putFloat(v.x);
-						vertexbuffer.putFloat(v.y);
-						vertexbuffer.putFloat(v.z);
-						
-						//push indices for this vertex 
-						indexbuffer.putInt(index);
-						index++;
-						
-					}catch(Exception ex){
-						System.out.println("*****************----");
-						System.out.println(index);
-						System.out.println("*****************----");
-						ex.printStackTrace();
-						throw ex;
-					}
+					//shove x,y,z into buffer
+					vertexbuffer.putFloat(v.x);
+					vertexbuffer.putFloat(v.y);
+					vertexbuffer.putFloat(v.z);
+					
+					//push indices for this vertex 
+					indexbuffer.putInt(index);
+					index++;
 					indexbuffer.putInt(index);
 					index++;
 					indexbuffer.putInt(index);
@@ -179,36 +167,43 @@ public class Physics {
 			}	
 		}
 		
-		System.out.println("****************************");
-		System.out.println(index);
-		System.out.println("****************************");
-		
-		//flip that shit dawg
+		//flip that shit dawg; Just the index buffer, not the vertex buffer
+		//I mean, because that makes shit loads of sense...
 		indexbuffer.flip();
-		vertexbuffer.flip();
+		//vertexbuffer.flip();
 		
 		//Oh great, let's throw data at this undocumented function and hope
 		//something useful comes out the other side!
 			//*Clearly you are frustrated --Robert
+			//** I'M PISSED --Adam
 		TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(
 			trianglecount,
 			indexbuffer,
-			4,//indexStride,
+			3*4,//indexStride,
 			vertexcount,
 			vertexbuffer,
 			3*4//vertStride
 		);
 		
-		//put vertices in triangle mesh array
+		
 		boolean useQuantizedAabbCompression = true;
+		//Put vertices in triangle mesh array
 		meshshape = new BvhTriangleMeshShape(indexVertexArrays, useQuantizedAabbCompression);
 		
-		//create a hull approximation
-		ShapeHull hull = new ShapeHull((ConvexShape)meshshape);
-		float margin = e.getCollisionShape().getMargin();
-		hull.buildHull(margin);
-		ConvexHullShape simplifiedConvexShape = new ConvexHullShape(hull.getVertexPointer());
-		e.setCollisionShape(simplifiedConvexShape);
+		//Create an optimized Bvh to reduce the vertex set of the original mesh
+		OptimizedBvh optimizedmesh = new OptimizedBvh();
+		optimizedmesh.build(
+			meshshape.getMeshInterface(),
+			useQuantizedAabbCompression,
+			worldAabbMin,
+			worldAabbMax
+		);
+		
+		//Set the reduced set back to the mesh
+		meshshape.setOptimizedBvh(optimizedmesh);
+
+		//Override the original shape with the new one
+		e.setCollisionShape(meshshape);
 		
 	}
 }
