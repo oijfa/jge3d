@@ -118,9 +118,10 @@ public class Controller {
 		Parser p = new Obj_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
-			p.readFile("./lib/10010260.xgl");
+			//p.readFile("./lib/10010260.xgl");
 			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
+			p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}

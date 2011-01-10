@@ -65,12 +65,13 @@ public class Obj_Parser extends Parser{
 					if (newline.charAt(0) == 'v' && newline.charAt(1) == ' ') {
 						readVertex(newline.substring(2));
 					} else if (newline.charAt(0) == 'v' && newline.charAt(1) == 't') {
-						readTextureCoordinate(newline.substring(3));
+						readTextureCoordinate(newline.substring(2));
 					} else if (newline.charAt(0) == 'v' && newline.charAt(1) == 'n') {
-						readVertexNormal(newline.substring(3));
+						readVertexNormal(newline.substring(2));
 					} else if (newline.charAt(0) == 'f' && newline.charAt(1) == ' ') {
-						readFace(newline.substring(3));
-					} else if (newline.charAt(0) == 'g') {
+						readFace(newline.substring(2));
+					//} else if (newline.charAt(0) == 'g') {
+					} else {
 						//DO NOTHING FUUU
 					}
 				}
@@ -170,11 +171,11 @@ public class Obj_Parser extends Parser{
 	*/
 	
 	private void readVertex(String data) throws Exception{
-		float[] coords = new float[4];
-		String[] coordstext = new String[4];
+		float[] coords = new float[3];
+		String[] coordstext = new String[3];
 		coordstext = data.split("\\s+");
 		
-		if( coordstext.length != 4 )
+		if( coordstext.length != 3 )
 			throw new Exception();
 	
 		for (int i = 1;i < coordstext.length;i++) {
@@ -185,11 +186,11 @@ public class Obj_Parser extends Parser{
 	}
 
 	private void readTextureCoordinate(String data) throws Exception{
-		float[] coords = new float[4];
-		String[] coordstext = new String[4];
+		float[] coords = new float[3];
+		String[] coordstext = new String[3];
 		coordstext = data.split("\\s+");
 		
-		if( coordstext.length != 4 )
+		if( coordstext.length != 3 )
 			throw new Exception();
 		
 		for (int i = 1;i < coordstext.length;i++) {
@@ -199,8 +200,8 @@ public class Obj_Parser extends Parser{
 	}
 	
 	private void readVertexNormal(String data) throws Exception{
-		float[] coords = new float[4];
-		String[] coordstext = new String[4];
+		float[] coords = new float[3];
+		String[] coordstext = new String[3];
 		coordstext = data.split("\\s+");
 		for (int i = 1;i < coordstext.length;i++) {
 			coords[i-1] = Float.valueOf(coordstext[i]).floatValue();
@@ -237,6 +238,8 @@ public class Obj_Parser extends Parser{
 		}
 		float[][] vertnorms = new float[vn.length][3];
 		for(int i = 0; i < vn.length; i++){
+			if(vn[i] == 72030)
+				System.out.print(vn[i]+"\n");
 			vertnorms[i] = vertexsetsnorms.get(vn[i]);
 		}
 		float face_vert[] = {0f,0f,0f};

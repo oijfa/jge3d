@@ -24,6 +24,8 @@ public class Face {
 	}
 	
 	public Face(float[][] verts, float[][] vertnorms, float[] norm){
+		vertices = new ArrayList<float[]>();
+		vertexNormals = new ArrayList<float[]>();
 		for(int i = 0; i < verts.length; i++){
 			vertices.add(verts[i]);
 		}
