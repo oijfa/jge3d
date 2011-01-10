@@ -60,7 +60,6 @@ public class Tree extends ScrollPane implements EntityListObserver {
     
 	@Override
 	public void update(Object starter) {
-		System.out.println("Tree.update");
 		model.removeAll();
 		this.createEntityListNode(starter);
 	}
@@ -71,18 +70,14 @@ public class Tree extends ScrollPane implements EntityListObserver {
 			Entity ent = objectList.getItem(key);
 			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
 			this.createEntityNode(ent, entityNode, starter);
-			System.out.println("Entity List Node Created:" + key);
-			System.out.println("With an Index of: " + model.getChildIndex(entityNode));
 		}
-		System.out.println("Number of Children in Model: " + model.getNumChildren());
 	}
 	
 	public void createEntityNode(Entity ent, Node entityNode, Object starter){
 		for(String key : ent.getKeySet()){
 			Object obj = ent.getProperty(key);
-			EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
-			entityNode.insert(key, esm);
-			System.out.println("Entity Node Created:" + key + " " + obj.toString());
+			//EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
+			entityNode.insert(key, obj.toString());
 		}
 	}
     
@@ -95,6 +90,5 @@ public class Tree extends ScrollPane implements EntityListObserver {
 	public void init() {	
 		model.removeAll();
 		this.createEntityListNode(this);
-		System.out.println("Tree.init");
 	}
 }

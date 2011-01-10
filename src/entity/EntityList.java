@@ -86,7 +86,6 @@ public class EntityList implements EntityObserver{
 
 	@Override
 	public void update(String key, Object old_val, Object new_val, Object starter) {
-		System.out.println("EntityList.update");
 		if(key == "name"){
 			//this.removeItem((String) old_val);
 			//this.addItem(ent);
