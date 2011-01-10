@@ -1,6 +1,9 @@
 //TODO: Maybe add transforms?
 package importing.pieces;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -41,6 +44,26 @@ public class Model {
 			GL11.glPushMatrix();
 			m.draw();
 			GL11.glPopMatrix();
+		}
+	}
+	
+	/*Export*/
+	public void saveXGL(String filename){
+		StringBuffer data = new StringBuffer();
+		
+		data.append("<WORLD>\n");
+		for(int i = 0; i < meshes.size(); i++){
+			data.append(meshes.get(i).toXGLString(i));
+		}
+		data.append("</WORLD>\n");
+		
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter( filename));
+			out.write(data.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("EXPORT FAILED\n\n");
 		}
 	}
 	
