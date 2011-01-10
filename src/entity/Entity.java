@@ -13,11 +13,12 @@ import importing.pieces.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
-import monitoring.Observer;
+
 
 import org.lwjgl.opengl.GL11;
 
@@ -109,10 +110,15 @@ public class Entity extends RigidBody{
 	}
 	
 	// SET PROPERTY!!!
-	public void setProperty(String key, Object val){
-		Object old_key_val = data.get(key);
-		data.put(key,val);
-		notifyObservers(key, old_key_val, val);
+	public void setProperty(String key, Object val, Object starter){
+			Object old_key_val = data.get(key);
+			data.put(key,val);
+			//starter is passed to tell when to end the horrible infinite loop
+			notifyObservers(key, old_key_val, val, starter);
+	}
+	public void nodeUpdate(String key, Object val, Object starter){
+		System.out.println("Entity.update");	
+		this.setProperty(key, val, starter);
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -128,7 +134,7 @@ public class Entity extends RigidBody{
 
 	/* Getters */
 	public EntityList getSubEntities(){return subEntities;}
-	public String[] getKeys() {return (String[])data.keySet().toArray();}
+	public Set<String> getKeys() {return data.keySet();}
 	public boolean keyExists(String prop_name){
 		for( int i = 0; i < data.keySet().size(); i++){
 			//TODO: Probably a better way to loop through the keys, but I'm lazy
@@ -169,19 +175,17 @@ public class Entity extends RigidBody{
 		}
 	}
 	
-	public void notifyObservers() {
+	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
 		for(int i = 0; i < observers.size(); i++){
-			Observer observer = (Observer)observers.get(i);
-			observer.update();
+			EntityObserver observer = (EntityObserver)observers.get(i);
+			if(starter != observer){
+				observer.update(key, old_name, new_name, starter);
+			}	
 		}
 	}
 	
-	public void notifyObservers(String key, Object old_name, Object new_name) {
-		for(int i = 0; i < observers.size(); i++){
-			EntityObserver observer = (EntityObserver)observers.get(i);
-			observer.update(key, old_name, new_name);
-		}
-		
+	public Set<String> getKeySet(){
+		return data.keySet();
 	}
 	
 }

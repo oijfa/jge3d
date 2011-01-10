@@ -36,7 +36,6 @@ public class Controller {
 
 	public Controller() throws Exception {
 		start();
-		
 		loadLevel();
 	}
 
@@ -97,8 +96,8 @@ public class Controller {
 		Parser p = new XGL_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
-			//p.readFile("./lib/10010260.xgl");
-			p.readFile("./lib/box2.xgl");
+			p.readFile("./lib/10010260.xgl");
+			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?
@@ -108,8 +107,7 @@ public class Controller {
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		
-		objectList.addItem(cam);
+		objectList.addItem(cam, cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
 		//Make a cathode
@@ -117,7 +115,7 @@ public class Controller {
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		objectList.addItem(ent);
+		objectList.addItem(ent, ent);
 		
 		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
 		
@@ -125,8 +123,9 @@ public class Controller {
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
-			p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
+			p.readFile("./lib/export.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}
@@ -135,12 +134,13 @@ public class Controller {
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.addItem(ent);
+		objectList.addItem(ent, ent);
 		physics.reduceHull(ent);
-		
 		cam.setDistance(25.0f);
 		cam.focusOn(ent);
-		
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
+
+		
+		p.createModel().saveXGL("export.xgl");
 	}
 }

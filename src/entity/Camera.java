@@ -50,8 +50,7 @@ public class Camera extends Entity {
 		cameraInit();
 	}
 	private void cameraInit(){
-		setProperty(Entity.NAME, "camera");
-		
+		setProperty(Entity.NAME, "camera", this);
 		setPosition(new Vector3f(0,0,0));
 		declination = 0;
 		rotation = 0;
