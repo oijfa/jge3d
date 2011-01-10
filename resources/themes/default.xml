@@ -355,5 +355,19 @@
         		</theme>				
             </theme>
         </theme>
+        <theme name="rotationmenu" ref="resizableframe">
+        	<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>100</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>100</int></param>
+        	<theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+				<theme name="up" ref="button" />
+				<theme name="down" ref="button" />
+				<theme name="right" ref="button" />
+				<theme name="left" ref="button" />	
+				<theme name="center" ref="button" />
+            </theme>
+        </theme>
     </theme>
 </themes>

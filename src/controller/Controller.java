@@ -137,7 +137,7 @@ public class Controller {
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
 		objectList.addItem(ent, ent);
-		
+		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
 		
 		//Make a green box thing
@@ -149,7 +149,7 @@ public class Controller {
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}
-		
+		/*
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
@@ -159,6 +159,6 @@ public class Controller {
 		cam.setDistance(25.0f);
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
-
+		*/
 	}
 }

@@ -18,7 +18,7 @@ public class Input {
 	private static final float UP_DOWN_INC = 0.00001f;
 	
 	//DISTANCE
-	private static final float IN_OUT_INC = 0.1f;
+	private static final float IN_OUT_INC = 5.0f;
 	
 	public Input (EntityList objectList){
 		this.objectList = objectList;
@@ -39,7 +39,7 @@ public class Input {
 	public void run(){
 		Keyboard.poll();
 		if(camera != null) {
-			handleMouse();
+			//handleMouse();
 			if(Mouse.isInsideWindow()) {
 				handleKeyboard();
 			}
@@ -77,8 +77,9 @@ public class Input {
 					if(Mouse.isInsideWindow()) {
 						//Editor.getInstance().setCurrentBlock(Mouse.getX(), Mouse.getY(), EditorView.getInstance().getLayer());
 						if(Mouse.isButtonDown(0)) {
-							//Pan camera Z
-							camera.incrementDistance(-1.0f*deltaY);	
+							//Change Perspective
+							camera.incrementDeclination(-deltaY*.01f);
+							camera.incrementRotation(-deltaX*.01f);
 						}
 						
 						if(Mouse.isButtonDown(1)) {
@@ -87,9 +88,7 @@ public class Input {
 						}
 						
 						if(Mouse.isButtonDown(2)) {
-							//Change Perspective
-							camera.incrementDeclination(-deltaY*.01f);
-							camera.incrementRotation(-deltaX*.01f);
+							//Pan Z
 						}
 					}
 					break;

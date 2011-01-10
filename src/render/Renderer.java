@@ -48,6 +48,7 @@ public class Renderer {
 		
 		if(objectList.getItem(Camera.CAMERA_NAME)!=null) {
 			Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+			window.setCamera(cam);
 			
 			//Move the camera with its focus
 			cam.updatePosition();

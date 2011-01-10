@@ -136,10 +136,19 @@ public class Camera extends Entity {
 		//Not needed because renderer always calls it
 		//updatePosition();
 	}
+	
+	public void setDeclination(float angle){
+		this.declination = angle;
+	}
+	
 	public void incrementRotation(float angle){
 		rotation += angle;
 		//Not needed because renderer always calls it
 		//updatePosition();
+	}
+	
+	public void setRotation(float angle){
+		this.rotation = angle;
 	}
 	public void updatePosition()
 	{
