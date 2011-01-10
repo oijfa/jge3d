@@ -3,6 +3,7 @@
  */
 package controller;
 
+import importing.Obj_Parser;
 import importing.Parser;
 import importing.XGL_Parser;
 import input.Input;
@@ -114,7 +115,7 @@ public class Controller {
 
 		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
 		
-		Parser p = new XGL_Parser();
+		Parser p = new Obj_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			p.readFile("./lib/10010260.xgl");
@@ -144,7 +145,8 @@ public class Controller {
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
-			p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/box2.xgl");
+			
 			//p.readFile("./lib/cath.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?
@@ -155,7 +157,7 @@ public class Controller {
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent, ent);
-		physics.reduceHull(ent);
+		//physics.reduceHull(ent);
 		cam.setDistance(25.0f);
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));

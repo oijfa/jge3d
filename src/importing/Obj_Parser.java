@@ -5,22 +5,24 @@
  * 
  */
 package importing;
+import importing.pieces.Face;
+import importing.pieces.Material;
+import importing.pieces.Mesh;
 import importing.pieces.Model;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
-
 public class Obj_Parser extends Parser{
-	private ArrayList<Float[]> vertexsets = new ArrayList<Float[]>(); // Vertex Coordinates
-	private ArrayList<Float[]> vertexsetsnorms = new ArrayList<Float[]>(); // Vertex Coordinates Normals
-	private ArrayList<Float[]> vertexsetstexs = new ArrayList<Float[]>(); // Vertex Coordinates Textures
-	private ArrayList<int[]> faces = new ArrayList<int[]>(); // Array of Faces (vertex sets)
-	private ArrayList<int[]> facestexs = new ArrayList<int[]>(); // Array of of Faces textures
-	private ArrayList<int[]> facesnorms = new ArrayList<int[]>(); // Array of Faces normals
+	
+	private ArrayList<float[]> vertexsets = new ArrayList<float[]>(); // Vertex Coordinates
+	private ArrayList<float[]> vertexsetsnorms = new ArrayList<float[]>(); // Vertex Coordinates Normals
+	private ArrayList<float[]> vertexsetstexs = new ArrayList<float[]>(); // Vertex Coordinates Textures
+
+	private Model model;
+	private Mesh mesh;
 	//private ArrayList<float[]> groups = new ArrayList<float[]>(); // Array of groups
 	
 	private int numpolys = 0;
@@ -34,30 +36,24 @@ public class Obj_Parser extends Parser{
 	public float nearpoint = 0;		// z+	
 	
 	//private Model model;
+	public Obj_Parser() {
+		model = new Model();
+		mesh = new Mesh();
+	}
 	
 	public Obj_Parser(BufferedReader ref, boolean centerit) {
 		try {
-			loadobject(ref);
-			if (centerit) {
-				centerit();
-			}
-			numpolys = faces.size();
-			cleanup();
+			readFile(ref);
+			//if (centerit) {
+				//centerit();
+			//}
+			//numpolys = faces.size();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void cleanup() {
-		vertexsets.clear();
-		vertexsetsnorms.clear();
-		vertexsetstexs.clear();
-		faces.clear();
-		facestexs.clear();
-		facesnorms.clear();
-	}
-	
-	private void loadobject(BufferedReader br) throws Exception {
+
+	private void readFile(BufferedReader br) throws Exception {
 		int linecounter = 0;
 		try {
 			String newline;
@@ -90,6 +86,7 @@ public class Obj_Parser extends Parser{
 		
 	}
 	
+	/*
 	private void centerit() {
 		float xshift = (rightpoint-leftpoint) /2f;
 		float yshift = (toppoint - bottompoint) /2f;
@@ -103,9 +100,9 @@ public class Obj_Parser extends Parser{
 			coords[2] = ((vertexsets.get(i)))[2] - farpoint - zshift;
 			
 			vertexsets.set(i,coords); // = coords;
-		}
-		
+		}	
 	}
+	*/
 	
 	public float getXWidth() {
 		float returnval = 0;
@@ -128,7 +125,7 @@ public class Obj_Parser extends Parser{
 	public int numpolygons() {
 		return numpolys;
 	}
-	
+	/*
 	public void draw() {
 		for (int i=0;i<faces.size();i++) {
 			int[] tempfaces = (faces.get(i));
@@ -170,9 +167,10 @@ public class Obj_Parser extends Parser{
 		}
 
 	}
+	*/
 	
 	private void readVertex(String data) throws Exception{
-		Float[] coords = new Float[4];
+		float[] coords = new float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		
@@ -187,7 +185,7 @@ public class Obj_Parser extends Parser{
 	}
 
 	private void readTextureCoordinate(String data) throws Exception{
-		Float[] coords = new Float[4];
+		float[] coords = new float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		
@@ -201,7 +199,7 @@ public class Obj_Parser extends Parser{
 	}
 	
 	private void readVertexNormal(String data) throws Exception{
-		Float[] coords = new Float[4];
+		float[] coords = new float[4];
 		String[] coordstext = new String[4];
 		coordstext = data.split("\\s+");
 		for (int i = 1;i < coordstext.length;i++) {
@@ -233,20 +231,42 @@ public class Obj_Parser extends Parser{
 			}
 		}
 		
-		Float[][] verts = new Float[v.length][3];
+		float[][] verts = new float[v.length][3];
 		for(int i = 0; i < v.length; i++){
 			verts[i] = vertexsets.get(v[i]);
 		}
-		Float[][] vertnorms = new Float[vn.length][3];
+		float[][] vertnorms = new float[vn.length][3];
 		for(int i = 0; i < vn.length; i++){
 			vertnorms[i] = vertexsetsnorms.get(vn[i]);
 		}
-		//Face face = new Face(verts, vertnorms);
+		float face_vert[] = {0f,0f,0f};
+		mesh.addFace(new Face(verts, vertnorms, face_vert));
 	}
 	
 	@Override
-	public void readFile(String fileName) {/*TODO*/ }
+	public void readFile(String fileName) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			readFile(br);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
-	public Model createModel() {return null; /*new Model(world);*/}
+	public Model createModel() {
+		Material mat = new Material();
+		float[] alpha = {200f,200f,200f};
+		
+		mat.setAlpha(alpha);
+		mat.setDiffuse(alpha);
+		mat.setEmission(alpha);
+		mat.setShine(alpha);
+		mat.setSpecular(alpha);
+		mesh.setMaterial(new Material());
+		model.addMesh(mesh);
+		
+		return model;
+	}
 }
