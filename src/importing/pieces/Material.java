@@ -1,8 +1,7 @@
-//TODO: Remove reference variable, its useless
+
 package importing.pieces;
 
 import java.nio.FloatBuffer;
-
 import org.lwjgl.BufferUtils;
 
 public class Material {
@@ -14,7 +13,6 @@ public class Material {
 	static private FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 	private float alpha; //default 1.0f
 	private float shine; //default 0.0f
-	private int reference;
 	
 	public Material()
 	{
@@ -236,11 +234,6 @@ public class Material {
 		return shine;
 	}
 	
-	public int getReference()
-	{
-		return reference;
-	}
-	
 	public void setEmission(float[] emiss)
 	{
 		emission = emiss;
@@ -289,5 +282,18 @@ public class Material {
 		ret += "			alpha: " + String.valueOf(alpha) + "\n";
 		ret += "			shine: " + String.valueOf(shine) + "\n";
 		return ret;
+	}
+	
+	public StringBuffer toXGLString(int ref){
+		StringBuffer data = new StringBuffer();
+		data.append("<MAT ID=\"" + ref + "\">\n");
+		data.append("<AMB>" + String.valueOf(ambientReflect[0]) + ", " + String.valueOf(ambientReflect[1]) + ", " + String.valueOf(ambientReflect[2]) + "</AMB>\n");
+		data.append("<DIFF>" + String.valueOf(diffuseReflect[0]) + ", " + String.valueOf(diffuseReflect[1]) + ", " + String.valueOf(diffuseReflect[2]) + "</DIFF>\n");
+		data.append("<SPEC>" + String.valueOf(specularReflect[0]) + ", " + String.valueOf(specularReflect[1]) + ", " + String.valueOf(specularReflect[2]) + "</SPEC>\n");
+		data.append("<EMISS>" + String.valueOf(emission[0]) + ", " + String.valueOf(emission[1]) + ", " + String.valueOf(emission[2]) + "</EMISS>\n");
+		data.append("<ALPHA>" + String.valueOf(alpha) + "</ALPHA>\n");
+		data.append("<SHINE>" + String.valueOf(shine) + "</SHINE>\n");
+		data.append("</MAT>\n");
+		return data;
 	}
 }

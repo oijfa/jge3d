@@ -144,8 +144,9 @@ public class Controller {
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
-			p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
+			p.readFile("./lib/export.xgl");
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}
@@ -160,5 +161,6 @@ public class Controller {
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
 		*/
+		p.createModel().saveXGL("export.xgl");
 	}
 }
