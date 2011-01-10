@@ -2,24 +2,24 @@ package window;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.lwjgl.LWJGLException;
 
-import window.MainMenu;
+//import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
+import entity.EntityList;
 
 public class Window extends DesktopArea {
-	private MainMenu mainMenu;
-	private TextureMenu textureMenu;
+	//private MainMenu mainMenu;
+	//private TextureMenu textureMenu;
 	private EntityMenu entityMenu;
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
-
-	public Window() {
+	
+	public Window(EntityList objectList) {
 		try {
 			renderer = new LWJGLRenderer();
 		} catch (LWJGLException e1) {
@@ -35,25 +35,26 @@ public class Window extends DesktopArea {
 			e.printStackTrace();
 		}
 		
+		/*
 		// Create the main menu
 		mainMenu = new MainMenu();
 		add(mainMenu);
 		mainMenu.setTheme("mainmenu");
-
-		textureMenu = new TextureMenu();
-		add(textureMenu);
-		textureMenu.setTheme("texturemenu");
+		mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
 		
-		entityMenu = new EntityMenu();
+		textureMenu = new TextureMenu();
+		//add(textureMenu);
+		textureMenu.setTheme("texturemenu");
+		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
+		*/
+		
+		entityMenu = new EntityMenu(objectList);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");
+		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),textureMenu.getHeight());
 		
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
-		
-		mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
-		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
-		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),textureMenu.getHeight());
 	}
 	
 	public void draw() {

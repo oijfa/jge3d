@@ -2,6 +2,7 @@
 <!DOCTYPE themes PUBLIC "-//www.matthiasmann.de//TWL-Theme//EN" "http://hg.l33tlabs.org/twl/raw-file/tip/src/de/matthiasmann/twl/theme/theme.dtd">
 <themes>
     <images file="widgets.png">
+        <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true"/>
         <area name="white" xywh="1,36,1,1"/>
         <area name="black" xywh="23,57,1,1"/>
         <area name="border_round" xywh="2,1,40,34" splitx="L11,B11" splity="L9,B9" nocenter="true"/>
@@ -98,7 +99,7 @@
     </theme>
     <theme name="resizableframe" ref="-defaults" allowWildcard="true">
         <param name="background"><image>border_round</image></param>
-        <param name="border"><border>15,0,0,0</border></param>
+        <param name="border"><border>15,15,15,15</border></param>
         <param name="titleAreaTop"><int>1</int></param>
         <param name="titleAreaLeft"><int>8</int></param>
         <param name="titleAreaRight"><int>-8</int></param>
@@ -274,13 +275,13 @@
     </theme>
     <theme name="tree" allowWildcard="true" ref="table">
     	<param name="hasDragButton"><bool>true</bool></param>
-    	<theme name="dragButton" ref="-defaults"></theme>
+    	<theme name="dragButton" ref="-defaults"/>
     </theme>  
     <theme name="tableScrollPane" ref="scrollpane"/>
     <!--
     <theme name="menumanager" ref="-defaults">
         <theme name="menupopup" ref="dialoglayout">
-            <param name="background"><image>border_round</image></param>
+            <param name="background"><image>border_square</image></param>
             <param name="border"><border>background.border</border></param>
             <theme name="button" ref="button"/>
             <theme name="submenu" ref="button"/>
@@ -344,6 +345,15 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>200</int></param>
         	<param name="maxHeight"><int>200</int></param>
+        	<theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+				<theme name="textree" ref="tree">
+                    <param name="minWidth"><int>100</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>200</int></param>
+        			<param name="maxHeight"><int>5000</int></param>
+        		</theme>				
+            </theme>
         </theme>
     </theme>
 </themes>
