@@ -131,7 +131,7 @@ public class Controller {
 		cam = new Camera(1.0f, new DefaultMotionState(), boxShape, false, objectList);
 		cam.setPosition(new Vector3f(0,0,-15));
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		objectList.addItem(cam, objectList);
+		objectList.addItem(cam, cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
 		//Make a cathode
@@ -139,11 +139,20 @@ public class Controller {
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.addItem(ent, objectList);	
+		objectList.addItem(ent, ent);	
 		//Setting the camera to focus on the entity
 		cam.focusOn(ent);
 		//Name change to test EntityObserver
 		ent.setProperty("name", "new_ent", ent);
 		
+		/*
+		for(int i = 0; i < 4; i++){
+			boxShape = new BoxShape(new Vector3f(1, 1, 1));
+			ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+			ent.setModel(p.createModel());
+			ent.setPosition(new Vector3f((float)i,(float)i,(float)i));
+			objectList.addItem(ent, ent);	
+		}
+		*/
 	}
 }

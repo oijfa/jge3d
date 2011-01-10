@@ -76,22 +76,38 @@ public class EntityList implements EntityObserver{
 	}
 	
 	public void notifyObservers(Object starter) {
-		if(starter != this)
-			for(int i = 0; i < observers.size(); i++){
-				EntityListObserver observer = (EntityListObserver)observers.get(i);
+		for(int i = 0; i < observers.size(); i++){
+			EntityListObserver observer = (EntityListObserver)observers.get(i);
+			if(starter != observer){
 				observer.update(starter);
 			}
+		}
 	}
 
 	@Override
 	public void update(String key, Object old_val, Object new_val, Object starter) {
-		//starter check for the EntityList
+		System.out.println("EntityList.update");
 		if(key == "name"){
-			Entity ent = this.getItem((String) old_val);
-			this.removeItem((String) old_val, starter);
-			this.addItem(ent, starter);
-			System.out.println("List Ran!");
+			//this.removeItem((String) old_val);
+			//this.addItem(ent);
+			updateListItems((String) old_val);
+			notifyObservers(starter);
 		}
-		
+	}
+	//Only called when entityList needs to be updated this way
+	//We don't call notifyObservers twice for add and remove.
+	public boolean updateListItems(String old_val){
+		Entity ent = this.getItem(old_val);
+		names.remove(old_val);
+		ent.removeObserver(this);
+		if(ent.keyExists("name")){
+			names.put((String)ent.getProperty("name"), ent);
+			names.size();
+			physics.addEntity(ent);
+			ent.registerObserver(this);
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

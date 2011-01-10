@@ -24,7 +24,6 @@ import java.util.Set;
 import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
-import monitoring.Observer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -129,8 +128,8 @@ public class Entity extends RigidBody{
 			notifyObservers(key, old_key_val, val, starter);
 	}
 	public void nodeUpdate(String key, Object val, Object starter){
-			this.setProperty(key, val, starter);
-			System.out.println("ENITIY RAN!");
+		System.out.println("Entity.update");	
+		this.setProperty(key, val, starter);
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -206,12 +205,13 @@ public class Entity extends RigidBody{
 	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
-			//checks to see if the starter was the entity list.
-			System.out.println("Entity " + this.getProperty("name") + " Notifying Observers.  Started by:" + starter.toString());
-			if(starter != observer){	
+			if(starter != observer){
 				observer.update(key, old_name, new_name, starter);
-			}
+			}	
 		}
-		
+	}
+	
+	public Set<String> getKeySet(){
+		return data.keySet();
 	}
 }

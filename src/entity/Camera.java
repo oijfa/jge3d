@@ -38,6 +38,7 @@ public class Camera extends Entity{
 	}
 	private void cameraInit(){
 		setProperty(Entity.NAME, "camera", this);
+		setProperty("collidable", true, this);
 	}
 	
 	public void focusOn(Entity newFocus){

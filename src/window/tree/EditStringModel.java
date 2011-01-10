@@ -17,6 +17,7 @@ public class EditStringModel extends HasCallback implements StringModel{
 		this.key = key;
 		this.observer = observer;
 		this.starter = starter;
+		
 	}
 	
 	public Entity getObserver(){
@@ -40,10 +41,10 @@ public class EditStringModel extends HasCallback implements StringModel{
 				this.value = value;
 				doCallback();
 			}
-			this.notifyEnt(starter);
+			this.notifyEnt();
 	}
-	public void notifyEnt(Object starter){
-		//starter check for the Entity happens here. It works better this way.
+	public void notifyEnt(){
+		//starter check for the Entity happens here. It works better this way
 		if(starter != observer){
 			observer.nodeUpdate(key, value, starter);
 			System.out.println(observer.getProperty(key).toString());

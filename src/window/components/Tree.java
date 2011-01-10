@@ -7,13 +7,10 @@ import window.tree.Node;
 import window.tree.SpanRenderer;
 import window.tree.SpanString;
 import monitoring.EntityListObserver;
-
 import de.matthiasmann.twl.ScrollPane;
-
 import de.matthiasmann.twl.TreeTable;
-
 import de.matthiasmann.twl.model.StringModel;
-
+import de.matthiasmann.twl.model.TreeTableNode;
 import entity.Entity;
 import entity.EntityList;
 
@@ -48,7 +45,7 @@ public class Tree extends ScrollPane implements EntityListObserver {
     
     public Tree(EntityList objectList){
     	this.objectList = objectList;
-    	//System.out.println("Tree Constructor");
+    	objectList.registerObserver(this);
     	model = new Model();
         TreeTable t = new TreeTable(model);
         t.setTheme("/table");
@@ -58,16 +55,14 @@ public class Tree extends ScrollPane implements EntityListObserver {
 
         setContent(t);
         setTheme("/tableScrollPane");
-        this.update(this);
+        //this.update();
     }
     
 	@Override
 	public void update(Object starter) {
-		if(starter != this){
-			model.removeAll();
-			this.createEntityListNode(starter);
-			System.out.println("Tree.update");
-		}
+		System.out.println("Tree.update");
+		model.removeAll();
+		this.createEntityListNode(starter);
 	}
 	
 	public void createEntityListNode(Object starter){
@@ -75,18 +70,19 @@ public class Tree extends ScrollPane implements EntityListObserver {
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
 			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
-			
 			this.createEntityNode(ent, entityNode, starter);
-			
-			System.out.println("Entity List Node Created");
+			System.out.println("Entity List Node Created:" + key);
+			System.out.println("With an Index of: " + model.getChildIndex(entityNode));
 		}
+		System.out.println("Number of Children in Model: " + model.getNumChildren());
 	}
 	
 	public void createEntityNode(Entity ent, Node entityNode, Object starter){
-		for(String key : ent.getKeys()){
+		for(String key : ent.getKeySet()){
 			Object obj = ent.getProperty(key);
 			EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
 			entityNode.insert(key, esm);
+			System.out.println("Entity Node Created:" + key + " " + obj.toString());
 		}
 	}
     
