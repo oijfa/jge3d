@@ -44,6 +44,17 @@ public class Model {
 		}
 	}
 	
+	/*Export*/
+	public void saveXGL(String filename){
+		StringBuffer data = new StringBuffer();
+		
+		data.append("<WORLD>\n");
+		for(int i = 0; i < meshes.size(); i++){
+			data.append(meshes.get(i).toXGLString(i));
+		}
+		data.append("</WORLD>\n");
+	}
+	
 	/*Debug*/
 	public String toString(){
 		String ret = "Model{\n";

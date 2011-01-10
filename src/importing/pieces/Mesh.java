@@ -229,4 +229,10 @@ public class Mesh {
 	public int getFaceCount() {
 		return faces.size();
 	}
+	public StringBuffer toXGLString(int ref) {
+		StringBuffer data = new StringBuffer();
+		data.append(mat.toXGLString());
+		
+		return data;
+	}
 }

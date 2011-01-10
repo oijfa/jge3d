@@ -290,4 +290,7 @@ public class Material {
 		ret += "			shine: " + String.valueOf(shine) + "\n";
 		return ret;
 	}
+	public StringBuffer toXGLString(int ref){
+		return null;
+	}
 }
