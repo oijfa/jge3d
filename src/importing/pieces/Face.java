@@ -171,13 +171,14 @@ public class Face {
 		return vertices.size();
 	}
 
-	public StringBuffer toXGLString(Integer startRef) {
+	public StringBuffer toXGLString(Integer startRef, int matRef) {
 		StringBuffer data = new StringBuffer();
 		for(int i = 0; i < vertices.size(); i++){
 			data.append("<P ID=\"" + String.valueOf(startRef + i) + "\">" + vertices.get(i)[0] + ", " + vertices.get(i)[1] + ", " + vertices.get(i)[2] + "</P>\n");
 			data.append("<N ID=\"" + String.valueOf(startRef + i) + "\">" + vertexNormals.get(i)[0] + ", " + vertexNormals.get(i)[1] + ", " + vertexNormals.get(i)[2] + "</N>\n");
 		}
 		data.append("<F>\n");
+		data.append("<MATREF>" + matRef + "</MATREF>");
 		data.append("<FV1><PREF>" + String.valueOf(startRef + 0) + "</PREF><NREF>" + String.valueOf(startRef + 0) + "</NREF></FV1>");
 		data.append("<FV2><PREF>" + String.valueOf(startRef + 1) + "</PREF><NREF>" + String.valueOf(startRef + 1) + "</NREF></FV2>");
 		data.append("<FV3><PREF>" + String.valueOf(startRef + 2) + "</PREF><NREF>" + String.valueOf(startRef + 2) + "</NREF></FV3>");

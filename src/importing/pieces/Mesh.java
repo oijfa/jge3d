@@ -232,10 +232,10 @@ public class Mesh {
 	}
 	public StringBuffer toXGLString(int ref) {
 		StringBuffer data = new StringBuffer();
-		data.append("<MESH ID=\"" + ref + "\">");
 		data.append(mat.toXGLString(ref));
+		data.append("<MESH ID=\"" + ref + "\">");
 		for(int i = 0; i < faces.size(); i++){
-			faces.get(i).toXGLString(i * 3);
+			data.append(faces.get(i).toXGLString(i * 3, ref));
 		}
 		data.append("</MESH>");
 		data.append("<OBJECT>\n");

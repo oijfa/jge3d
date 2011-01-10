@@ -1,6 +1,9 @@
 //TODO: Maybe add transforms?
 package importing.pieces;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -53,6 +56,15 @@ public class Model {
 			data.append(meshes.get(i).toXGLString(i));
 		}
 		data.append("</WORLD>\n");
+		
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter( filename));
+			out.write(data.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("EXPORT FAILED\n\n");
+		}
 	}
 	
 	/*Debug*/
