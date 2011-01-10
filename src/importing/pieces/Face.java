@@ -170,4 +170,18 @@ public class Face {
 	public int getVertexCount() {
 		return vertices.size();
 	}
+
+	public StringBuffer toXGLString(Integer startRef) {
+		StringBuffer data = new StringBuffer();
+		for(int i = 0; i < vertices.size(); i++){
+			data.append("<P ID=\"" + String.valueOf(startRef + i) + "\">" + vertices.get(i)[0] + ", " + vertices.get(i)[1] + ", " + vertices.get(i)[2] + "</P>\n");
+			data.append("<N ID=\"" + String.valueOf(startRef + i) + "\">" + vertexNormals.get(i)[0] + ", " + vertexNormals.get(i)[1] + ", " + vertexNormals.get(i)[2] + "</N>\n");
+		}
+		data.append("<F>\n");
+		data.append("<FV1><PREF>" + String.valueOf(startRef + 0) + "</PREF><NREF>" + String.valueOf(startRef + 0) + "</NREF></FV1>");
+		data.append("<FV2><PREF>" + String.valueOf(startRef + 1) + "</PREF><NREF>" + String.valueOf(startRef + 1) + "</NREF></FV2>");
+		data.append("<FV3><PREF>" + String.valueOf(startRef + 2) + "</PREF><NREF>" + String.valueOf(startRef + 2) + "</NREF></FV3>");
+		data.append("</F>\n");
+		return data;
+	}
 }

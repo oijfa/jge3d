@@ -117,6 +117,7 @@ public class Mesh {
 		forward[2] = 1.0f;
 		up[1] = 1.0f;
 	}
+	
 	public Mesh(Face[] _faces, Material m, float[] loc){
 		location = new float[3];
 		forward = new float[3];
@@ -231,8 +232,20 @@ public class Mesh {
 	}
 	public StringBuffer toXGLString(int ref) {
 		StringBuffer data = new StringBuffer();
-		data.append(mat.toXGLString());
-		
+		data.append("<MESH ID=\"" + ref + "\">");
+		data.append(mat.toXGLString(ref));
+		for(int i = 0; i < faces.size(); i++){
+			faces.get(i).toXGLString(i * 3);
+		}
+		data.append("</MESH>");
+		data.append("<OBJECT>\n");
+		data.append("<TRANSFORM>\n");
+			data.append("<FORWARD>" + forward[0] + ", " + forward[1] + ", " + forward[2] + "</FORWARD>\n");
+			data.append("<UP>" + up[0] + ", " + up[1] + ", " + up[2] + "</UP>\n");
+			data.append("<POSITION>" + location[0] + ", " + location[1] + ", " + location[2] + "</POSITION>\n");
+		data.append("</TRANSFORM>\n");
+		data.append("<MESHREF>" + ref + "</MESHREF>");
+		data.append("</OBJECT>\n");
 		return data;
 	}
 }
