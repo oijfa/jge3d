@@ -3,8 +3,8 @@
  */
 package controller;
 
+import importing.Obj_Parser;
 import importing.Parser;
-import importing.XGL_Parser;
 import input.Input;
 
 import javax.vecmath.Vector3f;
@@ -114,23 +114,26 @@ public class Controller {
 
 		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
 		
-		Parser p = new XGL_Parser();
-		try{
-			//p.readFile("./lib/legoman.xgl");
-			p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
-			//p.readFile("./lib/cath.xgl");
-		}catch(Exception e){
-			//TODO:  What to do here?
-		}
-		
 		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		objectList.addItem(cam, cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
+	
 		
+		Parser p = new Obj_Parser();
+		/*
+		try{
+			//p.readFile("./lib/legoman.xgl");
+			p.readFile("./lib/10010260.xgl");
+			//p.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/cath.xgl");
+			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+		}catch(Exception e){
+			//TODO:  What to do here?
+		}
+	
 		//Make a cathode
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
@@ -139,28 +142,32 @@ public class Controller {
 		objectList.addItem(ent, ent);
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
-		
+		*/
 		//Make a green box thing
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
 			//p.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
-			p.readFile("./lib/export.xgl");
+			p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+			//p.readFile("resources/Models/radar.obj");
 		}catch(Exception e){
 			//TODO:  What to do here?
+			e.printStackTrace();
 		}
-		/*
+		
+		//System.out.println(p.createModel().toString());
+		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent, ent);
-		physics.reduceHull(ent);
+		//physics.reduceHull(ent);
 		cam.setDistance(25.0f);
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
-		*/
+		
 		p.createModel().saveXGL("export.xgl");
 	}
 }

@@ -44,7 +44,7 @@ public class Renderer {
 	}
 
 	public void draw() {
-		//Setup Camera
+		//System.out.println("draw called" + objectList.size());
 		
 		if(objectList.getItem(Camera.CAMERA_NAME)!=null) {
 			Camera cam = (Camera) objectList.getItem(Camera.CAMERA_NAME);
