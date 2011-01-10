@@ -13,6 +13,7 @@ import importing.pieces.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -36,8 +37,8 @@ public class XGL_Parser extends Parser{
 		
 		HashMap<Integer, Material> mats = new HashMap<Integer, Material>();
 		HashMap<Integer, ArrayList<Mesh>> meshes = new HashMap<Integer, ArrayList<Mesh>>();
-		HashMap<Integer, float[]> points = new HashMap<Integer, float[]>();
-		HashMap<Integer, float[]> normals = new HashMap<Integer, float[]>();
+		HashMap<Integer, Vector3f> points = new HashMap<Integer, Vector3f>();
+		HashMap<Integer, Vector3f> normals = new HashMap<Integer, Vector3f>();
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -81,8 +82,8 @@ public class XGL_Parser extends Parser{
 			Element root, 
 			HashMap<Integer,Material> mats, 
 			HashMap<Integer, ArrayList<Mesh>> meshes,
-			HashMap<Integer,float[]> points,
-			HashMap<Integer,float[]> normals
+			HashMap<Integer,Vector3f> points,
+			HashMap<Integer,Vector3f> normals
 	) throws Exception{
 		ArrayList<Node> tagList;
 		
@@ -95,7 +96,7 @@ public class XGL_Parser extends Parser{
 				int ID = Integer.parseInt(ele.getAttribute("ID"));
 				
 				//Get point values
-				float[] pos = readVector(ele.getTextContent());
+				Vector3f pos = readVector(ele.getTextContent());
 				
 				//Add to hashmap
 				points.put(ID, pos);
@@ -110,7 +111,7 @@ public class XGL_Parser extends Parser{
 				int ID = Integer.parseInt(ele.getAttribute("ID"));
 				
 				//Get point values
-				float[] pos = readVector(ele.getTextContent());
+				Vector3f pos = readVector(ele.getTextContent());
 				
 				//Add to hashmap
 				normals.put(ID, pos);
@@ -159,8 +160,8 @@ public class XGL_Parser extends Parser{
 	private ArrayList<Mesh> readObjects(Element rootElement,
 			HashMap<Integer, Material> _mats, 
 			HashMap<Integer, ArrayList<Mesh>> _meshes,
-			HashMap<Integer, float[]> _points,
-			HashMap<Integer, float[]> _normals
+			HashMap<Integer, Vector3f> _points,
+			HashMap<Integer, Vector3f> _normals
 	) throws Exception {
 		//Create clones so we don't overwrite the parent's references
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
@@ -168,8 +169,8 @@ public class XGL_Parser extends Parser{
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
 		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 	
-		HashMap<Integer, float[]> normals = makeCopy(_normals);
-		HashMap<Integer, float[]> points = makeCopy(_points);
+		HashMap<Integer, Vector3f> normals = makeCopy(_normals);
+		HashMap<Integer, Vector3f> points = makeCopy(_points);
 		
 		//Add defines created in this tag
 		readDefines(rootElement,mats,meshes,points,normals);
@@ -182,9 +183,9 @@ public class XGL_Parser extends Parser{
 		ArrayList<Node> tagList;
 		
 		//Transform information
-		float[] location = {0.0f,0.0f,0.0f};
-		float[] forward = {0.0f,0.0f,1.0f};
-		float[] up = {0.0f,1.0f,0.0f};
+		Vector3f location = new Vector3f(0.0f,0.0f,0.0f);
+		Vector3f forward = new Vector3f(0.0f,0.0f,1.0f);
+		Vector3f up = new Vector3f(0.0f,1.0f,0.0f);
 		readTransform(rootElement,location,forward,up);
 		
 		//Get all defined Meshes
@@ -239,8 +240,8 @@ public class XGL_Parser extends Parser{
 			Element root, 
 			HashMap<Integer, Material> _mats, 
 			HashMap<Integer, ArrayList<Mesh>> _meshes,
-			HashMap<Integer, float[]> _points,
-			HashMap<Integer, float[]> _normals
+			HashMap<Integer, Vector3f> _points,
+			HashMap<Integer, Vector3f> _normals
 	) throws Exception {
 		
 		//Create clones so we don't overwrite the parent's references
@@ -249,8 +250,8 @@ public class XGL_Parser extends Parser{
 		@SuppressWarnings("unchecked") //Not sure what check its wanting, but I ain't doin' it
 		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 		
-		HashMap<Integer, float[]> points = makeCopy(_points);
-		HashMap<Integer, float[]> normals = makeCopy(_normals);
+		HashMap<Integer, Vector3f> points = makeCopy(_points);
+		HashMap<Integer, Vector3f> normals = makeCopy(_normals);
 		
 		readDefines(root, mats, null, points, normals);
 		
@@ -300,8 +301,8 @@ public class XGL_Parser extends Parser{
 	private HashMap<Integer, ArrayList<Face>> readFaces(
 			Element root, 
 			HashMap<Integer, Material> _mats, 
-			HashMap<Integer, float[]> _points,
-			HashMap<Integer, float[]> _normals
+			HashMap<Integer, Vector3f> _points,
+			HashMap<Integer, Vector3f> _normals
 	) throws Exception {
 		//Faces will be grouped by what material they are tied too
 		HashMap<Integer, ArrayList<Face>> faces = new HashMap<Integer, ArrayList<Face>>();
@@ -316,7 +317,7 @@ public class XGL_Parser extends Parser{
 				ArrayList<Node> vertexList = findChildrenByName(ele,temp);
 				for(int j = 0; j < vertexList.size(); j++){
 					int temp2 = (int)readScalarTag((Element)vertexList.get(j),"PREF",true);
-					float[] temp1 = _points.get(temp2);
+					Vector3f temp1 = _points.get(temp2);
 					f.addVertex(temp1);
 					
 					temp1 = _normals.get((int)readScalarTag((Element)vertexList.get(j),"NREF",false));
@@ -347,19 +348,17 @@ public class XGL_Parser extends Parser{
 		return m;
 	}
 
-	private void readTransform(Element ele, float[] location, float[] forward, float[] up) throws Exception{
+	private void readTransform(Element ele, Vector3f location, Vector3f forward, Vector3f up) throws Exception{
 		ArrayList<Node> tagList;
 		tagList = findChildrenByName(ele,"TRANSFORM");
 		if( tagList.size() == 1 ){
-			float[] local_location = readVectorTag((Element) tagList.get(0),"POSITION",true);
-			float[] local_forward = readVectorTag((Element) tagList.get(0),"FORWARD",true);
-			float[] local_up = readVectorTag((Element) tagList.get(0),"UP",true);
+			Vector3f local_location = readVectorTag((Element) tagList.get(0),"POSITION",true);
+			Vector3f local_forward = readVectorTag((Element) tagList.get(0),"FORWARD",true);
+			Vector3f local_up = readVectorTag((Element) tagList.get(0),"UP",true);
 			
-			for(int i = 0; i < 3; i++){
-				location[i] += local_location[i];
-				forward[i] += local_forward[i];
-				up[i] += local_up[i];
-			}
+			location.add(local_location);
+			forward.add(local_forward);
+			up.add(local_up);
 		}else if(tagList.size() == 0){
 			//Do nothing, its fine.
 		}else if(tagList.size() > 1){
@@ -367,7 +366,7 @@ public class XGL_Parser extends Parser{
 		}
 	}
 	
-	private float[] readVectorTag(Element root, String childName, boolean required) throws Exception {
+	private Vector3f readVectorTag(Element root, String childName, boolean required) throws Exception {
 		ArrayList<Node> tagList;
 		tagList = findChildrenByName(root,childName);
 		if( tagList.size() == 1 ){
@@ -381,16 +380,16 @@ public class XGL_Parser extends Parser{
 			throwException("Material Tag with redundant " + childName + " Tag");
 		}
 		
-		return new float[3];
+		return null;
 	}
 	
-	private float[] readVector(String data){
+	private Vector3f readVector(String data){
 		String[] temp = data.split(",");
-		float[] ret = new float[3];
+		Vector3f ret = new Vector3f();
 		
-		for(int i = 0; i < 3; i++){
-			ret[i] = Float.parseFloat(temp[i]);
-		}
+		ret.x = Float.parseFloat(temp[0]);
+		ret.y = Float.parseFloat(temp[1]);
+		ret.z = Float.parseFloat(temp[2]);
 		
 		return ret;
 	}
@@ -431,16 +430,14 @@ public class XGL_Parser extends Parser{
 		return -500;//? TODO
 	}
 	
-	private HashMap<Integer, float[]> makeCopy(HashMap<Integer, float[]> copyFrom){
+	private HashMap<Integer, Vector3f> makeCopy(HashMap<Integer, Vector3f> copyFrom){
 		
-		HashMap<Integer, float[]> copyTo = new HashMap<Integer, float[]>();
+		HashMap<Integer, Vector3f> copyTo = new HashMap<Integer, Vector3f>();
 		if(copyFrom.size() != 0){	
 			for(Integer key:copyFrom.keySet()){
 				try{
-					copyTo.put(key, new float[copyFrom.get(key).length]);
-					for(int j = 0; j < copyFrom.get(key).length;j++){
-						copyTo.get(key)[j] = copyFrom.get(key)[j];
-					}
+					Vector3f temp = copyFrom.get(key);
+					copyTo.put(key, new Vector3f(temp.x,temp.y,temp.z));
 				}catch(Exception e){
 					System.out.println("Failed on key: " + String.valueOf(key));
 					e.printStackTrace();
