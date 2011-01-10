@@ -129,7 +129,7 @@ public class Input {
 		//printf("button %i, state %i, x=%i,y=%i\n",button,state,x,y);
 		//button 0, state 0 means left mouse down
 
-		Vector3f rayTo = new Vector3f(getRayTo(x, y,camera));
+		Vector3f rayTo = new Vector3f(objectList.getRayTo(x, y,"camera"));
 
 		switch (button) {
 			case 2: {
