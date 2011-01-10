@@ -6,7 +6,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 
 import entity.Camera;
 import entity.EntityList;

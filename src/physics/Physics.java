@@ -1,12 +1,11 @@
 package physics;
 
-import input.Point2PointConstraint;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.BulletStats;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -23,7 +22,9 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
@@ -39,6 +40,11 @@ public class Physics {
 	private BroadphaseInterface overlappingPairCache;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
+	
+	@SuppressWarnings("unused")
+	private TypedConstraint pickedConstraint = null;
+	private Entity pickedEntity = null;
+	
 	//private List<CollisionShape> collisionShapes = new ArrayList<CollisionShape>();
 	float deltaT;
 	long frames=0;
@@ -213,15 +219,19 @@ public class Physics {
 	
 	public void drag(Camera camera) {
 		if (dynamicsWorld != null) {
-			CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(cameraPosition, rayTo);
+			Vector3f cameraPos = new Vector3f();
+			camera.getCenterOfMassPosition(cameraPos);
+			camera.getFocusPosition();
+			
+			CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(cameraPos, camera.getFocusPosition());
 			dynamicsWorld.rayTest(camera.getPosition(), camera.getFocusPosition(), rayCallback);
 			if (rayCallback.hasHit()) {
 				RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
 				if (body != null) {
 					// other exclusions?
 					if (!(body.isStaticObject() || body.isKinematicObject())) {
-						pickedBody = body;
-						pickedBody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+						pickedEntity = (Entity) body;
+						pickedEntity.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 	
 						Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
 	
@@ -231,13 +241,14 @@ public class Physics {
 						tmpTrans.transform(localPivot);
 	
 						Point2PointConstraint p2p = new Point2PointConstraint(body, localPivot);
-						p2p.setting.impulseClamp = mousePickClamping;
+						p2p.setting.impulseClamp = 3f;
 	
 						dynamicsWorld.addConstraint(p2p);
-						pickConstraint = p2p;
+						pickedConstraint = p2p;
+						
 						// save mouse position for dragging
-						BulletStats.gOldPickingPos.set(rayTo);
-						Vector3f eyePos = new Vector3f(cameraPosition);
+						BulletStats.gOldPickingPos.set(camera.getFocusPosition());
+						Vector3f eyePos = new Vector3f(cameraPos);
 						Vector3f tmp = new Vector3f();
 						tmp.sub(pickPos, eyePos);
 						BulletStats.gOldPickingDist = tmp.length();
