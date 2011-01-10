@@ -1,5 +1,7 @@
 package physics;
 
+import input.Point2PointConstraint;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -8,6 +10,8 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
@@ -23,6 +27,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
+import entity.Camera;
 import entity.Entity;
 
 public class Physics {
@@ -204,6 +209,43 @@ public class Physics {
 
 		//Override the original shape with the new one
 		e.setCollisionShape(meshshape);
-		
+	}
+	
+	public void drag(Camera camera) {
+		if (dynamicsWorld != null) {
+			CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(cameraPosition, rayTo);
+			dynamicsWorld.rayTest(camera.getPosition(), camera.getFocusPosition(), rayCallback);
+			if (rayCallback.hasHit()) {
+				RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
+				if (body != null) {
+					// other exclusions?
+					if (!(body.isStaticObject() || body.isKinematicObject())) {
+						pickedBody = body;
+						pickedBody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+	
+						Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
+	
+						Transform tmpTrans = body.getCenterOfMassTransform(new Transform());
+						tmpTrans.inverse();
+						Vector3f localPivot = new Vector3f(pickPos);
+						tmpTrans.transform(localPivot);
+	
+						Point2PointConstraint p2p = new Point2PointConstraint(body, localPivot);
+						p2p.setting.impulseClamp = mousePickClamping;
+	
+						dynamicsWorld.addConstraint(p2p);
+						pickConstraint = p2p;
+						// save mouse position for dragging
+						BulletStats.gOldPickingPos.set(rayTo);
+						Vector3f eyePos = new Vector3f(cameraPosition);
+						Vector3f tmp = new Vector3f();
+						tmp.sub(pickPos, eyePos);
+						BulletStats.gOldPickingDist = tmp.length();
+						// very weak constraint for picking
+						p2p.setting.tau = 0.1f;
+					}
+				}
+			}
+		}
 	}
 }

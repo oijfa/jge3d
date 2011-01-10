@@ -5,7 +5,6 @@ package controller;
 
 import importing.Parser;
 import importing.XGL_Parser;
-import input.Input;
 
 import javax.vecmath.Vector3f;
 
@@ -28,7 +27,6 @@ public class Controller {
 	private Physics physics;
 	
 	private long frames = 0;
-	private Input input;
 
 	private EntityList objectList;
 	
@@ -64,26 +62,8 @@ public class Controller {
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
 		render_thread.start();
-		
-		//Input has to be after entity list and after the render thread has been started (Display must be created)
-		input = new Input(objectList);
-		input_thread.start();
 	}
-	
-	/* THREAD DEFINITIONS */
-	// Create the Input Listening thread
-	Thread input_thread = new Thread() {
-		public void run() {
-			//Wait for display to be created
-			try {
-				render_thread.join();
-			} catch (InterruptedException e) {/*Nothing to do, render thread is telling us its done creating display*/}
-			input.init();
-			while(isRunning){
-				input.run();
-			}
-		}
-	};
+
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
@@ -97,7 +77,6 @@ public class Controller {
 	Thread render_thread = new Thread() {
 		public void run() {
 			renderer.initGL();
-			input_thread.interrupt(); //If input thread is waiting (it should be) let it go
 			while (isRunning) {
 				renderer.draw();
 			}

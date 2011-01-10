@@ -153,5 +153,68 @@ public class Renderer {
 		GL11.glLoadIdentity();
 	}
 	
+	public Vector3f getRayTo(int x, int y, Camera fromEnt) {
+		float top = 1f;
+		float bottom = -1f;
+		float nearPlane = 1f;
+		float tanFov = (top - bottom) * 0.5f / nearPlane;
+		float fov = 2f * (float) Math.atan(tanFov);
+
+		Vector3f rayFrom = new Vector3f(fromEnt.getPosition());
+		Vector3f rayForward = new Vector3f();
+		rayForward.sub(fromEnt.getFocusPosition(), fromEnt.getPosition());
+		rayForward.normalize();
+		float farPlane = 10000f;
+		rayForward.scale(farPlane);
+
+		//Vector3f rightOffset = new Vector3f();
+		Vector3f vertical = new Vector3f(fromEnt.getPosition());
+
+		Vector3f hor = new Vector3f();
+		// TODO: check: hor = rayForward.cross(vertical);
+		hor.cross(rayForward, vertical);
+		hor.normalize();
+		// TODO: check: vertical = hor.cross(rayForward);
+		vertical.cross(hor, rayForward);
+		vertical.normalize();
+
+		float tanfov = (float) Math.tan(0.5f * fov);
+		
+		float aspect = window.getHeight() / (float)window.getWidth();
+		
+		hor.scale(2f * farPlane * tanfov);
+		vertical.scale(2f * farPlane * tanfov);
+		
+		if (aspect < 1f) {
+			hor.scale(1f / aspect);
+		}
+		else {
+			vertical.scale(aspect);
+		}
+		
+		Vector3f rayToCenter = new Vector3f();
+		rayToCenter.add(rayFrom, rayForward);
+		Vector3f dHor = new Vector3f(hor);
+		dHor.scale(1f / (float) window.getWidth());
+		Vector3f dVert = new Vector3f(vertical);
+		dVert.scale(1.f / (float) window.getHeight());
+
+		Vector3f tmp1 = new Vector3f();
+		Vector3f tmp2 = new Vector3f();
+		tmp1.scale(0.5f, hor);
+		tmp2.scale(0.5f, vertical);
+
+		Vector3f rayTo = new Vector3f();
+		rayTo.sub(rayToCenter, tmp1);
+		rayTo.add(tmp2);
+
+		tmp1.scale(x, dHor);
+		tmp2.scale(y, dVert);
+
+		rayTo.add(tmp1);
+		rayTo.sub(tmp2);
+		return rayTo;
+	}
+	
 	public void destroy() {window.destroy();}
 }

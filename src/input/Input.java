@@ -1,8 +1,12 @@
 package input;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import com.bulletphysics.collision.dispatch.CollisionWorld;
 
 import entity.Camera;
 import entity.EntityList;
@@ -118,4 +122,89 @@ public class Input {
 			}
 		}
 	}
+	
+	public void mouseFunc(int button, int state, int x, int y) {
+		//printf("button %i, state %i, x=%i,y=%i\n",button,state,x,y);
+		//button 0, state 0 means left mouse down
+
+		Vector3f rayTo = new Vector3f(getRayTo(x, y,camera));
+
+		switch (button) {
+			case 2: {
+				if (state == 0) {
+					shootBox(rayTo);
+				}
+				break;
+			}
+			case 1: {
+				if (state == 0) {
+					// apply an impulse
+					if (dynamicsWorld != null) {
+						CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(cameraPosition, rayTo);
+						dynamicsWorld.rayTest(cameraPosition, rayTo, rayCallback);
+						if (rayCallback.hasHit()) {
+							RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
+							if (body != null) {
+								body.setActivationState(CollisionObject.ACTIVE_TAG);
+								Vector3f impulse = new Vector3f(rayTo);
+								impulse.normalize();
+								float impulseStrength = 10f;
+								impulse.scale(impulseStrength);
+								Vector3f relPos = new Vector3f();
+								relPos.sub(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vector3f()));
+								body.applyImpulse(impulse, relPos);
+							}
+						}
+					}
+				}
+				else {
+				}
+				break;
+			}
+			case 0: {
+				if (state == 0) {
+					// add a point to point constraint for picking
+					physics.
+
+				}
+				else {
+
+					if (pickConstraint != null && dynamicsWorld != null) {
+						dynamicsWorld.removeConstraint(pickConstraint);
+						// delete m_pickConstraint;
+						//printf("removed constraint %i",gPickingConstraintId);
+						pickConstraint = null;
+						pickedBody.forceActivationState(CollisionObject.ACTIVE_TAG);
+						pickedBody.setDeactivationTime(0f);
+						pickedBody = null;
+					}
+				}
+				break;
+			}
+			default: {
+			}
+		}
+	}
+	
+	public void mouseMotionFunc(int x, int y) {
+		if (pickConstraint != null) {
+			// move the constraint pivot
+			Point2PointConstraint p2p = (Point2PointConstraint) pickConstraint;
+			if (p2p != null) {
+				// keep it at the same picking distance
+
+				Vector3f newRayTo = new Vector3f(getRayTo(x, y));
+				Vector3f eyePos = new Vector3f(cameraPosition);
+				Vector3f dir = new Vector3f();
+				dir.sub(newRayTo, eyePos);
+				dir.normalize();
+				dir.scale(BulletStats.gOldPickingDist);
+
+				Vector3f newPos = new Vector3f();
+				newPos.add(eyePos, dir);
+				p2p.setPivotB(newPos);
+			}
+		}
+	}
+
 }
