@@ -1,7 +1,6 @@
 /*
  * 	Reads in obj files, a fairly simplistic model format.
  * 
- * 	//TODO: Rework so that it works with FileLoader.
  * 
  */
 package importing;
@@ -39,7 +38,7 @@ public class Obj_Parser extends Parser{
 		String currentLine = file.readLine();
 		
 		while(!currentLine.subSequence(0, 2).equals("v ")){
-			System.out.println("***" + currentLine.subSequence(0, 2) + "***");
+			//System.out.println("***" + currentLine.subSequence(0, 2) + "***");
 			currentLine = file.readLine();
 		}
 		
