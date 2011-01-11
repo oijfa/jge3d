@@ -1,9 +1,12 @@
 package window;
 
+import java.beans.PropertyChangeListener;
+
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.model.ButtonModel;
 import entity.Camera;
 import entity.EntityList;
 
@@ -14,14 +17,13 @@ public class RotationMenu extends ResizableFrame {
 	private final Button right;
 	private final Button left;
 	private final Button center;
-	private EntityList objectList;
 	private Camera cam;
 	private static final float LEFT_RIGHT_INC = 0.1f;
 	private static final float UP_DOWN_INC = 0.1f;
 	
 	public RotationMenu(EntityList objectList){
 		setTitle("Camera Rotation");
-		this.objectList = objectList;
+
 		cam = (Camera) objectList.getItem("camera");
 		layout = new DialogLayout();
 		up= new Button("Up");
@@ -35,6 +37,22 @@ public class RotationMenu extends ResizableFrame {
 		center = new Button("Center");
 		center.setTheme("center");
 		
+		//Create a model for reflecting the state of the button
+		final ButtonModel leftButtonModel = left.getModel();
+		
+		leftButtonModel.addStateCallback(new Runnable() { 
+		   @Override 
+		   public void run() { 
+				if (leftButtonModel.isHover() && leftButtonModel.isPressed()) {
+					//start looping increment function
+				}
+				else if(!leftButtonModel.isHover()) {
+					//stop function
+				}
+		   } 
+		}); 
+		
+		/*
 		up.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -47,10 +65,15 @@ public class RotationMenu extends ResizableFrame {
 				cam.incrementDeclination(-UP_DOWN_INC);
 			}
 		});
+		
+		
 		right.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				cam.incrementRotation(LEFT_RIGHT_INC);
+				if(right.getModel().isHover()) {
+					System.out.print("poopopopppooooppoooppop\n");
+					cam.incrementRotation(LEFT_RIGHT_INC);
+				}
 			}
 		});
 		left.addCallback(new Runnable() {
@@ -67,6 +90,7 @@ public class RotationMenu extends ResizableFrame {
 				cam.setRotation(0);
 			}
 		});
+		*/
 		
 		Group row1 = layout.createSequentialGroup().addGap().addWidget(up).addGap();
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
