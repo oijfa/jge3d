@@ -3,6 +3,8 @@
  */
 package controller;
 
+import java.applet.Applet;
+
 import importing.Obj_Parser;
 import importing.Parser;
 import input.Input;
@@ -20,7 +22,8 @@ import entity.Entity;
 import entity.EntityList;
 import render.Renderer;
 
-public class Controller {
+@SuppressWarnings("serial")
+public class Controller extends Applet{
 	// the game always runs (except when it doesn't)
 	private static boolean isRunning = true;
 	
@@ -35,9 +38,18 @@ public class Controller {
 	public static void main(String[] args) throws Exception {
 		new Controller();
 	}
+	
+	public void init(){
+		try {
+			new Controller();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public Controller() throws Exception {
-		start();
+		startThreads();
 		loadLevel();
 	}
 
@@ -52,7 +64,7 @@ public class Controller {
 	 * 						|			|
 	 * 						\------(Input)
 	 */
-	private void start() {
+	private void startThreads() {
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
 		physics_thread.start();
@@ -140,7 +152,7 @@ public class Controller {
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
 		objectList.addItem(ent, ent);
-		cam.focusOn(ent);
+		
 		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
 		*/
 		//Make a green box thing
@@ -148,8 +160,10 @@ public class Controller {
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
 			//p.readFile("./lib/box2.xgl");
+			
 			//p.readFile("./lib/cath.xgl");
 			p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+			//p.readFile("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
 			//p.readFile("resources/Models/radar.obj");
 		}catch(Exception e){
 			//TODO:  What to do here?
@@ -157,6 +171,7 @@ public class Controller {
 		}
 		
 		//System.out.println(p.createModel().toString());
+		
 		
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
@@ -168,6 +183,11 @@ public class Controller {
 		cam.focusOn(ent);
 		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
 		
-		p.createModel().saveXGL("export.xgl");
+		/*
+		Parser p = new Obj_Parser();
+		p.readFile(fileName);
+		p.createModel()
+		*/
+		
 	}
 }
