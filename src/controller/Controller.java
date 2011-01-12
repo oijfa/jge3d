@@ -36,22 +36,20 @@ public class Controller extends Applet{
 	private EntityList objectList;
 	
 	public static void main(String[] args) throws Exception {
-		new Controller();
+		Applet app = new Controller();
+		app.init();
 	}
 	
 	public void init(){
 		try {
-			new Controller();
+			startThreads();
+			loadLevel();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public Controller() throws Exception {
-		startThreads();
-		loadLevel();
-	}
+	public Controller(){	}
 
 	
 	/* Diagram of dependencies (:D).  Arrows mean "depends on"
@@ -77,8 +75,8 @@ public class Controller extends Applet{
 		render_thread.start();
 		
 		//Input has to be after entity list and after the render thread has been started (Display must be created)
-		input = new Input(objectList);
-		input_thread.start();
+		//input = new Input(objectList);
+		//input_thread.start();
 	}
 	
 	/* THREAD DEFINITIONS */
@@ -162,8 +160,8 @@ public class Controller extends Applet{
 			//p.readFile("./lib/box2.xgl");
 			
 			//p.readFile("./lib/cath.xgl");
-			p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-			//p.readFile("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
+			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+			p.readUrl("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
 			//p.readFile("resources/Models/radar.obj");
 		}catch(Exception e){
 			//TODO:  What to do here?

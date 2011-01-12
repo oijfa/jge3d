@@ -10,6 +10,7 @@ import importing.pieces.Material;
 import importing.pieces.Mesh;
 import importing.pieces.Model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,21 +30,33 @@ public class XGL_Parser extends Parser{
 	public XGL_Parser(){}
 	
 	@Override
+	public void readUrl(String url) throws Exception {
+		Document dom;
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		
+		//Create Dom Structure
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		dom = db.parse(new File(url));
+		parseXGL(dom);
+	}
+	
+	@Override
 	public void readFile(String fileName) throws Exception {
 		Document dom;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
+		//Create Dom Structure
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		dom = db.parse(fileName);
+		parseXGL(dom);
+	}	
+	
+	private void parseXGL(Document dom){
 		ArrayList<Mesh> drawableMeshes = new ArrayList<Mesh>();
-		
 		HashMap<Integer, Material> mats = new HashMap<Integer, Material>();
 		HashMap<Integer, ArrayList<Mesh>> meshes = new HashMap<Integer, ArrayList<Mesh>>();
 		HashMap<Integer, Vector3f> points = new HashMap<Integer, Vector3f>();
 		HashMap<Integer, Vector3f> normals = new HashMap<Integer, Vector3f>();
-		
-		//Create Dom Structure
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(fileName);
-		
 		ArrayList<Node> tagList;
 		try {
 			//Now that we've got the file in DOM format, loop through elements
@@ -458,6 +471,4 @@ public class XGL_Parser extends Parser{
 	public Model createModel() {
 		return new Model(model);
 	}
-	
-	
 }

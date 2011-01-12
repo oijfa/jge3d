@@ -11,7 +11,10 @@ import importing.pieces.Mesh;
 import importing.pieces.Model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
@@ -32,9 +35,17 @@ public class Obj_Parser extends Parser{
 	
 	@Override
 	public void readFile(String fileName) throws Exception {
+		parseObj(new BufferedReader(new FileReader(fileName)));
+	}
+
+	@Override
+	public void readUrl(String url) throws Exception {
+		BufferedReader file = new BufferedReader(new InputStreamReader(new URL( url ).openStream()));
+		parseObj(file);
+	}
+	
+	public void parseObj(BufferedReader file) throws Exception {
 		Mesh mesh = new Mesh();
-		
-		BufferedReader file = new BufferedReader(new FileReader(fileName));
 		String currentLine = file.readLine();
 		
 		while(!currentLine.subSequence(0, 2).equals("v ")){
@@ -110,4 +121,5 @@ public class Obj_Parser extends Parser{
 	public Model createModel() {
 		return new Model(model);
 	}
+
 }

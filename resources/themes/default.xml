@@ -367,6 +367,8 @@
 				<theme name="right" ref="button" />
 				<theme name="left" ref="button" />	
 				<theme name="center" ref="button" />
+				<theme name="zoomin" ref="button" />	
+				<theme name="zoomout" ref="button" />
             </theme>
         </theme>
     </theme>

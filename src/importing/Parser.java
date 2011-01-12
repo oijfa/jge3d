@@ -15,5 +15,6 @@ public abstract class Parser {
 	public Model getWorld() {return model;}
 
 	public abstract void readFile(String fileName) throws Exception;
+	public abstract void readUrl(String url) throws Exception;
 	public abstract Model createModel();
 }
