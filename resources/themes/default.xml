@@ -131,6 +131,7 @@
         <param name="minHeight"><int>150</int></param>
     </theme>
     <theme name="label" allowWildcard="true" ref="-defaults">
+    	<param name="border"><border>5,5,5,5</border></param>
     </theme>
     <theme name="tooltipwindow" ref="-defaults">
         <param name="background"><image>border_round</image></param>
@@ -139,7 +140,7 @@
     </theme>
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
-        <param name="border"><border>0,5,0,0</border></param>
+        <param name="border"><border>5,5,5,5</border></param>
     </theme>
     <theme name="vscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="upbutton" ref="-defaults">
@@ -369,6 +370,8 @@
 				<theme name="center" ref="button" />
 				<theme name="zoomin" ref="button" />	
 				<theme name="zoomout" ref="button" />
+				<theme name="blank" ref="button" />
+				<theme name="blank2" ref="button" />
             </theme>
         </theme>
     </theme>

@@ -101,7 +101,11 @@ public class Controller extends Applet{
 	Thread physics_thread = new Thread() {
 		public void run() {
 			while (isRunning) {
-				physics.clientUpdate();
+				try{
+					physics.clientUpdate();
+				}catch(Exception e){
+					System.out.println("-");
+				}
 			}
 		}
 	};
@@ -123,26 +127,29 @@ public class Controller extends Applet{
 	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel() throws Exception{
+		//Make a camera	
+		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		objectList.addItem(cam, cam);
 		
 		pullModelFiles("resources/Models");
-		
-		System.exit(0);
 	}
 	
 	private void pullModelFiles(String filename) throws Exception{
 		File dir = new File(filename);
 		File[] subFiles;
 		subFiles = dir.listFiles();
-		XGL_Parser xparse = new XGL_Parser();
-		Obj_Parser oparse = new Obj_Parser();
+		
 		for( File f: subFiles){
 			if(!f.isDirectory()){
 				//create model
 				int dotPos = f.getPath().lastIndexOf(".");
 		        String extension = f.getPath().substring(dotPos);
-		        if( extension.equals("xgl") || extension.equals("obj")){
+		        if( extension.equals(".xgl") || extension.equals(".obj")){
 		        	Parser p;
-					if( extension.equals("xgl")){
+		        	XGL_Parser xparse = new XGL_Parser();
+		    		Obj_Parser oparse = new Obj_Parser();
+					if( extension.equals(".xgl")){
 						xparse.readFile(f.getPath());
 						p = xparse;
 					} else {
@@ -150,7 +157,14 @@ public class Controller extends Applet{
 						p = oparse;
 					}
 					if( p != null){
-						
+						//Make a cathode	
+						BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+						Entity ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);	
+						ent.setModel(p.createModel());	
+						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
+						ent.setProperty("name", f.getPath().substring(0,dotPos-1), ent);
+						objectList.addItem(ent, ent);
+						ent.setShouldDraw(false);
 					}
 		        }
 			}else{
