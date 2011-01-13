@@ -1,6 +1,8 @@
 package window;
 
-import java.beans.PropertyChangeListener;
+import input.components.ThreadFactory;
+
+import java.util.HashMap;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
@@ -18,12 +20,15 @@ public class RotationMenu extends ResizableFrame {
 	private final Button left;
 	private final Button center;
 	private Camera cam;
-	private static final float LEFT_RIGHT_INC = 0.1f;
+	private static final float LEFT_RIGHT_INC = 0.00000001f;
 	private static final float UP_DOWN_INC = 0.1f;
+	private HashMap<String, Thread> buttonThreads;
+	private ThreadFactory threadStarter;
 	
 	public RotationMenu(EntityList objectList){
 		setTitle("Camera Rotation");
-
+		buttonThreads = new HashMap<String, Thread>();
+		threadStarter = new ThreadFactory();
 		cam = (Camera) objectList.getItem("camera");
 		layout = new DialogLayout();
 		up= new Button("Up");
@@ -43,12 +48,13 @@ public class RotationMenu extends ResizableFrame {
 		leftButtonModel.addStateCallback(new Runnable() { 
 		   @Override 
 		   public void run() { 
-				if (leftButtonModel.isHover() && leftButtonModel.isPressed()) {
-					//start looping increment function
-				}
-				else if(!leftButtonModel.isHover()) {
-					//stop function
-				}
+			   if(leftButtonModel.isArmed()&&leftButtonModel.isPressed()){
+				   System.out.println("pressed");
+				   startThread("left");
+			   }else if (!leftButtonModel.isArmed()&&!leftButtonModel.isPressed()){
+				   System.out.println("released");
+				   endThread("left");
+			   }
 		   } 
 		}); 
 		
@@ -82,6 +88,7 @@ public class RotationMenu extends ResizableFrame {
 				cam.incrementRotation(-LEFT_RIGHT_INC);
 			}
 		});
+		*/
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -90,7 +97,7 @@ public class RotationMenu extends ResizableFrame {
 				cam.setRotation(0);
 			}
 		});
-		*/
+		
 		
 		Group row1 = layout.createSequentialGroup().addGap().addWidget(up).addGap();
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
@@ -110,11 +117,56 @@ public class RotationMenu extends ResizableFrame {
 		
 	layout.setHorizontalGroup(button_hgroup);
 	layout.setVerticalGroup(button_vgroup);
-
-	add(layout);
-
-		
+	add(layout);		
 	}
+	
+	public void startThread(String key){
+		Runnable threadRun;
+		Thread threadStart;
+		if(key == "left"){
+			threadRun = new Runnable(){
+				public void run(){
+					while(true){
+						cam.incrementRotation(-LEFT_RIGHT_INC);
+						System.out.print("DicksEverywhere!\n");
+					}
+				}
+			};
+			buttonThreads.put(key, threadStarter.newThread(threadRun));
+			threadStart = buttonThreads.get(key);
+			threadStart.start();
+		}else if(key == "right"){
+			threadRun = new Runnable(){
+				public void run(){
+					
+				}
+			};
+			buttonThreads.put(key, threadStarter.newThread(threadRun));
+		}else if(key == "up"){
+			threadRun = new Runnable(){
+				public void run(){
+					
+				}
+			};
+			buttonThreads.put(key, threadStarter.newThread(threadRun));
+		}else if(key == "right"){
+			threadRun = new Runnable(){
+				public void run(){
+					
+				}
+			};
+			buttonThreads.put(key, threadStarter.newThread(threadRun));
+		}else{
+			System.out.println("Invalid Key");
+		}
+	}
+	
+	public void endThread(String key){
+		Thread toDie;
+		toDie = buttonThreads.get(key);
+		toDie = null;
+	}
+	
 	
 	public void setCameraRef(Camera cam){
 		this.cam = cam;
