@@ -4,12 +4,27 @@
 package controller;
 
 import java.applet.Applet;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import importing.Obj_Parser;
 import importing.Parser;
+import importing.XGL_Parser;
 import input.Input;
 
 import javax.vecmath.Vector3f;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import physics.Physics;
 
@@ -108,73 +123,39 @@ public class Controller extends Applet{
 	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel() throws Exception{
-		Entity ent;
-		Camera cam;
-
-		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
 		
-		//Make a camera
-		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
-		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		objectList.addItem(cam, cam);
-		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
+		pullModelFiles("resources/Models");
+		
+		System.exit(0);
+	}
 	
-		
-		Parser p = new Obj_Parser();
-		/*
-		try{
-			//p.readFile("./lib/legoman.xgl");
-			p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
-			//p.readFile("./lib/cath.xgl");
-			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-		}catch(Exception e){
-			//TODO:  What to do here?
+	private void pullModelFiles(String filename) throws Exception{
+		File dir = new File(filename);
+		File[] subFiles;
+		subFiles = dir.listFiles();
+		XGL_Parser xparse = new XGL_Parser();
+		Obj_Parser oparse = new Obj_Parser();
+		for( File f: subFiles){
+			if(!f.isDirectory()){
+				//create model
+				int dotPos = f.getPath().lastIndexOf(".");
+		        String extension = f.getPath().substring(dotPos);
+		        if( extension.equals("xgl") || extension.equals("obj")){
+		        	Parser p;
+					if( extension.equals("xgl")){
+						xparse.readFile(f.getPath());
+						p = xparse;
+					} else {
+						oparse.readFile(f.getPath());
+						p = oparse;
+					}
+					if( p != null){
+						
+					}
+		        }
+			}else{
+				pullModelFiles(f.getPath());
+			}
 		}
-	
-		//Make a cathode
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		objectList.addItem(ent, ent);
-		
-		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
-		*/
-		//Make a green box thing
-		try{
-			//p.readFile("./lib/legoman.xgl");
-			//p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
-			
-			//p.readFile("./lib/cath.xgl");
-			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-			p.readUrl("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
-			//p.readFile("resources/Models/radar.obj");
-		}catch(Exception e){
-			//TODO:  What to do here?
-			e.printStackTrace();
-		}
-		
-		//System.out.println(p.createModel().toString());
-		
-		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.addItem(ent, ent);
-		//physics.reduceHull(ent);
-		cam.setDistance(25.0f);
-		cam.focusOn(ent);
-		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
-		
-		/*
-		Parser p = new Obj_Parser();
-		p.readFile(fileName);
-		p.createModel()
-		*/
-		
 	}
 }
