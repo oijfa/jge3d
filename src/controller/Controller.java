@@ -51,17 +51,6 @@ public class Controller extends Applet{
 
 	public Controller(){	}
 
-	
-	/* Diagram of dependencies (:D).  Arrows mean "depends on"
-	 * 
-	 * 						/------(Renderer)
-	 * 						|			^
-	 * 						V			|
-	 * (Physics) <-- (Entity List)		|
-	 * 						^			|
-	 * 						|			|
-	 * 						\------(Input)
-	 */
 	private void startThreads() {
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
