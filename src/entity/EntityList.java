@@ -140,4 +140,8 @@ public class EntityList implements EntityObserver{
 			return false;
 		}
 	}
+	
+	public Physics getPhysics() {
+		return physics;
+	}
 }

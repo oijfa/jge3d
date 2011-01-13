@@ -7,6 +7,7 @@ import org.lwjgl.LWJGLException;
 //import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.GUI;
+import input.Input;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 import entity.EntityList;
@@ -14,10 +15,11 @@ import entity.EntityList;
 public class Window extends DesktopArea {
 	//private MainMenu mainMenu;
 	//private TextureMenu textureMenu;
-	private EntityMenu entityMenu;
+	//private EntityMenu entityMenu;
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
+	private Input input;
 	
 	public Window(EntityList objectList) {
 		try {
@@ -47,10 +49,11 @@ public class Window extends DesktopArea {
 		textureMenu.setTheme("texturemenu");
 		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
 		*/
+		input = new Input(objectList);
 		
-		entityMenu = new EntityMenu(objectList);
-		add(entityMenu);
-		entityMenu.setTheme("entitymenu");
+		//entityMenu = new EntityMenu(objectList);
+		//add(entityMenu);
+		//entityMenu.setTheme("entitymenu");
 		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),textureMenu.getHeight());
 		
 		//you have to do a gui update or it won't give you the sizes of the subwindows
@@ -58,7 +61,8 @@ public class Window extends DesktopArea {
 	}
 	
 	public void draw() {
-		gui.update();
+		//gui.update();
+		input.run();
 	}
 
 	public void destroy() {

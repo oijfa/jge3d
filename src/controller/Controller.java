@@ -116,8 +116,10 @@ public class Controller {
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
 		objectList.addItem(ent, ent);
+		cam.setDistance(25.0f);
+		cam.focusOn(ent);
 		
-		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
+		//ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
 		
 		//Make a green box thing
 		try{
@@ -135,10 +137,9 @@ public class Controller {
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.addItem(ent, ent);
-		physics.reduceHull(ent);
-		cam.setDistance(25.0f);
-		cam.focusOn(ent);
-		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
+		//physics.reduceHull(ent);
+		
+		//ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
 
 		
 		p.createModel().saveXGL("export.xgl");
