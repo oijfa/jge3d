@@ -4,14 +4,8 @@
 package controller;
 
 import java.applet.Applet;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
+
 import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import importing.Obj_Parser;
 import importing.Parser;
@@ -19,12 +13,6 @@ import importing.XGL_Parser;
 import input.Input;
 
 import javax.vecmath.Vector3f;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import physics.Physics;
 
