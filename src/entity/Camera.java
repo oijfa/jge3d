@@ -172,7 +172,7 @@ public class Camera extends Entity {
 		System.out.print("Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y + "	Z:	" + up_vector.z + "\n\n");	
 	}
 	
-	public Vector3f getRayTo(int x, int y) {
+	public Vector3f getRayTo(int x, int y) {	
 		float top = 1f;
 		float bottom = -1f;
 		float nearPlane = 1f;
@@ -187,7 +187,7 @@ public class Camera extends Entity {
 		rayForward.scale(farPlane);
 
 		//Vector3f rightOffset = new Vector3f();
-		Vector3f vertical = new Vector3f(this.getPosition());
+		Vector3f vertical = new Vector3f(this.getUp());
 
 		Vector3f hor = new Vector3f();
 		// TODO: check: hor = rayForward.cross(vertical);

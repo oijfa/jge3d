@@ -67,7 +67,10 @@ public class Controller {
 	Thread physics_thread = new Thread() {
 		public void run() {
 			while (isRunning) {
-				physics.clientUpdate();
+				if(objectList != null && objectList.requiresLock())
+					objectList.parseQueue();
+				else
+					physics.clientUpdate();
 			}
 		}
 	};
@@ -105,9 +108,9 @@ public class Controller {
 		
 		//Make a camera
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		cam = new Camera(1.0f, new DefaultMotionState(), boxShape, false);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		objectList.addItem(cam, cam);
+		objectList.enqueue((Entity)cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
 		//Make a cathode
@@ -115,8 +118,8 @@ public class Controller {
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		objectList.addItem(ent, ent);
-		cam.setDistance(25.0f);
+		objectList.enqueue(ent);
+		cam.setDistance(50.0f);
 		cam.focusOn(ent);
 		
 		//ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
@@ -132,11 +135,12 @@ public class Controller {
 			//TODO:  What to do here?
 		}
 		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		//Box thing
+		boxShape = new BoxShape(new Vector3f(2, 2, 2));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.addItem(ent, ent);
+		objectList.enqueue(ent);
 		//physics.reduceHull(ent);
 		
 		//ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));

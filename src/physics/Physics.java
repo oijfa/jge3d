@@ -217,11 +217,11 @@ public class Physics {
 		e.setCollisionShape(meshshape);
 	}
 	
-	public void drag(Camera camera,int state) {
+	public void drag(Camera camera,int state,Vector3f rayTo) {
 		if(state == 0) {
 			if (dynamicsWorld != null) {
-				CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(camera.getPosition(), camera.getFocusPosition());
-				dynamicsWorld.rayTest(camera.getPosition(), camera.getFocusPosition(), rayCallback);
+				CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(camera.getPosition(), rayTo);
+				dynamicsWorld.rayTest(camera.getPosition(), rayTo, rayCallback);
 				if (rayCallback.hasHit()) {
 					RigidBody hitBody = RigidBody.upcast(rayCallback.collisionObject);
 					if (hitBody != null) {
@@ -244,7 +244,7 @@ public class Physics {
 							pickedConstraint = p2p;
 							
 							// save mouse position for dragging
-							BulletStats.gOldPickingPos.set(camera.getFocusPosition());
+							BulletStats.gOldPickingPos.set(rayTo);
 							Vector3f tmp = new Vector3f();
 							tmp.sub(pickPos, camera.getPosition());
 							BulletStats.gOldPickingDist = tmp.length();
@@ -280,9 +280,9 @@ public class Physics {
 				 dir.normalize();
 				 dir.scale(BulletStats.gOldPickingDist);
 				 
-				 Vector3f newPos = new Vector3f(); newPos.add(eyePos, dir);
+				 Vector3f newPos = new Vector3f();
+				 newPos.add(eyePos, dir);
 				 p2p.setPivotB(newPos);
-				 System.out.println("dragging");
 			 }
 		}
 	}

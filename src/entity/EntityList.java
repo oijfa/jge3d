@@ -13,7 +13,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
@@ -34,14 +33,20 @@ public class EntityList implements EntityObserver{
 
 	private ArrayList<EntityListObserver> observers;
 
+	private HashMap<String,ArrayList<Object>> set_queue;
+	private ArrayList<Entity> ent_queue;
+	
+	private boolean requires_lock = false;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
 		constraints = new HashMap<String,TypedConstraint>();
 		observers = new ArrayList<EntityListObserver>();
+		set_queue = new HashMap<String,ArrayList<Object>>();
+		ent_queue = new ArrayList<Entity>();
 	}
-	public boolean addItem(Entity e, Object starter){
+	private boolean addItem(Entity e, Object starter){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
@@ -53,6 +58,17 @@ public class EntityList implements EntityObserver{
 			return false;
 		}
 	}
+	public void enqueue(String name, String key, Object value) {
+		ArrayList<Object> changes = new ArrayList<Object>();
+		changes.add(key);
+		changes.add(value);
+		set_queue.put(name, changes);
+	}
+	public void enqueue(Entity ent) {
+		ent_queue.add(ent);
+		requires_lock=true;
+	}
+	
 	public void removeItem(String name, Object starter){
 		Entity ent = this.getItem(name);
 		names.remove(name);
@@ -143,5 +159,23 @@ public class EntityList implements EntityObserver{
 	
 	public Physics getPhysics() {
 		return physics;
+	}
+	
+	public void parseQueue() {
+		for(String key:set_queue.keySet()) {
+			names.get(key).setProperty(
+				set_queue.get(0).toString(),
+				(Object)set_queue.get(1),
+				this
+			);
+		}
+		for(Entity key:ent_queue) {
+			addItem(key, this);
+		}
+		requires_lock=false;
+	}
+	
+	public boolean requiresLock() {
+		return requires_lock;
 	}
 }
