@@ -7,7 +7,8 @@ import java.applet.Applet;
 
 import importing.Obj_Parser;
 import importing.Parser;
-import input.Input;
+
+import importing.XGL_Parser;
 
 import javax.vecmath.Vector3f;
 
@@ -31,7 +32,6 @@ public class Controller extends Applet{
 	private Physics physics;
 	
 	private long frames = 0;
-	private Input input;
 
 	private EntityList objectList;
 	
@@ -67,26 +67,15 @@ public class Controller extends Applet{
 		//input = new Input(objectList);
 		//input_thread.start();
 	}
-	
-	/* THREAD DEFINITIONS */
-	// Create the Input Listening thread
-	Thread input_thread = new Thread() {
-		public void run() {
-			//Wait for display to be created
-			try {
-				render_thread.join();
-			} catch (InterruptedException e) {/*Nothing to do, render thread is telling us its done creating display*/}
-			input.init();
-			while(isRunning){
-				input.run();
-			}
-		}
-	};
+
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
 			while (isRunning) {
-				physics.clientUpdate();
+				if(objectList != null && objectList.requiresLock())
+					objectList.parseQueue();
+				else
+					physics.clientUpdate();
 			}
 		}
 	};
@@ -95,7 +84,6 @@ public class Controller extends Applet{
 	Thread render_thread = new Thread() {
 		public void run() {
 			renderer.initGL();
-			input_thread.interrupt(); //If input thread is waiting (it should be) let it go
 			while (isRunning) {
 				renderer.draw();
 			}
@@ -117,12 +105,12 @@ public class Controller extends Applet{
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
-		objectList.addItem(cam, cam);
+		objectList.enqueue(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 	
 		
 		Parser p = new Obj_Parser();
-		/*
+		
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			p.readFile("./lib/10010260.xgl");
@@ -132,16 +120,19 @@ public class Controller extends Applet{
 		}catch(Exception e){
 			//TODO:  What to do here?
 		}
-	
+
 		//Make a cathode
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		objectList.addItem(ent, ent);
-		
+		objectList.enqueue(ent);
+		cam.setDistance(50.0f);
+		cam.focusOn(ent);
+
 		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
-		*/
+
+		//ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
 		//Make a green box thing
 		try{
 			//p.readFile("./lib/legoman.xgl");
@@ -157,19 +148,16 @@ public class Controller extends Applet{
 			e.printStackTrace();
 		}
 		
-		//System.out.println(p.createModel().toString());
-		
-		
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		//Box thing
+		boxShape = new BoxShape(new Vector3f(2, 2, 2));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
-		objectList.addItem(ent, ent);
+		objectList.enqueue(ent);
 		//physics.reduceHull(ent);
-		cam.setDistance(25.0f);
-		cam.focusOn(ent);
-		ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
 		
+		//ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
+
 		/*
 		Parser p = new Obj_Parser();
 		p.readFile(fileName);

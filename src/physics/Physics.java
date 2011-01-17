@@ -5,9 +5,12 @@ import java.nio.ByteOrder;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.BulletStats;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
@@ -19,10 +22,13 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
+import entity.Camera;
 import entity.Entity;
 
 public class Physics {
@@ -34,6 +40,11 @@ public class Physics {
 	private BroadphaseInterface overlappingPairCache;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
+
+	//Used for mouse movement
+	private TypedConstraint pickedConstraint = null;
+	private Entity pickedEntity = null;
+	
 	//private List<CollisionShape> collisionShapes = new ArrayList<CollisionShape>();
 	float deltaT;
 	long frames=0;
@@ -204,6 +215,75 @@ public class Physics {
 
 		//Override the original shape with the new one
 		e.setCollisionShape(meshshape);
+	}
+	
+	public void drag(Camera camera,int state,Vector3f rayTo) {
+		if(state == 0) {
+			if (dynamicsWorld != null) {
+				CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(camera.getPosition(), rayTo);
+				dynamicsWorld.rayTest(camera.getPosition(), rayTo, rayCallback);
+				if (rayCallback.hasHit()) {
+					RigidBody hitBody = RigidBody.upcast(rayCallback.collisionObject);
+					if (hitBody != null) {
+						// other exclusions?
+						if (!(hitBody.isStaticObject() || hitBody.isKinematicObject())) {;
+							pickedEntity = (Entity) hitBody;
+							pickedEntity.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
+							Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
+		
+							Transform tmpTrans = hitBody.getCenterOfMassTransform(new Transform());
+							tmpTrans.inverse();
+							Vector3f localPivot = new Vector3f(pickPos);
+							tmpTrans.transform(localPivot);
+		
+							Point2PointConstraint p2p = new Point2PointConstraint(hitBody, localPivot);
+							p2p.setting.impulseClamp = 3f;
+		
+							dynamicsWorld.addConstraint(p2p);
+							pickedConstraint = p2p;
+							
+							// save mouse position for dragging
+							BulletStats.gOldPickingPos.set(rayTo);
+							Vector3f tmp = new Vector3f();
+							tmp.sub(pickPos, camera.getPosition());
+							BulletStats.gOldPickingDist = tmp.length();
+							// very weak constraint for picking
+							p2p.setting.tau = 0.1f;
+						}
+					}
+				}
+			}
+		} else if(state == 1) {
+			if (pickedConstraint != null && dynamicsWorld != null) {
+				dynamicsWorld.removeConstraint(pickedConstraint);
+				// delete m_pickConstraint;
+				//printf("removed constraint %i",gPickingConstraintId);
+				pickedConstraint = null;
+				pickedEntity.forceActivationState(CollisionObject.ACTIVE_TAG);
+				pickedEntity.setDeactivationTime(0f);
+				pickedEntity = null;
+			}
+		}
+	}
+	
+	public void motionFunc(Camera camera, int x, int y) {
+		 if (pickedConstraint != null) {
+			 // move the constraint pivot
+			 Point2PointConstraint p2p = (Point2PointConstraint) pickedConstraint;
+			 if (p2p != null) { 
+				 // keep it at the same picking distance
+				 Vector3f newRayTo = new Vector3f(camera.getRayTo(x, y));
+				 Vector3f eyePos = new Vector3f(camera.getPosition());
+				 Vector3f dir = new Vector3f();
+				 dir.sub(newRayTo, eyePos);
+				 dir.normalize();
+				 dir.scale(BulletStats.gOldPickingDist);
+				 
+				 Vector3f newPos = new Vector3f();
+				 newPos.add(eyePos, dir);
+				 p2p.setPivotB(newPos);
+			 }
+		}
 	}
 }

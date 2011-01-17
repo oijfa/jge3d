@@ -6,7 +6,9 @@ import org.lwjgl.LWJGLException;
 
 //import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
+import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
+import input.Input;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 import entity.Camera;
@@ -20,6 +22,7 @@ public class Window extends DesktopArea {
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
+	private Input input;
 	
 	public Window(EntityList objectList) {
 		try {
@@ -49,8 +52,8 @@ public class Window extends DesktopArea {
 		textureMenu.setTheme("texturemenu");
 		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
 		*/
-		gui.update();
-		
+
+		input = new Input(objectList,this);
 		entityMenu = new EntityMenu(objectList);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");
@@ -62,13 +65,16 @@ public class Window extends DesktopArea {
 		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
 		
 		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),textureMenu.getHeight());
-		
+
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
+		
+		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
 	}
 	
 	public void draw() {
 		gui.update();
+		//input.run();
 	}
 
 	public void destroy() {
@@ -78,5 +84,17 @@ public class Window extends DesktopArea {
 
 	public void setCamera(Camera cam) {
 		rotationMenu.setCameraRef(cam);
+	}
+	protected boolean handleEvent(Event evt) { 
+	    System.out.println("happening");
+		if(super.handleEvent(evt)) { 
+			System.out.println("twl");
+	        return true; 
+	    } 
+	    if(input.handleEvent(evt)) {
+	    	System.out.println("jge");
+	        return true; 
+	    } 
+	    return false; 
 	}
 }
