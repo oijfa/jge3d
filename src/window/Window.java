@@ -56,7 +56,7 @@ public class Window extends DesktopArea {
 		entityMenu.setTheme("entitymenu");
 		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(), 0);
 		
-		rotationMenu = new RotationMenu(objectList);
+		rotationMenu = new RotationMenu();
 		add(rotationMenu);
 		rotationMenu.setTheme("rotationmenu");
 		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
