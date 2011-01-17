@@ -50,7 +50,10 @@ public class Tree extends ScrollPane implements EntityListObserver {
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
         t.setDefaultSelectionManager();
-
+        
+        model.insert("qwer","1");
+        createFolder(model,"qwer","asdf");
+        
         setContent(t);
         setTheme("/tableScrollPane");
         //this.update();
@@ -76,6 +79,28 @@ public class Tree extends ScrollPane implements EntityListObserver {
 			Object obj = ent.getProperty(key);
 			//EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
 			entityNode.insert(key, obj.toString());
+		}
+	}
+	
+	private void createFolder(Node node, String parent, String name) {
+		Node child;
+		for(int i=0;i<node.getNumChildren();i++) {
+			child = (Node) node.getChild(i);
+			System.out.print(child.getData(0));
+			if(child.getData(0) == parent)
+				child.insert(name, "");
+			else
+				createFolder(node,parent,name);
+		}
+	}
+	private void createFolder(Model node, String parent, String name) {
+		Node child;
+		for(int i=0;i<node.getNumChildren();i++) {
+			child = (Node) node.getChild(i);
+			if(child.getData(0) == parent)
+				child.insert(name, "");
+			else
+				createFolder(node,parent,name);
 		}
 	}
     

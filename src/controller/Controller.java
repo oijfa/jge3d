@@ -5,9 +5,10 @@ package controller;
 
 import java.applet.Applet;
 
+import java.io.File;
+
 import importing.Obj_Parser;
 import importing.Parser;
-
 import importing.XGL_Parser;
 
 import javax.vecmath.Vector3f;
@@ -93,18 +94,15 @@ public class Controller extends Applet{
 	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel() throws Exception{
-		Entity ent;
-		Camera cam;
-
-		//Physics.getInstance().getDynamicsWorld().setGravity(new Vector3f(0.0f,-10.0f,0.0f));
-		
-		//Make a camera
+		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+
+		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		objectList.enqueue(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-
+		
+		/*
 		//Make a cathode
 		Parser obj_parser = new Obj_Parser();
 		try{
@@ -146,5 +144,48 @@ public class Controller extends Applet{
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.enqueue(ent);
 		physics.reduceHull(ent);
+
+		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		objectList.addItem(cam, cam);
+		*/
+		pullModelFiles("resources/Models");
+	}
+	
+	private void pullModelFiles(String filename) throws Exception{
+		File dir = new File(filename);
+		File[] subFiles;
+		subFiles = dir.listFiles();
+		
+		for( File f: subFiles){
+			if(!f.isDirectory()){
+				//create model
+				int dotPos = f.getPath().lastIndexOf(".");
+		        String extension = f.getPath().substring(dotPos);
+		        if( extension.equals(".xgl") || extension.equals(".obj")){
+		        	Parser p;
+		        	XGL_Parser xparse = new XGL_Parser();
+		    		Obj_Parser oparse = new Obj_Parser();
+					if( extension.equals(".xgl")){
+						xparse.readFile(f.getPath());
+						p = xparse;
+					} else {
+						oparse.readFile(f.getPath());
+						p = oparse;
+					}
+					if( p != null){
+						//Make a cathode	
+						BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+						Entity ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);	
+						ent.setModel(p.createModel());	
+						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
+						ent.setProperty("name", f.getPath().substring(0,dotPos-1), ent);
+						objectList.enqueue(ent);
+						ent.setShouldDraw(false);
+					}
+		        }
+			}else{
+				pullModelFiles(f.getPath());
+			}
+		}
 	}
 }

@@ -34,6 +34,7 @@ public class Entity extends RigidBody{
 	protected HashMap<String,Object> data;
 	private Model model;
 	protected ArrayList<EntityObserver> observers;
+	private boolean shouldDraw = true;
 
 	/*Properties the engine uses a lot*/
 	public static String NAME = "name";
@@ -186,6 +187,18 @@ public class Entity extends RigidBody{
 	
 	public Set<String> getKeySet(){
 		return data.keySet();
+	}
+	/**
+	 * @param shouldDraw the shouldDraw to set
+	 */
+	public void setShouldDraw(boolean shouldDraw) {
+		this.shouldDraw = shouldDraw;
+	}
+	/**
+	 * @return the shouldDraw
+	 */
+	public boolean shouldDraw() {
+		return shouldDraw;
 	}
 	
 }

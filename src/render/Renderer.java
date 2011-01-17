@@ -101,6 +101,7 @@ public class Renderer {
 		camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 			
 		camera.setWindowReference(window);
+		window.setCamera(camera);
 		
 		setPerspective();
 
