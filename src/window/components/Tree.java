@@ -1,7 +1,7 @@
 package window.components;
 
 import window.tree.EditFieldCellRenderer;
-import window.tree.EditStringModel;
+//import window.tree.EditStringModel;
 import window.tree.Model;
 import window.tree.Node;
 import window.tree.SpanRenderer;

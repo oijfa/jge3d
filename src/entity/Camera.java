@@ -54,7 +54,7 @@ public class Camera extends Entity {
 		setPosition(new Vector3f(0,0,0));
 		declination = 0;
 		rotation = 0;
-		distance = 15.0f;
+		distance = 5.0f;
 		setUpVector( new Vector3f(0, 1, 0) );
 		updatePosition();
 	}
@@ -133,6 +133,7 @@ public class Camera extends Entity {
 		if( declination < minimum_declination ){
 			declination = minimum_declination;
 		}
+		
 		//Not needed because renderer always calls it
 		//updatePosition();
 	}
@@ -143,6 +144,18 @@ public class Camera extends Entity {
 	
 	public void incrementRotation(float angle){
 		rotation += angle;
+		/*
+		 * Checks if rotation is over 2*Pi and adjusts it accordingly.
+		 * This way the camera's rotation doesn't lock up(Slow Down) at around 2*Pi + Pi/2
+		 * of the rotation 
+		*/
+		if(Math.abs(rotation) > 6.28318531f){
+			if(rotation > 0){
+				rotation -= 6.28318531f;
+			}else if(rotation < 0){
+				rotation += 6.28318531f;
+			}
+		}
 		//Not needed because renderer always calls it
 		//updatePosition();
 	}
