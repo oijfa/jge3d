@@ -86,13 +86,10 @@ public class Window extends DesktopArea {
 		rotationMenu.setCameraRef(cam);
 	}
 	protected boolean handleEvent(Event evt) { 
-	    System.out.println("happening");
 		if(super.handleEvent(evt)) { 
-			System.out.println("twl");
 	        return true; 
 	    } 
 	    if(input.handleEvent(evt)) {
-	    	System.out.println("jge");
 	        return true; 
 	    } 
 	    return false; 

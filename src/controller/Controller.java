@@ -107,33 +107,9 @@ public class Controller extends Applet{
 		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		objectList.enqueue(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-	
-		
-		Parser p = new Obj_Parser();
-		
-		try{
-			//p.readFile("./lib/legoman.xgl");
-			p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
-			//p.readFile("./lib/cath.xgl");
-			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-		}catch(Exception e){
-			//TODO:  What to do here?
-		}
 
 		//Make a cathode
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		objectList.enqueue(ent);
-		cam.setDistance(50.0f);
-		cam.focusOn(ent);
-
-		ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
-
-		//ent.applyImpulse(new Vector3f(0,0,4), new Vector3f(0,0,1));
-		//Make a green box thing
+		Parser obj_parser = new Obj_Parser();
 		try{
 			//p.readFile("./lib/legoman.xgl");
 			//p.readFile("./lib/10010260.xgl");
@@ -141,28 +117,37 @@ public class Controller extends Applet{
 			
 			//p.readFile("./lib/cath.xgl");
 			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-			p.readUrl("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
+			obj_parser.readUrl("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
 			//p.readFile("resources/Models/radar.obj");
 		}catch(Exception e){
 			//TODO:  What to do here?
 			e.printStackTrace();
 		}
-		
+		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		ent.setModel(obj_parser.createModel());
+		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
+		//physics.reduceHull(ent);
+		objectList.enqueue(ent);
+		cam.setDistance(25.0f);
+		cam.focusOn(ent);
+
 		//Box thing
+		XGL_Parser xgl_parser = new XGL_Parser();
+		try{
+			//p.readFile("./lib/legoman.xgl");
+			//p.readFile("./lib/10010260.xgl");
+			xgl_parser.readFile("./lib/box2.xgl");
+			//p.readFile("./lib/cath.xgl");
+			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+		}catch(Exception e){
+			//TODO:  What to do here?
+		}
 		boxShape = new BoxShape(new Vector3f(2, 2, 2));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(p.createModel());
+		ent.setModel(xgl_parser.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.enqueue(ent);
-		//physics.reduceHull(ent);
-		
-		//ent.applyImpulse(new Vector3f(0,0,-4), new Vector3f(0,0,-1));
-
-		/*
-		Parser p = new Obj_Parser();
-		p.readFile(fileName);
-		p.createModel()
-		*/
-		
+		physics.reduceHull(ent);
 	}
 }

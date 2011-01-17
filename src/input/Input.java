@@ -60,8 +60,7 @@ public class Input {
 		} else {
 			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		}
-		
-		System.out.println("doing");
+
 		return true;
 	}
 
