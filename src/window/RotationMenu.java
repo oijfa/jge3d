@@ -5,7 +5,6 @@ import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
 import entity.Camera;
-import entity.EntityList;
 
 public class RotationMenu extends ResizableFrame {
 	private final DialogLayout layout;
@@ -16,17 +15,13 @@ public class RotationMenu extends ResizableFrame {
 	private final Button center;
 	private final Button zoomIn;
 	private final Button zoomOut;
-	private EntityList objectList;
 	private Camera cam;
 	private static final float LEFT_RIGHT_INC = 0.1f;
 	private static final float UP_DOWN_INC = 0.1f;
 	private static final float ZOOM_INC = 0.1f;
-
 	
-	public RotationMenu(EntityList objectList){
+	public RotationMenu(){
 		setTitle("Camera Rotation");
-		this.objectList = objectList;
-		cam = (Camera) objectList.getItem("camera");
 		layout = new DialogLayout();
 		up= new Button("Up");
 		up.setTheme("up");
@@ -104,12 +99,10 @@ public class RotationMenu extends ResizableFrame {
 			.addGroup(col2)
 			.addGroup(col3);
 		
-	layout.setHorizontalGroup(button_hgroup);
-	layout.setVerticalGroup(button_vgroup);
-
-	add(layout);
-
-		
+		layout.setHorizontalGroup(button_hgroup);
+		layout.setVerticalGroup(button_vgroup);
+	
+		add(layout);	
 	}
 	
 	public void setCameraRef(Camera cam){

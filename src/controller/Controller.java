@@ -23,8 +23,9 @@ import entity.Entity;
 import entity.EntityList;
 import render.Renderer;
 
-@SuppressWarnings("serial")
 public class Controller extends Applet{
+	private static final long serialVersionUID = 4458487765324323938L;
+
 	// the game always runs (except when it doesn't)
 	private static boolean isRunning = true;
 	
@@ -62,10 +63,6 @@ public class Controller extends Applet{
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
 		render_thread.start();
-		
-		//Input has to be after entity list and after the render thread has been started (Display must be created)
-		//input = new Input(objectList);
-		//input_thread.start();
 	}
 
 	// Create the Physics Listening thread
