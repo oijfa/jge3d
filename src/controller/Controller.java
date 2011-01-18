@@ -149,6 +149,10 @@ public class Controller extends Applet{
 		objectList.addItem(cam, cam);
 		*/
 		pullModelFiles("resources/Models");
+		/*
+		cam.setDistance(25.0f);
+		cam.focusOn(objectList.getItem("resources/Models/0335-CATHODE_ASSEMBLY.obj"));
+		*/
 	}
 	
 	private void pullModelFiles(String filename) throws Exception{

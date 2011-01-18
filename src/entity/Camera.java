@@ -15,7 +15,7 @@ public class Camera extends Entity {
 	private static final float maximum_declination = (float) (Math.PI/2.0f) - 0.01f;
 	private static final float minimum_declination = (float) ((float) -1.0f*((Math.PI/2.0f) - 0.01f));
 	private static final float minimum_distance = 2.5f;
-	private static final float maximum_distance = 100.0f;
+	private static final float maximum_distance = 25.0f;
 	public static final String CAMERA_NAME = "camera";
 	
 	/*Class fields*/
@@ -115,18 +115,19 @@ public class Camera extends Entity {
 		if( temp > maximum_distance)
 		{
 			distance = maximum_distance;
-		}else
-		{
-			if(temp < minimum_distance)
-			{
-				distance = minimum_distance;
-			}else
-			{
-				distance = temp;
-			}
+			System.out.println(distance + " " + maximum_distance);
+		}else if(temp < minimum_distance){
+			distance = minimum_distance;
+		}else{
+			distance = temp;
 		}
+	
 		//Not needed because renderer always calls it
 		//updatePosition();
+	}
+	
+	public float getDistance(){
+		return distance;
 	}
 	public void incrementDeclination(float angle){
 		declination += angle;
