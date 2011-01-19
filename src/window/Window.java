@@ -85,6 +85,7 @@ public class Window extends DesktopArea {
 		rotationMenu.setCameraRef(cam);
 	}
 	protected boolean handleEvent(Event evt) { 
+		System.out.println("handling");
 		if(super.handleEvent(evt)) { 
 	        return true; 
 	    } 

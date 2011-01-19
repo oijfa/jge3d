@@ -50,17 +50,14 @@ public class Input {
 	}
 
 	public boolean handleEvent(Event evt) {
-		Keyboard.poll();
-		if(camera != null) {
-			//TODO: THIS MIGHT BE BROKEN
-			handleMouse();
-			if(Mouse.isInsideWindow()) {
-				handleKeyboard();
-			}
+		//Keyboard.poll();
+		//Mouse.poll();
+		if(camera != null && Mouse.isInsideWindow()) {
+			handleMouse(evt);
+			handleKeyboard();
 		} else {
 			camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		}
-
 		return true;
 	}
 
@@ -79,16 +76,14 @@ public class Input {
 		}
 	}
 
-	private void handleMouse(){
-		while(Mouse.next())	{
-			Mouse.poll();
-			
+	private void handleMouse(Event evt){
+		while(Mouse.next())	{		
 			//update the changes in position
 			//deltaX = Mouse.getEventDX();
 			//deltaY = Mouse.getEventDY();
 			
 			//fix mouse coordinates
-			adjustY = window.getHeight()-1-Mouse.getY();	
+			adjustY = window.getHeight()-1-Mouse.getEventY();	
 			
 			switch(Mouse.getEventButton()) {
 				case -1://Mouse Movement
@@ -136,7 +131,7 @@ public class Input {
 					camera.incrementDistance(-IN_OUT_INC);
 					break;
 			}
-			physics.motionFunc(camera,Mouse.getX(), adjustY);
+			physics.motionFunc(camera,Mouse.getEventX(), adjustY);
 		}
 	}
 }

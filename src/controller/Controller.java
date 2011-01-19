@@ -13,6 +13,8 @@ import importing.XGL_Parser;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.opengl.Display;
+
 import physics.Physics;
 
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -83,6 +85,8 @@ public class Controller extends Applet{
 		public void run() {
 			renderer.initGL();
 			while (isRunning) {
+				if(Display.isCloseRequested())
+					isRunning=false;
 				renderer.draw();
 			}
 		}
@@ -102,7 +106,7 @@ public class Controller extends Applet{
 		objectList.enqueue(cam);
 		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
-		/*
+		
 		//Make a cathode
 		Parser obj_parser = new Obj_Parser();
 		try{
@@ -119,10 +123,10 @@ public class Controller extends Applet{
 			e.printStackTrace();
 		}
 		boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		Entity ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(obj_parser.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		//physics.reduceHull(ent);
+		physics.reduceHull(ent);
 		objectList.enqueue(ent);
 		cam.setDistance(25.0f);
 		cam.focusOn(ent);
@@ -144,11 +148,8 @@ public class Controller extends Applet{
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		objectList.enqueue(ent);
 		physics.reduceHull(ent);
-
-		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
-		objectList.addItem(cam, cam);
-		*/
-		pullModelFiles("resources/Models");
+		
+		//pullModelFiles("resources/Models");
 	}
 	
 	private void pullModelFiles(String filename) throws Exception{
