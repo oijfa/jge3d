@@ -46,13 +46,13 @@ public class EntityList implements EntityObserver{
 		set_queue = new HashMap<String,ArrayList<Object>>();
 		ent_queue = new ArrayList<Entity>();
 	}
-	private boolean addItem(Entity e, Object starter){
+	private boolean addItem(Entity e){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
 			physics.addEntity(e);
 			e.registerObserver(this);
-			notifyObservers(starter);
+			notifyObservers();
 			return true;
 		}else{
 			return false;
@@ -73,7 +73,7 @@ public class EntityList implements EntityObserver{
 		Entity ent = this.getItem(name);
 		names.remove(name);
 		ent.removeObserver(this);
-		notifyObservers(starter);
+		notifyObservers();
 		}
 	public Entity getItem(String name){
 		//System.out.println("Length of list: " + String.valueOf(names.size()));
@@ -122,22 +122,20 @@ public class EntityList implements EntityObserver{
 		observers.remove(o);
 	}
 	
-	public void notifyObservers(Object starter) {
+	public void notifyObservers() {
 		for(int i = 0; i < observers.size(); i++){
 			EntityListObserver observer = (EntityListObserver)observers.get(i);
-			if(starter != observer){
-				observer.update(starter);
-			}
+			observer.update();
 		}
 	}
 
 	@Override
-	public void update(String key, Object old_val, Object new_val, Object starter) {
+	public void update(String key, Object old_val, Object new_val) {
 		if(key == "name"){
 			//this.removeItem((String) old_val);
 			//this.addItem(ent);
 			updateListItems((String) old_val);
-			notifyObservers(starter);
+			notifyObservers();
 		}
 	}
 	//Only called when entityList needs to be updated this way
@@ -170,7 +168,7 @@ public class EntityList implements EntityObserver{
 			);
 		}
 		for(Entity key:ent_queue) {
-			addItem(key, this);
+			addItem(key);
 		}
 		requires_lock=false;
 	}

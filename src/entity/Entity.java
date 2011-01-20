@@ -180,7 +180,7 @@ public class Entity extends RigidBody{
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
 			if(starter != observer){
-				observer.update(key, old_name, new_name, starter);
+				observer.update(key, old_name, new_name);
 			}	
 		}
 	}
