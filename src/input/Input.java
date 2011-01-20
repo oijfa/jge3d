@@ -76,62 +76,46 @@ public class Input {
 		}
 	}
 
-	private void handleMouse(Event evt){
-		while(Mouse.next())	{		
-			//update the changes in position
-			//deltaX = Mouse.getEventDX();
-			//deltaY = Mouse.getEventDY();
-			
-			//fix mouse coordinates
-			adjustY = window.getHeight()-1-Mouse.getEventY();	
-			
-			switch(Mouse.getEventButton()) {
-				case -1://Mouse Movement
-					if(Mouse.isInsideWindow()) {
-						//Editor.getInstance().setCurrentBlock(Mouse.getX(), Mouse.getY(), EditorView.getInstance().getLayer());
-						if(Mouse.isButtonDown(0)) {
+	private boolean handleMouse(Event evt){
+		boolean button_caught=true;
+		//update the changes in position
+		//deltaX = Mouse.getEventDX();
+		//deltaY = Mouse.getEventDY();
 
-						}
-						
-						if(Mouse.isButtonDown(1)) {
-							//Change angle of camera
-	
-						}
-						if(Mouse.isButtonDown(2)) {
-							//Pan Z
-						}
-					}
-					break;
-				case 0://Left Button
-					//if( Mouse.isButtonDown(0) )	{
-						physics.drag(
-							camera,
-							Mouse.getEventButtonState()? 0 : 1,
-							camera.getRayTo(Mouse.getX(),adjustY)
-						);
-					//} else {
-						
-					//}
-					break;
-				case 1://Right Button
-					if( !(Mouse.isButtonDown(1)) ) {
-					}
-					break;
-				case 2://Middle Button
-					if( !(Mouse.isButtonDown(1)) ) {
-					}
-					break;
-			}
+		//fix mouse coordinates
+		adjustY = window.getHeight()-1-Mouse.getEventY();	
+		switch(evt.getMouseButton()){
+			case 0://Left Button
+				physics.drag(
+					camera,
+					Mouse.getEventButtonState()? 0 : 1,
+					camera.getRayTo(Mouse.getX(),adjustY)
+				);
+				break;
+			case -1:
+				
+				break;
+			default:
+				System.out.println("unhandled mouse");
+				button_caught=false;
+				break;
+		}
 
-			switch(Mouse.getDWheel()) {
-				case -120: 
+		if(button_caught==false) {
+			switch(evt.getMouseWheelDelta()) {
+				case -1: //mouse wheel up
 					camera.incrementDistance(IN_OUT_INC);
 					break;
-				case  120: 
+				case  1: //mouse wheel down
 					camera.incrementDistance(-IN_OUT_INC);
 					break;
+				default:
+					System.out.println("unhandled mouse");
+					button_caught=false;
+					break;
 			}
-			physics.motionFunc(camera,Mouse.getEventX(), adjustY);
 		}
+		physics.motionFunc(camera,Mouse.getEventX(), adjustY);
+		return button_caught;
 	}
 }

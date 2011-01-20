@@ -9,8 +9,10 @@
  */
 package entity;
 
+import importing.pieces.Material;
 import importing.pieces.Model;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -20,12 +22,13 @@ import javax.vecmath.Vector3f;
 import monitoring.EntityObserver;
 
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
@@ -92,22 +95,19 @@ public class Entity extends RigidBody{
 		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
-			Transform trans = new Transform();
-		
-			this.getCenterOfMassTransform(trans);
-			trans.setIdentity();
-			
+			Transform trans = this.getWorldTransform(new Transform());
 			trans.origin.set(pos);
-			this.setCenterOfMassTransform(trans);
+			this.setWorldTransform(trans);
+
 		} catch (Exception e) {
 			System.out.print(p.toString() + "<< Possible Incorrect data type for position, must be Vector3f\n");
 			e.printStackTrace();
 		}
 	}
 	public Vector3f getPosition(){
-		Vector3f out = new Vector3f();
-		this.getCenterOfMassPosition(out);
-		return out;
+		Transform out = new Transform();
+		out = this.getWorldTransform(new Transform());
+		return out.origin;
 	}
 	
 	// SET PROPERTY!!!
@@ -147,13 +147,37 @@ public class Entity extends RigidBody{
 	public Object getProperty(String key){return data.get(key);}
 	
 	public void draw(){
-		Vector3f pos = new Vector3f();
-		this.getCenterOfMassPosition(pos);
-		
 		GL11.glPushMatrix();
-			GL11.glTranslatef(pos.x, pos.y, pos.z);
-			if( model != null)
-				model.draw();
+			//Retrieve the current motionstate to get the transform
+			//versus the world
+			Transform transform_matrix = new Transform();
+			DefaultMotionState motion_state = (DefaultMotionState) this.getMotionState();
+			transform_matrix.set(motion_state.graphicsWorldTrans);
+			
+			//Adjust the position and rotation of the object from physics
+			float[] body_matrix = new float[16];
+			FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+			transform_matrix.getOpenGLMatrix(body_matrix);
+			buf.put(body_matrix);
+			buf.flip();
+			GL11.glMultMatrix(buf);
+			buf.clear();
+			
+			//Scaling code (testing)
+			//Vector3f halfExtent = new Vector3f();
+			//this.getCollisionShape().getLocalScaling(halfExtent);
+			//GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
+			
+			//Draw the model
+			GL11.glPushMatrix();
+				if( model != null)
+					model.draw();		
+			GL11.glPopMatrix();
+			
+			//Draw a test box too; just for now
+			GL11.glPushMatrix();
+				drawTestCube();
+		    GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 	
@@ -201,4 +225,56 @@ public class Entity extends RigidBody{
 		return shouldDraw;
 	}
 	
+	//This is for debugging hitbox positions (should be deleted later)
+	public void drawTestCube() {
+		Material mat = new Material();
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
+		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
+        GL11.glBegin(GL11.GL_QUADS);
+    	// Front Face
+    	GL11.glNormal3f( 0.0f, 0.0f, 0.5f);
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
+
+        // Back Face
+        GL11.glNormal3f( 0.0f, 0.0f, -0.5f);
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
+
+        // Top Face
+        GL11.glNormal3f( 0.0f, 0.5f, 0.0f);
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
+
+        // Bottom Face
+        GL11.glNormal3f( 0.0f, -0.5f, 0.0f);
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Top Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Top Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
+
+        // Right face
+        GL11.glNormal3f( 0.5f, 0.0f, 0.0f);
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
+
+        // Left Face
+        GL11.glNormal3f( -0.5f, 0.0f, 0.0f);
+        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
+        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
+        GL11.glEnd();
+	}
 }

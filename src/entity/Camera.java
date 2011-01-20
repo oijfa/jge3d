@@ -2,6 +2,8 @@ package entity;
 
 import javax.vecmath.Vector3f;
 
+import render.Renderer;
+
 import window.Window;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -15,7 +17,7 @@ public class Camera extends Entity {
 	private static final float maximum_declination = (float) (Math.PI/2.0f) - 0.01f;
 	private static final float minimum_declination = (float) ((float) -1.0f*((Math.PI/2.0f) - 0.01f));
 	private static final float minimum_distance = 2.5f;
-	private static final float maximum_distance = 100.0f;
+	private static final float maximum_distance = 50.0f;
 	public static final String CAMERA_NAME = "camera";
 	
 	/*Class fields*/
@@ -115,18 +117,18 @@ public class Camera extends Entity {
 		if( temp > maximum_distance)
 		{
 			distance = maximum_distance;
-		}else
-		{
-			if(temp < minimum_distance)
-			{
-				distance = minimum_distance;
-			}else
-			{
-				distance = temp;
-			}
+		}else if(temp < minimum_distance){
+			distance = minimum_distance;
+		}else{
+			distance = temp;
 		}
+	
 		//Not needed because renderer always calls it
 		//updatePosition();
+	}
+	
+	public float getDistance(){
+		return distance;
 	}
 	public void incrementDeclination(float angle){
 		declination += angle;
@@ -194,28 +196,26 @@ public class Camera extends Entity {
 		System.out.print("Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y + "	Z:	" + up_vector.z + "\n\n");	
 	}
 	
+	//TODO: This needs cleaned up and commented real bad
 	public Vector3f getRayTo(int x, int y) {	
 		float top = 1f;
 		float bottom = -1f;
-		float nearPlane = 1f;
-		float tanFov = (top - bottom) * 0.5f / nearPlane;
+		float tanFov = (top - bottom) * 0.5f / Renderer.nearClipping;
 		float fov = 2f * (float) Math.atan(tanFov);
 
 		Vector3f rayFrom = new Vector3f(this.getPosition());
 		Vector3f rayForward = new Vector3f();
 		rayForward.sub(this.getFocusPosition(), this.getPosition());
 		rayForward.normalize();
-		float farPlane = 10000f;
-		rayForward.scale(farPlane);
 
-		//Vector3f rightOffset = new Vector3f();
+		//Scale by the far clipping plane
+		rayForward.scale(Renderer.farClipping);
+
 		Vector3f vertical = new Vector3f(this.getUp());
 
 		Vector3f hor = new Vector3f();
-		// TODO: check: hor = rayForward.cross(vertical);
 		hor.cross(rayForward, vertical);
 		hor.normalize();
-		// TODO: check: vertical = hor.cross(rayForward);
 		vertical.cross(hor, rayForward);
 		vertical.normalize();
 
@@ -223,8 +223,8 @@ public class Camera extends Entity {
 		
 		float aspect = window.getHeight() / (float)window.getWidth();
 		
-		hor.scale(2f * farPlane * tanfov);
-		vertical.scale(2f * farPlane * tanfov);
+		hor.scale(Renderer.farClipping * tanfov);
+		vertical.scale(Renderer.farClipping * tanfov);
 		
 		if (aspect < 1f) {
 			hor.scale(1f / aspect);
@@ -254,6 +254,7 @@ public class Camera extends Entity {
 
 		rayTo.add(tmp1);
 		rayTo.sub(tmp2);
+		
 		return rayTo;
 	}
 	

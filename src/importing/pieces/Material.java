@@ -79,7 +79,7 @@ public class Material {
 		emission = new Vector3f(0.0f,0.0f,0.0f);	
 		
 		alpha = 1.0f;
-		shine = 0.0f;
+		shine = 0.5f;
 	}
 
 	public Vector3f getAmbient() {

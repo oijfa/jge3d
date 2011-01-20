@@ -30,8 +30,8 @@ public class Renderer {
     
 	//private float x=0,y=0,z=0;
 	
-	private float nearClipping = 1.0f;
-	private float farClipping = 1000.0f;
+    public static float nearClipping = 1.0f;
+	public static float farClipping = 1000.0f;
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
@@ -50,9 +50,9 @@ public class Renderer {
 		camera.updatePosition();
 		
 		//Get its new position
-		Vector3f camPos = new Vector3f();
+		Vector3f camPos = camera.getPosition();
 		Vector3f focusPos = camera.getFocusPosition();
-		camera.getCenterOfMassPosition(camPos);
+		Vector3f up = camera.getUp();
 
 		// Clear The Screen And The Depth Buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
@@ -62,7 +62,7 @@ public class Renderer {
 		GLU.gluLookAt(
 				camPos.x, camPos.y, camPos.z, 	//Camera Location
 				focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
-				0, 1, 0			//Up Vector
+				up.x, up.y, up.z			//Up Vector
 		);
 
 		//Draw the 3d stuff

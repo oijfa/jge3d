@@ -20,7 +20,7 @@ public class RotationMenu extends ResizableFrame {
 	private final Button zoomOut;
 	private Camera cam;
 
-	private static final float ZOOM_INC = 0.00000001f;
+	private static final float ZOOM_INC = 0.01f;
 	private static final float LEFT_RIGHT_INC = 0.00000001f;
 	private static final float UP_DOWN_INC = 0.00000001f;
 	private HashMap<String, Thread> buttonThreads;
@@ -145,6 +145,14 @@ public class RotationMenu extends ResizableFrame {
 		
 		Button blank = new Button();
 		Button blank2 = new Button();
+		
+		blank.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println(cam.getDistance());
+				
+			}
+		});
 		Group row1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(up).addGap().addWidget(zoomOut);
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
 		Group row3 = layout.createSequentialGroup().addWidget(blank).addGap().addWidget(down).addGap().addWidget(blank2);
@@ -249,12 +257,12 @@ public class RotationMenu extends ResizableFrame {
 				public void run(){
 					long previousTime;
 					float increment;
-					previousTime = System.nanoTime();
+					previousTime = System.nanoTime()/1000000;
 					//Increment is now based on how on a coefficient of time.
 					while(inAlive){
-						increment = (System.nanoTime() - previousTime) * -ZOOM_INC;
+						increment = (System.nanoTime()/1000000 - previousTime) * -ZOOM_INC;
 						cam.incrementDistance(increment);
-						previousTime = System.nanoTime();
+						previousTime = System.nanoTime()/1000000;
 					}
 				}
 			};
@@ -267,12 +275,12 @@ public class RotationMenu extends ResizableFrame {
 				public void run(){
 					long previousTime;
 					float increment;
-					previousTime = System.nanoTime();
+					previousTime = System.nanoTime()/1000000;
 					//Increment is now based on how on a coefficient of time.
 					while(outAlive){
-						increment = (System.nanoTime() - previousTime) * ZOOM_INC;
+						increment = (System.nanoTime()/1000000 - previousTime) * ZOOM_INC;
 						cam.incrementDistance(increment);
-						previousTime = System.nanoTime();
+						previousTime = System.nanoTime()/1000000;
 					}
 				}
 			};

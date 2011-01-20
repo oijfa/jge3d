@@ -100,13 +100,16 @@ public class Controller extends Applet{
 	public void loadLevel() throws Exception{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
 		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
-		//ent.setLinearVelocity(new Vector3f(10,10,10));
 		objectList.enqueue(cam);
-		//ent.setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
 		
-		
+		//Load some stuff (I would only pick one of the following
+		//two methods if I were you)
+		loadTestShapes(cam);
+		//pullModelFiles("resources/Models");
+	}
+	
+	private void loadTestShapes(Camera cam) {
 		//Make a cathode
 		Parser obj_parser = new Obj_Parser();
 		try{
@@ -122,13 +125,13 @@ public class Controller extends Applet{
 			//TODO:  What to do here?
 			e.printStackTrace();
 		}
-		boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		Entity ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(obj_parser.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		physics.reduceHull(ent);
+		//physics.reduceHull(ent);
 		objectList.enqueue(ent);
-		cam.setDistance(25.0f);
+		cam.setDistance(20.0f);
 		cam.focusOn(ent);
 
 		//Box thing
@@ -145,11 +148,9 @@ public class Controller extends Applet{
 		boxShape = new BoxShape(new Vector3f(2, 2, 2));
 		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
 		ent.setModel(xgl_parser.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
+		ent.setPosition(new Vector3f(-5.0f,0.0f,-10.0f));
+		//physics.reduceHull(ent);
 		objectList.enqueue(ent);
-		physics.reduceHull(ent);
-		
-		//pullModelFiles("resources/Models");
 	}
 	
 	private void pullModelFiles(String filename) throws Exception{
