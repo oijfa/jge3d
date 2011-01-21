@@ -31,9 +31,9 @@ import com.bulletphysics.linearmath.Transform;
 
 public class Entity extends RigidBody{
 	//Properties
-	protected HashMap<String,Object> data;
+	private HashMap<String,Object> data;
 	private Model model;
-	protected ArrayList<EntityObserver> observers;
+	private ArrayList<EntityObserver> observers;
 	private boolean shouldDraw = true;
 
 	/*Properties the engine uses a lot*/
@@ -43,8 +43,10 @@ public class Entity extends RigidBody{
 	private String[] reqKeys = {"name", "collidable", "TTL"};
 	
 	//Keep track of number of entities for naming purposes
-	protected static int num_entities=0;
-	 
+
+	private static int num_entities=0;
+	
+
 	//For making entity groups (complex bodies)
 	private EntityList subEntities;
 	
@@ -91,6 +93,7 @@ public class Entity extends RigidBody{
 		
 		observers = new ArrayList<EntityObserver>();
 	}
+
 	private void initialSetup(String name, boolean c){
 		num_entities++;
 		data = new HashMap<String,Object>();
@@ -100,13 +103,15 @@ public class Entity extends RigidBody{
 		
 		observers = new ArrayList<EntityObserver>();
 	}
+	/* End of Constructors
 	
-	
-	/* Setters */
-	public void setModel(Model model) {
-		this.model = model;
-	}
+	/* MUTATORS */
 	public void setPosition(Object p) {
+		/*
+		 * There's no straight-forward way to move a RigidBody to some location
+		 * 	So that's what this class does.  It takes an Object because of skynet code
+		 * TODO: Remove skynet code
+		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
 			Transform trans = this.getWorldTransform(new Transform());
@@ -118,21 +123,14 @@ public class Entity extends RigidBody{
 			e.printStackTrace();
 		}
 	}
-	public Vector3f getPosition(){
-		Transform out = new Transform();
-		out = this.getWorldTransform(new Transform());
-		return out.origin;
+	
+	public void setProperty(String key, Object val){
+		Object old_key_val = data.get(key);
+		data.put(key,val);
+		//starter is passed to tell when to end the horrible infinite loop
+		notifyObservers(key, old_key_val, val);
 	}
-	public void setProperty(String key, Object val, Object starter){
-			Object old_key_val = data.get(key);
-			data.put(key,val);
-			//starter is passed to tell when to end the horrible infinite loop
-			notifyObservers(key, old_key_val, val, starter);
-	}
-	public void nodeUpdate(String key, Object val, Object starter){
-		System.out.println("Entity.update");	
-		this.setProperty(key, val, starter);
-	}
+	
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
 		boolean req = false;
@@ -144,16 +142,16 @@ public class Entity extends RigidBody{
 			data.remove(key);
 		}
 	}
-	public Set<String> getKeySet(){
-		return data.keySet();
-	}
-	public void setShouldDraw(boolean shouldDraw) {
-		this.shouldDraw = shouldDraw;
-	}
 
-	/* Getters */
-	public Model getModel() {
-		return model;
+	public void setModel(Model model) {this.model = model;}
+	public void setShouldDraw(boolean shouldDraw) {this.shouldDraw = shouldDraw;}
+	
+	/* ACCESSORS */
+	public Vector3f getPosition(){
+		Transform out = new Transform();
+		out = this.getWorldTransform(new Transform());
+		return out.origin;
+
 	}
 	public EntityList getSubEntities(){return subEntities;}
 	public Set<String> getKeys() {return data.keySet();}
@@ -166,14 +164,13 @@ public class Entity extends RigidBody{
 		return false;
 	}
 	public Object getProperty(String key){return data.get(key);}
-	public boolean shouldDraw() {
-		return shouldDraw;
-	}
+
+	public Model getModel() {return model;}
+	public Set<String> getKeySet(){return data.keySet();}
+	public boolean shouldDraw() {return shouldDraw;}
 	
-	
-	/* Drawing related stuff */
-	//The entities drawing code is called from the entlist
-	//when it is time to draw
+	/* MISC */
+
 	public void draw(){
 		GL11.glPushMatrix();
 			//Retrieve the current motionstate to get the transform
@@ -201,34 +198,29 @@ public class Entity extends RigidBody{
 				if( model != null)
 					model.draw();		
 			GL11.glPopMatrix();
-			
-			//Draw a test box too; just for now
-			GL11.glPushMatrix();
-				drawTestCube();
-		    GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 
 	
+	
 	/* Functions for EntityObservers */
-	public void registerObserver(EntityObserver o) {
-		observers.add(o);
-	}
+	public void registerObserver(EntityObserver o) {observers.add(o);}
+
 	public void removeObserver(EntityObserver o) {
 		int i = observers.indexOf(o);
 		if (i >= 0){
 			observers.remove(i);
 		}
 	}
-	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
+
+	public void notifyObservers(String key, Object old_name, Object new_name) {
+
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
-			if(starter != observer){
-				observer.update(key, old_name, new_name, starter);
-			}	
+			observer.update(key, old_name, new_name);
 		}
 	}
-	
+
 	
 	/* Debugging BS */
 	//This is for debugging hitbox positions (should be deleted later)
@@ -283,4 +275,5 @@ public class Entity extends RigidBody{
         GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
         GL11.glEnd();
 	}
+
 }

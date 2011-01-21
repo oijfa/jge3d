@@ -77,10 +77,6 @@ public class Physics {
 		//Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();
 	}
-
-	public void addEntity(Entity e) {
-		dynamicsWorld.addRigidBody(e);
-	}
 	
 	public DynamicsWorld getDynamicsWorld() {
 		return dynamicsWorld;
@@ -108,7 +104,10 @@ public class Physics {
 	public float getDeltaT() {
 		return deltaT;
 	}
-
+	
+	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
+	public void removeEntity(Entity e){ dynamicsWorld.removeRigidBody(e); }
+	
 	public void reduceHull(Entity e){
 		int vertexcount=0;
 		int trianglecount=0;

@@ -1,87 +1,34 @@
-/*
- * The list of entities that the renderer will be drawing.
- * 
- * The reason its in a class rather than just using a hashmap is it will eventually 
- * listen to all of the entities it contains, in case their name changes.  (It can change 
- * the key they are saved in)
- * 
- * //TODO:	Listen to the entities it contains.  Yes, that means right now the class has 
- * 			no purpose other than being a placeholder
- */
 package entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.vecmath.Vector3f;
-
-import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
-import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
-
-
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-import monitoring.EntityListObserver;
+import monitoring.Observer;
+import monitoring.Subject;
+
 
 import monitoring.EntityObserver;
+
 import physics.Physics;
 
-public class EntityList implements EntityObserver{
+public class EntityList implements EntityObserver, Subject{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 
-	private HashMap<String,TypedConstraint> constraints;
+	//private HashMap<String,TypedConstraint> constraints;
 
-	private ArrayList<EntityListObserver> observers;
+	private ArrayList<Observer> observers;
+	private ArrayList<QueueItem> queue;
 
-	private ConcurrentHashMap<String,ArrayList<Object>> set_queue;
-	private ConcurrentHashMap<String,Entity> ent_queue;
-	
-	private boolean requires_lock = false;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
-		constraints = new HashMap<String,TypedConstraint>();
-		observers = new ArrayList<EntityListObserver>();
-		set_queue = new ConcurrentHashMap<String,ArrayList<Object>>();
-		ent_queue = new ConcurrentHashMap<String,Entity>();
-	}
-	private boolean addItem(Entity e, Object starter){
-		if(e.keyExists("name")){
-			names.put((String)e.getProperty("name"), e);
-			names.size();
-			physics.addEntity(e);
-			//e.registerObserver(this);
-			//notifyObservers(starter);
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public void enqueue(String name, String key, Object value) {
-		ArrayList<Object> changes = new ArrayList<Object>();
-		changes.add(key);
-		changes.add(value);
-		set_queue.put(name, changes);
-	}
-	public void enqueue(Entity ent) {
-		ent_queue.put("",ent);
-		requires_lock=true;
+		observers = new ArrayList<Observer>();
+		queue = new ArrayList<QueueItem>();
 	}
 	
-	public void removeItem(String name, Object starter){
-		//Entity ent = this.getItem(name);
-		names.remove(name);
-		//ent.removeObserver(this);
-		//notifyObservers(starter);
-	}
-	public Entity getItem(String name){
-		//System.out.println("Length of list: " + String.valueOf(names.size()));
-		//System.out.println("List: " + names.toString());
-		return names.get(name);
-	}
 	public void drawList(){ 
 		//Have to change keySet into array so that a clone will be made
 			//Avoids concurrency issues
@@ -90,12 +37,67 @@ public class EntityList implements EntityObserver{
 		}
 	}
 	
+	public void parseQueue() {
+		Object[] itemArray = queue.toArray();
+		for(Object item:itemArray) {
+			if(QueueItem.ADD == ((QueueItem) item).getAction())
+				addItem(((QueueItem) item).getEnt());
+			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
+				removeItem(((QueueItem) item).getEnt());
+			
+			queue.remove(item);
+		}
+	}
+	
+	/* ACCESSORS */
+	public Entity getItem(String name){return names.get(name);	}
 	public int size(){return names.size();}
+	public Set<String> getKeySet(){return names.keySet();}
+	public Physics getPhysics() {return physics;}
+	public int queueSize(){return queue.size();}
+	
+	/* MUTATORS */
+	//Add an item to the entity List
+	private boolean addItem(Entity e){
+		boolean ret = false;
+		
+		if(e.keyExists("name")){
+			names.put((String)e.getProperty("name"), e);
+			names.size();
+			physics.addEntity(e);
+			e.registerObserver(this);
+			notifyObservers(e.getProperty("name"));
+			ret = true;
+		}
+		return ret;
+	}
+	private void removeItem(Entity entity){
+		names.remove(entity);
+		entity.removeObserver(this);
+		physics.removeEntity(entity);
+		notifyObservers(entity.getProperty("name"));
+	}
+
+	//Set actions that need to wait on the physics
+	public void enqueue(Entity ent, int action) {
+		queue.add(new QueueItem(ent,action));
+	}
+	
+	/* ENTITY OBSERVER IMPLEMENTATION */
+	public void update(String key, Object old_val, Object new_val) {
+		if(key == "name"){
+			Entity ent = this.getItem(key);
+			enqueue(ent, QueueItem.REMOVE);
+			this.addItem(ent);
+			notifyObservers(key);
+		}
+	}
 	
 	/*Physics Constraints*/
-	public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
+	/*public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
 		//Setup a Ball joint between the two objects, at the point given
-		Point2PointConstraint ballJoint = new Point2PointConstraint(
+		Point2PointConstraint ballJoint = new Point2P*/
+	/*ointConstraint(
 			object1,
 			object2,
 			point1,
@@ -103,81 +105,27 @@ public class EntityList implements EntityObserver{
 		);
 		physics.getDynamicsWorld().addConstraint(ballJoint);
 	}
-	
 	public void removeJoint(String constraint_name){
 		if( constraints.containsKey(constraint_name) ){
 			physics.getDynamicsWorld().removeConstraint(constraints.get(constraint_name));
 			constraints.remove(constraint_name);
 		}
-	}
+	}*/
 	
-	public Set<String> getKeySet(){
-		return names.keySet();
-	}
-	
-	/* Subject implementation */
-	public void registerObserver(EntityListObserver o) {
+	/* SUBJECT IMPLEMENTATION */
+	@Override
+	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
-	
-	public void removeObserver(EntityListObserver o) {
+	@Override
+	public void removeObserver(Observer o) {
 		observers.remove(o);
 	}
-	
-	public void notifyObservers(Object starter) {
-		for(int i = 0; i < observers.size(); i++){
-			EntityListObserver observer = (EntityListObserver)observers.get(i);
-			if(starter != observer){
-				observer.update(starter);
-			}
-		}
-	}
-
 	@Override
-	public void update(String key, Object old_val, Object new_val, Object starter) {
-		if(key == "name"){
-			//this.removeItem((String) old_val);
-			//this.addItem(ent);
-			//updateListItems((String) old_val);
-			//notifyObservers(starter);
-		}
-	}
-	//Only called when entityList needs to be updated this way
-	//We don't call notifyObservers twice for add and remove.
-	public boolean updateListItems(String old_val){
-		Entity ent = this.getItem(old_val);
-		names.remove(old_val);
-		//ent.removeObserver(this);
-		if(ent.keyExists("name")){
-			names.put((String)ent.getProperty("name"), ent);
-			names.size();
-			physics.addEntity(ent);
-			//ent.registerObserver(this);
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	public Physics getPhysics() {
-		return physics;
-	}
-	
-	public void parseQueue() {
-		for(String key:set_queue.keySet()) {
-			names.get(key).setProperty(
-				set_queue.get(0).toString(),
-				(Object)set_queue.get(1),
-				this
-			);
-		}
-		for(String key:ent_queue.keySet()) {
-			addItem(ent_queue.get(key), this);
-		}
-		requires_lock=false;
-	}
-	
-	public boolean requiresLock() {
-		return requires_lock;
+	public void notifyObservers(Object o) {
+		for(int i = 0; i < observers.size(); i++){
+			Observer observer = (Observer)observers.get(i);
+				observer.update(o);
+		}	
 	}
 }

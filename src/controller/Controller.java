@@ -23,6 +23,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import entity.Camera;
 import entity.Entity;
 import entity.EntityList;
+import entity.QueueItem;
 import render.Renderer;
 
 public class Controller extends Applet{
@@ -71,7 +72,7 @@ public class Controller extends Applet{
 	Thread physics_thread = new Thread() {
 		public void run() {
 			while (isRunning) {
-				if(objectList != null && objectList.requiresLock())
+				if(objectList != null && objectList.queueSize() > 0)
 					objectList.parseQueue();
 				else
 					physics.clientUpdate();
@@ -99,8 +100,9 @@ public class Controller extends Applet{
 	public void loadLevel() throws Exception{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+
 		Camera cam = new Camera(0.0f, boxShape, false);
-		objectList.enqueue(cam);
+		objectList.enqueue(cam, QueueItem.ADD);
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
@@ -130,8 +132,10 @@ public class Controller extends Applet{
 		ent.setModel(xgl_parser.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		//physics.reduceHull(ent);
-		objectList.enqueue(ent);
-		cam.setDistance(50.0f);
+
+		objectList.enqueue(ent, QueueItem.ADD);
+		cam.setDistance(20.0f);
+
 		cam.focusOn(ent);
 		
 		for(int i=10;i<1000;i+=10) {
@@ -139,10 +143,19 @@ public class Controller extends Applet{
 			ent.setModel(xgl_parser.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
 			//physics.reduceHull(ent);
-			objectList.enqueue(ent);
+			objectList.enqueue(ent, QueueItem.ADD);
 		}
+
+		boxShape = new BoxShape(new Vector3f(2, 2, 2));
+		ent = new Entity(1.0f, boxShape, false);
+		ent.setModel(xgl_parser.createModel());
+		ent.setPosition(new Vector3f(-5.0f,0.0f,-10.0f));
+		//physics.reduceHull(ent);
+		objectList.enqueue(ent, QueueItem.ADD);
+
 	}
 	
+	@SuppressWarnings("unused")
 	private void pullModelFiles(String filename) throws Exception{
 		File dir = new File(filename);
 		File[] subFiles;
@@ -170,8 +183,8 @@ public class Controller extends Applet{
 						Entity ent = new Entity(0.0f, boxShape, false);	
 						ent.setModel(p.createModel());	
 						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
-						ent.setProperty("name", f.getPath().substring(0,dotPos-1), ent);
-						objectList.enqueue(ent);
+						ent.setProperty("name", f.getPath().substring(0,dotPos-1));
+						objectList.enqueue(ent, QueueItem.ADD);
 						ent.setShouldDraw(false);
 					}
 		        }
