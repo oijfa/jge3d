@@ -6,13 +6,14 @@ import window.tree.Node;
 import window.tree.SpanRenderer;
 import window.tree.SpanString;
 import monitoring.EntityListObserver;
+import monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
 import entity.Entity;
 import entity.EntityList;
 
-public class Tree extends ScrollPane implements EntityListObserver {
+public class Tree extends ScrollPane implements Observer {
     //private MyNode dynamicNode;
     int state;
     Node subNode;
@@ -60,21 +61,21 @@ public class Tree extends ScrollPane implements EntityListObserver {
     }
     
 	@Override
-	public void update(Object starter) {
+	public void update() {
 		model.removeAll();
-		this.createEntityListNode(starter);
+		this.createEntityListNode();
 	}
 	
-	public void createEntityListNode(Object starter){
+	public void createEntityListNode(){
 		Node entityNode;
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
 			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
-			this.createEntityNode(ent, entityNode, starter);
+			this.createEntityNode(ent, entityNode);
 		}
 	}
 	
-	public void createEntityNode(Entity ent, Node entityNode, Object starter){
+	public void createEntityNode(Entity ent, Node entityNode){
 		for(String key : ent.getKeySet()){
 			Object obj = ent.getProperty(key);
 			//EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
@@ -112,6 +113,6 @@ public class Tree extends ScrollPane implements EntityListObserver {
 
 	public void init() {	
 		model.removeAll();
-		this.createEntityListNode(this);
+		this.createEntityListNode();
 	}
 }

@@ -20,18 +20,19 @@ import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 
 
 import java.util.Set;
-import monitoring.EntityListObserver;
+import monitoring.Observer;
+import monitoring.Subject;
 
 import monitoring.EntityObserver;
 import physics.Physics;
 
-public class EntityList implements EntityObserver{
+public class EntityList implements EntityObserver, Subject{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 
 	private HashMap<String,TypedConstraint> constraints;
 
-	private ArrayList<EntityListObserver> observers;
+	private ArrayList<Observer> observers;
 
 	private HashMap<String,ArrayList<Object>> set_queue;
 	private ArrayList<Entity> ent_queue;
@@ -42,7 +43,7 @@ public class EntityList implements EntityObserver{
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
 		constraints = new HashMap<String,TypedConstraint>();
-		observers = new ArrayList<EntityListObserver>();
+		observers = new ArrayList<Observer>();
 		set_queue = new HashMap<String,ArrayList<Object>>();
 		ent_queue = new ArrayList<Entity>();
 	}
@@ -114,21 +115,10 @@ public class EntityList implements EntityObserver{
 	}
 	
 	/* Subject implementation */
-	public void registerObserver(EntityListObserver o) {
-		observers.add(o);
-	}
 	
-	public void removeObserver(EntityListObserver o) {
-		observers.remove(o);
-	}
 	
 	public void notifyObservers(Object starter) {
-		for(int i = 0; i < observers.size(); i++){
-			EntityListObserver observer = (EntityListObserver)observers.get(i);
-			if(starter != observer){
-				observer.update(starter);
-			}
-		}
+	
 	}
 
 	@Override
@@ -177,5 +167,20 @@ public class EntityList implements EntityObserver{
 	
 	public boolean requiresLock() {
 		return requires_lock;
+	}
+	@Override
+	public void registerObserver(Observer o) {
+		observers.add(o);
+	}
+	@Override
+	public void removeObserver(Observer o) {
+		observers.remove(o);
+	}
+	@Override
+	public void notifyObservers() {
+		for(int i = 0; i < observers.size(); i++){
+			Observer observer = (Observer)observers.get(i);
+				observer.update();
+		}	
 	}
 }
