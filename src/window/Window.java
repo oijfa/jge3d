@@ -62,13 +62,13 @@ public class Window extends DesktopArea {
 		rotationMenu = new RotationMenu();
 		add(rotationMenu);
 		rotationMenu.setTheme("rotationmenu");
-		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
+		
 
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
 		
 		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
-		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(), 0);
+		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
 	}
 	
 	public void draw() {

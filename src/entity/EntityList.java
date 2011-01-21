@@ -20,6 +20,8 @@ import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 
 
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import monitoring.EntityListObserver;
 
 import monitoring.EntityObserver;
@@ -33,8 +35,8 @@ public class EntityList implements EntityObserver{
 
 	private ArrayList<EntityListObserver> observers;
 
-	private HashMap<String,ArrayList<Object>> set_queue;
-	private ArrayList<Entity> ent_queue;
+	private ConcurrentHashMap<String,ArrayList<Object>> set_queue;
+	private ConcurrentHashMap<String,Entity> ent_queue;
 	
 	private boolean requires_lock = false;
 	
@@ -43,16 +45,16 @@ public class EntityList implements EntityObserver{
 		this.physics=physics;
 		constraints = new HashMap<String,TypedConstraint>();
 		observers = new ArrayList<EntityListObserver>();
-		set_queue = new HashMap<String,ArrayList<Object>>();
-		ent_queue = new ArrayList<Entity>();
+		set_queue = new ConcurrentHashMap<String,ArrayList<Object>>();
+		ent_queue = new ConcurrentHashMap<String,Entity>();
 	}
 	private boolean addItem(Entity e, Object starter){
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
 			physics.addEntity(e);
-			e.registerObserver(this);
-			notifyObservers(starter);
+			//e.registerObserver(this);
+			//notifyObservers(starter);
 			return true;
 		}else{
 			return false;
@@ -65,16 +67,16 @@ public class EntityList implements EntityObserver{
 		set_queue.put(name, changes);
 	}
 	public void enqueue(Entity ent) {
-		ent_queue.add(ent);
+		ent_queue.put("",ent);
 		requires_lock=true;
 	}
 	
 	public void removeItem(String name, Object starter){
-		Entity ent = this.getItem(name);
+		//Entity ent = this.getItem(name);
 		names.remove(name);
-		ent.removeObserver(this);
-		notifyObservers(starter);
-		}
+		//ent.removeObserver(this);
+		//notifyObservers(starter);
+	}
 	public Entity getItem(String name){
 		//System.out.println("Length of list: " + String.valueOf(names.size()));
 		//System.out.println("List: " + names.toString());
@@ -136,8 +138,8 @@ public class EntityList implements EntityObserver{
 		if(key == "name"){
 			//this.removeItem((String) old_val);
 			//this.addItem(ent);
-			updateListItems((String) old_val);
-			notifyObservers(starter);
+			//updateListItems((String) old_val);
+			//notifyObservers(starter);
 		}
 	}
 	//Only called when entityList needs to be updated this way
@@ -145,12 +147,12 @@ public class EntityList implements EntityObserver{
 	public boolean updateListItems(String old_val){
 		Entity ent = this.getItem(old_val);
 		names.remove(old_val);
-		ent.removeObserver(this);
+		//ent.removeObserver(this);
 		if(ent.keyExists("name")){
 			names.put((String)ent.getProperty("name"), ent);
 			names.size();
 			physics.addEntity(ent);
-			ent.registerObserver(this);
+			//ent.registerObserver(this);
 			return true;
 		}else{
 			return false;
@@ -169,8 +171,8 @@ public class EntityList implements EntityObserver{
 				this
 			);
 		}
-		for(Entity key:ent_queue) {
-			addItem(key, this);
+		for(String key:ent_queue.keySet()) {
+			addItem(ent_queue.get(key), this);
 		}
 		requires_lock=false;
 	}

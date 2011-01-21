@@ -21,15 +21,12 @@ import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
 
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
-import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class Entity extends RigidBody{
@@ -47,34 +44,44 @@ public class Entity extends RigidBody{
 	
 	//Keep track of number of entities for naming purposes
 	protected static int num_entities=0;
-	
+	 
+	//For making entity groups (complex bodies)
 	private EntityList subEntities;
 	
 	/* Constructors */
-	public Entity(RigidBodyConstructionInfo r, boolean collide) {
-		super(r);
+	public Entity(float mass,CollisionShape shape, boolean collide ) {
+		super(mass,new DefaultMotionState(),shape);
+		createRigidBody(mass,shape,collide);
 		initialSetup(collide);
 	}
-	public Entity(float f, MotionState m, CollisionShape c, boolean collide ) {
-		super(f,m,c);
-		initialSetup(collide);
+	public Entity(String name,float mass,CollisionShape shape, boolean collide) {
+		super(mass,new DefaultMotionState(),shape);
+		createRigidBody(mass,shape,collide);
+		initialSetup(name,collide);
 	}
-	public Entity(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
-		super(f,m,c,v);
-		initialSetup(collide);
+
+	/* Initializing segments */
+	//Creates the initial settings for a rigidbody
+	//This function is what we use to make things rotate over multiple axes
+	private void createRigidBody(float mass, CollisionShape shape, boolean collide) {
+		// rigid body is dynamic if and only if mass is non zero,
+		//otherwise static
+		boolean isDynamic = (mass != 0f);
+
+		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
+		if (isDynamic) {
+			shape = this.getCollisionShape();
+			shape.calculateLocalInertia(mass, localInertia);
+			this.setCollisionShape(shape);
+		}	
+		
+		//This is extremely important; if you forget this
+		//then nothing will rotate
+		this.setMassProps(mass, localInertia);
+		this.updateInertiaTensor();
 	}
-	public Entity(String _name, RigidBodyConstructionInfo r, boolean collide) {
-		super(r);
-		initialSetup(collide);
-	}
-	public Entity(String _name,float f, MotionState m, CollisionShape c, boolean collide ) {
-		super(f,m,c);
-		initialSetup(collide);
-	}
-	public Entity(String _name,float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
-		super(f,m,c,v);
-		initialSetup(collide);
-	}
+	//Sets the initial name of the body in the list
+	//Also sets some default options to the ent
 	private void initialSetup(boolean c){
 		num_entities++;
 		data = new HashMap<String,Object>();
@@ -84,15 +91,22 @@ public class Entity extends RigidBody{
 		
 		observers = new ArrayList<EntityObserver>();
 	}
+	private void initialSetup(String name, boolean c){
+		num_entities++;
+		data = new HashMap<String,Object>();
+		data.put("name", name);
+		data.put("collidable", c);
+		data.put("TTL", 0);
+		
+		observers = new ArrayList<EntityObserver>();
+	}
+	
 	
 	/* Setters */
+	public void setModel(Model model) {
+		this.model = model;
+	}
 	public void setPosition(Object p) {
-		/*
-		 * There's no straight-forward way to move a RigidBody to some location
-		 * 	So that's what this class does.  It takes an Object because of skynet code
-		 *	//TODO:  maybe remove that?  Dunno if we're going to keep using skynet code 
-		 *	//TODO:  Maybe remove the whole thing?
-		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
 			Transform trans = this.getWorldTransform(new Transform());
@@ -109,8 +123,6 @@ public class Entity extends RigidBody{
 		out = this.getWorldTransform(new Transform());
 		return out.origin;
 	}
-	
-	// SET PROPERTY!!!
 	public void setProperty(String key, Object val, Object starter){
 			Object old_key_val = data.get(key);
 			data.put(key,val);
@@ -132,8 +144,17 @@ public class Entity extends RigidBody{
 			data.remove(key);
 		}
 	}
+	public Set<String> getKeySet(){
+		return data.keySet();
+	}
+	public void setShouldDraw(boolean shouldDraw) {
+		this.shouldDraw = shouldDraw;
+	}
 
 	/* Getters */
+	public Model getModel() {
+		return model;
+	}
 	public EntityList getSubEntities(){return subEntities;}
 	public Set<String> getKeys() {return data.keySet();}
 	public boolean keyExists(String prop_name){
@@ -145,7 +166,14 @@ public class Entity extends RigidBody{
 		return false;
 	}
 	public Object getProperty(String key){return data.get(key);}
+	public boolean shouldDraw() {
+		return shouldDraw;
+	}
 	
+	
+	/* Drawing related stuff */
+	//The entities drawing code is called from the entlist
+	//when it is time to draw
 	public void draw(){
 		GL11.glPushMatrix();
 			//Retrieve the current motionstate to get the transform
@@ -164,9 +192,9 @@ public class Entity extends RigidBody{
 			buf.clear();
 			
 			//Scaling code (testing)
-			//Vector3f halfExtent = new Vector3f();
-			//this.getCollisionShape().getLocalScaling(halfExtent);
-			//GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
+			Vector3f halfExtent = new Vector3f();
+			this.getCollisionShape().getLocalScaling(halfExtent);
+			GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
 			
 			//Draw the model
 			GL11.glPushMatrix();
@@ -180,26 +208,18 @@ public class Entity extends RigidBody{
 		    GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
-	
-	public void setModel(Model model) {
-		this.model = model;
-	}
-	public Model getModel() {
-		return model;
-	}
+
 	
 	/* Functions for EntityObservers */
 	public void registerObserver(EntityObserver o) {
 		observers.add(o);
 	}
-	
 	public void removeObserver(EntityObserver o) {
 		int i = observers.indexOf(o);
 		if (i >= 0){
 			observers.remove(i);
 		}
 	}
-	
 	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);
@@ -209,22 +229,8 @@ public class Entity extends RigidBody{
 		}
 	}
 	
-	public Set<String> getKeySet(){
-		return data.keySet();
-	}
-	/**
-	 * @param shouldDraw the shouldDraw to set
-	 */
-	public void setShouldDraw(boolean shouldDraw) {
-		this.shouldDraw = shouldDraw;
-	}
-	/**
-	 * @return the shouldDraw
-	 */
-	public boolean shouldDraw() {
-		return shouldDraw;
-	}
 	
+	/* Debugging BS */
 	//This is for debugging hitbox positions (should be deleted later)
 	public void drawTestCube() {
 		Material mat = new Material();

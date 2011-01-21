@@ -19,7 +19,6 @@ import physics.Physics;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.linearmath.DefaultMotionState;
 
 import entity.Camera;
 import entity.Entity;
@@ -100,57 +99,48 @@ public class Controller extends Applet{
 	public void loadLevel() throws Exception{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		Camera cam = new Camera(0.0f, new DefaultMotionState(), boxShape, false);
+		Camera cam = new Camera(1.0f, boxShape, false);
 		objectList.enqueue(cam);
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
 		loadTestShapes(cam);
 		//pullModelFiles("resources/Models");
+		
 	}
 	
 	private void loadTestShapes(Camera cam) {
-		//Make a cathode
-		Parser obj_parser = new Obj_Parser();
-		try{
-			//p.readFile("./lib/legoman.xgl");
-			//p.readFile("./lib/10010260.xgl");
-			//p.readFile("./lib/box2.xgl");
-			
-			//p.readFile("./lib/cath.xgl");
-			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
-			obj_parser.readUrl("http://192.168.143.17/ivec/lib/Models/0335-CATHODE_ASSEMBLY.obj");
-			//p.readFile("resources/Models/radar.obj");
-		}catch(Exception e){
-			//TODO:  What to do here?
-			e.printStackTrace();
-		}
-		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		Entity ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
-		ent.setModel(obj_parser.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,-20.0f));
-		//physics.reduceHull(ent);
-		objectList.enqueue(ent);
-		cam.setDistance(20.0f);
-		cam.focusOn(ent);
-
-		//Box thing
+		physics.setGravity(new Vector3f(0,-10,0));
+		
+		//Legoman thing
 		XGL_Parser xgl_parser = new XGL_Parser();
 		try{
-			//p.readFile("./lib/legoman.xgl");
-			//p.readFile("./lib/10010260.xgl");
+			//xgl_parser.readFile("./lib/legoman.xgl");
+			//xgl_parser.readFile("./lib/10010260.xgl");
 			xgl_parser.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
 			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
-			//TODO:  What to do here?
+			e.printStackTrace();
+			System.out.println("Model loading failed");
 		}
-		boxShape = new BoxShape(new Vector3f(2, 2, 2));
-		ent = new Entity(1.0f, new DefaultMotionState(), boxShape, false);
+		
+		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		Entity ent = new Entity(0.0f, boxShape, false);
 		ent.setModel(xgl_parser.createModel());
-		ent.setPosition(new Vector3f(-5.0f,0.0f,-10.0f));
+		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
 		//physics.reduceHull(ent);
 		objectList.enqueue(ent);
+		cam.setDistance(50.0f);
+		cam.focusOn(ent);
+		
+		for(int i=10;i<1000;i+=10) {
+			ent = new Entity(10.0f, boxShape, false);
+			ent.setModel(xgl_parser.createModel());
+			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
+			//physics.reduceHull(ent);
+			objectList.enqueue(ent);
+		}
 	}
 	
 	private void pullModelFiles(String filename) throws Exception{
@@ -177,7 +167,7 @@ public class Controller extends Applet{
 					if( p != null){
 						//Make a cathode	
 						BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-						Entity ent = new Entity(0.0f, new DefaultMotionState(), boxShape, false);	
+						Entity ent = new Entity(0.0f, boxShape, false);	
 						ent.setModel(p.createModel());	
 						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
 						ent.setProperty("name", f.getPath().substring(0,dotPos-1), ent);

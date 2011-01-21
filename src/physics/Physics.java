@@ -6,26 +6,22 @@ import java.nio.ByteOrder;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletStats;
-import com.bulletphysics.collision.broadphase.AxisSweep3;
-import com.bulletphysics.collision.broadphase.BroadphaseInterface;
+import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.OptimizedBvh;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
 import entity.Camera;
@@ -37,7 +33,8 @@ public class Physics {
 	private CollisionDispatcher dispatcher;
 	private Vector3f worldAabbMin;
 	private Vector3f worldAabbMax;
-	private BroadphaseInterface overlappingPairCache;
+	//private BroadphaseInterface overlappingPairCache;
+	private DbvtBroadphase broadphase;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
 
@@ -60,17 +57,18 @@ public class Physics {
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 		
 		//Min and Max collision boundaries for world (needs changing)
-		worldAabbMin = new Vector3f(-100,-100,-100);
-		worldAabbMax = new Vector3f(100,100,100);
+		worldAabbMin = new Vector3f(-1000,-1000,-1000);
+		worldAabbMax = new Vector3f(1000,1000,1000);
 		
 		//algorithm for finding collision proximity (there are better ones)
-		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+		//overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+		broadphase=new DbvtBroadphase();
 		
 		//Type of solver to be used for solving physics (look into threading for parallel)
 		solver = new SequentialImpulseConstraintSolver();
 		
 		//Create the dynamics world and set default options
-		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 		dynamicsWorld.setGravity(new Vector3f(0,0,0));
 
@@ -80,23 +78,8 @@ public class Physics {
 		prev_time = System.nanoTime();
 	}
 
-	public RigidBody createRigidBody(float mass, Transform startTransform, CollisionShape shape) {
-		// rigid body is dynamic if and only if mass is non zero, otherwise static
-		boolean isDynamic = (mass != 0f);
-
-		Vector3f localInertia = new Vector3f(255f, 255f, 255f);
-		if (isDynamic) {
-			shape.calculateLocalInertia(mass, localInertia);
-		}
-
-		//set motion state (keeps track of objects motion, durr)
-		DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-		RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
-		RigidBody body = new RigidBody(cInfo);
-
-		dynamicsWorld.addRigidBody(body);
-
-		return body;
+	public void addEntity(Entity e) {
+		dynamicsWorld.addRigidBody(e);
 	}
 	
 	public DynamicsWorld getDynamicsWorld() {
@@ -125,9 +108,7 @@ public class Physics {
 	public float getDeltaT() {
 		return deltaT;
 	}
-	
-	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
-	
+
 	public void reduceHull(Entity e){
 		int vertexcount=0;
 		int trianglecount=0;
@@ -285,5 +266,9 @@ public class Physics {
 				 p2p.setPivotB(newPos);
 			 }
 		}
+	}
+	
+	public void setGravity(Vector3f gravity) {
+		dynamicsWorld.setGravity(gravity);
 	}
 }

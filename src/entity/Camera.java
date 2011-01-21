@@ -7,8 +7,6 @@ import render.Renderer;
 import window.Window;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.linearmath.MotionState;
 
 public class Camera extends Entity {
 	
@@ -30,30 +28,15 @@ public class Camera extends Entity {
 	private Entity focus;
 
 	/* Constructors */
-	public Camera(RigidBodyConstructionInfo r, boolean collide) {
-		super(r, collide);
+	public Camera(float f, CollisionShape c, boolean collide ) {
+		super(f,c,collide);
 		cameraInit();
 	}
-	public Camera(float f, MotionState m, CollisionShape c, boolean collide ) {
-		super(f,m,c, collide);
+	public Camera(String _name,float f, CollisionShape c, boolean collide ) {
+		super(f,c,collide);
 		cameraInit();
 	}
-	public Camera(float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
-		super(f,m,c,v, collide);
-		cameraInit();
-	}
-	public Camera(String _name, RigidBodyConstructionInfo r, boolean collide) {
-		super(r, collide);
-		cameraInit();
-	}
-	public Camera(String _name,float f, MotionState m, CollisionShape c, boolean collide ) {
-		super(f,m,c, collide);
-		cameraInit();
-	}
-	public Camera(String _name,float f, MotionState m, CollisionShape c, Vector3f v, boolean collide ) {
-		super(f,m,c,v, collide);
-		cameraInit();
-	}
+
 	private void cameraInit(){
 		setProperty(Entity.NAME, "camera", this);
 		setPosition(new Vector3f(0,0,0));
