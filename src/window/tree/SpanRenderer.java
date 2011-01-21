@@ -12,10 +12,8 @@ public class SpanRenderer extends TreeTable.StringCellRenderer {
         span = ((SpanString)data).span;
     }
 
-    /*
     @Override
     public int getColumnSpan() {
         return span;
     }
-    */
 }

@@ -37,11 +37,14 @@ public class EntityList implements EntityObserver{
 	}
 	
 	public void parseQueue() {
-		for(QueueItem item:queue) {
-			if(QueueItem.ADD == item.getAction())
-				addItem(item.getEnt());
-			else if(QueueItem.REMOVE == item.getAction())
-				removeItem(item.getEnt());
+		Object[] itemArray = queue.toArray();
+		for(Object item:itemArray) {
+			if(QueueItem.ADD == ((QueueItem) item).getAction())
+				addItem(((QueueItem) item).getEnt());
+			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
+				removeItem(((QueueItem) item).getEnt());
+			
+			queue.remove(item);
 		}
 	}
 	
@@ -100,7 +103,7 @@ public class EntityList implements EntityObserver{
 	public void notifyObservers() {
 		for(int i = 0; i < observers.size(); i++){
 			EntityListObserver observer = (EntityListObserver)observers.get(i);
-			observer.update();
+			//observer.update();
 		}
 	}
 	

@@ -61,7 +61,7 @@ public class Tree extends ScrollPane implements EntityListObserver {
     
 	@Override
 	public void update() {
-		model.removeAll();
+		//model.removeAll();
 		this.createEntityListNode();
 	}
 	
