@@ -15,6 +15,7 @@ import entity.Entity;
 public class EntityTest extends Thread{
 	static Entity testEnt;
 	static Physics phy;
+	@SuppressWarnings("unused")
 	private String name;
 	static Random rand;
 	EntityTest(String name){

@@ -83,8 +83,9 @@ public class Entity extends RigidBody{
 		
 		observers = new ArrayList<EntityObserver>();
 	}
+	/* End of Constructors
 	
-	/* Setters */
+	/* MUTATORS */
 	public void setPosition(Object p) {
 		/*
 		 * There's no straight-forward way to move a RigidBody to some location
@@ -102,22 +103,11 @@ public class Entity extends RigidBody{
 			e.printStackTrace();
 		}
 	}
-	public Vector3f getPosition(){
-		Transform out = new Transform();
-		out = this.getWorldTransform(new Transform());
-		return out.origin;
-	}
-	
-	// SET PROPERTY!!!
 	public void setProperty(String key, Object val){
 		Object old_key_val = data.get(key);
 		data.put(key,val);
 		//starter is passed to tell when to end the horrible infinite loop
 		notifyObservers(key, old_key_val, val);
-	}
-	public void nodeUpdate(String key, Object val, Object starter){
-		System.out.println("Entity.update");	
-		this.setProperty(key, val);
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -130,8 +120,15 @@ public class Entity extends RigidBody{
 			data.remove(key);
 		}
 	}
-
-	/* Getters */
+	public void setModel(Model model) {this.model = model;}
+	public void setShouldDraw(boolean shouldDraw) {this.shouldDraw = shouldDraw;}
+	
+	/* ACCESSORS */
+	public Vector3f getPosition(){
+		Transform out = new Transform();
+		out = this.getWorldTransform(new Transform());
+		return out.origin;
+	}
 	public EntityList getSubEntities(){return subEntities;}
 	public Set<String> getKeys() {return data.keySet();}
 	public boolean keyExists(String prop_name){
@@ -143,7 +140,11 @@ public class Entity extends RigidBody{
 		return false;
 	}
 	public Object getProperty(String key){return data.get(key);}
+	public Model getModel() {return model;}
+	public Set<String> getKeySet(){return data.keySet();}
+	public boolean shouldDraw() {return shouldDraw;}
 	
+	/* MISC */
 	public void draw(){
 		GL11.glPushMatrix();
 			//Retrieve the current motionstate to get the transform
@@ -174,41 +175,15 @@ public class Entity extends RigidBody{
 		GL11.glPopMatrix();
 	}
 	
-	public void setModel(Model model) {
-		this.model = model;
-	}
-	public Model getModel() {
-		return model;
-	}
-	
-	public Set<String> getKeySet(){
-		return data.keySet();
-	}
-	/**
-	 * @param shouldDraw the shouldDraw to set
-	 */
-	public void setShouldDraw(boolean shouldDraw) {
-		this.shouldDraw = shouldDraw;
-	}
-	/**
-	 * @return the shouldDraw
-	 */
-	public boolean shouldDraw() {
-		return shouldDraw;
-	}
 	
 	/* Functions for EntityObservers */
-	public void registerObserver(EntityObserver o) {
-		observers.add(o);
-	}
-	
+	public void registerObserver(EntityObserver o) {observers.add(o);}
 	public void removeObserver(EntityObserver o) {
 		int i = observers.indexOf(o);
 		if (i >= 0){
 			observers.remove(i);
 		}
 	}
-	
 	public void notifyObservers(String key, Object old_name, Object new_name) {
 		for(int i = 0; i < observers.size(); i++){
 			EntityObserver observer = (EntityObserver)observers.get(i);

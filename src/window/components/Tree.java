@@ -82,6 +82,7 @@ public class Tree extends ScrollPane implements EntityListObserver {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void createFolder(Node node, String parent, String name) {
 		Node child;
 		for(int i=0;i<node.getNumChildren();i++) {
