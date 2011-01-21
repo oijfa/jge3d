@@ -99,7 +99,7 @@ public class Controller extends Applet{
 	public void loadLevel() throws Exception{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		Camera cam = new Camera(1.0f, boxShape, false);
+		Camera cam = new Camera(0.0f, boxShape, false);
 		objectList.enqueue(cam);
 		
 		//Load some stuff (I would only pick one of the following
