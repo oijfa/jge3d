@@ -4,12 +4,17 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.vecmath.Vector3f;
+
+import com.bulletphysics.collision.shapes.BoxShape;
+
 import de.matthiasmann.twl.Event;
 
 import physics.Physics;
 import window.Window;
 
 import entity.Camera;
+import entity.Entity;
 import entity.EntityList;
 
 public class Input {
@@ -85,6 +90,12 @@ public class Input {
 		//fix mouse coordinates
 		adjustY = window.getHeight()-1-Mouse.getEventY();	
 		switch(evt.getMouseButton()){
+			case 1:
+				BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+				Entity ent = new Entity(1.0f,boxShape,true);
+				ent.applyForce(camera.getRayTo(Mouse.getX(), adjustY), camera.getPosition());
+				objectList.enqueue(ent);
+				break;
 			case 0://Left Button
 				physics.drag(
 					camera,
