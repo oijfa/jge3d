@@ -9,7 +9,6 @@
  */
 package entity;
 
-import importing.pieces.Material;
 import importing.pieces.Model;
 
 import java.nio.FloatBuffer;
@@ -34,9 +33,9 @@ import com.bulletphysics.linearmath.Transform;
 
 public class Entity extends RigidBody{
 	//Properties
-	protected HashMap<String,Object> data;
+	private HashMap<String,Object> data;
 	private Model model;
-	protected ArrayList<EntityObserver> observers;
+	private ArrayList<EntityObserver> observers;
 	private boolean shouldDraw = true;
 
 	/*Properties the engine uses a lot*/
@@ -46,7 +45,7 @@ public class Entity extends RigidBody{
 	private String[] reqKeys = {"name", "collidable", "TTL"};
 	
 	//Keep track of number of entities for naming purposes
-	protected static int num_entities=0;
+	private static int num_entities=0;
 	
 	private EntityList subEntities;
 	
@@ -90,8 +89,7 @@ public class Entity extends RigidBody{
 		/*
 		 * There's no straight-forward way to move a RigidBody to some location
 		 * 	So that's what this class does.  It takes an Object because of skynet code
-		 *	//TODO:  maybe remove that?  Dunno if we're going to keep using skynet code 
-		 *	//TODO:  Maybe remove the whole thing?
+		 * TODO: Remove skynet code
 		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
@@ -111,15 +109,15 @@ public class Entity extends RigidBody{
 	}
 	
 	// SET PROPERTY!!!
-	public void setProperty(String key, Object val, Object starter){
-			Object old_key_val = data.get(key);
-			data.put(key,val);
-			//starter is passed to tell when to end the horrible infinite loop
-			notifyObservers(key, old_key_val, val, starter);
+	public void setProperty(String key, Object val){
+		Object old_key_val = data.get(key);
+		data.put(key,val);
+		//starter is passed to tell when to end the horrible infinite loop
+		notifyObservers(key, old_key_val, val);
 	}
 	public void nodeUpdate(String key, Object val, Object starter){
 		System.out.println("Entity.update");	
-		this.setProperty(key, val, starter);
+		this.setProperty(key, val);
 	}
 	public void removeProperty(String key){
 		//Protect our required keys. Don't delete those, oh no!
@@ -173,11 +171,6 @@ public class Entity extends RigidBody{
 				if( model != null)
 					model.draw();		
 			GL11.glPopMatrix();
-			
-			//Draw a test box too; just for now
-			GL11.glPushMatrix();
-				drawTestCube();
-		    GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 	
@@ -186,27 +179,6 @@ public class Entity extends RigidBody{
 	}
 	public Model getModel() {
 		return model;
-	}
-	
-	/* Functions for EntityObservers */
-	public void registerObserver(EntityObserver o) {
-		observers.add(o);
-	}
-	
-	public void removeObserver(EntityObserver o) {
-		int i = observers.indexOf(o);
-		if (i >= 0){
-			observers.remove(i);
-		}
-	}
-	
-	public void notifyObservers(String key, Object old_name, Object new_name, Object starter) {
-		for(int i = 0; i < observers.size(); i++){
-			EntityObserver observer = (EntityObserver)observers.get(i);
-			if(starter != observer){
-				observer.update(key, old_name, new_name);
-			}	
-		}
 	}
 	
 	public Set<String> getKeySet(){
@@ -225,56 +197,22 @@ public class Entity extends RigidBody{
 		return shouldDraw;
 	}
 	
-	//This is for debugging hitbox positions (should be deleted later)
-	public void drawTestCube() {
-		Material mat = new Material();
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
-		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
-        GL11.glBegin(GL11.GL_QUADS);
-    	// Front Face
-    	GL11.glNormal3f( 0.0f, 0.0f, 0.5f);
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
-
-        // Back Face
-        GL11.glNormal3f( 0.0f, 0.0f, -0.5f);
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
-
-        // Top Face
-        GL11.glNormal3f( 0.0f, 0.5f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-
-        // Bottom Face
-        GL11.glNormal3f( 0.0f, -0.5f, 0.0f);
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-
-        // Right face
-        GL11.glNormal3f( 0.5f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-
-        // Left Face
-        GL11.glNormal3f( -0.5f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glEnd();
+	/* Functions for EntityObservers */
+	public void registerObserver(EntityObserver o) {
+		observers.add(o);
+	}
+	
+	public void removeObserver(EntityObserver o) {
+		int i = observers.indexOf(o);
+		if (i >= 0){
+			observers.remove(i);
+		}
+	}
+	
+	public void notifyObservers(String key, Object old_name, Object new_name) {
+		for(int i = 0; i < observers.size(); i++){
+			EntityObserver observer = (EntityObserver)observers.get(i);
+			observer.update(key, old_name, new_name);
+		}
 	}
 }

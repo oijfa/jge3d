@@ -127,6 +127,7 @@ public class Physics {
 	}
 	
 	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
+	public void removeEntity(Entity e){ dynamicsWorld.removeRigidBody(e); }
 	
 	public void reduceHull(Entity e){
 		int vertexcount=0;
