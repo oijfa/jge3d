@@ -25,8 +25,11 @@ public class Node extends AbstractTreeTableNode {
         return n;
     }
 
-    public void remove(int idx) {
-        removeChild(idx);
+    public void remove(String name){
+    	for(int i=0; i < this.getNumChildren();i++) {
+    		if(this.getChild(i).equals(name))
+    			this.removeChild(i);
+    	}	
     }
 
     public void removeAll() {

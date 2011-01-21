@@ -64,7 +64,7 @@ public class EntityList implements EntityObserver, Subject{
 			names.size();
 			physics.addEntity(e);
 			e.registerObserver(this);
-			notifyObservers();
+			notifyObservers(e.getProperty("name"));
 			ret = true;
 		}
 		return ret;
@@ -73,7 +73,7 @@ public class EntityList implements EntityObserver, Subject{
 		names.remove(entity);
 		entity.removeObserver(this);
 		physics.removeEntity(entity);
-		notifyObservers();
+		notifyObservers(entity.getProperty("name"));
 	}
 	//Set actions that need to wait on the physics
 	public void enqueue(Entity ent, int action) {
@@ -86,7 +86,7 @@ public class EntityList implements EntityObserver, Subject{
 			Entity ent = this.getItem(key);
 			enqueue(ent, QueueItem.REMOVE);
 			this.addItem(ent);
-			notifyObservers();
+			notifyObservers(key);
 		}
 	}
 	
@@ -119,10 +119,10 @@ public class EntityList implements EntityObserver, Subject{
 		observers.remove(o);
 	}
 	@Override
-	public void notifyObservers() {
+	public void notifyObservers(Object o) {
 		for(int i = 0; i < observers.size(); i++){
 			Observer observer = (Observer)observers.get(i);
-				observer.update();
+				observer.update(o);
 		}	
 	}
 }
