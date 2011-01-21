@@ -5,14 +5,14 @@ import window.tree.Model;
 import window.tree.Node;
 import window.tree.SpanRenderer;
 import window.tree.SpanString;
-import monitoring.EntityListObserver;
+import monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
 import entity.Entity;
 import entity.EntityList;
 
-public class Tree extends ScrollPane implements EntityListObserver {
+public class Tree extends ScrollPane implements Observer {
     //private MyNode dynamicNode;
     int state;
     Node subNode;
@@ -61,7 +61,7 @@ public class Tree extends ScrollPane implements EntityListObserver {
     
 	@Override
 	public void update() {
-		//model.removeAll();
+		model.removeAll();
 		this.createEntityListNode();
 	}
 	

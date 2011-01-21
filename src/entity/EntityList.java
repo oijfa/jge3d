@@ -4,28 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import monitoring.Observer;
+import monitoring.Subject;
 
-import monitoring.EntityListObserver;
 import monitoring.EntityObserver;
 
 import physics.Physics;
 
-public class EntityList implements EntityObserver{
+public class EntityList implements EntityObserver, Subject{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 
 	//private HashMap<String,TypedConstraint> constraints;
 
-	private ArrayList<EntityListObserver> observers;
+	private ArrayList<Observer> observers;
 	private ArrayList<QueueItem> queue;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
-		observers = new ArrayList<EntityListObserver>();
+		observers = new ArrayList<Observer>();
 		queue = new ArrayList<QueueItem>();
-		
-		//constraints = new HashMap<String,TypedConstraint>();
 	}
 	
 	public void drawList(){ 
@@ -91,22 +90,6 @@ public class EntityList implements EntityObserver{
 		}
 	}
 	
-	/* SUBJECT IMPLEMENTATION */
-	public void registerObserver(EntityListObserver o) {
-		observers.add(o);
-	}
-	
-	public void removeObserver(EntityListObserver o) {
-		observers.remove(o);
-	}
-	
-	public void notifyObservers() {
-		for(int i = 0; i < observers.size(); i++){
-			EntityListObserver observer = (EntityListObserver)observers.get(i);
-			//observer.update();
-		}
-	}
-	
 	/*Physics Constraints*/
 	/*public void addBallJoint(String name, Entity object1, Vector3f point1, Entity object2, Vector3f point2){
 		//Setup a Ball joint between the two objects, at the point given
@@ -125,4 +108,21 @@ public class EntityList implements EntityObserver{
 			constraints.remove(constraint_name);
 		}
 	}*/
+	
+	/* SUBJECT IMPLEMENTATION */
+	@Override
+	public void registerObserver(Observer o) {
+		observers.add(o);
+	}
+	@Override
+	public void removeObserver(Observer o) {
+		observers.remove(o);
+	}
+	@Override
+	public void notifyObservers() {
+		for(int i = 0; i < observers.size(); i++){
+			Observer observer = (Observer)observers.get(i);
+				observer.update();
+		}	
+	}
 }
