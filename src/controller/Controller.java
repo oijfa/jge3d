@@ -30,7 +30,7 @@ public class Controller extends Applet{
 	private static final long serialVersionUID = 4458487765324323938L;
 
 	// the game always runs (except when it doesn't)
-	private static boolean isRunning = true;
+	private volatile static boolean isRunning = true;
 	
 	private Renderer renderer;
 	private Physics physics;
