@@ -214,7 +214,7 @@ public class Controller extends Applet{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse("./resources/Models/config.xml");
+		dom = db.parse("resources/models/config.xml");
 		
 		ArrayList<Node> tagList;
 		
