@@ -25,6 +25,7 @@ public class Window extends DesktopArea {
 	private GUI gui;
 	private ThemeManager theme;
 	private Input input;
+	//private EntityList objectList;
 	
 	public Window(EntityList objectList) {
 		super();
@@ -73,6 +74,7 @@ public class Window extends DesktopArea {
 		
 		rotationMenu = new RotationMenu();
 		add(rotationMenu);
+		rotationMenu.setObjectList(objectList);
 		rotationMenu.setTheme("rotationmenu");
 		
 

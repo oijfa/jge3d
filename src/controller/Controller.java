@@ -121,8 +121,7 @@ public class Controller extends Applet{
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
 		loadTestShapes(cam);
-		//pullModelFiles("resources/Models");
-		
+		//pullModelFiles("resources/models/cathodes");
 	}
 	
 	private void loadTestShapes(Camera cam) {
@@ -131,11 +130,11 @@ public class Controller extends Applet{
 		//Legoman thing
 		XGL_Parser xgl_parser = new XGL_Parser();
 		try{
-			xgl_parser.readFile("./lib/legoman.xgl");
-			//xgl_parser.readFile("./lib/10010260.xgl");
-			//xgl_parser.readFile("./lib/box2.xgl");
-			//p.readFile("./lib/cath.xgl");
-			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
+			//xgl_parser.readFile("resources/models/misc/legoman.xgl");
+			//xgl_parser.readFile("resources/models/misc/10010260.xgl");
+			xgl_parser.readFile("resources/models/misc/box2.xgl");
+			//p.readFile("resources/models/misc/cath.xgl");
+			//p.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Model loading failed");

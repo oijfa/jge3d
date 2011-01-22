@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE themes PUBLIC "-//www.matthiasmann.de//TWL-Theme//EN" "http://hg.l33tlabs.org/twl/raw-file/tip/src/de/matthiasmann/twl/theme/theme.dtd">
 <themes>
-    <images file="widgets.png">
+    <images file="images/widgets.png">
         <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true"/>
         <area name="white" xywh="1,36,1,1"/>
         <area name="black" xywh="23,57,1,1"/>
@@ -69,6 +69,12 @@
         </select>
         <cursor name="cursor.horiz_resize" hotSpotX="0" hotSpotY="0" xywh="175,34,32,15"/>
     </images>
+    <images file="images/bomb.png" format="RGBA">
+    	<area name="bomb" xywh="*"/>
+   	</images>
+   	<images file="images/align.png" format="RGBA">
+    	<area name="align" xywh="*"/>
+   	</images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
@@ -255,7 +261,7 @@
         <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button">
         </theme>
-        <param name="columnHeaderWidth"><int>256</int></param>
+        <param name="columnHeaderWidth"><int>135</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>3</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
@@ -370,8 +376,12 @@
 				<theme name="center" ref="button" />
 				<theme name="zoomin" ref="button" />	
 				<theme name="zoomout" ref="button" />
-				<theme name="blank" ref="button" />
-				<theme name="blank2" ref="button" />
+				<theme name="explode" ref="button">
+					<param name="overlay"><image>bomb</image></param>
+				</theme>
+				<theme name="align" ref="button">
+					<param name="overlay"><image>align</image></param>
+				</theme>
             </theme>
         </theme>
     </theme>
