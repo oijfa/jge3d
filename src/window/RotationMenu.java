@@ -2,12 +2,18 @@ package window;
 
 import input.components.ThreadFactory;
 import java.util.HashMap;
+import java.util.Random;
+
+import javax.vecmath.Vector3f;
+
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.model.ButtonModel;
 import entity.Camera;
+import entity.Entity;
+import entity.EntityList;
 
 public class RotationMenu extends ResizableFrame {
 	private final DialogLayout layout;
@@ -18,7 +24,10 @@ public class RotationMenu extends ResizableFrame {
 	private final Button center;
 	private final Button zoomIn;
 	private final Button zoomOut;
+	Button explode = new Button();
+	Button align = new Button();
 	private Camera cam;
+	private EntityList objectList;
 
 	private static final float ZOOM_INC = 0.01f;
 	private static final float LEFT_RIGHT_INC = 0.00000001f;
@@ -26,7 +35,7 @@ public class RotationMenu extends ResizableFrame {
 	private HashMap<String, Thread> buttonThreads;
 	private ThreadFactory threadStarter;
 	private volatile boolean leftAlive, rightAlive, upAlive, downAlive, inAlive, outAlive;
-
+	
 	
 	public RotationMenu(){
 		setTitle("Camera Rotation");
@@ -53,6 +62,8 @@ public class RotationMenu extends ResizableFrame {
 		zoomIn.setTheme("zoomin");
 		zoomOut = new Button("-");
 		zoomOut.setTheme("zoomout");
+		explode.setTheme("explode");
+		align.setTheme("align");
 		
 		//Create a models for reflecting the state of the buttons
 		final ButtonModel leftButtonModel = left.getModel();
@@ -143,27 +154,50 @@ public class RotationMenu extends ResizableFrame {
 			}
 		});
 		
-		Button blank = new Button();
-		Button blank2 = new Button();
-		
-		blank.addCallback(new Runnable() {
+		explode.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println(cam.getDistance());
-				
+				for(String key:objectList.getKeySet()) {
+					Entity ent = objectList.getItem(key);
+					if(!key.equals(Camera.CAMERA_NAME)) {
+						Random rand = new Random();
+						Vector3f force = new Vector3f(
+							rand.nextFloat()*1000,
+							rand.nextFloat()*1000,
+							rand.nextFloat()*1000
+						);
+						ent.applyImpulse(force, ent.getPosition());
+					}
+				}
 			}
 		});
+		
+		align.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				int pos_x=0;
+				for(String key:objectList.getKeySet()) {
+					Entity ent = objectList.getItem(key);
+					if(!key.equals(Camera.CAMERA_NAME)) {
+						pos_x += 2;
+						ent.clearForces();
+						ent.setPosition(new Vector3f(pos_x,0,0));
+					}
+				}
+			}
+		});
+		
 		Group row1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(up).addGap().addWidget(zoomOut);
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
-		Group row3 = layout.createSequentialGroup().addWidget(blank).addGap().addWidget(down).addGap().addWidget(blank2);
+		Group row3 = layout.createSequentialGroup().addWidget(explode).addGap().addWidget(down).addGap().addWidget(align);
 		Group button_hgroup = layout.createParallelGroup()
 			.addGroup(row1)
 			.addGroup(row2)
 			.addGroup(row3);
 		
-		Group col1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(left).addGap().addWidget(blank);
+		Group col1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(left).addGap().addWidget(explode);
 		Group col2 = layout.createSequentialGroup().addWidget(up).addGap().addWidget(center).addGap().addWidget(down);
-		Group col3 = layout.createSequentialGroup().addWidget(zoomOut).addGap().addWidget(right).addGap().addWidget(blank2);
+		Group col3 = layout.createSequentialGroup().addWidget(zoomOut).addGap().addWidget(right).addGap().addWidget(align);
 		Group button_vgroup = layout.createParallelGroup()
 			.addGroup(col1)
 			.addGroup(col2)
@@ -295,5 +329,9 @@ public class RotationMenu extends ResizableFrame {
 	
 	public void setCameraRef(Camera cam){
 		this.cam = cam;
+	}
+	
+	public void setObjectList(EntityList objectList){
+		this.objectList = objectList;
 	}
 }
