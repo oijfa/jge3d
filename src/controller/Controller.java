@@ -6,19 +6,27 @@ package controller;
 import java.applet.Applet;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import importing.Obj_Parser;
 import importing.Parser;
 import importing.XGL_Parser;
 
 import javax.vecmath.Vector3f;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.lwjgl.opengl.Display;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import physics.Physics;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+
+import de.matthiasmann.twl.model.TreeTableNode;
 
 import entity.Camera;
 import entity.Entity;
@@ -39,6 +47,8 @@ public class Controller extends Applet{
 
 	private EntityList objectList;
 	
+	window.tree.Model treeModel;
+	
 	public static void main(String[] args) throws Exception {
 		Applet app = new Controller();
 		app.init();
@@ -55,7 +65,10 @@ public class Controller extends Applet{
 
 	public Controller(){	}
 
-	private void startThreads() {
+	private void startThreads() throws Exception {
+		treeModel = new window.tree.Model();
+		readConfigFile();
+		
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
 		physics_thread.start();
@@ -83,7 +96,8 @@ public class Controller extends Applet{
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL();
+			renderer.initGL(treeModel);
+			this.interrupt();
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;
@@ -192,5 +206,117 @@ public class Controller extends Applet{
 				pullModelFiles(f.getPath());
 			}
 		}
+	}
+	
+	/* Config file reading */
+	private void readConfigFile() throws Exception{
+		Document dom;
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		
+		//Create Dom Structure
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		dom = db.parse("./resources/Models/config.xml");
+		
+		ArrayList<Node> tagList;
+		
+		try {
+			//Now that we've got the file in DOM format, loop through elements
+			Element rootElement = dom.getDocumentElement();
+			
+			if( rootElement.getNodeName().equals("config")){
+				tagList = findChildrenByName(rootElement, "folder");
+				for(int i = 0; i < tagList.size(); i++){
+					//Create nodes for all of them
+					createFolderNode((Element)tagList.get(i));
+				}
+				
+				tagList = findChildrenByName(rootElement, "property");
+				for(int i = 0; i < tagList.size(); i++){
+					createPropertyNode(treeModel, (Element)tagList.get(i));
+				}
+			}else{
+				throwException("Invalid config file");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	private void createFolderNode(Element ele) {
+		String name;
+		ArrayList<Node> tagList = findChildrenByName(ele, "name");
+		name = tagList.get(0).getTextContent();
+		
+		window.tree.Node folderNode = treeModel.insert(name, "");
+		
+		tagList = findChildrenByName(ele, "model");
+		for(int i = 0; i < tagList.size(); i++){
+			createModelNode(folderNode, (Element)tagList.get(i));
+		}
+		
+		tagList = findChildrenByName(ele, "property");
+		for(int i = 0; i < tagList.size(); i++){
+			createPropertyNode(folderNode, (Element)tagList.get(i));
+		}
+	}
+
+	private void createModelNode(window.tree.Node folderNode, Element ele) {
+		String name;
+		ArrayList<Node> tagList = findChildrenByName(ele, "name");
+		name = tagList.get(0).getTextContent();
+		window.tree.Node modelNode = folderNode.insert(name, "");
+		
+		tagList = findChildrenByName(ele, "path");
+		//Do something with path
+		
+		tagList = findChildrenByName(ele, "position");
+		//Do something with position
+		
+		tagList = findChildrenByName(ele, "property");
+		for(int i = 0; i < tagList.size(); i++){
+			createPropertyNode(modelNode, (Element)tagList.get(i));
+		}
+	}
+
+	private void createPropertyNode(TreeTableNode parent, Element ele) {
+		String name;
+		String value;
+		
+		ArrayList<Node> tagList = findChildrenByName(ele, "name");
+		name = tagList.get(0).getTextContent();
+		
+		tagList = findChildrenByName(ele, "value");
+		value = tagList.get(0).getTextContent();
+		
+		if( parent != treeModel ){
+			((window.tree.Node)parent).insert(name, value);
+		}else{
+			((window.tree.Model)parent).insert(name, value);
+		}
+	}
+
+	private ArrayList<Node> findChildrenByName(Node root, String name){
+		String[] names = new String[1];
+		names[0] = name;
+		return findChildrenByName(root,names);
+	}
+	private ArrayList<Node> findChildrenByName(Node root, String[] names){
+		ArrayList<Node> list = new ArrayList<Node>();
+		for( int i = 0; i < names.length; i++){
+			Node e = root.getFirstChild();
+			while(e != null){
+				if(e.getNodeName().equals(names[i])){
+					list.add(e);
+				}
+				e = e.getNextSibling();
+			}
+		}
+		return list;
+	}
+
+	private void throwException(String message) throws Exception{
+		Exception e = new Exception();
+		e.initCause(new Throwable(message));
+		throw e;
 	}
 }
