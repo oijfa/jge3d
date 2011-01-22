@@ -109,10 +109,22 @@ public class Face {
 		GL11.glNormal3f(norm.x, norm.y, norm.z);
 		*/
 		for(int i = 0; i < vertices.size(); i++){
-			Vector3f f = vertices.get(i);
-			Vector3f n = vertexNormals.get(i);
-			GL11.glVertex3f(f.x, f.y, f.z);
-			GL11.glNormal3f(n.x, n.y, n.z);	
+			Vector3f v = vertices.get(i);
+			Vector3f n = new Vector3f();
+			GL11.glVertex3f(v.x, v.y, v.z);
+			
+			if( i >= vertexNormals.size() ){
+				/*
+				Vector3f line1 = vertices.get(0);
+				Vector3f line2 = vertices.get(0);
+				line1.sub(vertices.get(1));
+				line2.sub(vertices.get(2));
+				n.cross(line1, line2);
+				*/
+			}else{
+				n = vertexNormals.get(i);
+				GL11.glNormal3f(n.x, n.y, n.z);
+			}
 		}
 	}
 	

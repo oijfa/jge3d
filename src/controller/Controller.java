@@ -117,9 +117,9 @@ public class Controller extends Applet{
 		//Legoman thing
 		XGL_Parser xgl_parser = new XGL_Parser();
 		try{
-			//xgl_parser.readFile("./lib/legoman.xgl");
+			xgl_parser.readFile("./lib/legoman.xgl");
 			//xgl_parser.readFile("./lib/10010260.xgl");
-			xgl_parser.readFile("./lib/box2.xgl");
+			//xgl_parser.readFile("./lib/box2.xgl");
 			//p.readFile("./lib/cath.xgl");
 			//p.readFile("resources/Models/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
@@ -138,7 +138,7 @@ public class Controller extends Applet{
 
 		cam.focusOn(ent);
 		
-		for(int i=10;i<1000;i+=10) {
+		for(int i=10;i<15;i+=10) {
 			ent = new Entity(10.0f, boxShape, false);
 			ent.setModel(xgl_parser.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
