@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import org.lwjgl.LWJGLException;
 
+import window.tree.Model;
+
 //import window.MainMenu;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
@@ -23,10 +25,19 @@ public class Window extends DesktopArea {
 	private GUI gui;
 	private ThemeManager theme;
 	private Input input;
-	private EntityList objectList;
+	//private EntityList objectList;
 	
 	public Window(EntityList objectList) {
-		this.objectList = objectList;
+		super();
+		windowInit(objectList, null);
+	}
+	
+	public Window(EntityList objectList, Model m) {
+		super();
+		windowInit(objectList,m);
+	}
+	
+	public void windowInit(EntityList objectList, Model m){
 		try {
 			renderer = new LWJGLRenderer();
 		} catch (LWJGLException e1) {
@@ -56,7 +67,7 @@ public class Window extends DesktopArea {
 		*/
 
 		input = new Input(objectList,this);
-		entityMenu = new EntityMenu(objectList);
+		entityMenu = new EntityMenu(m);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");
 
@@ -73,7 +84,7 @@ public class Window extends DesktopArea {
 		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
 		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
 	}
-	
+
 	public void draw() {
 		gui.update();
 		//input.run();
@@ -95,7 +106,8 @@ public class Window extends DesktopArea {
 		//Our event handling
 	    if(input.handleEvent(evt)) {
 	        return true; 
-	    } 
+	    }
+	    
 	    return false; 
 	}
 }

@@ -22,6 +22,7 @@ import entity.Camera;
 import entity.EntityList;
 
 import window.Window;
+import window.tree.Model;
 
 public class Renderer {
 	private Window window;
@@ -42,6 +43,10 @@ public class Renderer {
 
 
 	public Renderer(EntityList objectList){
+		this.objectList = objectList;
+	}
+
+	public Renderer(EntityList objectList, Model m) {
 		this.objectList = objectList;
 	}
 
@@ -78,7 +83,7 @@ public class Renderer {
 		//Display.processMessages(); // process new native messages since
 	}
 	
-	public void initGL() {		
+	public void initGL(Model m) {		
 		//Setup Display
 		try {
 			Display.setDisplayMode(new DisplayMode(1024,768));
@@ -93,7 +98,7 @@ public class Renderer {
 		//TODO:  Make Configurable by User
 		Display.setVSyncEnabled(true);
 		
-		window = new Window(objectList);
+		window = new Window(objectList, m);
 		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
 			
 		}

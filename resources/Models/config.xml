@@ -1,0 +1,18 @@
+<config>
+	<folder>
+		<name>Name</name>
+		<model>
+			<path>./lib/box2.xgl</path>
+			<position>0,0,0</position>
+			<name>model_name</name>
+			<property>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</property>
+		</model>
+	</folder>
+	<property>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</property>
+</config>

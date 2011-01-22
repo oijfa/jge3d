@@ -180,7 +180,6 @@ public class RotationMenu extends ResizableFrame {
 					Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
 						pos_x += 2;
-						ent.clearForces();
 						ent.setPosition(new Vector3f(pos_x,0,0));
 					}
 				}

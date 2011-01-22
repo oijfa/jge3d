@@ -20,14 +20,25 @@ public class Tree extends ScrollPane implements Observer {
     private Model model;
     
     public Tree() {
-    	treeInit(null);
+    	super();
+    	treeInit(null, null);
     }
     
     public Tree(EntityList objectList){
-    	treeInit(objectList);
+    	super();
+    	treeInit(objectList, null);
     }
-    private void treeInit(EntityList objectList){
-    	model = new Model();
+    
+    public Tree(EntityList objectList, Model m){
+    	super();
+    	treeInit(objectList, m);
+    }
+    private void treeInit(EntityList objectList, Model m){
+    	if( m != null){
+    		model = m;
+    	}else{
+    		model = new Model();
+    	}
     	if( objectList != null ){
 	    	this.objectList = objectList;
 	    	objectList.registerObserver(this);
@@ -41,8 +52,10 @@ public class Tree extends ScrollPane implements Observer {
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
         t.setDefaultSelectionManager();
         
+        /*
         model.insert("qwer","1");
         createSubNode(model,"qwer","asdf");
+        */
         
         setContent(t);
         setTheme("/tableScrollPane");
