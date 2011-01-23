@@ -223,75 +223,44 @@ public class Controller extends Applet{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("config")){
-				tagList = findChildrenByName(rootElement, "folder");
+				tagList = findChildrenByName(rootElement, "item");
 				for(int i = 0; i < tagList.size(); i++){
 					//Create nodes for all of them
-					createFolderNode((Element)tagList.get(i));
-				}
-				
-				tagList = findChildrenByName(rootElement, "property");
-				for(int i = 0; i < tagList.size(); i++){
-					createPropertyNode(treeModel, (Element)tagList.get(i));
+					createItem((Element)tagList.get(i), treeModel);
 				}
 			}else{
-				throwException("Invalid config file");
+				Exception e = new Exception();
+				e.initCause(new Throwable("Invalid config file"));
+				throw e;
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	private void createFolderNode(Element ele) {
-		String name;
-		ArrayList<Node> tagList = findChildrenByName(ele, "name");
-		name = tagList.get(0).getTextContent();
-		
-		window.tree.Node folderNode = treeModel.insert(name, "");
-		
-		tagList = findChildrenByName(ele, "model");
-		for(int i = 0; i < tagList.size(); i++){
-			createModelNode(folderNode, (Element)tagList.get(i));
-		}
-		
-		tagList = findChildrenByName(ele, "property");
-		for(int i = 0; i < tagList.size(); i++){
-			createPropertyNode(folderNode, (Element)tagList.get(i));
-		}
-	}
-
-	private void createModelNode(window.tree.Node folderNode, Element ele) {
-		String name;
-		ArrayList<Node> tagList = findChildrenByName(ele, "name");
-		name = tagList.get(0).getTextContent();
-		window.tree.Node modelNode = folderNode.insert(name, "");
-		
-		tagList = findChildrenByName(ele, "path");
-		//Do something with path
-		
-		tagList = findChildrenByName(ele, "position");
-		//Do something with position
-		
-		tagList = findChildrenByName(ele, "property");
-		for(int i = 0; i < tagList.size(); i++){
-			createPropertyNode(modelNode, (Element)tagList.get(i));
-		}
-	}
-
-	private void createPropertyNode(TreeTableNode parent, Element ele) {
+	private void createItem(Element ele, TreeTableNode parent) {
 		String name;
 		String value;
-		
 		ArrayList<Node> tagList = findChildrenByName(ele, "name");
 		name = tagList.get(0).getTextContent();
 		
 		tagList = findChildrenByName(ele, "value");
 		value = tagList.get(0).getTextContent();
 		
-		if( parent != treeModel ){
-			((window.tree.Node)parent).insert(name, value);
+		window.tree.Node item;
+		if( parent == treeModel ){
+			 item = treeModel.insert(name, "");
 		}else{
-			((window.tree.Model)parent).insert(name, value);
+			item = ((window.tree.Node)parent).insert(name,value);
 		}
+		
+		tagList = findChildrenByName(ele, "item");
+		for(int i = 0; i < tagList.size(); i++){
+			//Create nodes for all of them
+			createItem((Element)tagList.get(i), item);
+		}
+		
+		
 	}
 
 	private ArrayList<Node> findChildrenByName(Node root, String name){
@@ -311,11 +280,5 @@ public class Controller extends Applet{
 			}
 		}
 		return list;
-	}
-
-	private void throwException(String message) throws Exception{
-		Exception e = new Exception();
-		e.initCause(new Throwable(message));
-		throw e;
 	}
 }
