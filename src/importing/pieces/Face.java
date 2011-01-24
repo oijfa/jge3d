@@ -104,27 +104,31 @@ public class Face {
 	}
 
 	public void draw() {
-		/*
-		Vector3f norm = calculateNormal(vertices.get(0),vertices.get(1),vertices.get(2));
-		GL11.glNormal3f(norm.x, norm.y, norm.z);
-		*/
 		for(int i = 0; i < vertices.size(); i++){
 			Vector3f v = vertices.get(i);
 			Vector3f n = new Vector3f();
 			GL11.glVertex3f(v.x, v.y, v.z);
 			
+			//if there are no defined vectors we do it ourselves
+			//otherwise we use the ones given
 			if( i >= vertexNormals.size() ){
-				/*
-				Vector3f line1 = vertices.get(0);
-				Vector3f line2 = vertices.get(0);
-				line1.sub(vertices.get(1));
-				line2.sub(vertices.get(2));
+				Vector3f
+					vertex0 = new Vector3f(),
+					vertex1 = new Vector3f(),
+					vertex2 = new Vector3f(),
+					line1 = new Vector3f(),
+					line2 = new Vector3f();
+			
+				vertex0 = vertices.get(0);
+				vertex1 = vertices.get(1);
+				vertex2 = vertices.get(2);
+				line1.sub(vertex0,vertex2);
+				line2.sub(vertex0,vertex1);
 				n.cross(line1, line2);
-				*/
 			}else{
 				n = vertexNormals.get(i);
-				GL11.glNormal3f(n.x, n.y, n.z);
 			}
+			GL11.glNormal3f(n.x, n.y, n.z);
 		}
 	}
 	

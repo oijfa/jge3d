@@ -93,6 +93,7 @@ public class Tree extends ScrollPane implements Observer {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void createSubNode(TreeTableNode node, String parent, String name) {
 		Node insertTo = findChildNode(parent, node);
 		if( insertTo != null ){

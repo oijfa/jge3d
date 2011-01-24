@@ -1,5 +1,7 @@
 package input;
 
+import importing.XGL_Parser;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -94,7 +96,21 @@ public class Input {
 			case 1:
 				BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 				Entity ent = new Entity(1.0f,boxShape,true);
-				ent.applyForce(camera.getRayTo(Mouse.getX(), adjustY), camera.getPosition());
+				ent.setPosition(camera.getPosition());
+				XGL_Parser xgl_parser = new XGL_Parser();
+				try{
+					//xgl_parser.readFile("resources/models/misc/legoman.xgl");
+					//xgl_parser.readFile("resources/models/misc/10010260.xgl");
+					xgl_parser.readFile("resources/models/misc/box2.xgl");
+					//p.readFile("resources/models/misc/cath.xgl");
+					//p.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
+				}catch(Exception e){
+					e.printStackTrace();
+					System.out.println("Model loading failed");
+				}
+				ent.setModel(xgl_parser.createModel());
+				Vector3f impulse = camera.getRayTo(Mouse.getX(), adjustY,10000);
+				ent.applyImpulse(impulse, camera.getPosition());
 				objectList.enqueue(ent, QueueItem.ADD);
 				break;
 			case 0://Left Button

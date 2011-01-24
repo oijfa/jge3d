@@ -132,9 +132,9 @@ public class Controller extends Applet{
 		try{
 			//xgl_parser.readFile("resources/models/misc/legoman.xgl");
 			//xgl_parser.readFile("resources/models/misc/10010260.xgl");
-			xgl_parser.readFile("resources/models/misc/box2.xgl");
-			//p.readFile("resources/models/misc/cath.xgl");
-			//p.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
+			//xgl_parser.readFile("resources/models/misc/box2.xgl");
+			xgl_parser.readFile("resources/models/cathodes/cath.xgl");
+			//xgl_parser.readFile("resources/models/cathodes/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Model loading failed");
@@ -151,21 +151,13 @@ public class Controller extends Applet{
 
 		cam.focusOn(ent);
 		
-		for(int i=10;i<15;i+=10) {
+		for(int i=10;i<100;i+=10) {
 			ent = new Entity(10.0f, boxShape, false);
 			ent.setModel(xgl_parser.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
 			//physics.reduceHull(ent);
 			objectList.enqueue(ent, QueueItem.ADD);
 		}
-
-		boxShape = new BoxShape(new Vector3f(2, 2, 2));
-		ent = new Entity(1.0f, boxShape, false);
-		ent.setModel(xgl_parser.createModel());
-		ent.setPosition(new Vector3f(-5.0f,0.0f,-10.0f));
-		//physics.reduceHull(ent);
-		objectList.enqueue(ent, QueueItem.ADD);
-
 	}
 	
 	@SuppressWarnings("unused")

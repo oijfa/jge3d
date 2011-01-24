@@ -180,11 +180,8 @@ public class Camera extends Entity {
 	}
 	
 	//TODO: This needs cleaned up and commented real bad
-	public Vector3f getRayTo(int x, int y) {	
-		float top = 1f;
-		float bottom = -1f;
-		float tanFov = (top - bottom) * 0.5f / Renderer.nearClipping;
-		float fov = 2f * (float) Math.atan(tanFov);
+	public Vector3f getRayTo(int x, int y) { return getRayTo(x, y, (int)Renderer.farClipping); }
+	public Vector3f getRayTo(int x, int y, int farDistance) {	
 
 		Vector3f rayFrom = new Vector3f(this.getPosition());
 		Vector3f rayForward = new Vector3f();
@@ -192,7 +189,7 @@ public class Camera extends Entity {
 		rayForward.normalize();
 
 		//Scale by the far clipping plane
-		rayForward.scale(Renderer.farClipping);
+		rayForward.scale(farDistance);
 
 		Vector3f vertical = new Vector3f(this.getUp());
 
@@ -202,12 +199,10 @@ public class Camera extends Entity {
 		vertical.cross(hor, rayForward);
 		vertical.normalize();
 
-		float tanfov = (float) Math.tan(0.5f * fov);
-		
 		float aspect = window.getHeight() / (float)window.getWidth();
 		
-		hor.scale(Renderer.farClipping * tanfov);
-		vertical.scale(Renderer.farClipping * tanfov);
+		hor.scale(farDistance );
+		vertical.scale(farDistance );
 		
 		if (aspect < 1f) {
 			hor.scale(1f / aspect);
@@ -221,7 +216,7 @@ public class Camera extends Entity {
 		Vector3f dHor = new Vector3f(hor);
 		dHor.scale(1f / (float) window.getWidth());
 		Vector3f dVert = new Vector3f(vertical);
-		dVert.scale(1.f / (float) window.getHeight());
+		dVert.scale(1.0f / (float) window.getHeight());
 
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
