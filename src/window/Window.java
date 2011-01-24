@@ -66,7 +66,7 @@ public class Window extends DesktopArea {
 		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
 		*/
 
-		input = new Input(objectList,this);
+		input = new Input(objectList);
 		entityMenu = new EntityMenu(m);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");

@@ -1,12 +1,146 @@
 <config>
 	<item>
-		<name>Name</name>
+		<name>Braze Coat</name>
 		<value></value>
 		<item>
-			<name>model_name</name>
+			<name>brazecoat</name>
 			<value></value>
-			<path>./lib/box2.xgl</path>
+			<path>resources/models/cathodes/minixgl/brazecoat.xgl</path>
 			<position>0,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Coating</name>
+		<value></value>
+		<item>
+			<name>coating</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/coating.xgl</path>
+			<position>2,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Impregnant</name>
+		<value></value>
+		<item>
+			<name>impregnant</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/impregnant.xgl</path>
+			<position>4,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Body</name>
+		<value></value>
+		<item>
+			<name>minibody</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/minibody.xgl</path>
+			<position>6,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Cathode</name>
+		<value></value>
+		<item>
+			<name>minicathode</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/minicathode.xgl</path>
+			<position>8,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Cathode Assembly</name>
+		<value></value>
+		<item>
+			<name>minicathodeassembly</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/minicathodeassembly.xgl</path>
+			<position>10,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Heater</name>
+		<value></value>
+		<item>
+			<name>miniheater</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/miniheater.xgl</path>
+			<position>12,0,0</position>
+			<item>
+				<name>prop_name</name>
+				<value>prop_value</value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>prop_name</name>
+		<value>prop_value</value>
+	</item>
+	
+	<item>
+		<name>Potting</name>
+		<value></value>
+		<item>
+			<name>potting</name>
+			<value></value>
+			<path>resources/models/cathodes/minixgl/potting.xgl</path>
+			<position>14,0,0</position>
 			<item>
 				<name>prop_name</name>
 				<value>prop_value</value>

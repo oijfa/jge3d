@@ -120,8 +120,9 @@ public class Controller extends Applet{
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		loadTestShapes(cam);
-		//pullModelFiles("resources/models/cathodes");
+		//loadTestShapes(cam);
+		pullModelFiles("resources/models/cathodes/minixgl");
+		readConfigFile();
 	}
 	
 	private void loadTestShapes(Camera cam) {

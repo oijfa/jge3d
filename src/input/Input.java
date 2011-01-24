@@ -14,7 +14,6 @@ import com.bulletphysics.collision.shapes.BoxShape;
 import de.matthiasmann.twl.Event;
 
 import physics.Physics;
-import window.Window;
 
 import entity.Camera;
 import entity.Entity;
@@ -25,13 +24,6 @@ public class Input {
 	private Camera camera;
 	private EntityList objectList;
 	private Physics physics;
-	private Window window;
-
-	//private int deltaX;
-	//private int deltaY;
-
-	//Holds Y coordinate that is reversed for raycasting
-	private int adjustY;
 	
 	// ANGLES
 	private static final float LEFT_RIGHT_INC = 0.00001f;
@@ -40,10 +32,9 @@ public class Input {
 	// DISTANCE
 	private static final float IN_OUT_INC = 1f;
 
-	public Input(EntityList objectList, Window window) {
+	public Input(EntityList objectList) {
 		this.objectList = objectList;
 		physics = objectList.getPhysics();
-		this.window=window;
 	}
 
 	public void init() {
@@ -88,11 +79,6 @@ public class Input {
 	private boolean handleMouse(Event evt){
 		boolean button_caught=true;
 		//update the changes in position
-		//deltaX = Mouse.getEventDX();
-		//deltaY = Mouse.getEventDY();
-
-		//fix mouse coordinates
-		adjustY = window.getHeight()-1-Mouse.getEventY();	
 		switch(evt.getMouseButton()){
 			case 1:
 				BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
@@ -110,7 +96,7 @@ public class Input {
 					System.out.println("Model loading failed");
 				}
 				ent.setModel(parser.createModel());
-				Vector3f impulse = camera.getRayTo(Mouse.getX(), Mouse.getY(),100);
+				Vector3f impulse = camera.getRayTo(Mouse.getEventX(), Mouse.getEventY());
 				impulse.scale(0.02f);
 				ent.setGravity(new Vector3f(0,0,0));
 				ent.applyImpulse(impulse, camera.getPosition());
@@ -120,7 +106,7 @@ public class Input {
 				physics.drag(
 					camera,
 					Mouse.getEventButtonState()? 0 : 1,
-					camera.getRayTo(Mouse.getX(),Mouse.getY())
+					camera.getRayTo(Mouse.getEventX(),Mouse.getEventY())
 				);
 				break;
 			case -1:
@@ -146,7 +132,7 @@ public class Input {
 					break;
 			}
 		}
-		physics.motionFunc(camera,Mouse.getEventX(), adjustY);
+		physics.motionFunc(camera,Mouse.getEventX(), Mouse.getEventY());
 		return button_caught;
 	}
 }
