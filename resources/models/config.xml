@@ -2,153 +2,100 @@
 	<item>
 		<name>Braze Coat</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/brazecoat.xgl</path>
+		<position>101,0,0</position>
+		
 		<item>
-			<name>brazecoat</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/brazecoat.xgl</path>
-			<position>0,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Coating</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/coating.xgl</path>
+		<position>102,0,0</position>
+		
 		<item>
-			<name>coating</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/coating.xgl</path>
-			<position>2,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Impregnant</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/impregnant.xgl</path>
+		<position>103,0,0</position>
+		
 		<item>
-			<name>impregnant</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/impregnant.xgl</path>
-			<position>4,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Body</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/minibody.xgl</path>
+		<position>104,0,0</position>
+		
 		<item>
-			<name>minibody</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/minibody.xgl</path>
-			<position>6,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Cathode</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
+		<position>105,0,0</position>
+		
 		<item>
-			<name>minicathode</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/minicathode.xgl</path>
-			<position>8,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
-	<item>
-		<name>Cathode Assembly</name>
-		<value></value>
-		<item>
-			<name>minicathodeassembly</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/minicathodeassembly.xgl</path>
-			<position>10,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
-		</item>
-	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Heater</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/heater.xgl</path>
+		<position>106,0,0</position>
+		
 		<item>
-			<name>miniheater</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/miniheater.xgl</path>
-			<position>12,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
-	</item>
-	
 	<item>
 		<name>Potting</name>
 		<value></value>
+		<path>resources/models/cathodes/normalxgl/potting.xgl</path>
+		<position>107,0,0</position>
+		
 		<item>
-			<name>potting</name>
-			<value></value>
-			<path>resources/models/cathodes/minixgl/potting.xgl</path>
-			<position>14,0,0</position>
-			<item>
-				<name>prop_name</name>
-				<value>prop_value</value>
-			</item>
+			<name>prop_name</name>
+			<value>prop_value</value>
 		</item>
 	</item>
 	<item>
-		<name>prop_name</name>
-		<value>prop_value</value>
+		<name>Cathode Assembly</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
+		<position>0,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>linear_focus</name>
+		<value></value>
+		<path></path>
+		<position>104.5,0,0</position>
+		<show>false</show>
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
 	</item>
 </config>

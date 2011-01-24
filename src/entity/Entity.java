@@ -172,33 +172,35 @@ public class Entity extends RigidBody{
 	/* MISC */
 
 	public void draw(){
-		GL11.glPushMatrix();
-			//Retrieve the current motionstate to get the transform
-			//versus the world
-			Transform transform_matrix = new Transform();
-			DefaultMotionState motion_state = (DefaultMotionState) this.getMotionState();
-			transform_matrix.set(motion_state.graphicsWorldTrans);
-			
-			//Adjust the position and rotation of the object from physics
-			float[] body_matrix = new float[16];
-			FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-			transform_matrix.getOpenGLMatrix(body_matrix);
-			buf.put(body_matrix);
-			buf.flip();
-			GL11.glMultMatrix(buf);
-			buf.clear();
-			
-			//Scaling code (testing)
-			Vector3f halfExtent = new Vector3f();
-			this.getCollisionShape().getLocalScaling(halfExtent);
-			GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
-			
-			//Draw the model
+		if( shouldDraw ){
 			GL11.glPushMatrix();
-				if( model != null)
-					model.draw();		
+				//Retrieve the current motionstate to get the transform
+				//versus the world
+				Transform transform_matrix = new Transform();
+				DefaultMotionState motion_state = (DefaultMotionState) this.getMotionState();
+				transform_matrix.set(motion_state.graphicsWorldTrans);
+				
+				//Adjust the position and rotation of the object from physics
+				float[] body_matrix = new float[16];
+				FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+				transform_matrix.getOpenGLMatrix(body_matrix);
+				buf.put(body_matrix);
+				buf.flip();
+				GL11.glMultMatrix(buf);
+				buf.clear();
+				
+				//Scaling code (testing)
+				Vector3f halfExtent = new Vector3f();
+				this.getCollisionShape().getLocalScaling(halfExtent);
+				GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
+				
+				//Draw the model
+				GL11.glPushMatrix();
+					if( model != null)
+						model.draw();		
+				GL11.glPopMatrix();
 			GL11.glPopMatrix();
-		GL11.glPopMatrix();
+		}
 	}
 
 	

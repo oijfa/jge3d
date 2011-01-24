@@ -23,8 +23,13 @@ import org.w3c.dom.Node;
 
 import physics.Physics;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
+import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.MotionState;
+import com.bulletphysics.linearmath.Transform;
 
 import de.matthiasmann.twl.model.TreeTableNode;
 
@@ -66,15 +71,15 @@ public class Controller extends Applet{
 	public Controller(){	}
 
 	private void startThreads() throws Exception {
-		treeModel = new window.tree.Model();
-		readConfigFile();
-		
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
 		physics_thread.start();
 		
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
+
+		treeModel = new window.tree.Model();
+		readConfigFile();		
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
@@ -87,8 +92,9 @@ public class Controller extends Applet{
 			while (isRunning) {
 				if(objectList != null && objectList.queueSize() > 0)
 					objectList.parseQueue();
-				else
+				else{
 					physics.clientUpdate();
+				}
 			}
 		}
 	};
@@ -121,12 +127,13 @@ public class Controller extends Applet{
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
 		//loadTestShapes(cam);
-		pullModelFiles("resources/models/cathodes/minixgl");
-		readConfigFile();
+		//pullModelFiles("resources/models/cathodes/minixgl");
+		
+		GhostObject temp;
 	}
 	
 	private void loadTestShapes(Camera cam) {
-		physics.setGravity(new Vector3f(0,-10,0));
+		physics.setGravity(new Vector3f(0,0,0));
 		
 		//Legoman thing
 		Parser p = new XGL_Parser();
@@ -187,9 +194,9 @@ public class Controller extends Applet{
 					if( p != null){
 						//Make a cathode	
 						BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-						Entity ent = new Entity(0.0f, boxShape, false);	
+						Entity ent = new Entity(1.0f, boxShape, false);	
 						ent.setModel(p.createModel());	
-						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
+						//ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
 						ent.setProperty("name", f.getPath().substring(0,dotPos-1));
 						objectList.enqueue(ent, QueueItem.ADD);
 						ent.setShouldDraw(false);
@@ -232,26 +239,67 @@ public class Controller extends Applet{
 		}
 	}
 
-	private void createItem(Element ele, TreeTableNode parent) {
+	private void createItem(Element ele, TreeTableNode parent) throws Exception {
 		String name;
 		String value;
+		String path;
+		boolean show;
+		Vector3f position;
+		String[] xyz;
 		ArrayList<Node> tagList = findChildrenByName(ele, "name");
 		name = tagList.get(0).getTextContent();
 		
 		tagList = findChildrenByName(ele, "value");
 		value = tagList.get(0).getTextContent();
 		
-		window.tree.Node item;
-		if( parent == treeModel ){
-			 item = treeModel.insert(name, "");
+		tagList = findChildrenByName(ele, "show");
+		if(tagList.size() == 0){
+			show = true;
+		}else if(tagList.get(0).getTextContent() == "true"){
+			show = true;
 		}else{
-			item = ((window.tree.Node)parent).insert(name,value);
+			show = false;
 		}
 		
-		tagList = findChildrenByName(ele, "item");
-		for(int i = 0; i < tagList.size(); i++){
-			//Create nodes for all of them
-			createItem((Element)tagList.get(i), item);
+		tagList = findChildrenByName(ele, "position");
+		if(tagList.size() > 0){
+			xyz = tagList.get(0).getTextContent().split(",");
+			position = new Vector3f(Float.parseFloat(xyz[0]),Float.parseFloat(xyz[1]),Float.parseFloat(xyz[2]));
+		}else{
+			position = new Vector3f(0,0,0);
+		}
+		
+		tagList = findChildrenByName(ele, "path");
+		if( tagList.size() > 0){
+			path = tagList.get(0).getTextContent();
+			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+			Entity ent = new Entity(1.0f, boxShape, false);
+			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+			if( !path.equals("") ){
+				//Make a cathode	
+				Parser p = new XGL_Parser();
+				p.readFile(path);
+				ent.setModel(p.createModel());
+			}
+	
+			ent.setPosition(position);
+			ent.setProperty("name", name);
+			objectList.enqueue(ent, QueueItem.ADD);
+		}
+		
+		if(show == true){
+			window.tree.Node item;
+			if( parent == treeModel ){
+				 item = treeModel.insert(name, "");
+			}else{
+				item = ((window.tree.Node)parent).insert(name,value);
+			}
+			
+			tagList = findChildrenByName(ele, "item");
+			for(int i = 0; i < tagList.size(); i++){
+				//Create nodes for all of them
+				createItem((Element)tagList.get(i), item);
+			}
 		}
 		
 		
@@ -262,6 +310,7 @@ public class Controller extends Applet{
 		names[0] = name;
 		return findChildrenByName(root,names);
 	}
+	
 	private ArrayList<Node> findChildrenByName(Node root, String[] names){
 		ArrayList<Node> list = new ArrayList<Node>();
 		for( int i = 0; i < names.length; i++){
