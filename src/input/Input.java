@@ -1,5 +1,6 @@
 package input;
 
+import importing.Parser;
 import importing.XGL_Parser;
 
 import org.lwjgl.LWJGLException;
@@ -97,19 +98,21 @@ public class Input {
 				BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 				Entity ent = new Entity(1.0f,boxShape,true);
 				ent.setPosition(camera.getPosition());
-				XGL_Parser xgl_parser = new XGL_Parser();
+				Parser parser = new XGL_Parser();
 				try{
-					//xgl_parser.readFile("resources/models/misc/legoman.xgl");
-					//xgl_parser.readFile("resources/models/misc/10010260.xgl");
-					xgl_parser.readFile("resources/models/misc/box2.xgl");
-					//p.readFile("resources/models/misc/cath.xgl");
-					//p.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
+					//parser.readFile("resources/models/misc/legoman.xgl");
+					//parser.readFile("resources/models/misc/10010260.xgl");
+					parser.readFile("resources/models/misc/box2.xgl");
+					//parser.readFile("resources/models/misc/cath.xgl");
+					//parser.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
 				}catch(Exception e){
 					e.printStackTrace();
 					System.out.println("Model loading failed");
 				}
-				ent.setModel(xgl_parser.createModel());
+				ent.setModel(parser.createModel());
 				Vector3f impulse = camera.getRayTo(Mouse.getX(), adjustY,10000);
+				impulse.scale(0.02f);
+				ent.setGravity(new Vector3f(0,0,0));
 				ent.applyImpulse(impulse, camera.getPosition());
 				objectList.enqueue(ent, QueueItem.ADD);
 				break;
