@@ -128,14 +128,14 @@ public class Controller extends Applet{
 		physics.setGravity(new Vector3f(0,-10,0));
 		
 		//Legoman thing
-		//Parser xgl_parser = new XGL_Parser();
-		Parser p = new Obj_Parser();
+		Parser p = new XGL_Parser();
+		//Parser p = new Obj_Parser();
 		try{
 			//p.readFile("resources/models/misc/legoman.xgl");
 			//p.readFile("resources/models/misc/10010260.xgl");
-			//p.readFile("resources/models/misc/box2.xgl");
+			p.readFile("resources/models/misc/box2.xgl");
 			//p.readFile("resources/models/misc/cath.xgl");
-			p.readFile("resources/models/cathodes/0335-CATHODE_ASSEMBLY.obj");
+			//p.readFile("resources/models/cathodes/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Model loading failed");
@@ -149,10 +149,10 @@ public class Controller extends Applet{
 
 		objectList.enqueue(ent, QueueItem.ADD);
 		cam.setDistance(20.0f);
-
+		cam.setCollisionFlags(4);
 		cam.focusOn(ent);
 		
-		for(int i=10;i<100;i+=10) {
+		for(int i=10;i<20;i+=10) {
 			ent = new Entity(10.0f, boxShape, false);
 			ent.setModel(p.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));

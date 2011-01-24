@@ -1,6 +1,14 @@
 package entity;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
 import javax.vecmath.Vector3f;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import render.Renderer;
 
@@ -182,58 +190,31 @@ public class Camera extends Entity {
 	//TODO: This needs cleaned up and commented real bad
 	public Vector3f getRayTo(int x, int y) { return getRayTo(x, y, (int)Renderer.farClipping); }
 	public Vector3f getRayTo(int x, int y, int farDistance) {	
-
-		Vector3f rayFrom = new Vector3f(this.getPosition());
-		Vector3f rayForward = new Vector3f();
-		rayForward.sub(this.getFocusPosition(), this.getPosition());
-		rayForward.normalize();
-
-		//Scale by the far clipping plane
-		rayForward.scale(farDistance);
-
-		Vector3f vertical = new Vector3f(this.getUp());
-
-		Vector3f hor = new Vector3f();
-		hor.cross(rayForward, vertical);
-		hor.normalize();
-		vertical.cross(hor, rayForward);
-		vertical.normalize();
-
-		float aspect = window.getHeight() / (float)window.getWidth();
+		//Create stupid floatbuffers for LWJGL
+		IntBuffer viewport = BufferUtils.createIntBuffer(16);
+		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+		FloatBuffer winZ = BufferUtils.createFloatBuffer(1);
+		FloatBuffer position = BufferUtils.createFloatBuffer(3);
+		Vector3f pos = new Vector3f();
 		
-		hor.scale(farDistance );
-		vertical.scale(farDistance );
-		
-		if (aspect < 1f) {
-			hor.scale(1f / aspect);
-		}
-		else {
-			vertical.scale(aspect);
-		}
-		
-		Vector3f rayToCenter = new Vector3f();
-		rayToCenter.add(rayFrom, rayForward);
-		Vector3f dHor = new Vector3f(hor);
-		dHor.scale(1f / (float) window.getWidth());
-		Vector3f dVert = new Vector3f(vertical);
-		dVert.scale(1.0f / (float) window.getHeight());
+		//Get some information about the viewport, modelview, and projection matrix
+		GL11.glGetFloat( GL11.GL_MODELVIEW_MATRIX, modelview );
+		GL11.glGetFloat( GL11.GL_PROJECTION_MATRIX, projection );
+		GL11.glGetInteger( GL11.GL_VIEWPORT, viewport );
 
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
-		tmp1.scale(0.5f, hor);
-		tmp2.scale(0.5f, vertical);
+		//Find the depth to 
+		GL11.glReadPixels(x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, winZ);
 
-		Vector3f rayTo = new Vector3f();
-		rayTo.sub(rayToCenter, tmp1);
-		rayTo.add(tmp2);
+		//get the position in 3d space by casting a ray from the mouse
+		//coords to the first contacted point in space
+		//GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection, viewport, position);
+		GLU.gluUnProject(x, y, winZ.get(), modelview, projection, viewport, position);
 
-		tmp1.scale(x, dHor);
-		tmp2.scale(y, dVert);
+		//Make a vector out of the silly float buffer LWJGL forces us to use
+		pos.set(position.get(0), position.get(1), position.get(2));
 
-		rayTo.add(tmp1);
-		rayTo.sub(tmp2);
-		
-		return rayTo;
+		return pos;
 	}
 	
 	public void setWindowReference(Window window) {

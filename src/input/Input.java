@@ -110,7 +110,7 @@ public class Input {
 					System.out.println("Model loading failed");
 				}
 				ent.setModel(parser.createModel());
-				Vector3f impulse = camera.getRayTo(Mouse.getX(), adjustY,10000);
+				Vector3f impulse = camera.getRayTo(Mouse.getX(), Mouse.getY(),100);
 				impulse.scale(0.02f);
 				ent.setGravity(new Vector3f(0,0,0));
 				ent.applyImpulse(impulse, camera.getPosition());
@@ -120,7 +120,7 @@ public class Input {
 				physics.drag(
 					camera,
 					Mouse.getEventButtonState()? 0 : 1,
-					camera.getRayTo(Mouse.getX(),adjustY)
+					camera.getRayTo(Mouse.getX(),Mouse.getY())
 				);
 				break;
 			case -1:
