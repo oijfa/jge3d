@@ -49,10 +49,8 @@ public class Entity {
 	private String[] reqKeys = {"name", "collidable", "TTL"};
 	
 	//Keep track of number of entities for naming purposes
-
 	private static int num_entities=0;
 	
-
 	//For making entity groups (complex bodies)
 	private EntityList subEntities;
 	
@@ -107,6 +105,7 @@ public class Entity {
 	private void createGhostBody(float mass, CollisionShape shape) {
 		// rigid body is dynamic if and only if mass is non zero,
 		//otherwise static
+		GhostObject ghost = new GhostObject();
 		boolean isDynamic = (mass != 0f);
 
 		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
@@ -114,12 +113,13 @@ public class Entity {
 			shape.calculateLocalInertia(mass, localInertia);
 		}	
 
+		ghost.setCollisionShape(shape);
 		//This is extremely important; if you forget this
 		//then nothing will rotate
-		//((GhostObject) collision_object).setMassProps(mass, localInertia);
-		//((GhostObject) collision_object).updateInertiaTensor();
+		//ghost.setMassProps(mass, localInertia);
+		//ghost.updateInertiaTensor();
 		
-		collision_object = new GhostObject();
+		collision_object = ghost;
 	}
 	
 	//Sets the initial name of the body in the list

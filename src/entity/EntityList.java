@@ -64,7 +64,10 @@ public class EntityList implements EntityObserver, Subject{
 		if(e.keyExists("name")){
 			names.put((String)e.getProperty("name"), e);
 			names.size();
-			physics.addEntity(e);
+			
+			if( e.getCollisionObject() != null ){
+				physics.getDynamicsWorld().addCollisionObject(e.getCollisionObject());
+			}
 			e.registerObserver(this);
 			notifyObservers(e.getProperty("name"));
 			ret = true;

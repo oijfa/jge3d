@@ -270,8 +270,9 @@ public class Controller extends Applet{
 		if( tagList.size() > 0){
 			path = tagList.get(0).getTextContent();
 			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+			
 			Entity ent = new Entity(1.0f, boxShape, false);
-			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+			//ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 			if( !path.equals("") ){
 				//Make a cathode	
 				Parser p = new XGL_Parser();
@@ -298,8 +299,6 @@ public class Controller extends Applet{
 				createItem((Element)tagList.get(i), item);
 			}
 		}
-		
-		
 	}
 
 	private ArrayList<Node> findChildrenByName(Node root, String name){
