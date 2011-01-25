@@ -24,17 +24,23 @@ import monitoring.EntityObserver;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-public class Entity extends RigidBody{
+public class Entity {
 	//Properties
+	private CollisionObject collision_object;
 	private HashMap<String,Object> data;
 	private Model model;
 	private ArrayList<EntityObserver> observers;
 	private boolean shouldDraw = true;
+	public static enum ObjectType{ghost,rigidbody};
+	private ObjectType object_type;
 
 	/*Properties the engine uses a lot*/
 	public static String NAME = "name";
@@ -52,36 +58,70 @@ public class Entity extends RigidBody{
 	
 	/* Constructors */
 	public Entity(float mass,CollisionShape shape, boolean collide ) {
-		super(mass,new DefaultMotionState(),shape);
-		createRigidBody(mass,shape,collide);
+		if(collide) {
+			createRigidBody(mass,shape);
+			object_type = ObjectType.rigidbody;
+		}
+		else {
+			createGhostBody(mass,shape);
+			object_type = ObjectType.ghost;
+		}
 		initialSetup(collide);
 	}
 	public Entity(String name,float mass,CollisionShape shape, boolean collide) {
-		super(mass,new DefaultMotionState(),shape);
-		createRigidBody(mass,shape,collide);
+		if(collide) {
+			createRigidBody(mass,shape);
+			object_type = ObjectType.rigidbody;
+		}
+		else {
+			createGhostBody(mass,shape);
+			object_type = ObjectType.ghost;
+		}
 		initialSetup(name,collide);
 	}
 
 	/* Initializing segments */
 	//Creates the initial settings for a rigidbody
 	//This function is what we use to make things rotate over multiple axes
-	private void createRigidBody(float mass, CollisionShape shape, boolean collide) {
+	private void createRigidBody(float mass, CollisionShape shape) {
 		// rigid body is dynamic if and only if mass is non zero,
 		//otherwise static
 		boolean isDynamic = (mass != 0f);
 
 		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
 		if (isDynamic) {
-			shape = this.getCollisionShape();
 			shape.calculateLocalInertia(mass, localInertia);
-			this.setCollisionShape(shape);
 		}	
+
+		DefaultMotionState motion_state = new DefaultMotionState(new Transform());
+		RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motion_state, shape, localInertia);
+		
+		collision_object = new RigidBody(cInfo);
 		
 		//This is extremely important; if you forget this
 		//then nothing will rotate
-		this.setMassProps(mass, localInertia);
-		this.updateInertiaTensor();
+		((RigidBody) collision_object).setMassProps(mass, localInertia);
+		((RigidBody) collision_object).updateInertiaTensor();
 	}
+	
+	private void createGhostBody(float mass, CollisionShape shape) {
+		// rigid body is dynamic if and only if mass is non zero,
+		//otherwise static
+		boolean isDynamic = (mass != 0f);
+
+		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
+		if (isDynamic) {
+			shape.calculateLocalInertia(mass, localInertia);
+		}	
+
+		//This is extremely important; if you forget this
+		//then nothing will rotate
+		//((GhostObject) collision_object).setMassProps(mass, localInertia);
+		//((GhostObject) collision_object).updateInertiaTensor();
+		
+		collision_object = new GhostObject();
+	}
+	
 	//Sets the initial name of the body in the list
 	//Also sets some default options to the ent
 	private void initialSetup(boolean c){
@@ -114,9 +154,9 @@ public class Entity extends RigidBody{
 		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
-			Transform trans = this.getWorldTransform(new Transform());
+			Transform trans = collision_object.getWorldTransform(new Transform());
 			trans.origin.set(pos);
-			this.setWorldTransform(trans);
+			collision_object.setWorldTransform(trans);
 
 		} catch (Exception e) {
 			System.out.print(p.toString() + "<< Possible Incorrect data type for position, must be Vector3f\n");
@@ -149,7 +189,7 @@ public class Entity extends RigidBody{
 	/* ACCESSORS */
 	public Vector3f getPosition(){
 		Transform out = new Transform();
-		out = this.getWorldTransform(new Transform());
+		out = collision_object.getWorldTransform(new Transform());
 		return out.origin;
 
 	}
@@ -175,30 +215,36 @@ public class Entity extends RigidBody{
 		GL11.glPushMatrix();
 			//Retrieve the current motionstate to get the transform
 			//versus the world
-			Transform transform_matrix = new Transform();
-			DefaultMotionState motion_state = (DefaultMotionState) this.getMotionState();
-			transform_matrix.set(motion_state.graphicsWorldTrans);
-			
-			//Adjust the position and rotation of the object from physics
-			float[] body_matrix = new float[16];
-			FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-			transform_matrix.getOpenGLMatrix(body_matrix);
-			buf.put(body_matrix);
-			buf.flip();
-			GL11.glMultMatrix(buf);
-			buf.clear();
-			
-			//Scaling code (testing)
-			Vector3f halfExtent = new Vector3f();
-			this.getCollisionShape().getLocalScaling(halfExtent);
-			GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
-			
-			//Draw the model
-			GL11.glPushMatrix();
-				if( model != null)
-					model.draw();		
+
+			if(this.getObjectType()==ObjectType.rigidbody) {
+				Transform transform_matrix = new Transform();
+				DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
+				transform_matrix.set(motion_state.graphicsWorldTrans);
+				
+				//Adjust the position and rotation of the object from physics
+				float[] body_matrix = new float[16];
+				FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+				transform_matrix.getOpenGLMatrix(body_matrix);
+				buf.put(body_matrix);
+				buf.flip();
+				GL11.glMultMatrix(buf);
+				buf.clear();
+				
+				//Scaling code (testing)
+				Vector3f halfExtent = new Vector3f();
+				collision_object.getCollisionShape().getLocalScaling(halfExtent);
+				GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
+				
+				//Draw the model
+				GL11.glPushMatrix();
+					if( model != null)
+						model.draw();		
+				GL11.glPopMatrix();
 			GL11.glPopMatrix();
-		GL11.glPopMatrix();
+			} else {
+				//System.out.println("Method [draw] not supported for ghost object");
+			}
+
 	}
 
 	
@@ -275,5 +321,31 @@ public class Entity extends RigidBody{
         GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
         GL11.glEnd();
 	}
-
+	public void setCollisionFlags(int kinematic_object) {
+		collision_object.setCollisionFlags(kinematic_object);	
+	}
+	public void setGravity(Vector3f gravity) {
+		if(object_type==ObjectType.rigidbody)
+			((RigidBody) collision_object).setGravity(gravity);
+		else
+			System.out.println("Method [setGravity] not supported for ghost object");
+	}
+	public void applyImpulse(Vector3f impulse, Vector3f position) {
+		if(object_type==ObjectType.rigidbody)
+			((RigidBody) collision_object).applyImpulse(impulse, position);
+		else
+			System.out.println("Method [applyImpulse] not supported for ghost object");
+	}
+	public CollisionObject getCollisionObject() {
+		return collision_object;
+	}
+	public void setMotionState(DefaultMotionState defaultMotionState) {
+		if(object_type==ObjectType.rigidbody)
+			((RigidBody) collision_object).setMotionState(defaultMotionState);
+		else
+			System.out.println("Method [setActivation] not supported for ghost object");		
+	}
+	public ObjectType getObjectType() {
+		return object_type;
+	}
 }

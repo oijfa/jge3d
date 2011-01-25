@@ -23,6 +23,7 @@ import org.w3c.dom.Node;
 
 import physics.Physics;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
@@ -120,11 +121,11 @@ public class Controller extends Applet{
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		//loadTestShapes(cam);
-		pullModelFiles("resources/models/cathodes/minixgl");
-		readConfigFile();
+		loadTestShapes(cam);
+		//pullModelFiles("resources/models/cathodes/minixgl");
+		//readConfigFile();
 	}
-	
+
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -150,13 +151,14 @@ public class Controller extends Applet{
 
 		objectList.enqueue(ent, QueueItem.ADD);
 		cam.setDistance(20.0f);
-		cam.setCollisionFlags(4);
+		
 		cam.focusOn(ent);
 		
-		for(int i=10;i<20;i+=10) {
+		for(int i=10;i<1000;i+=10) {
 			ent = new Entity(10.0f, boxShape, false);
 			ent.setModel(p.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
+			ent.setCollisionFlags(CollisionFlags.KINEMATIC_OBJECT);
 			//physics.reduceHull(ent);
 			objectList.enqueue(ent, QueueItem.ADD);
 		}
@@ -192,7 +194,7 @@ public class Controller extends Applet{
 						ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
 						ent.setProperty("name", f.getPath().substring(0,dotPos-1));
 						objectList.enqueue(ent, QueueItem.ADD);
-						ent.setShouldDraw(false);
+						ent.setShouldDraw(true);
 					}
 		        }
 			}else{

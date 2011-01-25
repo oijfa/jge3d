@@ -6,13 +6,10 @@ import java.nio.IntBuffer;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import render.Renderer;
-
-import window.Window;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 
@@ -31,7 +28,6 @@ public class Camera extends Entity {
 	private float rotation;						//Angle left and right
 	private float distance;						//distance from focus
 	private Vector3f up_vector;					//vector pointing up
-	private Window window;
 	
 	private Entity focus;
 
@@ -74,7 +70,7 @@ public class Camera extends Entity {
 	public Vector3f getFocusPosition(){
 		Vector3f temp = new Vector3f();
 		if(focus != null){
-			focus.getCenterOfMassPosition(temp);
+			temp = focus.getPosition();
 		}else{
 			temp.set(0, 0, 0);
 		}
@@ -179,7 +175,7 @@ public class Camera extends Entity {
 		//Debug the camera
 		//System.out.print("Height:		" + height 	+ "	Width:	" + width + "\n");
 		Vector3f position = new Vector3f();
-		this.getCenterOfMassPosition(position);
+		position = this.getPosition();
 		
 		Vector3f focpos = this.getFocusPosition();
 		System.out.print("Camera = X:	" + position.x + "	Y:	" + position.y + "	Z:	" + position.z + "\n");
@@ -215,9 +211,5 @@ public class Camera extends Entity {
 		pos.set(position.get(0), position.get(1), position.get(2));
 
 		return pos;
-	}
-	
-	public void setWindowReference(Window window) {
-		this.window = window;
 	}
 }

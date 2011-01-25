@@ -26,6 +26,7 @@ import com.bulletphysics.linearmath.Transform;
 
 import entity.Camera;
 import entity.Entity;
+import entity.Entity.ObjectType;
 
 public class Physics {
 	//World Definitions
@@ -40,7 +41,7 @@ public class Physics {
 
 	//Used for mouse movement
 	private TypedConstraint pickedConstraint = null;
-	private Entity pickedEntity = null;
+	private CollisionObject pickedEntity = null;
 	
 	//private List<CollisionShape> collisionShapes = new ArrayList<CollisionShape>();
 	float deltaT;
@@ -105,8 +106,19 @@ public class Physics {
 		return deltaT;
 	}
 	
-	public void addEntity(Entity e){ dynamicsWorld.addRigidBody(e); }
-	public void removeEntity(Entity e){ dynamicsWorld.removeRigidBody(e); }
+	public void addEntity(Entity e){
+		if(e.getObjectType()==ObjectType.rigidbody)
+			dynamicsWorld.addRigidBody((RigidBody) e.getCollisionObject());
+		else
+			System.out.println("Method [addEntity] not supported for ghost object");
+	}
+	public void removeEntity(Entity e){
+		if(e.getObjectType()==ObjectType.rigidbody)
+			dynamicsWorld.removeRigidBody((RigidBody) e.getCollisionObject());
+		else
+			System.out.println("Method [removeEntity] not supported for ghost object");
+		
+	}
 	
 	public void reduceHull(Entity e){
 		int vertexcount=0;
@@ -194,7 +206,7 @@ public class Physics {
 		meshshape.setOptimizedBvh(optimizedmesh);
 
 		//Override the original shape with the new one
-		e.setCollisionShape(meshshape);
+		e.getCollisionObject().setCollisionShape(meshshape);
 	}
 	
 	public void drag(Camera camera,int state,Vector3f rayTo) {
@@ -207,7 +219,7 @@ public class Physics {
 					if (hitBody != null) {
 						// other exclusions?
 						if (!(hitBody.isStaticObject() || hitBody.isKinematicObject())) {;
-							pickedEntity = (Entity) hitBody;
+							pickedEntity = hitBody;
 							pickedEntity.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
 							Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
