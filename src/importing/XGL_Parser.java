@@ -75,6 +75,13 @@ public class XGL_Parser extends Parser{
 						drawableMeshes.add(m);
 					}
 				}
+				if(tagList.size() == 0){
+					for(Integer i : meshes.keySet()){
+						for(Mesh m : meshes.get(i)){
+							drawableMeshes.add(m);
+						}
+					}
+				}
 			}else{
 				throwException("World tag should be root element.");
 			}

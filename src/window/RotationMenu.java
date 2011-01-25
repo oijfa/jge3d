@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.linearmath.Transform;
+
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
@@ -36,7 +38,7 @@ public class RotationMenu extends ResizableFrame {
 	private ThreadFactory threadStarter;
 	private volatile boolean leftAlive, rightAlive, upAlive, downAlive, inAlive, outAlive;
 	
-	
+	static boolean linearShow = false;
 	public RotationMenu(){
 		setTitle("Camera Rotation");
 		buttonThreads = new HashMap<String, Thread>();
@@ -175,13 +177,13 @@ public class RotationMenu extends ResizableFrame {
 		align.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				int pos_x=0;
-				for(String key:objectList.getKeySet()) {
-					Entity ent = objectList.getItem(key);
-					if(!key.equals(Camera.CAMERA_NAME)) {
-						pos_x += 2;
-						ent.setPosition(new Vector3f(pos_x,0,0));
-					}
+				
+				if(!linearShow){
+					cam.focusOn(objectList.getItem("linear_focus"));
+					linearShow = true;
+				}else{
+					cam.focusOn(null);
+					linearShow = false;
 				}
 			}
 		});

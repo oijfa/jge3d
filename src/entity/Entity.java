@@ -212,13 +212,15 @@ public class Entity {
 	/* MISC */
 
 	public void draw(){
-		GL11.glPushMatrix();
-			//Retrieve the current motionstate to get the transform
-			//versus the world
-
-			if(this.getObjectType()==ObjectType.rigidbody) {
+		//Retrieve the current motionstate to get the transform
+		//versus the world
+		if( shouldDraw && this.getObjectType()==ObjectType.rigidbody){
+			GL11.glPushMatrix();
+				//Retrieve the current motionstate to get the transform
+				//versus the world
 				Transform transform_matrix = new Transform();
 				DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
+
 				transform_matrix.set(motion_state.graphicsWorldTrans);
 				
 				//Adjust the position and rotation of the object from physics
@@ -241,13 +243,11 @@ public class Entity {
 						model.draw();		
 				GL11.glPopMatrix();
 			GL11.glPopMatrix();
-			} else {
-				//System.out.println("Method [draw] not supported for ghost object");
-			}
-
+		} else {
+			//System.out.println("Method [draw] not supported for ghost object");
+		}
 	}
 
-	
 	
 	/* Functions for EntityObservers */
 	public void registerObserver(EntityObserver o) {observers.add(o);}
