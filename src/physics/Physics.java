@@ -227,13 +227,15 @@ public class Physics {
 		
 							Transform tmpTrans = hitBody.getCenterOfMassTransform(new Transform());
 							tmpTrans.inverse();
+							
+							hitBody.getCenterOfMassPosition(pickPos);
 							Vector3f localPivot = new Vector3f(pickPos);
 							tmpTrans.transform(localPivot);
 		
 							Point2PointConstraint p2p = new Point2PointConstraint(hitBody, localPivot);
-							//SliderConstraint p2p = new SliderConstraint(hitBody,,hitBody, tmpTrans,tmpTrans,true);
-							p2p.setting.impulseClamp = 3f;
-		
+							//SliderConstraint p2p = new SliderConstraint();
+							p2p.setting.impulseClamp = 1f;
+							
 							dynamicsWorld.addConstraint(p2p);
 							pickedConstraint = p2p;
 							
@@ -243,8 +245,7 @@ public class Physics {
 							tmp.sub(pickPos, camera.getPosition());
 							BulletStats.gOldPickingDist = tmp.length();
 							// very weak constraint for picking
-							p2p.setting.tau =0.3f;
-							p2p.setting.damping =5f;
+							p2p.setting.tau =0.1f;
 						}
 					}
 				}
