@@ -76,7 +76,7 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 
 		treeModel = new window.tree.Model();
-		//readConfigFile();		
+		readConfigFile();		
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
@@ -123,7 +123,7 @@ public class Controller extends Applet{
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		loadTestShapes(cam);
+		//loadTestShapes(cam);
 		//pullModelFiles("resources/models/cathodes/minixgl");
 	}
 

@@ -173,28 +173,17 @@ public class Mesh {
 		for(Face f: this.faces) {
 			if(f.getVertices().size() > 0) {
 				//find the max and min vertices for each dimension
-				if(f.getVertex(0).x>max.x)
-					max.x = f.getVertex(0).x;
-				if(f.getVertex(1).x>max.x)
-					max.x = f.getVertex(1).x;
-				if(f.getVertex(2).x>max.x)
-					max.x = f.getVertex(2).x;
+				if(f.getVertex(0).x>max.x) max.x = f.getVertex(0).x;
+				if(f.getVertex(1).x>max.x) max.x = f.getVertex(1).x;
+				if(f.getVertex(2).x>max.x) max.x = f.getVertex(2).x;
 				
+				if(f.getVertex(0).y>max.y) max.y = f.getVertex(0).y;
+				if(f.getVertex(1).y>max.y) max.y = f.getVertex(1).y;
+				if(f.getVertex(2).y>max.y) max.y = f.getVertex(2).y;
 				
-				if(f.getVertex(0).y>max.y)
-					max.y = f.getVertex(0).y;
-				if(f.getVertex(1).y>max.y)
-					max.y = f.getVertex(1).y;
-				if(f.getVertex(2).y>max.y)
-					max.y = f.getVertex(2).y;
-				
-				
-				if(f.getVertex(0).z>max.z)
-					max.z = f.getVertex(0).z;
-				if(f.getVertex(1).z>max.z)
-					max.z = f.getVertex(1).z;
-				if(f.getVertex(2).x>max.x)
-					max.z = f.getVertex(2).z;
+				if(f.getVertex(0).z>max.z) max.z = f.getVertex(0).z;
+				if(f.getVertex(1).z>max.z) max.z = f.getVertex(1).z;
+				if(f.getVertex(2).x>max.x) max.z = f.getVertex(2).z;
 			}
 		}		
 		return max;
