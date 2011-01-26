@@ -9,7 +9,6 @@
  */
 package entity;
 
-import importing.pieces.Material;
 import importing.pieces.Model;
 
 import java.nio.FloatBuffer;
@@ -103,7 +102,7 @@ public class Entity {
 	}
 	
 	private void createGhostBody(float mass, CollisionShape shape) {
-		// rigid body is dynamic if and only if mass is non zero,
+		//rigid body is dynamic if and only if mass is non zero,
 		//otherwise static
 		GhostObject ghost = new GhostObject();
 		boolean isDynamic = (mass != 0f);
@@ -267,60 +266,6 @@ public class Entity {
 		}
 	}
 
-	
-	/* Debugging BS */
-	//This is for debugging hitbox positions (should be deleted later)
-	public void drawTestCube() {
-		Material mat = new Material();
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT, mat.getAmbientAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, mat.getDiffuseAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, mat.getSpecularAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, mat.getEmissionAsBuffer());
-		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS, mat.getShine());
-        GL11.glBegin(GL11.GL_QUADS);
-    	// Front Face
-    	GL11.glNormal3f( 0.0f, 0.0f, 0.5f);
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
-
-        // Back Face
-        GL11.glNormal3f( 0.0f, 0.0f, -0.5f);
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
-
-        // Top Face
-        GL11.glNormal3f( 0.0f, 0.5f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-
-        // Bottom Face
-        GL11.glNormal3f( 0.0f, -0.5f, 0.0f);
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-
-        // Right face
-        GL11.glNormal3f( 0.5f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f, -0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f, -0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f( 0.5f,  0.5f,  0.5f);   // Top Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f( 0.5f, -0.5f,  0.5f);   // Bottom Left Of The Texture and Quad
-
-        // Left Face
-        GL11.glNormal3f( -0.5f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f, -0.5f);   // Bottom Left Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.0f); GL11.glVertex3f(-0.5f, -0.5f,  0.5f);   // Bottom Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.5f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f,  0.5f);   // Top Right Of The Texture and Quad
-        GL11.glTexCoord2f(0.0f, 0.5f); GL11.glVertex3f(-0.5f,  0.5f, -0.5f);   // Top Left Of The Texture and Quad
-        GL11.glEnd();
-	}
 	public void setCollisionFlags(int kinematic_object) {
 		collision_object.setCollisionFlags(kinematic_object);	
 	}
@@ -347,5 +292,8 @@ public class Entity {
 	}
 	public ObjectType getObjectType() {
 		return object_type;
+	}
+	public void activate() {
+		collision_object.activate();
 	}
 }

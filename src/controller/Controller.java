@@ -123,21 +123,20 @@ public class Controller extends Applet{
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		loadTestShapes(cam);
+		//loadTestShapes(cam);
 		//pullModelFiles("resources/models/cathodes/minixgl");
-		//readConfigFile();
 	}
 
 	private void loadTestShapes(Camera cam) {
-		physics.setGravity(new Vector3f(0,0,0));
+		physics.setGravity(new Vector3f(0,-10,0));
 		
 		//Legoman thing
 		Parser p = new XGL_Parser();
 		//Parser p = new Obj_Parser();
 		try{
-			//p.readFile("resources/models/misc/legoman.xgl");
+			p.readFile("resources/models/misc/legoman.xgl");
 			//p.readFile("resources/models/misc/10010260.xgl");
-			p.readFile("resources/models/misc/box2.xgl");
+			//p.readFile("resources/models/misc/box2.xgl");
 			//p.readFile("resources/models/misc/cath.xgl");
 			//p.readFile("resources/models/cathodes/0335-CATHODE_ASSEMBLY.obj");
 		}catch(Exception e){
@@ -146,9 +145,10 @@ public class Controller extends Applet{
 		}
 		
 		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-		Entity ent = new Entity(0.0f, boxShape, false);
+		Entity ent = new Entity(0.0f, boxShape, true);
 		ent.setModel(p.createModel());
 		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
+		ent.setCollisionFlags(CollisionFlags.STATIC_OBJECT);
 		//physics.reduceHull(ent);
 
 		objectList.enqueue(ent, QueueItem.ADD);
@@ -156,11 +156,11 @@ public class Controller extends Applet{
 		
 		cam.focusOn(ent);
 		
-		for(int i=10;i<1000;i+=10) {
-			ent = new Entity(10.0f, boxShape, false);
+		for(int i=10;i<100;i+=10) {
+			ent = new Entity(5.0f, boxShape, true);
 			ent.setModel(p.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
-			ent.setCollisionFlags(CollisionFlags.KINEMATIC_OBJECT);
+			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 			//physics.reduceHull(ent);
 			objectList.enqueue(ent, QueueItem.ADD);
 		}
@@ -271,8 +271,8 @@ public class Controller extends Applet{
 			path = tagList.get(0).getTextContent();
 			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 			
-			Entity ent = new Entity(1.0f, boxShape, false);
-			//ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+			Entity ent = new Entity(1.0f, boxShape, true);
+			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 			if( !path.equals("") ){
 				//Make a cathode	
 				Parser p = new XGL_Parser();

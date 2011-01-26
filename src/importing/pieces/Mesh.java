@@ -105,6 +105,7 @@ public class Mesh {
 	/*Getters*/
 	public Material getMaterial(){ return mat; }
 	public Face getFace(int i){ return faces.get(i); }
+	public ArrayList<Face> getFaces() { return faces; }
 	
 	public void draw(){
 		//Set Material

@@ -98,6 +98,8 @@ public class Face {
 		return vertexlist;
 	}
 	
+	public ArrayList<Vector3f> getNormals(){ return vertexNormals; }
+	
 	public Vector3f getVertex(int i){
 		Vector3f temp = vertices.get(i);
 		return new Vector3f(temp.x,temp.y,temp.z);
@@ -106,28 +108,8 @@ public class Face {
 	public void draw() {
 		for(int i = 0; i < vertices.size(); i++){
 			Vector3f v = vertices.get(i);
-			Vector3f n = new Vector3f();
+			Vector3f n = vertexNormals.get(i);
 			GL11.glVertex3f(v.x, v.y, v.z);
-			
-			//if there are no defined vectors we do it ourselves
-			//otherwise we use the ones given
-			if( i >= vertexNormals.size() ){
-				Vector3f
-					vertex0 = new Vector3f(),
-					vertex1 = new Vector3f(),
-					vertex2 = new Vector3f(),
-					line1 = new Vector3f(),
-					line2 = new Vector3f();
-			
-				vertex0 = vertices.get(0);
-				vertex1 = vertices.get(1);
-				vertex2 = vertices.get(2);
-				line1.sub(vertex0,vertex2);
-				line2.sub(vertex0,vertex1);
-				n.cross(line1, line2);
-			}else{
-				n = vertexNormals.get(i);
-			}
 			GL11.glNormal3f(n.x, n.y, n.z);
 		}
 	}

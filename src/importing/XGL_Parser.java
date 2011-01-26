@@ -38,6 +38,7 @@ public class XGL_Parser extends Parser{
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		dom = db.parse(new File(url));
 		parseXGL(dom);
+		model.verify();
 	}
 	
 	@Override
@@ -49,6 +50,7 @@ public class XGL_Parser extends Parser{
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		dom = db.parse(fileName);
 		parseXGL(dom);
+		model.verify();
 	}	
 	
 	private void parseXGL(Document dom){

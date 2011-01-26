@@ -6,8 +6,6 @@ import java.util.Random;
 
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.linearmath.Transform;
-
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
@@ -164,11 +162,12 @@ public class RotationMenu extends ResizableFrame {
 					if(!key.equals(Camera.CAMERA_NAME)) {
 						Random rand = new Random();
 						Vector3f force = new Vector3f(
-							rand.nextFloat()*1000,
-							rand.nextFloat()*1000,
-							rand.nextFloat()*1000
+							rand.nextFloat()*10,
+							rand.nextFloat()*10,
+							rand.nextFloat()*10
 						);
 						ent.applyImpulse(force, ent.getPosition());
+						ent.activate();
 					}
 				}
 			}
