@@ -13,8 +13,6 @@ import org.lwjgl.opengl.GL11;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
-import debug.CubeShape;
-
 public class Model {
 	ArrayList<Mesh> meshes;
 	Vector3f max, min, center;
@@ -65,20 +63,6 @@ public class Model {
 	public void draw(){
 		for(Mesh m: meshes){
 			GL11.glPushMatrix();
-			if(center != null) {
-				GL11.glPushMatrix();
-					GL11.glTranslatef(max.x, max.y, max.z);
-					CubeShape.drawTestCube(0.05f);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-					GL11.glTranslatef(min.x, min.y, min.z);
-					CubeShape.drawTestCube(0.05f);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-					GL11.glTranslatef(center.x, center.y, center.z);
-					CubeShape.drawTestCube(0.05f);
-				GL11.glPopMatrix();
-			}	
 			m.draw();
 			GL11.glPopMatrix();
 		}
@@ -122,12 +106,9 @@ public class Model {
 				min.z = mins.get(i).z;
 			}
 		}	
-		System.out.print("Max="+max+":Min="+min);
-		
 		//find the center of the model using our min/max values
 		center.add(max,min);
 		center.scale(0.5f);
-		System.out.println(":Center="+center);
 	}
 	
 	/*Export*/
@@ -167,6 +148,7 @@ public class Model {
 	public CollisionShape createCollisionShape() {
 		Vector3f shape = new Vector3f();
 		shape.sub(max,min);
+		shape.scale(0.5f);
 		return new BoxShape(shape);
 	}
 }

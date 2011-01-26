@@ -91,6 +91,7 @@
 		<name>linear_focus</name>
 		<value></value>
 		<path></path>
+		<collidable>false</collidable>
 		<position>104.5,0,0</position>
 		<show>false</show>
 		<item>

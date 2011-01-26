@@ -130,6 +130,7 @@ public class Controller extends Applet{
 		//pullModelFiles("resources/models/cathodes/minixgl");
 	}
 
+	@SuppressWarnings("unused")
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -248,6 +249,7 @@ public class Controller extends Applet{
 		String path;
 		boolean show;
 		Vector3f position;
+		boolean collidable;
 		String[] xyz;
 		ArrayList<Node> tagList = findChildrenByName(ele, "name");
 		name = tagList.get(0).getTextContent();
@@ -272,12 +274,26 @@ public class Controller extends Applet{
 			position = new Vector3f(0,0,0);
 		}
 		
+		tagList = findChildrenByName(ele, "collidable");
+		if(tagList.size() > 0){
+			if(tagList.get(0).getTextContent().equals("true"))
+				collidable = true;
+			else if(tagList.get(0).getTextContent().equals("false"))
+				collidable = false;
+			else {
+				System.out.println("XML parse error: unsupported value" + tagList.get(0).getTextContent());
+				collidable=false;
+			}
+		}else{
+			collidable = true;
+		}
+		
 		tagList = findChildrenByName(ele, "path");
 		if( tagList.size() > 0){
 			path = tagList.get(0).getTextContent();
 			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 			
-			Entity ent = new Entity(1.0f, boxShape, true);
+			Entity ent = new Entity(1.0f, boxShape, collidable);
 			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 			if( !path.equals("") ){
 				//Make a cathode	
