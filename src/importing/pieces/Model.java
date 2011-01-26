@@ -74,88 +74,43 @@ public class Model {
 	/* Verify */
 	//This function will verify whether the file had normals defined
 	//and also check for shading groups and normalize if possible
-	public void verify() {		
+	public void verify() {	
+		ArrayList<Vector3f> maxes = new ArrayList<Vector3f>();
+		ArrayList<Vector3f> mins = new ArrayList<Vector3f>();
 		for(Mesh m: meshes) {
-			for(Face f: m.getFaces()) {
-				if(f.getVertices().size() > 0) {
-					//find the max and min vertices for each dimension
-					if(f.getVertex(0).x>max.x)
-						max.x = f.getVertex(0).x;
-					if(f.getVertex(1).x>max.x)
-						max.x = f.getVertex(1).x;
-					if(f.getVertex(2).x>max.x)
-						max.x = f.getVertex(2).x;
-					if(f.getVertex(0).x<min.x)
-						min.x = f.getVertex(0).x;
-					if(f.getVertex(1).x<min.x)
-						min.x = f.getVertex(1).x;
-					if(f.getVertex(2).x<min.x)
-						min.x = f.getVertex(2).x;
-					
-					if(f.getVertex(0).y>max.y)
-						max.y = f.getVertex(0).y;
-					if(f.getVertex(1).y>max.y)
-						max.y = f.getVertex(1).y;
-					if(f.getVertex(2).y>max.y)
-						max.y = f.getVertex(2).y;
-					if(f.getVertex(0).y<min.y)
-						min.y = f.getVertex(0).y;
-					if(f.getVertex(1).y<min.y)
-						min.y = f.getVertex(1).y;
-					if(f.getVertex(2).y<min.x)
-						min.y = f.getVertex(2).y;
-					
-					if(f.getVertex(0).z>max.z)
-						max.z = f.getVertex(0).z;
-					if(f.getVertex(1).z>max.z)
-						max.z = f.getVertex(1).z;
-					if(f.getVertex(2).x>max.x)
-						max.z = f.getVertex(2).z;
-					if(f.getVertex(0).z<min.z)
-						min.z = f.getVertex(0).z;
-					if(f.getVertex(1).z<min.z)
-						min.z = f.getVertex(1).z;
-					if(f.getVertex(2).z<min.z)
-						min.z = f.getVertex(2).z;
-					
-					//if there are no vertices defined in the file we
-					//need to find them from the face
-					if( f.getNormals().size() <= 0 ){
-						ArrayList<Vector3f> normal_set = new ArrayList<Vector3f>();
-						Vector3f
-							vertex0 = new Vector3f(),
-							vertex1 = new Vector3f(),
-							vertex2 = new Vector3f(),
-							line1 = new Vector3f(),
-							line2 = new Vector3f(),
-							normal_vert = new Vector3f()
-						;
-	
-						//Copy the verts so we don't scrub the originals
-						//with our math
-						vertex0 = f.getVertex(0);
-						vertex1 = f.getVertex(1);
-						vertex2 = f.getVertex(2);
-						
-						//Find two vectors so we can get the orientation
-						//of the face
-						line1.sub(vertex0,vertex2);
-						line2.sub(vertex0,vertex1);
-						normal_vert.cross(line1, line2);
-						
-						//To normalize we must find the length of the normal
-						//based on the cross product of our vectors
-						normal_vert.normalize();
-	
-						//Since we only have enough information to do
-						//a face vertex we just copy the data for each vert
-						for(int i=0; i<3;i++){normal_set.add(normal_vert);}
-						f.setVertexNormals(normal_set);
-					}
-				}
+			maxes.add(m.getMaximums());
+			mins.add(m.getMinimums());
+			m.calcNormals();
+		}
+		
+		max = new Vector3f();
+		min = new Vector3f();
+		
+		max = maxes.get(0);
+		min = mins.get(0);
+		for(int i = 1; i < maxes.size(); i++){
+			if(maxes.get(i).x > max.x){
+				max = maxes.get(i);
+			}
+			if(maxes.get(i).y > max.y){
+				max = maxes.get(i);
+			}
+			if(maxes.get(i).z > max.z){
+				max = maxes.get(i);
+			}
+			
+			if(mins.get(i).x < min.x){
+				min = mins.get(i);
+			}
+			if(mins.get(i).y < min.y){
+				min = mins.get(i);
+			}
+			if(mins.get(i).z < min.z){
+				min = mins.get(i);
 			}
 		}	
 		System.out.print("Max="+max+":Min="+min);
+		
 		//find the center of the model using our min/max values
 		max.add(min);
 		max.scale(0.5f);
@@ -177,6 +132,7 @@ public class Model {
 			BufferedWriter out = new BufferedWriter(new FileWriter( filename));
 			out.write(data.toString());
 			out.close();
+			System.out.println("Export succeeded");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("EXPORT FAILED\n\n");

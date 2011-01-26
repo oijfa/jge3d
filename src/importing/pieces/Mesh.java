@@ -168,4 +168,102 @@ public class Mesh {
 		data.append("</OBJECT>\n");
 		return data;
 	}
+	public Vector3f getMaximums() {
+		Vector3f max = new Vector3f();
+		for(Face f: this.faces) {
+			if(f.getVertices().size() > 0) {
+				//find the max and min vertices for each dimension
+				if(f.getVertex(0).x>max.x)
+					max.x = f.getVertex(0).x;
+				if(f.getVertex(1).x>max.x)
+					max.x = f.getVertex(1).x;
+				if(f.getVertex(2).x>max.x)
+					max.x = f.getVertex(2).x;
+				
+				
+				if(f.getVertex(0).y>max.y)
+					max.y = f.getVertex(0).y;
+				if(f.getVertex(1).y>max.y)
+					max.y = f.getVertex(1).y;
+				if(f.getVertex(2).y>max.y)
+					max.y = f.getVertex(2).y;
+				
+				
+				if(f.getVertex(0).z>max.z)
+					max.z = f.getVertex(0).z;
+				if(f.getVertex(1).z>max.z)
+					max.z = f.getVertex(1).z;
+				if(f.getVertex(2).x>max.x)
+					max.z = f.getVertex(2).z;
+			}
+		}		
+		return max;
+	}
+	public Vector3f getMinimums() {
+		Vector3f min = new Vector3f();
+		for(Face f: this.faces) {
+			if(f.getVertices().size() > 0) {
+				if(f.getVertex(0).x<min.x)
+					min.x = f.getVertex(0).x;
+				if(f.getVertex(1).x<min.x)
+					min.x = f.getVertex(1).x;
+				if(f.getVertex(2).x<min.x)
+					min.x = f.getVertex(2).x;
+				
+				if(f.getVertex(0).y<min.y)
+					min.y = f.getVertex(0).y;
+				if(f.getVertex(1).y<min.y)
+					min.y = f.getVertex(1).y;
+				if(f.getVertex(2).y<min.x)
+					min.y = f.getVertex(2).y;
+				
+				if(f.getVertex(0).z<min.z)
+					min.z = f.getVertex(0).z;
+				if(f.getVertex(1).z<min.z)
+					min.z = f.getVertex(1).z;
+				if(f.getVertex(2).z<min.z)
+					min.z = f.getVertex(2).z;
+			}
+		}
+		return min;
+	}
+	
+	public void calcNormals(){
+		//if there are no vertices defined in the file we
+		//need to find them from the face
+		for( Face f : faces ){
+			if( f.getNormals().size() <= 0 ){
+				ArrayList<Vector3f> normal_set = new ArrayList<Vector3f>();
+				Vector3f
+					vertex0 = new Vector3f(),
+					vertex1 = new Vector3f(),
+					vertex2 = new Vector3f(),
+					line1 = new Vector3f(),
+					line2 = new Vector3f(),
+					normal_vert = new Vector3f()
+				;
+	
+				//Copy the verts so we don't scrub the originals
+				//with our math
+				vertex0 = f.getVertex(0);
+				vertex1 = f.getVertex(1);
+				vertex2 = f.getVertex(2);
+				
+				//Find two vectors so we can get the orientation
+				//of the face
+				line1.sub(vertex0,vertex2);
+				line2.sub(vertex0,vertex1);
+				normal_vert.cross(line1, line2);
+				
+				//To normalize we must find the length of the normal
+				//based on the cross product of our vectors
+				normal_vert.normalize();
+	
+				//Since we only have enough information to do
+				//a face vertex we just copy the data for each vert
+				for(int i=0; i<3;i++){normal_set.add(normal_vert);}
+				f.setVertexNormals(normal_set);
+			}
+		}
+	}
 }

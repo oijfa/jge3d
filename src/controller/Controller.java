@@ -76,7 +76,7 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 
 		treeModel = new window.tree.Model();
-		readConfigFile();		
+		//readConfigFile();		
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
@@ -123,10 +123,11 @@ public class Controller extends Applet{
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		//loadTestShapes(cam);
+		loadTestShapes(cam);
 		//pullModelFiles("resources/models/cathodes/minixgl");
 	}
 
+	@SuppressWarnings("unused")
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -134,7 +135,9 @@ public class Controller extends Applet{
 		Parser p = new XGL_Parser();
 		//Parser p = new Obj_Parser();
 		try{
-			p.readFile("resources/models/misc/legoman.xgl");
+			//p.readFile("resources/models/misc/singlebox.obj");
+			p.readFile("resources/models/misc/singlebox.xgl");
+			//p.readFile("resources/models/misc/legoman.xgl");
 			//p.readFile("resources/models/misc/10010260.xgl");
 			//p.readFile("resources/models/misc/box2.xgl");
 			//p.readFile("resources/models/misc/cath.xgl");
@@ -143,11 +146,11 @@ public class Controller extends Applet{
 			e.printStackTrace();
 			System.out.println("Model loading failed");
 		}
-		
+		//p.createModel().saveXGL("resources/models/misc/singlebox.xgl");
 		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		Entity ent = new Entity(0.0f, boxShape, true);
 		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
+		ent.setPosition(new Vector3f(0.0f,0.0f,10.0f));
 		ent.setCollisionFlags(CollisionFlags.STATIC_OBJECT);
 		//physics.reduceHull(ent);
 
@@ -156,7 +159,7 @@ public class Controller extends Applet{
 		
 		cam.focusOn(ent);
 		
-		for(int i=10;i<100;i+=10) {
+		for(int i=0;i<100;i+=10) {
 			ent = new Entity(5.0f, boxShape, true);
 			ent.setModel(p.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));

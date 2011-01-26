@@ -21,6 +21,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.SliderConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.Transform;
 
@@ -230,6 +231,7 @@ public class Physics {
 							tmpTrans.transform(localPivot);
 		
 							Point2PointConstraint p2p = new Point2PointConstraint(hitBody, localPivot);
+							//SliderConstraint p2p = new SliderConstraint(hitBody,,hitBody, tmpTrans,tmpTrans,true);
 							p2p.setting.impulseClamp = 3f;
 		
 							dynamicsWorld.addConstraint(p2p);
@@ -241,7 +243,8 @@ public class Physics {
 							tmp.sub(pickPos, camera.getPosition());
 							BulletStats.gOldPickingDist = tmp.length();
 							// very weak constraint for picking
-							p2p.setting.tau = 0.1f;
+							p2p.setting.tau =0.3f;
+							p2p.setting.damping =5f;
 						}
 					}
 				}
