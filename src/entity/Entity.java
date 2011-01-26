@@ -296,4 +296,7 @@ public class Entity {
 	public void activate() {
 		collision_object.activate();
 	}
+	public void setCollisionShape(CollisionShape createCollisionShape) {
+		collision_object.setCollisionShape(createCollisionShape);		
+	}
 }

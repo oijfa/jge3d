@@ -10,6 +10,9 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.shapes.CollisionShape;
+
 import debug.CubeShape;
 
 public class Model {
@@ -63,8 +66,18 @@ public class Model {
 		for(Mesh m: meshes){
 			GL11.glPushMatrix();
 			if(center != null) {
-				GL11.glTranslatef(center.x, center.y, center.z);
-				CubeShape.drawTestCube(0.15f);
+				GL11.glPushMatrix();
+					GL11.glTranslatef(max.x, max.y, max.z);
+					CubeShape.drawTestCube(0.05f);
+				GL11.glPopMatrix();
+				GL11.glPushMatrix();
+					GL11.glTranslatef(min.x, min.y, min.z);
+					CubeShape.drawTestCube(0.05f);
+				GL11.glPopMatrix();
+				GL11.glPushMatrix();
+					GL11.glTranslatef(center.x, center.y, center.z);
+					CubeShape.drawTestCube(0.05f);
+				GL11.glPopMatrix();
 			}	
 			m.draw();
 			GL11.glPopMatrix();
@@ -90,31 +103,30 @@ public class Model {
 		min = mins.get(0);
 		for(int i = 1; i < maxes.size(); i++){
 			if(maxes.get(i).x > max.x){
-				max = maxes.get(i);
+				max.x = maxes.get(i).x;
 			}
 			if(maxes.get(i).y > max.y){
-				max = maxes.get(i);
+				max.y = maxes.get(i).y;
 			}
 			if(maxes.get(i).z > max.z){
-				max = maxes.get(i);
+				max.z = maxes.get(i).z;
 			}
 			
 			if(mins.get(i).x < min.x){
-				min = mins.get(i);
+				min.x = mins.get(i).x;
 			}
 			if(mins.get(i).y < min.y){
-				min = mins.get(i);
+				min.y = mins.get(i).y;
 			}
 			if(mins.get(i).z < min.z){
-				min = mins.get(i);
+				min.z = mins.get(i).z;
 			}
 		}	
 		System.out.print("Max="+max+":Min="+min);
 		
 		//find the center of the model using our min/max values
-		max.add(min);
-		max.scale(0.5f);
-		center = max;
+		center.add(max,min);
+		center.scale(0.5f);
 		System.out.println(":Center="+center);
 	}
 	
@@ -150,5 +162,11 @@ public class Model {
 		}
 		ret += "}\n";
 		return ret;
+	}
+	
+	public CollisionShape createCollisionShape() {
+		Vector3f shape = new Vector3f();
+		shape.sub(max,min);
+		return new BoxShape(shape);
 	}
 }

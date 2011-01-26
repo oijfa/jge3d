@@ -81,26 +81,28 @@ public class Input {
 		//update the changes in position
 		switch(evt.getMouseButton()){
 			case 1:
-				BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-				Entity ent = new Entity(1.0f,boxShape,true);
-				ent.setPosition(camera.getPosition());
-				Parser parser = new XGL_Parser();
-				try{
-					//parser.readFile("resources/models/misc/legoman.xgl");
-					//parser.readFile("resources/models/misc/10010260.xgl");
-					parser.readFile("resources/models/misc/box2.xgl");
-					//parser.readFile("resources/models/misc/cath.xgl");
-					//parser.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
-				}catch(Exception e){
-					e.printStackTrace();
-					System.out.println("Model loading failed");
+				if(evt.getType() == Event.Type.MOUSE_BTNDOWN){
+					BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+					Entity ent = new Entity(1.0f,boxShape,true);
+					ent.setPosition(camera.getPosition());
+					Parser parser = new XGL_Parser();
+					try{
+						//parser.readFile("resources/models/misc/legoman.xgl");
+						//parser.readFile("resources/models/misc/10010260.xgl");
+						parser.readFile("resources/models/misc/singlebox.xgl");
+						//parser.readFile("resources/models/misc/cath.xgl");
+						//parser.readFile("resources/models/misc/0335-CATHODE_ASSEMBLY.obj");
+					}catch(Exception e){
+						e.printStackTrace();
+						System.out.println("Model loading failed");
+					}
+					ent.setModel(parser.createModel());
+					Vector3f impulse = camera.getRayTo(Mouse.getEventX(), Mouse.getEventY());
+					impulse.scale(0.02f);
+					ent.setGravity(new Vector3f(0,0,0));
+					ent.applyImpulse(impulse, camera.getPosition());
+					objectList.enqueue(ent, QueueItem.ADD);
 				}
-				ent.setModel(parser.createModel());
-				Vector3f impulse = camera.getRayTo(Mouse.getEventX(), Mouse.getEventY());
-				impulse.scale(0.02f);
-				ent.setGravity(new Vector3f(0,0,0));
-				ent.applyImpulse(impulse, camera.getPosition());
-				objectList.enqueue(ent, QueueItem.ADD);
 				break;
 			case 0://Left Button
 				physics.drag(
@@ -108,6 +110,7 @@ public class Input {
 					Mouse.getEventButtonState()? 0 : 1,
 					camera.getRayTo(Mouse.getEventX(),Mouse.getEventY())
 				);
+
 				break;
 			case -1:
 				

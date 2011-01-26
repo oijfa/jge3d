@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import importing.Obj_Parser;
 import importing.Parser;
 import importing.XGL_Parser;
+import importing.pieces.Model;
 
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
@@ -76,7 +77,7 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 
 		treeModel = new window.tree.Model();
-		//readConfigFile();		
+		readConfigFile();		
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList);
@@ -121,13 +122,14 @@ public class Controller extends Applet{
 		Camera cam = new Camera(0.0f, boxShape, false);
 		objectList.enqueue(cam, QueueItem.ADD);
 		
+		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		loadTestShapes(cam);
+		//loadTestShapes(cam);
 		//pullModelFiles("resources/models/cathodes/minixgl");
 	}
 
-	@SuppressWarnings("unused")
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -147,11 +149,11 @@ public class Controller extends Applet{
 			System.out.println("Model loading failed");
 		}
 		//p.createModel().saveXGL("resources/models/misc/singlebox.xgl");
-		BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+		BoxShape boxShape = new BoxShape(new Vector3f(0.5f, 0.5f, 0.5f));
 		Entity ent = new Entity(0.0f, boxShape, true);
 		ent.setModel(p.createModel());
-		ent.setPosition(new Vector3f(0.0f,0.0f,10.0f));
-		ent.setCollisionFlags(CollisionFlags.STATIC_OBJECT);
+		ent.setPosition(new Vector3f(0.0f,0.0f,0.0f));
+		ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 		//physics.reduceHull(ent);
 
 		objectList.enqueue(ent, QueueItem.ADD);
@@ -159,12 +161,13 @@ public class Controller extends Applet{
 		
 		cam.focusOn(ent);
 		
-		for(int i=0;i<100;i+=10) {
+		for(int i=10;i<100;i+=10) {
 			ent = new Entity(5.0f, boxShape, true);
 			ent.setModel(p.createModel());
 			ent.setPosition(new Vector3f(0.0f,(float)i,0.0f));
 			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 			//physics.reduceHull(ent);
+			//ent.setGravity(new Vector3f(0,-1,0));
 			objectList.enqueue(ent, QueueItem.ADD);
 		}
 	}
@@ -280,9 +283,12 @@ public class Controller extends Applet{
 				//Make a cathode	
 				Parser p = new XGL_Parser();
 				p.readFile(path);
-				ent.setModel(p.createModel());
+				Model model = new Model();
+				model = p.createModel();
+				ent.setModel(model);
+				ent.setCollisionShape(model.createCollisionShape());
 			}
-	
+			
 			ent.setPosition(position);
 			ent.setProperty("name", name);
 			objectList.enqueue(ent, QueueItem.ADD);
