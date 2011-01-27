@@ -32,11 +32,11 @@ public class Camera extends Entity {
 	private Entity focus;
 
 	/* Constructors */
-	public Camera(float f, CollisionShape c, boolean collide ) {
+	public Camera(Float f, CollisionShape c, boolean collide ) {
 		super(f,c,collide);
 		cameraInit();
 	}
-	public Camera(String _name,float f, CollisionShape c, boolean collide ) {
+	public Camera(String _name,Float f, CollisionShape c, boolean collide ) {
 		super(f,c,collide);
 		cameraInit();
 	}
@@ -81,7 +81,7 @@ public class Camera extends Entity {
 	private void setUpVector( Vector3f newUp ){
 		up_vector = newUp;
 	}
-	public void setDistance(float f) {
+	public void setDistance(Float f) {
 		if( f > maximum_distance)
 		{
 			distance = maximum_distance;
@@ -99,7 +99,7 @@ public class Camera extends Entity {
 		//updatePosition();
 	}
 	
-	public void incrementDistance( float change ){
+	public void incrementDistance( Float change ){
 		float temp = distance + change;
 		if( temp > maximum_distance)
 		{
@@ -117,7 +117,7 @@ public class Camera extends Entity {
 	public float getDistance(){
 		return distance;
 	}
-	public void incrementDeclination(float angle){
+	public void incrementDeclination(Float angle){
 		declination += angle;
 		if( declination > maximum_declination ){
 			declination = maximum_declination;
@@ -130,11 +130,11 @@ public class Camera extends Entity {
 		//updatePosition();
 	}
 	
-	public void setDeclination(float angle){
+	public void setDeclination(Float angle){
 		this.declination = angle;
 	}
 	
-	public void incrementRotation(float angle){
+	public void incrementRotation(Float angle){
 		rotation += angle;
 		/*
 		 * Checks if rotation is over 2*Pi and adjusts it accordingly.
@@ -152,7 +152,7 @@ public class Camera extends Entity {
 		//updatePosition();
 	}
 	
-	public void setRotation(float angle){
+	public void setRotation(Float angle){
 		this.rotation = angle;
 	}
 	public void updatePosition()

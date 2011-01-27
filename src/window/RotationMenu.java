@@ -1,6 +1,8 @@
 package window;
 
-import input.components.ThreadFactory;
+import input.components.ButtonRunnable;
+import input.components.InputRunnable;
+
 import java.util.HashMap;
 import java.util.Random;
 
@@ -10,7 +12,6 @@ import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.model.ButtonModel;
 import entity.Camera;
 import entity.Entity;
 import entity.EntityList;
@@ -29,24 +30,40 @@ public class RotationMenu extends ResizableFrame {
 	private Camera cam;
 	private EntityList objectList;
 
-	private static final float ZOOM_INC = 0.01f;
+	private static final float ZOOM_INC = 0.00000001f;
 	private static final float LEFT_RIGHT_INC = 0.00000001f;
 	private static final float UP_DOWN_INC = 0.00000001f;
-	private HashMap<String, Thread> buttonThreads;
-	private ThreadFactory threadStarter;
-	private volatile boolean leftAlive, rightAlive, upAlive, downAlive, inAlive, outAlive;
+	private HashMap<String, InputRunnable> buttonThreads;
 	
 	static boolean linearShow = false;
-	public RotationMenu(){
+	
+	public void setCameraRef(Camera cam){
+		this.cam = cam;
+		try {
+			createThreads();
+			//Create a models for reflecting the state of the buttons
+			left.getModel().addStateCallback(new ButtonRunnable(this, "Left", left.getModel())); 
+			right.getModel().addStateCallback(new ButtonRunnable(this, "Right", right.getModel()));
+			up.getModel().addStateCallback(new ButtonRunnable(this, "Up", up.getModel()));
+			down.getModel().addStateCallback(new ButtonRunnable(this, "Down", down.getModel()));
+			right.getModel().addStateCallback(new ButtonRunnable(this, "Right", right.getModel()));
+			zoomIn.getModel().addStateCallback(new ButtonRunnable(this, "zoomIn", zoomIn.getModel()));
+			zoomOut.getModel().addStateCallback(new ButtonRunnable(this, "zoomOut", zoomOut.getModel()));
+		} catch (Exception e) {
+			System.out.println("Failed to create RotationMenu threads");
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+	
+	public void setObjectList(EntityList objectList){
+		this.objectList = objectList;
+	}
+	
+	public RotationMenu() throws SecurityException, NoSuchMethodException{
+		
 		setTitle("Camera Rotation");
-		buttonThreads = new HashMap<String, Thread>();
-		threadStarter = new ThreadFactory();
-		leftAlive = false;
-		rightAlive = false;
-		upAlive = false;
-		downAlive = false;
-		inAlive = false;
-		outAlive = false;
+		
 		layout = new DialogLayout();
 		up= new Button("Up");
 		up.setTheme("up");
@@ -64,93 +81,13 @@ public class RotationMenu extends ResizableFrame {
 		zoomOut.setTheme("zoomout");
 		explode.setTheme("explode");
 		align.setTheme("align");
-		
-		//Create a models for reflecting the state of the buttons
-		final ButtonModel leftButtonModel = left.getModel();
-		leftButtonModel.addStateCallback(new Runnable() { 
-		   @Override 
-		   public void run() { 
-			   if(leftButtonModel.isArmed()&&leftButtonModel.isPressed()){
-				   leftAlive = true;
-				   startThread("left");
-			   }else if (!leftButtonModel.isArmed()&&!leftButtonModel.isPressed()){
-				   leftAlive = false;
-			   }
-		   } 
-		}); 
-		
-		final ButtonModel rightButtonModel = right.getModel();
-		rightButtonModel.addStateCallback(new Runnable() { 
-		   @Override 
-		   public void run() { 
-			   if(rightButtonModel.isArmed()&&rightButtonModel.isPressed()){
-				   rightAlive = true;
-				   startThread("right");
-			   }else if (!rightButtonModel.isArmed()&&!rightButtonModel.isPressed()){
-				   rightAlive = false;
-			   }
-		   } 
-		}); 
-		
-		final ButtonModel upButtonModel = up.getModel();
-		upButtonModel.addStateCallback(new Runnable() { 
-		   @Override 
-		   public void run() { 
-			   if(upButtonModel.isArmed()&&upButtonModel.isPressed()){
-				   upAlive = true;
-				   startThread("up");
-			   }else if (!upButtonModel.isArmed()&&!upButtonModel.isPressed()){
-				   upAlive = false;
-			   }
-		   } 
-		}); 
-		
-		final ButtonModel downButtonModel = down.getModel();
-		downButtonModel.addStateCallback(new Runnable() { 
-		   @Override 
-		   public void run() { 
-			   if(downButtonModel.isArmed()&&downButtonModel.isPressed()){
-				   downAlive = true;
-				   startThread("down");
-			   }else if (!downButtonModel.isArmed()&&!downButtonModel.isPressed()){
-				   downAlive = false;
-			   }
-		   } 
-		}); 
-		
-		final ButtonModel inButtonModel = zoomIn.getModel();
-		inButtonModel.addStateCallback(new Runnable() {
-			@Override
-			public void run() {
-				if(inButtonModel.isArmed()&&inButtonModel.isPressed()){
-					inAlive = true;
-					startThread("in");
-				}else if(!inButtonModel.isArmed()&&!inButtonModel.isPressed()){
-					inAlive = false;
-				}
-			}
-		});
-		
-		final ButtonModel outButtonModel = zoomOut.getModel();
-		outButtonModel.addStateCallback(new Runnable() {
-			@Override
-			public void run() {
-				if(outButtonModel.isArmed()&&outButtonModel.isPressed()){
-					outAlive = true;
-					startThread("out");
-				}else if(!outButtonModel.isArmed()&&!outButtonModel.isPressed()){
-					outAlive = false;
-				}
-			}
-		});
-
 
 		//Center doesn't need continuous input capabilities, sad little center button :(
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				cam.setDeclination(0);
-				cam.setRotation(0);
+				cam.setDeclination(0f);
+				cam.setRotation(0f);
 			}
 		});
 		
@@ -209,129 +146,49 @@ public class RotationMenu extends ResizableFrame {
 		add(layout);	
 	}
 	
-	//Thread Starter function that creates 1(uno) thread per Button input.
-	public void startThread(String key){
-		Runnable threadRun;
-		//if statements checks to see which button's thread needs to be invoked.
-		if(key == "left"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime();
-					//Increment is now based on how on a coefficient of time.
-					while(leftAlive){
-						increment = (System.nanoTime() - previousTime) * -LEFT_RIGHT_INC;
-						cam.incrementRotation(increment);	
-						previousTime = System.nanoTime();
-					}
-					return;
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
-			buttonThreads.get(key).start();
-		}else if(key == "right"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime();
-					//Increment is now based on how on a coefficient of time.
-					while(rightAlive){
-						increment = (System.nanoTime() - previousTime) * LEFT_RIGHT_INC;
-						cam.incrementRotation(increment);
-						previousTime = System.nanoTime();
-					}
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
-			buttonThreads.get(key).start();
-		}else if(key == "up"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime();
-					//Increment is now based on how on a coefficient of time.
-					while(upAlive){
-						increment = (System.nanoTime() - previousTime) * UP_DOWN_INC;
-						cam.incrementDeclination(increment);
-						previousTime = System.nanoTime();
-					}
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
-			buttonThreads.get(key).start();
-		}else if(key == "down"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime();
-					//Increment is now based on how on a coefficient of time.
-					while(downAlive){
-						increment = (System.nanoTime() - previousTime) * -UP_DOWN_INC;
-						cam.incrementDeclination(increment);
-						previousTime = System.nanoTime();
-					}
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
-			buttonThreads.get(key).start();
-		}else if(key == "in"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime()/1000000;
-					//Increment is now based on how on a coefficient of time.
-					while(inAlive){
-						increment = (System.nanoTime()/1000000 - previousTime) * -ZOOM_INC;
-						cam.incrementDistance(increment);
-						previousTime = System.nanoTime()/1000000;
-					}
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
-			buttonThreads.get(key).start();
-		}else if(key == "out"){
-			threadRun = new Runnable(){
-				public void run(){
-					long previousTime;
-					float increment;
-					previousTime = System.nanoTime()/1000000;
-					//Increment is now based on how on a coefficient of time.
-					while(outAlive){
-						increment = (System.nanoTime()/1000000 - previousTime) * ZOOM_INC;
-						cam.incrementDistance(increment);
-						previousTime = System.nanoTime()/1000000;
-					}
-				}
-			};
-			//add button to threadStarter hash map
-			buttonThreads.put(key, threadStarter.newThread(threadRun));
-			//grab the newly created thread and start it.
+	public synchronized void createThreads() throws Exception{
+		buttonThreads = new HashMap<String, InputRunnable>();
+		resetThread("Left");
+		resetThread("Right");
+		resetThread("Up");
+		resetThread("Down");
+		resetThread("zoomIn");
+		resetThread("zoomOut");
+	}
+	
+	public synchronized void startThread(String key) throws SecurityException, NoSuchMethodException{
+		if(key.equals("Left")){
+			System.out.println();
+		}
+		if(buttonThreads.get(key) != null){
+			resetThread(key);
 			buttonThreads.get(key).start();
 		}else{
-			System.out.println("Invalid Key");
+			resetThread(key);
 		}
 	}
 	
-	public void setCameraRef(Camera cam){
-		this.cam = cam;
+	public synchronized  void stopThread(String key) throws SecurityException, NoSuchMethodException {
+		buttonThreads.get(key).end();
 	}
 	
-	public void setObjectList(EntityList objectList){
-		this.objectList = objectList;
+	public synchronized InputRunnable resetThread(String key) throws SecurityException, NoSuchMethodException{
+		if( buttonThreads.get(key) != null && buttonThreads.get(key).isAlive() ){
+			buttonThreads.get(key).end();
+		}
+		if(key.equals("Left")){
+			buttonThreads.put("Left", new InputRunnable("incrementRotation",cam, -LEFT_RIGHT_INC));
+		}else if(key.equals("Right")){
+			buttonThreads.put("Right", new InputRunnable("incrementRotation",cam, LEFT_RIGHT_INC));
+		}else if(key.equals("Up")){
+			buttonThreads.put("Up", new InputRunnable("incrementDeclination",cam, UP_DOWN_INC));
+		}else if(key.equals("Down")){
+			buttonThreads.put("Down", new InputRunnable("incrementDeclination",cam, -UP_DOWN_INC));
+		}else if(key.equals("zoomIn")){
+			buttonThreads.put("zoomIn", new InputRunnable("incrementDistance",cam, ZOOM_INC));
+		}else if(key.equals("zoomOut")){
+			buttonThreads.put("zoomOut", new InputRunnable("incrementDistance",cam, -ZOOM_INC));
+		}
+		return buttonThreads.get(key);
 	}
 }

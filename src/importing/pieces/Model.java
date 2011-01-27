@@ -148,7 +148,7 @@ public class Model {
 	public CollisionShape createCollisionShape() {
 		Vector3f shape = new Vector3f();
 		shape.sub(max,min);
-		shape.scale(0.5f);
+		//shape.scale(0.5f);
 		return new BoxShape(shape);
 	}
 }
