@@ -24,7 +24,7 @@ public class TreeListener implements Runnable{
 			
 			Entity newFocus = objects.getItem((String)n.getData(0));
 			if( newFocus != null){
-				((Camera)objects.getItem(Camera.CAMERA_NAME)).focusOn(newFocus);
+				((Camera)objects.getItem("linear_focus")).setPosition(newFocus.getPosition());
 			}
 		}
 	}
