@@ -51,6 +51,7 @@ public class Controller extends Applet{
 	private EntityList objectList;
 	
 	window.tree.Model treeModel;
+	Runnable treeListener;
 	
 	public static void main(String[] args) throws Exception {
 		Applet app = new Controller();
@@ -77,6 +78,7 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 
 		treeModel = new window.tree.Model();
+
 		readConfigFile();		
 		
 		//Renderer has to be after entity list
@@ -288,12 +290,13 @@ public class Controller extends Applet{
 			collidable = true;
 		}
 		
+		Entity ent = null;
 		tagList = findChildrenByName(ele, "path");
 		if( tagList.size() > 0){
 			path = tagList.get(0).getTextContent();
 			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 			
-			Entity ent = new Entity(1.0f, boxShape, collidable);
+			ent = new Entity(1.0f, boxShape, collidable);
 			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 			if( !path.equals("") ){
 				//Make a cathode	
@@ -303,6 +306,8 @@ public class Controller extends Applet{
 				model = p.createModel();
 				ent.setModel(model);
 				ent.setCollisionShape(model.createCollisionShape());
+				
+				
 			}
 			
 			ent.setPosition(position);
@@ -322,6 +327,10 @@ public class Controller extends Applet{
 			for(int i = 0; i < tagList.size(); i++){
 				//Create nodes for all of them
 				createItem((Element)tagList.get(i), item);
+			}
+			
+			if(ent != null){
+				//treeModel.addSelectionChangeListener();
 			}
 		}
 	}

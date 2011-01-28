@@ -67,7 +67,7 @@ public class Window extends DesktopArea {
 		*/
 
 		input = new Input(objectList);
-		entityMenu = new EntityMenu(m);
+		entityMenu = new EntityMenu(objectList, m);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");
 

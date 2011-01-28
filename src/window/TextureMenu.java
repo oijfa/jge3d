@@ -37,7 +37,7 @@ public class TextureMenu extends ResizableFrame {
 		remove_button.setTheme("remove");
 		preview = new Widget();
 		//preview.setTheme("preview");
-		textree = new Tree();
+		textree = new Tree(null,null);
 		textree.setTheme("textree");
 		
 		preview.setBackground(loadImagePreview("resources/themes/widgets.png"));

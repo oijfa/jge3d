@@ -13,14 +13,14 @@ public class EntityMenu extends ResizableFrame {
 	
 	public EntityMenu(EntityList objectList) {
 		super();
-		textree = new Tree(objectList);
+		textree = new Tree(objectList,null);
 		layout = new DialogLayout();
 		entityMenuInit(objectList);
 	}
 	
 	public EntityMenu() {
 		super();
-		textree = new Tree(null);
+		textree = new Tree(null, null);
 		layout = new DialogLayout();
 		entityMenuInit(null);
 	}
@@ -32,12 +32,21 @@ public class EntityMenu extends ResizableFrame {
 		layout = new DialogLayout();
 		entityMenuInit(null);
 	}
+	
+	public EntityMenu(EntityList objectList, Model m) {
+		super();
+		textree = new Tree(objectList, m);
+		layout = new DialogLayout();
+		entityMenuInit(null);
+	}
+
 
 	private void entityMenuInit(EntityList objectList){
 		setTitle("Entity Editor");
 		
-		if(objectList != null)
-			objectList.registerObserver(textree);
+		if(objectList != null){
+			//objectList.registerObserver(textree);
+		}
 		textree.setTheme("textree");
 		
 		Group hgroup = layout.createSequentialGroup()

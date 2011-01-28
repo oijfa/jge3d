@@ -5,10 +5,13 @@ import window.tree.Model;
 import window.tree.Node;
 import window.tree.SpanRenderer;
 import window.tree.SpanString;
+import window.tree.TreeListener;
 import monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
+import de.matthiasmann.twl.TableRowSelectionManager;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
+import de.matthiasmann.twl.model.TableSingleSelectionModel;
 import de.matthiasmann.twl.model.TreeTableNode;
 import entity.Entity;
 import entity.EntityList;
@@ -19,57 +22,76 @@ public class Tree extends ScrollPane implements Observer {
     EntityList objectList;
     private Model model;
     
+    /*
     public Tree() {
     	super();
-    	treeInit(null, null);
+    	treeInit(null, null, null);
     }
     
     public Tree(EntityList objectList){
     	super();
-    	treeInit(objectList, null);
+    	treeInit(objectList, null, null);
     }
+    
+    public Tree(EntityList objectList, Model m){
+    	super();
+    	treeInit(objectList, m, null);
+    }
+    */
     
     public Tree(EntityList objectList, Model m){
     	super();
     	treeInit(objectList, m);
     }
+    
     private void treeInit(EntityList objectList, Model m){
     	if( m != null){
     		model = m;
     	}else{
     		model = new Model();
     	}
+    	
     	if( objectList != null ){
 	    	this.objectList = objectList;
-	    	objectList.registerObserver(this);
-	    	model.removeAll();
-	    	this.createEntityListNode();
+	    	//objectList.registerObserver(this);
+	    	//model.removeAll();
+	    	//this.createEntityListNode();
     	}
     	
         TreeTable t = new TreeTable(model);
         t.setTheme("/table");
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
-        t.setDefaultSelectionManager();
         
-        /*
-        model.insert("qwer","1");
-        createSubNode(model,"qwer","asdf");
-        */
+        TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
+        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
         
+        t.setSelectionManager(
+    		new TableRowSelectionManager(
+    			selectionModel
+    		)
+        );
+
         setContent(t);
         setTheme("/tableScrollPane");
     }
     
+    //From here down Not used when using config files --Robert
 	@Override
 	public void update(Object _name) {
 		String name = (String)_name;
+		
+		//If the node does not exist, create it
 		Node n = findChildNode(name, model);
 		if( n == null ){
 			model.insert(name, "");
 			n = findChildNode(name, model);
 		}
+		
+		//Remove all children
 		n.removeAll();
+		
+		//Create new children with updated values
 		createEntityNode(objectList.getItem(name), n);
 		//model.removeAll();
 		//this.createEntityListNode();
