@@ -16,6 +16,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
 import entity.Camera;
@@ -40,6 +41,7 @@ public class Renderer {
     private float lightDiffuse[]={ 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
     private float lightSpecular[]={ 1f, 1f, 1f, 1.0f };
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
+	private static boolean supportsVBO = false;
 
 
 	public Renderer(EntityList objectList){
@@ -102,7 +104,10 @@ public class Renderer {
 		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
 			
 		}
-
+		
+		//Get supported openGL extensions
+		getVideoExtensions();		
+		
 		camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 
 		window.setCamera(camera);
@@ -136,7 +141,7 @@ public class Renderer {
         
         GL11.glEnable(GL11.GL_LIGHT1);
 	}
-	
+
 	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}
 	public void setPerspective(float near, float far, float zoomVal) {
 		nearClipping = near;
@@ -153,12 +158,23 @@ public class Renderer {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(
-				45.0f/zoom, 
-				(float) window.getWidth() / window.getHeight(), 
-				nearClipping, 
-				farClipping);
+			45.0f/zoom, 
+			(float) window.getWidth() / window.getHeight(), 
+			nearClipping, 
+			farClipping);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
+	}
+	
+	private void getVideoExtensions() {
+		/* Check the video card for rendering capabilities */
+		//Check if VBOs are supported
+		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
+			supportsVBO  = true;
+	}
+	
+	public static boolean supportsVBO() {
+		return supportsVBO;
 	}
 	
 	public void destroy() {window.destroy();}

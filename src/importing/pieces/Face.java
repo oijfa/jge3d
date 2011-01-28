@@ -1,5 +1,6 @@
 package importing.pieces;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,6 +12,7 @@ public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	Vector3f normal;
+	int vbo_id[];
 	
 	public Face(){ 
 		vertices = new ArrayList<Vector3f>();
@@ -98,6 +100,55 @@ public class Face {
 		return vertexlist;
 	}
 	
+	//LWJGL wants floatbuffers so we just return them in the
+	//native format here
+	public FloatBuffer getFaceBufferVNT() {
+		//Create a primitive float array to wrap in the float buffer
+		//multiply by three since there are three dimensions in the vec
+		//multiply by two since we are sending the normals as well
+		//add 2 for the texture coords
+		float[] float_array = new float[vertices.size()*3*2+2];
+		
+		//Make sure that the face is at least a triangle
+		if(vertices.size() >= 3) {
+			//Copy each vert in xyz order to the primitive array
+			for(int i=0; i<float_array.length;i+=3) {
+				float_array[i] = vertices.get(i).x;
+				float_array[i+1] = vertices.get(i).y;
+				float_array[i+2] = vertices.get(i).z;
+			}
+		} else {
+			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
+		}
+		//Do the same for the normals starting at the end of the vert data
+		if(vertexNormals.size() >= 3) {
+			//Copy each vert in xyz order to the primitive array
+			for(int i=vertices.size()*3; i<float_array.length;i+=3) {
+				float_array[i] = vertices.get(i).x;
+				float_array[i+1] = vertices.get(i).y;
+				float_array[i+2] = vertices.get(i).z;
+			}
+		} else {
+			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
+		}
+		//TODO: placeholder for texture data
+		float_array[vertices.size()*3+vertexNormals.size()*3] = 0.0f;
+		float_array[vertices.size()*3+vertexNormals.size()*3] = 1.0f;
+		
+		return FloatBuffer.wrap(float_array);
+	}
+	public FloatBuffer getVertBuffer(int i) {
+		//Create a primitive float array to wrap in the float buffer
+		float[] float_array = new float[3];
+		
+		//Copy each vert in xyz order to the primitive array
+		float_array[0] = vertices.get(i).x;
+		float_array[1] = vertices.get(i).y;
+		float_array[2] = vertices.get(i).z;
+		
+		return FloatBuffer.wrap(float_array);
+	}
+	
 	public ArrayList<Vector3f> getNormals(){ return vertexNormals; }
 	
 	public Vector3f getVertex(int i){
@@ -173,6 +224,10 @@ public class Face {
 		data.append("<FV3><PREF>" + String.valueOf(startRef + 2) + "</PREF><NREF>" + String.valueOf(startRef + 2) + "</NREF></FV3>");
 		data.append("</F>\n");
 		return data;
+	}
+
+	public void setVertexID(int index, int id) {
+		vbo_id[index]=id;
 	}
 	
 	

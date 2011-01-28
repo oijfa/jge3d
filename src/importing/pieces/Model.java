@@ -4,11 +4,17 @@ package importing.pieces;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.IntBuffer;
+
 import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
+
+import render.Renderer;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -16,6 +22,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 public class Model {
 	ArrayList<Mesh> meshes;
 	Vector3f max, min, center;
+	int vbo_id;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -74,6 +81,10 @@ public class Model {
 	public void verify() {	
 		ArrayList<Vector3f> maxes = new ArrayList<Vector3f>();
 		ArrayList<Vector3f> mins = new ArrayList<Vector3f>();
+		
+		//for each mesh we get the max and min width,height,depth
+		//we also calculate normals since we're going through the 
+		//whole list anyway
 		for(Mesh m: meshes) {
 			maxes.add(m.getMaximums());
 			mins.add(m.getMinimums());
@@ -83,6 +94,8 @@ public class Model {
 		max = new Vector3f();
 		min = new Vector3f();
 		
+		//create a vector for making a surrounding shape that
+		//matches the largest and smallest points exactly
 		max = maxes.get(0);
 		min = mins.get(0);
 		for(int i = 1; i < maxes.size(); i++){
@@ -109,6 +122,28 @@ public class Model {
 		//find the center of the model using our min/max values
 		center.add(max,min);
 		center.scale(0.5f);
+		
+		//if we support VBOs we need to precompute the thing now
+		//that we have normals and the model is fully loaded
+		if(Renderer.supportsVBO()) {
+			int index;
+			int vbo_id;
+			for(Mesh m: meshes) {
+				for(Face f: m.getFaces()) {
+					index=0;
+					for(int i=0; i<f.getVertexCount();i++) {
+						IntBuffer buffer = BufferUtils.createIntBuffer(1);
+					    ARBVertexBufferObject.glGenBuffersARB(buffer);
+					    vbo_id = buffer.get(0);
+					    f.setVertexID(index,buffer.get(0));
+					    index++;
+					    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id);
+					    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+					}
+				}
+			}
+		}
+		
 	}
 	
 	/*Export*/
@@ -150,5 +185,9 @@ public class Model {
 		shape.sub(max,min);
 		shape.scale(0.5f);
 		return new BoxShape(shape);
+	}
+	
+	public int getModelID() {
+		return vbo_id;
 	}
 }
