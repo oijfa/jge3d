@@ -1,72 +1,55 @@
 package controller;
 
-import importing.pieces.Model;
+import java.util.HashMap;
 
-import java.util.ArrayList;
-
-import javax.vecmath.Vector3f;
+import window.tree.Model;
+import entity.EntityList;
 
 public class Config {
-	ArrayList<ConfigItem> items;
+	private static HashMap<String, ConfigItem> configs;
+	private static String currentKey;
 	
-	public ConfigItem createItem(String name,String value,Vector3f pos,Model model,String parent_name){
-		ConfigItem i = new ConfigItem(name,value,pos,model);
-		if(parent_name == null){
-			items.add(i);
-		}else{
-			for(ConfigItem e: items){
-				if(e.getName().equals(parent_name)){
-					e.items.add(i);
-				}
-			}
-		}
-		return i;
+	Config(){
+		configs = new HashMap<String, ConfigItem>();
+		currentKey = null;
 	}
 	
-	public class ConfigItem{
-		private String name;
-		private String value;
-		private Vector3f pos;
-		private Model model;
-		ArrayList<ConfigItem> items;
+	public void synchronized addConfig(String name, EntityList entityList, Model treeModel){
+		if(currentKey == null){
+			currentKey = name;
+		}
+		configs.put(name, new ConfigItem(entityList,treeModel));
+	}
+	
+	public EntityList entlist() throws Exception{
+		if(currentKey == null){
+			throw new Exception("EntList: No config to fetch");
+		}
+		return configs.get(currentKey).list;
+	}
+	
+	public Model model() throws Exception{
+		if(currentKey == null){
+			throw new Exception("TreeModel: No config to fetch");
+		}
+		return configs.get(currentKey).treeModel;
+	}
+	
+	
+	public void changeConfig(String key) throws Exception{
+		if(!configs.containsKey(key)){
+			throw new Exception("Can't change to a config that doesn't exist...");
+		}
+		currentKey = key;
+	}
+	
+	class ConfigItem {
+		public EntityList list;
+		public Model treeModel;
 		
-		public ConfigItem(String name,String value,Vector3f pos,Model model){
-			this.setName(name);
-			this.setValue(value);
-			this.setPos(new Vector3f(pos.x,pos.y,pos.z));
-			this.setModel(model);
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setPos(Vector3f pos) {
-			this.pos = pos;
-		}
-
-		public Vector3f getPos() {
-			return pos;
-		}
-
-		public void setModel(Model model) {
-			this.model = model;
-		}
-
-		public Model getModel() {
-			return model;
+		public ConfigItem(EntityList list,Model treeModel){
+			this.list = list;
+			this.treeModel = treeModel;
 		}
 	}
 }
