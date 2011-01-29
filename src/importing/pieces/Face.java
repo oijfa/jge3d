@@ -12,7 +12,9 @@ public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	Vector3f normal;
-	int vbo_id[];
+	int vbo_id;
+	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
+	public static final int VERTEX_STRIDE=4*3*2+4*2;
 	
 	public Face(){ 
 		vertices = new ArrayList<Vector3f>();
@@ -111,30 +113,31 @@ public class Face {
 		
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
-			//Copy each vert in xyz order to the primitive array
-			for(int i=0; i<float_array.length;i+=3) {
+			for(int i=0;i<vertices.size();i++) {
+				//Copy each vert in xyz order to the primitive array
 				float_array[i] = vertices.get(i).x;
 				float_array[i+1] = vertices.get(i).y;
 				float_array[i+2] = vertices.get(i).z;
+
+				//Do the same for the normals starting at the end of the vert data
+				//Copy each vert in xyz order to the primitive array
+				float_array[2*i] = vertexNormals.get(i).x;
+				float_array[2*i+1] = vertexNormals.get(i).y;
+				float_array[2*i+2] = vertexNormals.get(i).z;
+				
+				//TODO: placeholder for texture data
+				float_array[3*i] = 0.0f;
+				float_array[3*i+1] = 1.0f;
+				
+				float_array[4*i] = 1.0f;
+				float_array[4*i+1] = 1.0f;
+				float_array[4*i+2] = 1.0f;
+				float_array[4*i+3] = 1.0f;
 			}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 		}
-		//Do the same for the normals starting at the end of the vert data
-		if(vertexNormals.size() >= 3) {
-			//Copy each vert in xyz order to the primitive array
-			for(int i=vertices.size()*3; i<float_array.length;i+=3) {
-				float_array[i] = vertices.get(i).x;
-				float_array[i+1] = vertices.get(i).y;
-				float_array[i+2] = vertices.get(i).z;
-			}
-		} else {
-			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
-		}
-		//TODO: placeholder for texture data
-		float_array[vertices.size()*3+vertexNormals.size()*3] = 0.0f;
-		float_array[vertices.size()*3+vertexNormals.size()*3] = 1.0f;
-		
+
 		return FloatBuffer.wrap(float_array);
 	}
 	public FloatBuffer getVertBuffer(int i) {
@@ -226,9 +229,7 @@ public class Face {
 		return data;
 	}
 
-	public void setVertexID(int index, int id) {
-		vbo_id[index]=id;
+	public void setVertexID(int id) {
+		vbo_id=id;
 	}
-	
-	
 }
