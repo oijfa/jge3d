@@ -105,11 +105,13 @@ public class Input {
 				}
 				break;
 			case 0://Left Button
+				/*
 				physics.drag(
 					camera,
 					Mouse.getEventButtonState()? 0 : 1,
 					camera.getRayTo(Mouse.getEventX(),Mouse.getEventY())
 				);
+				*/
 
 				break;
 			case -1:
