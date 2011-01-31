@@ -4,16 +4,12 @@ package importing.pieces;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.IntBuffer;
 
 import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import render.Renderer;
 
@@ -69,41 +65,18 @@ public class Model {
 	public int getMeshCount() { return meshes.size();}
 	
 	public void draw(){
-		for(Mesh m: meshes){
-			//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
-			if(Renderer.supportsVBO()) {
-				GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-				GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-				GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-				//GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-				 
-				// vertices
-				int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
-				GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-				 
-				// normals
-				offset = 3 * 4; // 3 components is the initial offset from 0, then convert to bytes
-				GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-				
-				// texture coordinates
-				offset = (3 + 3 + 2) * 4;
-				GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);				
-				
-				// colours
-				offset = (3 + 3) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
-				GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-
-				GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);
-				GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
-				 
-				GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, colourBufferID);
-				GL11.glColorPointer(4, GL11.GL_FLOAT, 0, 0);
-				 
-				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, indexBufferID);
-				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, 0, maxIndex, indexBufferSize,GL11.GL_UNSIGNED_INT, 0);
-			} else {
+		//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
+		//if the renderer supports VBOs definitely use them; if it doesn't
+		//we fall-back to immediate mode
+		if(Renderer.supportsVBO()) {
+			for(Mesh m: meshes){
+				for(Face f: m.getFaces()) {
+					f.draw_vbo();
+				}
+			}
+		} else {
+			for(Mesh m: meshes){
+		
 				GL11.glPushMatrix();
 				m.draw();
 				GL11.glPopMatrix();
@@ -162,15 +135,9 @@ public class Model {
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
 		if(Renderer.supportsVBO()) {
-			int vbo_id;
 			for(Mesh m: meshes) {
 				for(Face f: m.getFaces()) {
-				    IntBuffer buffer = BufferUtils.createIntBuffer(1);
-				    ARBVertexBufferObject.glGenBuffersARB(buffer);
-				    vbo_id = buffer.get(0);
-				    
-				    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id);
-				    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, f.getFaceBufferVNT(), ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+					f.createFaceBufferVNT();
 				}
 			}
 		}

@@ -1,20 +1,26 @@
 package importing.pieces;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
+	FloatBuffer faceVNT;
+	
 	Vector3f normal;
 	int vbo_id;
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
-	public static final int VERTEX_STRIDE=4*3*2+4*2;
+	public static final int VERTEX_STRIDE=48;
 	
 	public Face(){ 
 		vertices = new ArrayList<Vector3f>();
@@ -104,41 +110,40 @@ public class Face {
 	
 	//LWJGL wants floatbuffers so we just return them in the
 	//native format here
-	public FloatBuffer getFaceBufferVNT() {
-		//Create a primitive float array to wrap in the float buffer
-		//multiply by three since there are three dimensions in the vec
-		//multiply by two since we are sending the normals as well
-		//add 2 for the texture coords
-		float[] float_array = new float[vertices.size()*3*2+2];
-		
+	public void createFaceBufferVNT() {
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
-				//Copy each vert in xyz order to the primitive array
-				float_array[i] = vertices.get(i).x;
-				float_array[i+1] = vertices.get(i).y;
-				float_array[i+2] = vertices.get(i).z;
-
-				//Do the same for the normals starting at the end of the vert data
-				//Copy each vert in xyz order to the primitive array
-				float_array[2*i] = vertexNormals.get(i).x;
-				float_array[2*i+1] = vertexNormals.get(i).y;
-				float_array[2*i+2] = vertexNormals.get(i).z;
+				IntBuffer buffer = BufferUtils.createIntBuffer(1);
+			    ARBVertexBufferObject.glGenBuffersARB(buffer);
+			    vbo_id = buffer.get(0);
+			    
+				faceVNT.put(vertices.get(i).x);
+				faceVNT.put(vertices.get(i).y);
+				faceVNT.put(vertices.get(i).z);
 				
-				//TODO: placeholder for texture data
-				float_array[3*i] = 0.0f;
-				float_array[3*i+1] = 1.0f;
+				faceVNT.put(vertexNormals.get(i).x);
+				faceVNT.put(vertexNormals.get(i).y);
+				faceVNT.put(vertexNormals.get(i).z);
 				
-				float_array[4*i] = 1.0f;
-				float_array[4*i+1] = 1.0f;
-				float_array[4*i+2] = 1.0f;
-				float_array[4*i+3] = 1.0f;
+				faceVNT.put(0.0f);
+				faceVNT.put(1.0f);
+				
+				faceVNT.put(1.0f);
+				faceVNT.put(1.0f);
+				faceVNT.put(1.0f);
+				faceVNT.put(1.0f);
+					
+				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id);
+			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+			    
+			    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
+			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 			}
+			vbo_id-=vertices.size()-1;
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 		}
-
-		return FloatBuffer.wrap(float_array);
 	}
 	public FloatBuffer getVertBuffer(int i) {
 		//Create a primitive float array to wrap in the float buffer
@@ -166,6 +171,40 @@ public class Face {
 			GL11.glVertex3f(v.x, v.y, v.z);
 			GL11.glNormal3f(n.x, n.y, n.z);
 		}
+	}
+	
+	public void draw_vbo() {
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+		 
+		//Bind the index of the object
+		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id );
+		
+		//vertices
+		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		 
+		// normals
+		offset = 3 * 4; // 3 components is the initial offset from 0, then convert to bytes
+		GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		
+		// texture coordinates
+		offset = (3 + 3 + 2) * 4;
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);				
+		
+		//colors
+		offset = (3 + 3) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
+		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		IntBuffer index = BufferUtils.createIntBuffer(1);
+		for (int i=0;i<vertices.size();i++)
+			index.put(vbo_id+i);
+			
+		//GL11.glDrawElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_SHORT, vbo_id);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
+		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, 0, vertices.size()-1, index);
 	}
 	
 	@SuppressWarnings("unused")
