@@ -50,7 +50,6 @@ public class Controller extends Applet{
 
 	private EntityList objectList;
 	
-	window.tree.Model treeModel;
 	Runnable treeListener;
 	
 	public static void main(String[] args) throws Exception {
@@ -77,8 +76,6 @@ public class Controller extends Applet{
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
 
-		treeModel = new window.tree.Model();
-
 		readConfigFile();		
 		
 		//Renderer has to be after entity list
@@ -102,7 +99,7 @@ public class Controller extends Applet{
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL(treeModel);
+			renderer.initGL();
 			this.interrupt();
 			while (isRunning) {
 				if(Display.isCloseRequested())
@@ -113,7 +110,7 @@ public class Controller extends Applet{
 	};
 	
 	public long getFrames() { return frames; }
-	public void resetFrames() {	frames = 0;	}
+	public void resetFrames() { frames = 0;	}
 	
 	public static void quit() { isRunning = false;	}
 	
@@ -223,6 +220,9 @@ public class Controller extends Applet{
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		dom = db.parse("resources/models/config.xml");
 		
+		String configName;
+		window.tree.Model treeModel = new window.tree.Model();
+		
 		ArrayList<Node> tagList;
 		
 		try {
@@ -230,10 +230,13 @@ public class Controller extends Applet{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("config")){
+				tagList = findChildrenByName(rootElement, "name");
+				configName = tagList.get(0).getTextContent();
+				
 				tagList = findChildrenByName(rootElement, "item");
 				for(int i = 0; i < tagList.size(); i++){
 					//Create nodes for all of them
-					createItem((Element)tagList.get(i), treeModel);
+					createItem((Element)tagList.get(i), treeModel, configName);
 				}
 			}else{
 				Exception e = new Exception();
@@ -245,7 +248,7 @@ public class Controller extends Applet{
 		}
 	}
 
-	private void createItem(Element ele, TreeTableNode parent) throws Exception {
+	private void createItem(Element ele, TreeTableNode parent, String configName) throws Exception {
 		String name;
 		String value;
 		String path;
@@ -290,13 +293,12 @@ public class Controller extends Applet{
 			collidable = true;
 		}
 		
-		Entity ent = null;
 		tagList = findChildrenByName(ele, "path");
 		if( tagList.size() > 0){
 			path = tagList.get(0).getTextContent();
 			BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 			
-			ent = new Entity(1.0f, boxShape, collidable);
+			Entity ent = new Entity(1.0f, boxShape, collidable);
 			ent.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 			if( !path.equals("") ){
 				//Make a cathode	
@@ -306,19 +308,17 @@ public class Controller extends Applet{
 				model = p.createModel();
 				ent.setModel(model);
 				ent.setCollisionShape(model.createCollisionShape());
-				
-				
 			}
 			
 			ent.setPosition(position);
-			ent.setProperty("name", name);
+			ent.setProperty("name", configName + "-" + name);
 			objectList.enqueue(ent, QueueItem.ADD);
 		}
 		
 		if(show == true){
 			window.tree.Node item;
-			if( parent == treeModel ){
-				 item = treeModel.insert(name, "");
+			if( parent.getClass() == window.tree.Model.class ){
+				 item = ((window.tree.Model)parent).insert(name, "");
 			}else{
 				item = ((window.tree.Node)parent).insert(name,value);
 			}
@@ -326,11 +326,7 @@ public class Controller extends Applet{
 			tagList = findChildrenByName(ele, "item");
 			for(int i = 0; i < tagList.size(); i++){
 				//Create nodes for all of them
-				createItem((Element)tagList.get(i), item);
-			}
-			
-			if(ent != null){
-				//treeModel.addSelectionChangeListener();
+				createItem((Element)tagList.get(i),item, configName);
 			}
 		}
 	}

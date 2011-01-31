@@ -13,6 +13,8 @@ import render.Renderer;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 
+import controller.Config;
+
 public class Camera extends Entity {
 	
 	/*Static class variables*/
@@ -81,6 +83,7 @@ public class Camera extends Entity {
 	private void setUpVector( Vector3f newUp ){
 		up_vector = newUp;
 	}
+	
 	public void setDistance(Float f) {
 		if( f > maximum_distance)
 		{
@@ -117,6 +120,7 @@ public class Camera extends Entity {
 	public float getDistance(){
 		return distance;
 	}
+	
 	public void incrementDeclination(Float angle){
 		declination += angle;
 		if( declination > maximum_declination ){
@@ -155,8 +159,8 @@ public class Camera extends Entity {
 	public void setRotation(Float angle){
 		this.rotation = angle;
 	}
-	public void updatePosition()
-	{
+	
+	public void updatePosition(){
 		 float a = 0;
 		 Vector3f position = new Vector3f();
 		 Vector3f focPos = getFocusPosition();

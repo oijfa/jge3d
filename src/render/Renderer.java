@@ -83,7 +83,7 @@ public class Renderer {
 		//Display.processMessages(); // process new native messages since
 	}
 	
-	public void initGL(Model m) {		
+	public void initGL() {		
 		//Setup Display
 		try {
 			Display.setDisplayMode(new DisplayMode(1024,768));
@@ -98,7 +98,7 @@ public class Renderer {
 		//TODO:  Make Configurable by User
 		Display.setVSyncEnabled(true);
 		
-		window = new Window(objectList, m);
+		window = new Window(objectList);
 		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
 			
 		}
