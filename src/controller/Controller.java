@@ -277,11 +277,12 @@ public class Controller extends Applet{
 	/* Config file reading */
 	private void readConfigFile() throws Exception{
 		Document dom;
+		//URL url = new URL("resources/models/config.xml");
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse("resources/models/config.xml");
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config.xml"));
 		
 		ArrayList<Node> tagList;
 		

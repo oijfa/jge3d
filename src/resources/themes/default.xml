@@ -147,6 +147,10 @@
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
         <param name="border"><border>5,5,5,5</border></param>
+        <param name="maxWidth"><int>75</int></param>
+        <param name="maxHeight"><int>75</int></param>
+        <param name="minWidth"><int>75</int></param>
+        <param name="minHeight"><int>75</int></param>
     </theme>
     <theme name="vscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="upbutton" ref="-defaults">
@@ -246,14 +250,14 @@
     </theme>
     <theme name="-treecellrenderer" ref="-defaults">
         <param name="treeIndent"><int>13</int></param>
-        <param name="treeButtonSize"><dimension>20,19</dimension></param>
+        <param name="treeButtonSize"><dimension>30,30</dimension></param>
     </theme>
     <theme name="table" ref="-defaults" allowWildcard="true">
     	<theme name="" ref="*"/>
         <param name="row.background"><image>none</image></param>
         <param name="row.overlay"><image>none</image></param>
         <param name=""><image>table.*</image></param>
-        <param name="rowHeight"><int>20</int></param> <!-- the font line height is 14 -->
+        <param name="rowHeight"><int>30</int></param> <!-- the font line height is 14 -->
         <theme name="stringcellrenderer" ref="-defaults"/>
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
@@ -263,7 +267,7 @@
         </theme>
         <param name="columnHeaderWidth"><int>135</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
-        <param name="columnDividerDragableDistance"><int>3</int></param>
+        <param name="columnDividerDragableDistance"><int>1</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
         <param name="columnDivider"><image>white</image></param>
         <param name="columnWidths"><map/></param>
@@ -364,9 +368,9 @@
         </theme>
         <theme name="rotationmenu" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
-            <param name="maxWidth"><int>300</int></param>
+            <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>
-        	<param name="maxHeight"><int>300</int></param>
+        	<param name="maxHeight"><int>400</int></param>
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
 				<theme name="up" ref="button" />

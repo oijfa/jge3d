@@ -10,7 +10,6 @@ import importing.pieces.Material;
 import importing.pieces.Mesh;
 import importing.pieces.Model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +35,7 @@ public class XGL_Parser extends Parser{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(new File(url));
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream(url));
 		parseXGL(dom);
 		model.verify();
 	}
@@ -48,7 +47,7 @@ public class XGL_Parser extends Parser{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(fileName);
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
 		parseXGL(dom);
 		model.verify();
 	}	
