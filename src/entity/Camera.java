@@ -13,8 +13,6 @@ import render.Renderer;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 
-import controller.Config;
-
 public class Camera extends Entity {
 	
 	/*Static class variables*/
