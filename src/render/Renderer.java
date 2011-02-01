@@ -6,6 +6,7 @@
 
 package render;
 
+import java.awt.Canvas;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -14,7 +15,6 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -40,10 +40,12 @@ public class Renderer {
     private float lightDiffuse[]={ 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
     private float lightSpecular[]={ 1f, 1f, 1f, 1.0f };
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
+	private Canvas display_parent;
 
 
-	public Renderer(EntityList objectList){
+	public Renderer(EntityList objectList, Canvas display_parent){
 		this.objectList = objectList;
+		this.display_parent = display_parent;
 	}
 
 	public Renderer(EntityList objectList, Model m) {
@@ -84,20 +86,16 @@ public class Renderer {
 	}
 	
 	public void initGL(Model m) {		
-		//Setup Display
 		try {
-			Display.setDisplayMode(new DisplayMode(1024,768));
+			Display.setParent(display_parent);
 			Display.create();
+			Display.setTitle("JGE3d");
+			//TODO:  Make Configurable by User
+			Display.setVSyncEnabled(true);
 		} catch (LWJGLException e) {
-			System.out.println("***Failed to create Display***");
 			e.printStackTrace();
 		}
 
-		Display.setTitle("JGE3d");
-		
-		//TODO:  Make Configurable by User
-		Display.setVSyncEnabled(true);
-		
 		window = new Window(objectList, m);
 		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
 			

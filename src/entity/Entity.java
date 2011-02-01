@@ -1,4 +1,4 @@
-/*
+ /*
  * This class is what holds any object in the world.
  * 	The user can add/remove custom properties (though a few are 
  * 	unremovable for internal engine reasons)
