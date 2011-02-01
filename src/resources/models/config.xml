@@ -1,0 +1,103 @@
+<config>
+	<name>Mini</name>
+	<item>
+		<name>Coating</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/coating.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Pellet</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Impregnant</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/impregnant.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Braze Coat</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/brazecoat.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Body</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/minibody.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Potting</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/potting.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Heater</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/heater.xgl</path>
+		<position>100,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Cathode Assembly</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
+		<position>0,0,0</position>
+		<show>false</show>
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>linear_focus</name>
+		<value></value>
+		<path></path>
+		<collidable>false</collidable>
+		<position>100,0,0</position>
+		<show>false</show>
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+</config>
