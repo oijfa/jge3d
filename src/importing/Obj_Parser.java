@@ -11,9 +11,7 @@ import importing.pieces.Mesh;
 import importing.pieces.Model;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
@@ -34,12 +32,12 @@ public class Obj_Parser extends Parser{
 	
 	@Override
 	public void readFile(String fileName) throws Exception {
-		parseObj(new BufferedReader(new FileReader(fileName)));
+		parseObj(new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(fileName))));
 	}
 
 	@Override
 	public void readUrl(String url) throws Exception {
-		BufferedReader file = new BufferedReader(new InputStreamReader(new URL( url ).openStream()));
+		BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(url)));
 		parseObj(file);
 	}
 	

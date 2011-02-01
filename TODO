@@ -1,15 +1,16 @@
 Easy:
-	Expand list so easier to fat finger
-	Expand buttons so easier to fat finger
-	Color buttons along with parts
-	Order list properly (Heater, Potting, Body, Braze, Impreg, Pellet, Coating)
-	Get rid of mouse dragging/Reset button
-	Reset function
-	Part Dimensions?
+XExpand list so easier to fat finger
+XExpand buttons so easier to fat finger
+x Order list properly (Heater, Potting, Body, Braze, Impreg, Pellet, Coating)
+XGet rid of mouse dragging/Reset button
+Reset function
+Part Dimensions?
+Color buttons along with parts
 
 Hard:
-	Web app
-	Rotation on selection
-	Move everything else away on selection
-	Align parts to fit into cathode
-	Switch between full assemblies
+Figure out why touch screen died
+XWeb app
+Rotation on selection
+Move everything else away on selection
+Align parts to fit into cathode
+Switch between full assemblies
