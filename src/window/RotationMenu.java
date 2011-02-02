@@ -118,22 +118,22 @@ public class RotationMenu extends ResizableFrame {
 		align.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				int x = 100;
 				for(String name: objectList.getKeySet()) {
-					if(Config.getDefaultFocus() == null){
-						System.out.println("FUUUUCK ME");
-					}
-					if( !name.equals(Camera.CAMERA_NAME) && !name.equals(Config.getDefaultFocus().getProperty("name"))){
-						objectList.getItem(name).setPosition(new Vector3f(x,0,0));
-						x+=3;
+					//For everything but the camera do the following
+					if(!name.equals(Camera.CAMERA_NAME)) {
+						//Stop the movement
+						objectList.getItem(name).setDamping(1.0f,1.0f);
+						objectList.getItem(name).activate();
+						objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
 						
-						System.out.println(name);
-						System.out.println(objectList.getItem(name).getPosition());
-						
+						//Move the object back to its original position
+						objectList.getItem(name).setAngularIdentity();
+						objectList.getItem(name).setPosition(Config.getPosition(name));
 					}
 				}
+				
 				if(!linearShow){
-					cam.focusOn(objectList.getItem("Mini-Coating"));
+					cam.focusOn(objectList.getItem("Mini-Braze Coat"));
 					linearShow = true;
 				}else{
 					cam.focusOn(Config.getDefaultFocus());
