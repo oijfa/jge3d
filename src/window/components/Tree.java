@@ -1,5 +1,7 @@
 package window.components;
 
+import java.util.ArrayList;
+
 import controller.Config;
 import controller.ConfigListener;
 import window.tree.EditFieldCellRenderer;
@@ -22,6 +24,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     //private MyNode dynamicNode;
     int state;
     EntityList objectList;
+    Model treeModel;
     
     public Tree(EntityList objectList, Model m){
     	super();
@@ -29,6 +32,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     }
     
     private void treeInit(EntityList objectList){
+    	treeModel = new Model();
     	
     	if( objectList != null ){
 	    	this.objectList = objectList;
@@ -37,30 +41,25 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	    	//this.createEntityListNode();
     	}
     	
-        TreeTable t;
-		try {
-			t = new TreeTable(Config.treeModel());
+        TreeTable t = new TreeTable(treeModel);
 		
-	        t.setTheme("/table");
-	        t.registerCellRenderer(SpanString.class, new SpanRenderer());
-	        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
-	        
-	        TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-	        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
-	        
-	        t.setSelectionManager(
-	    		new TableRowSelectionManager(
-	    			selectionModel
-	    		)
-	        );
+        t.setTheme("/table");
+        t.registerCellRenderer(SpanString.class, new SpanRenderer());
+        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        
+        TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
+        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
+        
+        t.setSelectionManager(
+    		new TableRowSelectionManager(
+    			selectionModel
+    		)
+        );
 	
-	        setContent(t);
-	        setTheme("/tableScrollPane");
-		} catch (Exception e) {
-			System.out.println("Failed to initialize tree");
-			e.printStackTrace();
-		}
-		
+        setContent(t);
+        setTheme("/tableScrollPane");
+        
+        configChanged();
 		Config.registerObserver(this);
     }
     
@@ -150,25 +149,14 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	}
 	
 	public void configChanged(){
-		TreeTable t;
 		try {
-			t = new TreeTable(Config.treeModel());
-		
-	        t.setTheme("/table");
-	        t.registerCellRenderer(SpanString.class, new SpanRenderer());
-	        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
-	        
-	        TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-	        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
-	        
-	        t.setSelectionManager(
-	    		new TableRowSelectionManager(
-	    			selectionModel
-	    		)
-	        );
-	
-	        setContent(t);
-	        setTheme("/tableScrollPane");
+			ArrayList<Node> nodes = Config.getNodes();
+			
+			treeModel.removeAll();
+			for(Node n: nodes){
+				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
+				n.changeParent(treeModel);
+			}
 		} catch (Exception e) {
 			System.out.println("Failed to create new treeTable");
 			e.printStackTrace();

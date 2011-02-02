@@ -136,7 +136,8 @@ public class Controller extends Applet{
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
 
-		readConfigFile();		
+		readConfigFile();
+		System.out.println("Config should be ready: " + String.valueOf(Config.ready) );
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList, display_parent);
@@ -299,6 +300,8 @@ public class Controller extends Applet{
 					//Create nodes for all of them
 					createItem((Element)tagList.get(i), treeModel, configName);
 				}
+				
+				Config.addConfig(configName, new Vector3f(0,0,0), treeModel);
 			}else{
 				Exception e = new Exception();
 				e.initCause(new Throwable("Invalid config file"));

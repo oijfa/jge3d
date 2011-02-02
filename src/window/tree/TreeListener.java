@@ -28,6 +28,7 @@ public class TreeListener implements Runnable{
 				}
 			}catch(Exception e){
 				System.out.println("No config name");
+				e.printStackTrace();
 			}
 		}
 	}

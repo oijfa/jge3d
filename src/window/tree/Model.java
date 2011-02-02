@@ -1,5 +1,7 @@
 package window.tree;
 
+import java.util.ArrayList;
+
 import de.matthiasmann.twl.model.AbstractTreeTableModel;
 
 public class Model extends AbstractTreeTableModel {
@@ -24,4 +26,11 @@ public class Model extends AbstractTreeTableModel {
     public void removeAll(){
     	this.removeAllChildren();
     }
+	public ArrayList<Node> getChildren() {
+		ArrayList<Node> children = new ArrayList<Node>();
+		for(int j = 0; j < this.getNumChildren(); j++){
+			children.add((Node) this.getChild(j));
+		}
+		return children;
+	}
 }
