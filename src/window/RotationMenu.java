@@ -4,7 +4,6 @@ import input.components.ButtonRunnable;
 import input.components.InputRunnable;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.vecmath.Vector3f;
 
@@ -97,6 +96,7 @@ public class RotationMenu extends ResizableFrame {
 				for(String key:objectList.getKeySet()) {
 					Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
+						/*
 						Random rand = new Random();
 						Vector3f force = new Vector3f(
 							rand.nextFloat()*10,
@@ -105,6 +105,9 @@ public class RotationMenu extends ResizableFrame {
 						);
 						ent.applyImpulse(force, ent.getPosition());
 						ent.activate();
+						*/
+						
+						//ent.setPosition(Config.getByName(ent.getProperty("name")).getPosition());
 					}
 				}
 			}
@@ -161,6 +164,8 @@ public class RotationMenu extends ResizableFrame {
 			System.out.println();
 		}
 		if(buttonThreads.get(key) != null){
+			//System.out.println("buttonpress");
+			buttonPressed();
 			resetThread(key);
 			buttonThreads.get(key).start();
 		}else{
@@ -190,5 +195,10 @@ public class RotationMenu extends ResizableFrame {
 			buttonThreads.put("zoomOut", new InputRunnable("incrementDistance",cam, -ZOOM_INC));
 		}
 		return buttonThreads.get(key);
+	}
+	
+	public synchronized void buttonPressed() {
+		Entity ent = ((Camera)objectList.getItem(Camera.CAMERA_NAME)).getFocus();
+		ent.setAngularFactor(0, new Vector3f(0,0,0));
 	}
 }

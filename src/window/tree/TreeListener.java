@@ -1,5 +1,7 @@
 package window.tree;
 
+import javax.vecmath.Vector3f;
+
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.TableSingleSelectionModel;
 import entity.Camera;
@@ -25,6 +27,9 @@ public class TreeListener implements Runnable{
 			Entity newFocus = objects.getItem((String)n.getData(0));
 			if( newFocus != null){
 				((Camera)objects.getItem(Camera.CAMERA_NAME)).focusOn(newFocus);
+				newFocus.applyImpulse(new Vector3f(0,1,0), newFocus.getPosition());
+				newFocus.activate();
+				newFocus.setAngularFactor(0.0f, new Vector3f(1,1,0));
 			}
 		}
 	}

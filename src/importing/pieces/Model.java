@@ -151,4 +151,8 @@ public class Model {
 		//shape.scale(0.5f);
 		return new BoxShape(shape);
 	}
+	
+	public ArrayList<Float> getColor() {
+		return meshes.get(0).getMaterial().getColor();
+	}
 }

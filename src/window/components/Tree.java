@@ -21,6 +21,7 @@ public class Tree extends ScrollPane implements Observer {
     int state;
     EntityList objectList;
     private Model model;
+    private TreeTable treeTable;
     
     /*
     public Tree() {
@@ -58,21 +59,21 @@ public class Tree extends ScrollPane implements Observer {
 	    	//this.createEntityListNode();
     	}
     	
-        TreeTable t = new TreeTable(model);
-        t.setTheme("/table");
-        t.registerCellRenderer(SpanString.class, new SpanRenderer());
-        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        treeTable = new TreeTable(model);
+        treeTable.setTheme("/table");
+        treeTable.registerCellRenderer(SpanString.class, new SpanRenderer());
+        treeTable.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
         
         TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
+        selectionModel.addSelectionChangeListener(new TreeListener(treeTable,selectionModel,objectList));
         
-        t.setSelectionManager(
+        treeTable.setSelectionManager(
     		new TableRowSelectionManager(
     			selectionModel
     		)
         );
 
-        setContent(t);
+        setContent(treeTable);
         setTheme("/tableScrollPane");
     }
     

@@ -1,7 +1,7 @@
 Easy:
 XExpand list so easier to fat finger
 XExpand buttons so easier to fat finger
-x Order list properly (Heater, Potting, Body, Braze, Impreg, Pellet, Coating)
+xOrder list properly (Heater, Potting, Body, Braze, Impreg, Pellet, Coating)
 XGet rid of mouse dragging/Reset button
 Reset function
 Part Dimensions?
@@ -10,8 +10,8 @@ Color buttons along with parts
 Hard:
 Figure out why touch screen died
 XWeb app
-Rotation on selection
-Move everything else away on selection
+XRotation on selection
+XMove everything else away on selection
 Align parts to fit into cathode
 Switch between full assemblies
 
