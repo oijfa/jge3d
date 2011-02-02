@@ -51,7 +51,22 @@ public class TreeListener implements Runnable{
 				
 				//Move the object back to its original position
 				objects.getItem(name).setAngularIdentity();
-				objects.getItem(name).setPosition(Config.getPosition(name));
+				//objects.getItem(name).setPosition(Config.getPosition(name));
+			}
+		}
+		
+		int x = 100;
+		for(String name: objects.getKeySet()) {
+			if(Config.getDefaultFocus() == null){
+				System.out.println("FUUUUCK ME");
+			}
+			if( !name.equals(Camera.CAMERA_NAME) && !name.equals(Config.getDefaultFocus().getProperty("name"))){
+				objects.getItem(name).setPosition(new Vector3f(x,0,0));
+				x+=3;
+				
+				System.out.println(name);
+				System.out.println(objects.getItem(name).getPosition());
+				
 			}
 		}
 		
