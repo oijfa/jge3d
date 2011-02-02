@@ -116,9 +116,14 @@ public class RotationMenu extends ResizableFrame {
 		align.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				
 				if(!linearShow){
-					cam.focusOn(objectList.getItem("linear_focus"));
+					int x = 0;
+					for(String name: objectList.getKeySet()) {
+						//objectList.getItem(name).setPosition(new Vector3f(x,0,0));
+						//x+=3;
+						
+						//cam.focusOn(objectList.getItem(name));
+					}
 					linearShow = true;
 				}else{
 					cam.focusOn(null);

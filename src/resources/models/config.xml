@@ -88,16 +88,4 @@
 			<value>prop_value</value>
 		</item>
 	</item>
-	<item>
-		<name>linear_focus</name>
-		<value></value>
-		<path></path>
-		<collidable>false</collidable>
-		<position>100,0,0</position>
-		<show>false</show>
-		<item>
-			<name>prop_name</name>
-			<value>prop_value</value>
-		</item>
-	</item>
 </config>

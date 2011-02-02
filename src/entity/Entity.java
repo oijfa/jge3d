@@ -308,4 +308,27 @@ public class Entity {
 		else
 			System.out.println("Method [setAngularFactor] not supported for ghost object");	
 	}
+	
+	public void setDamping(float linear_damping, float angular_damping) {
+		if(object_type==ObjectType.rigidbody) {
+			//((RigidBody) collision_object).setInterpolationLinearVelocity(velocity);
+			((RigidBody) collision_object).setDamping(linear_damping, angular_damping);
+			//((RigidBody) collision_object).applyDamping(0);
+		}
+		else
+			System.out.println("Method [setVelocity] not supported for ghost object");	
+	}
+	public void setAngularIdentity() {
+		if(object_type==ObjectType.rigidbody) {
+			//((RigidBody) collision_object).setInterpolationLinearVelocity(velocity);
+			DefaultMotionState motionState = new DefaultMotionState();
+			Transform t = new Transform();
+			t.setIdentity();
+			motionState.setWorldTransform(t);
+			((RigidBody) collision_object).setMotionState(motionState);
+			//((RigidBody) collision_object).applyDamping(0);
+		}
+		else
+			System.out.println("Method [setVelocity] not supported for ghost object");	
+	}
 }
