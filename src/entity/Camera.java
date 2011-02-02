@@ -77,6 +77,10 @@ public class Camera extends Entity {
 		return temp;
 	}
 	
+	public Entity getFocus() {
+		return focus;
+	}
+	
 	/*Mutators*/
 	private void setUpVector( Vector3f newUp ){
 		up_vector = newUp;

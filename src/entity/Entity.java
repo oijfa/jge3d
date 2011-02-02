@@ -299,4 +299,13 @@ public class Entity {
 	public void setCollisionShape(CollisionShape createCollisionShape) {
 		collision_object.setCollisionShape(createCollisionShape);		
 	}
+	
+	public void setAngularFactor(float factor,Vector3f velocity){
+		if(object_type==ObjectType.rigidbody) {
+			((RigidBody) collision_object).setAngularFactor(factor);
+			((RigidBody) collision_object).setAngularVelocity(velocity);
+		}
+		else
+			System.out.println("Method [setAngularFactor] not supported for ghost object");	
+	}
 }

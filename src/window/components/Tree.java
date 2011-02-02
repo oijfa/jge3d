@@ -25,6 +25,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     int state;
     EntityList objectList;
     Model treeModel;
+
     
     public Tree(EntityList objectList, Model m){
     	super();
@@ -42,7 +43,6 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     	}
     	
         TreeTable t = new TreeTable(treeModel);
-		
         t.setTheme("/table");
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
@@ -55,7 +55,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     			selectionModel
     		)
         );
-	
+
         setContent(t);
         setTheme("/tableScrollPane");
         
