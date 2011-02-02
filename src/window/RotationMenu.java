@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
+import controller.Config;
+
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
@@ -116,17 +118,25 @@ public class RotationMenu extends ResizableFrame {
 		align.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				if(!linearShow){
-					int x = 0;
-					for(String name: objectList.getKeySet()) {
-						//objectList.getItem(name).setPosition(new Vector3f(x,0,0));
-						//x+=3;
-						
-						//cam.focusOn(objectList.getItem(name));
+				int x = 100;
+				for(String name: objectList.getKeySet()) {
+					if(Config.getDefaultFocus() == null){
+						System.out.println("FUUUUCK ME");
 					}
+					if( !name.equals(Camera.CAMERA_NAME) && !name.equals(Config.getDefaultFocus().getProperty("name"))){
+						objectList.getItem(name).setPosition(new Vector3f(x,0,0));
+						x+=3;
+						
+						System.out.println(name);
+						System.out.println(objectList.getItem(name).getPosition());
+						
+					}
+				}
+				if(!linearShow){
+					cam.focusOn(objectList.getItem("Mini-Coating"));
 					linearShow = true;
 				}else{
-					cam.focusOn(null);
+					cam.focusOn(Config.getDefaultFocus());
 					linearShow = false;
 				}
 			}

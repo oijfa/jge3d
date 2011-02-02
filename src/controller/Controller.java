@@ -9,6 +9,7 @@ import java.awt.Canvas;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import importing.Obj_Parser;
@@ -24,6 +25,7 @@ import org.lwjgl.opengl.Display;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import physics.Physics;
 
@@ -132,12 +134,22 @@ public class Controller extends Applet{
 	private void startThreads() throws Exception {
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
-		physics_thread.start();
+		
 		
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
 
 		readConfigFile();
+		if(Config.getDefaultFocus() == null){
+			try{
+			throw new Exception("FULLLLL OF SHIIIIITTTT");
+			}catch(Exception e){
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+		
+		physics_thread.start();
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList, display_parent);
@@ -147,6 +159,7 @@ public class Controller extends Applet{
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
+			objectList.parseQueue();
 			while (isRunning) {
 				if(objectList != null && objectList.queueSize() > 0)
 					objectList.parseQueue();
@@ -179,7 +192,7 @@ public class Controller extends Applet{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 
-		Camera cam = new Camera(0.0f, boxShape, false);
+		Camera cam = new Camera(0.0f, boxShape, false, Config.getDefaultFocus());
 		objectList.enqueue(cam, QueueItem.ADD);
 		
 		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
@@ -285,6 +298,7 @@ public class Controller extends Applet{
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();
 		HashMap<String, Vector3f> defaultPositions = new HashMap<String, Vector3f>();
+		String defaultFocus = null;
 		
 		ArrayList<Node> tagList;
 		
@@ -293,6 +307,13 @@ public class Controller extends Applet{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("config")){
+				NodeList nList = rootElement.getElementsByTagName("defaultfocus");
+				if(nList.getLength() == 1){
+					defaultFocus = nList.item(0).getTextContent();
+				}else{
+					throw new Exception("No default focus");
+				}
+				
 				tagList = findChildrenByName(rootElement, "name");
 				configName = tagList.get(0).getTextContent();
 				
@@ -301,8 +322,8 @@ public class Controller extends Applet{
 					//Create nodes for all of them
 					createItem((Element)tagList.get(i), treeModel, configName, defaultPositions);
 				}
-				
-				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions);
+				objectList.parseQueue();
+				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions, objectList.getItem(configName + "-" + defaultFocus));
 			}else{
 				Exception e = new Exception();
 				e.initCause(new Throwable("Invalid config file"));

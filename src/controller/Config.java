@@ -5,19 +5,23 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
+import entity.Entity;
+
 import window.tree.Model;
 import window.tree.Node;
 
 public class Config {
 	static class ConfigItem {
+		public Entity default_focus;
 		public Model treeModel;
 		public String name;
 		public HashMap<String, Vector3f> positions;
 		
-		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions){
+		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity default_focus){
 			this.treeModel = treeModel;
 			this.name = name;
 			this.positions = defaultPositions;
+			this.default_focus = default_focus;
 		}
 	}
 	
@@ -25,9 +29,9 @@ public class Config {
 	private static String currentKey;
 	private static ArrayList<ConfigListener> listeners = new ArrayList<ConfigListener>();
 	
-	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions){
+	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity default_focus){
 		
-		configs.put(name, new ConfigItem(name, treeModel, defaultPositions));
+		configs.put(name, new ConfigItem(name, treeModel, defaultPositions, default_focus));
 		
 		if(currentKey == null){
 			try {
@@ -85,5 +89,10 @@ public class Config {
 		Vector3f temp = configs.get(args[0]).positions.get(args[1]);
 		
 		return new Vector3f(temp.x, temp.y, temp.z);
+	}
+
+
+	public static synchronized Entity getDefaultFocus() {
+		return configs.get(currentKey).default_focus;
 	}
 }

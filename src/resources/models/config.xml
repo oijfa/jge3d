@@ -78,11 +78,12 @@
 		</item>
 	</item>
 	<item>
-		<name>Cathode Assembly</name>
+		<name>Full_Assembly</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
 		<position>0,0,0</position>
 		<show>false</show>
+		<defaultfocus>Full_Assembly</defaultfocus>
 		<item>
 			<name>prop_name</name>
 			<value>prop_value</value>
