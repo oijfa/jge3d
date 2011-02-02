@@ -12,21 +12,22 @@ public class Config {
 	static class ConfigItem {
 		public Model treeModel;
 		public String name;
+		public HashMap<String, Vector3f> positions;
 		
-		public ConfigItem(String name, Model treeModel){
+		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions){
 			this.treeModel = treeModel;
 			this.name = name;
+			this.positions = defaultPositions;
 		}
 	}
 	
 	private static HashMap<String, ConfigItem> configs = new HashMap<String, ConfigItem>();
 	private static String currentKey;
 	private static ArrayList<ConfigListener> listeners = new ArrayList<ConfigListener>();
-	public static boolean ready = false;
 	
-	public synchronized static void addConfig(String name, Vector3f position, Model treeModel){
+	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions){
 		
-		configs.put(name, new ConfigItem(name, treeModel));
+		configs.put(name, new ConfigItem(name, treeModel, defaultPositions));
 		
 		if(currentKey == null){
 			try {
@@ -52,7 +53,6 @@ public class Config {
 		}
 		currentKey = key;
 		updateObservers();
-		ready = true;
 	}
 
 	public static synchronized String getName() throws Exception {
@@ -78,5 +78,12 @@ public class Config {
 			throw new Exception("Name: No config to fetch");
 		}
 		return configs.get(currentKey).treeModel.getChildren();
+	}
+	
+	public static synchronized Vector3f getPosition(String name){
+		String[] args = name.split("-");
+		Vector3f temp = configs.get(args[0]).positions.get(args[1]);
+		
+		return new Vector3f(temp.x, temp.y, temp.z);
 	}
 }

@@ -9,6 +9,7 @@ import java.awt.Canvas;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import importing.Obj_Parser;
 import importing.Parser;
@@ -137,7 +138,6 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 
 		readConfigFile();
-		System.out.println("Config should be ready: " + String.valueOf(Config.ready) );
 		
 		//Renderer has to be after entity list
 		renderer = new Renderer(objectList, display_parent);
@@ -284,6 +284,7 @@ public class Controller extends Applet{
 		
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();
+		HashMap<String, Vector3f> defaultPositions = new HashMap<String, Vector3f>();
 		
 		ArrayList<Node> tagList;
 		
@@ -298,10 +299,10 @@ public class Controller extends Applet{
 				tagList = findChildrenByName(rootElement, "item");
 				for(int i = 0; i < tagList.size(); i++){
 					//Create nodes for all of them
-					createItem((Element)tagList.get(i), treeModel, configName);
+					createItem((Element)tagList.get(i), treeModel, configName, defaultPositions);
 				}
 				
-				Config.addConfig(configName, new Vector3f(0,0,0), treeModel);
+				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions);
 			}else{
 				Exception e = new Exception();
 				e.initCause(new Throwable("Invalid config file"));
@@ -312,7 +313,7 @@ public class Controller extends Applet{
 		}
 	}
 
-	private void createItem(Element ele, TreeTableNode parent, String configName) throws Exception {
+	private void createItem(Element ele, TreeTableNode parent, String configName, HashMap<String, Vector3f> defaultPositions) throws Exception {
 		String name;
 		String value;
 		String path;
@@ -377,6 +378,8 @@ public class Controller extends Applet{
 			ent.setPosition(position);
 			ent.setProperty("name", configName + "-" + name);
 			objectList.enqueue(ent, QueueItem.ADD);
+			
+			defaultPositions.put(name, position);
 		}
 		
 		if(show == true){
@@ -390,7 +393,7 @@ public class Controller extends Applet{
 			tagList = findChildrenByName(ele, "item");
 			for(int i = 0; i < tagList.size(); i++){
 				//Create nodes for all of them
-				createItem((Element)tagList.get(i),item, configName);
+				createItem((Element)tagList.get(i),item, configName, defaultPositions);
 			}
 		}
 	}

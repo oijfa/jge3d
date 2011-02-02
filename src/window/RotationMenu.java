@@ -94,7 +94,7 @@ public class RotationMenu extends ResizableFrame {
 			@Override
 			public void run() {
 				for(String key:objectList.getKeySet()) {
-					Entity ent = objectList.getItem(key);
+					//Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
 						/*
 						Random rand = new Random();
