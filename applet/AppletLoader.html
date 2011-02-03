@@ -1,0 +1,39 @@
+<applet code="org.lwjgl.util.applet.AppletLoader" archive="lwjgl_util_applet.jar, lzma.jar" codebase="." width="640" height="480">
+	<param name="al_title" value="R.A.D.A.R.">
+	<param name="al_jars" value="lwjgl_applet.jar.pack.lzma, lwjgl.jar.pack.lzma, jinput.jar.pack.lzma, lwjgl_util.jar.pack.lzma, jbullet.jar, slick.jar, TWL.jar, vecmath.jar, xpp3-1.1.4c.jar, radar.jar">
+	<param name="al_main" value="controller.Controller">
+	<param name="al_logo" value="images/radar.png">
+	<param name="al_progressbar" value="images/loading.gif">
+
+	
+	<!-- signed windows natives jar in a jar --> 
+    <param name="al_windows" value="windows_natives.jar.lzma">
+    <!-- signed linux natives jar in a jar --> 
+    <param name="al_linux" value="linux_natives.jar.lzma">
+    <!-- signed mac osx natives jar in a jar --> 
+    <param name="al_mac" value="macosx_natives.jar.lzma">
+    <!-- signed solaris natives jar in a jar --> 
+    <param name="al_solaris" value="solaris_natives.jar.lzma">
+		
+	<!-- Version of Applet, important otherwise applet won't be cached, version change will update applet, must be int or float -->
+    <!-- <param name="al_version" value="0.1"> -->
+    
+    <!-- whether to use cache - defaults to true -->
+    <!-- <param name="al_cache" value="true"> -->
+    
+    <!-- background color to paint with, defaults to white -->
+    <!-- <param name="boxbgcolor" value="#000000"> -->
+    
+    <!-- foreground color to paint with, defaults to black -->
+    <!-- <param name="boxfgcolor" value="#ffffff"> -->
+    
+    <!-- whether to run in debug mode -->
+    <!-- <param name="al_debug" value="true"> -->
+    
+    <!-- whether to prepend host to cache path - defaults to true -->
+    <!-- <param name="al_prepend_host" value="true"> -->
+    
+    <!-- load the applet in a seperate jvm to avoid crashing browser in case of failure -->
+    <param name="separate_jvm" value="true">
+  	
+</applet>

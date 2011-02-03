@@ -2,6 +2,7 @@
 package importing.pieces;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -203,5 +204,15 @@ public class Material {
 		data.append("<SHINE>" + String.valueOf(shine) + "</SHINE>\n");
 		data.append("</MAT>\n");
 		return data;
+	}
+	
+	public ArrayList<Float> getColor() {
+		ArrayList<Float> color = new ArrayList<Float>();
+		
+		color.add(ambientReflect.x);
+		color.add(ambientReflect.y);
+		color.add(ambientReflect.z);
+		
+		return color;
 	}
 }

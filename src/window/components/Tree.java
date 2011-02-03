@@ -1,94 +1,113 @@
 package window.components;
 
+import java.util.ArrayList;
+
+import controller.Config;
+import controller.ConfigListener;
 import window.tree.EditFieldCellRenderer;
 import window.tree.Model;
 import window.tree.Node;
 import window.tree.SpanRenderer;
 import window.tree.SpanString;
+import window.tree.TreeListener;
 import monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
+import de.matthiasmann.twl.TableRowSelectionManager;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
+import de.matthiasmann.twl.model.TableSingleSelectionModel;
 import de.matthiasmann.twl.model.TreeTableNode;
 import entity.Entity;
 import entity.EntityList;
 
-public class Tree extends ScrollPane implements Observer {
+public class Tree extends ScrollPane implements Observer, ConfigListener {
     //private MyNode dynamicNode;
     int state;
     EntityList objectList;
-    private Model model;
-    
-    public Tree() {
-    	super();
-    	treeInit(null, null);
-    }
-    
-    public Tree(EntityList objectList){
-    	super();
-    	treeInit(objectList, null);
-    }
+    Model treeModel;
+
     
     public Tree(EntityList objectList, Model m){
     	super();
-    	treeInit(objectList, m);
+    	treeInit(objectList);
     }
-    private void treeInit(EntityList objectList, Model m){
-    	if( m != null){
-    		model = m;
-    	}else{
-    		model = new Model();
-    	}
+    
+    private void treeInit(EntityList objectList){
+    	treeModel = new Model();
+    	
     	if( objectList != null ){
 	    	this.objectList = objectList;
-	    	objectList.registerObserver(this);
-	    	model.removeAll();
-	    	this.createEntityListNode();
+	    	//objectList.registerObserver(this);
+	    	//model.removeAll();
+	    	//this.createEntityListNode();
     	}
     	
-        TreeTable t = new TreeTable(model);
+        TreeTable t = new TreeTable(treeModel);
         t.setTheme("/table");
         t.registerCellRenderer(SpanString.class, new SpanRenderer());
         t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
-        t.setDefaultSelectionManager();
         
-        /*
-        model.insert("qwer","1");
-        createSubNode(model,"qwer","asdf");
-        */
+        TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
+        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
         
+        t.setSelectionManager(
+    		new TableRowSelectionManager(
+    			selectionModel
+    		)
+        );
+
         setContent(t);
         setTheme("/tableScrollPane");
+        
+        configChanged();
+		Config.registerObserver(this);
     }
     
+    //From here down Not used when using config files --Robert
 	@Override
-	public void update(Object _name) {
+	public void update(Object _name){
 		String name = (String)_name;
-		Node n = findChildNode(name, model);
-		if( n == null ){
-			model.insert(name, "");
-			n = findChildNode(name, model);
+		
+		//If the node does not exist, create it
+		Model model;
+		try {
+			model = Config.treeModel();
+		
+			Node n = findChildNode(name, model);
+			if( n == null ){
+				model.insert(name, "");
+				n = findChildNode(name, model);
+			}
+			
+			//Remove all children
+			n.removeAll();
+			
+			//Create new children with updated values
+			createEntityNode(objectList.getItem(name), n);
+		} catch (Exception e) {
+			System.out.println("Failed to update node, error from Config.treeModel");
+			e.printStackTrace();
 		}
-		n.removeAll();
-		createEntityNode(objectList.getItem(name), n);
-		//model.removeAll();
-		//this.createEntityListNode();
 	}
 	
 	public void createEntityListNode(){
 		Node entityNode;
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
-			entityNode = model.insert(ent.getProperty("name"), ent.getPosition().toString());
+			try {
+				entityNode = Config.treeModel().insert(ent.getProperty("name"), ent.getPosition().toString());
+			
 			this.createEntityNode(ent, entityNode);
+			} catch (Exception e) {
+				System.out.println("Couldn't insert into config's treemodel");
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public void createEntityNode(Entity ent, Node entityNode){
 		for(String key : ent.getKeySet()){
 			Object obj = ent.getProperty(key);
-			//EditStringModel esm = new EditStringModel(key, obj.toString(), ent, starter);
-			
 			entityNode.insert(key, obj.toString());
 		}
 	}
@@ -127,5 +146,20 @@ public class Tree extends ScrollPane implements Observer {
 			}
 		}
 		return null;
+	}
+	
+	public void configChanged(){
+		try {
+			ArrayList<Node> nodes = Config.getNodes();
+			
+			treeModel.removeAll();
+			for(Node n: nodes){
+				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
+				n.changeParent(treeModel);
+			}
+		} catch (Exception e) {
+			System.out.println("Failed to create new treeTable");
+			e.printStackTrace();
+		}
 	}
 }

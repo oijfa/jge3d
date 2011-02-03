@@ -1,9 +1,10 @@
 <config>
+	<name>Mini</name>
 	<item>
-		<name>Braze Coat</name>
+		<name>Coating</name>
 		<value></value>
-		<path>resources/models/cathodes/normalxgl/brazecoat.xgl</path>
-		<position>101,0,0</position>
+		<path>resources/models/cathodes/normalxgl/coating.xgl</path>
+		<position>106,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -11,10 +12,10 @@
 		</item>
 	</item>
 	<item>
-		<name>Coating</name>
+		<name>Pellet</name>
 		<value></value>
-		<path>resources/models/cathodes/normalxgl/coating.xgl</path>
-		<position>102,0,0</position>
+		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
+		<position>105,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -25,6 +26,17 @@
 		<name>Impregnant</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/impregnant.xgl</path>
+		<position>104,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Braze Coat</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/brazecoat.xgl</path>
 		<position>103,0,0</position>
 		
 		<item>
@@ -36,29 +48,7 @@
 		<name>Body</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/minibody.xgl</path>
-		<position>104,0,0</position>
-		
-		<item>
-			<name>prop_name</name>
-			<value>prop_value</value>
-		</item>
-	</item>
-	<item>
-		<name>Cathode</name>
-		<value></value>
-		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
-		<position>105,0,0</position>
-		
-		<item>
-			<name>prop_name</name>
-			<value>prop_value</value>
-		</item>
-	</item>
-	<item>
-		<name>Heater</name>
-		<value></value>
-		<path>resources/models/cathodes/normalxgl/heater.xgl</path>
-		<position>106,0,0</position>
+		<position>102,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -69,7 +59,18 @@
 		<name>Potting</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/potting.xgl</path>
-		<position>107,0,0</position>
+		<position>101,0,0</position>
+		
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+	<item>
+		<name>Heater</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/heater.xgl</path>
+		<position>100,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -81,7 +82,7 @@
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
 		<position>0,0,0</position>
-		
+		<show>false</show>
 		<item>
 			<name>prop_name</name>
 			<value>prop_value</value>

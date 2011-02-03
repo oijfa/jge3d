@@ -16,6 +16,7 @@ public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	FloatBuffer faceVNT;
+	IntBuffer buffer;
 	
 	Vector3f normal;
 	int vbo_id;
@@ -114,7 +115,7 @@ public class Face {
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
-				IntBuffer buffer = BufferUtils.createIntBuffer(1);
+				buffer = BufferUtils.createIntBuffer(1);
 			    ARBVertexBufferObject.glGenBuffersARB(buffer);
 			    vbo_id = buffer.get(0);
 			    
@@ -138,7 +139,7 @@ public class Face {
 			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 			    
 			    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
-			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer.get(0), ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 			}
 			vbo_id-=vertices.size()-1;
 		} else {

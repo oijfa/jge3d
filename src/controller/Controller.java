@@ -4,9 +4,12 @@
 package controller;
 
 import java.applet.Applet;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import importing.Obj_Parser;
 import importing.Parser;
@@ -50,19 +53,77 @@ public class Controller extends Applet{
 
 	private EntityList objectList;
 	
-	window.tree.Model treeModel;
+	Runnable treeListener;
+	
+	private Canvas display_parent;
 	
 	public static void main(String[] args) throws Exception {
 		Applet app = new Controller();
 		app.init();
 	}
-	
-	public void init(){
+
+	public void startApp() {
 		try {
 			startThreads();
 			loadLevel();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	// Tell game loop to stop running, after which the LWJGL Display will 
+	// be destroyed. The main thread will wait for the Display.destroy().
+	private void stopLWJGL() {
+		isRunning = false;
+		try {
+			render_thread.join();
+			physics_thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void start() {
+		
+	}
+
+	public void stop() {
+		
+	}
+	
+	// Applet Destroy method will remove the canvas, 
+	// before canvas is destroyed it will notify stopLWJGL()
+	// to stop the main game loop and to destroy the Display
+	public void destroy() {
+		remove(display_parent);
+		super.destroy();
+	}
+	
+	public void init(){
+		//Create a container to house the application
+		//for applets this is important otherwise the app won't embed
+		setLayout(new BorderLayout());
+		try {
+			display_parent = new Canvas() {
+				private static final long serialVersionUID = 1L;
+				public final void addNotify() {
+					super.addNotify();
+					startApp();
+				}
+				public final void removeNotify() {
+					stopLWJGL();
+					super.removeNotify();
+				}
+			};
+			display_parent.setSize(getWidth(),getHeight());
+			add(display_parent);
+			display_parent.setFocusable(true);
+			display_parent.requestFocus();
+			display_parent.setIgnoreRepaint(true);
+			setVisible(true);
+		} catch (Exception e) {
+			System.err.println(e);
+			throw new RuntimeException("Unable to create display");
 		}
 	}
 
@@ -76,11 +137,10 @@ public class Controller extends Applet{
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
 
-		treeModel = new window.tree.Model();
-		readConfigFile();		
+		readConfigFile();
 		
 		//Renderer has to be after entity list
-		renderer = new Renderer(objectList);
+		renderer = new Renderer(objectList, display_parent);
 		render_thread.start();
 	}
 
@@ -100,7 +160,7 @@ public class Controller extends Applet{
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL(treeModel);
+			renderer.initGL();
 			this.interrupt();
 			while (isRunning) {
 				if(Display.isCloseRequested())
@@ -111,7 +171,7 @@ public class Controller extends Applet{
 	};
 	
 	public long getFrames() { return frames; }
-	public void resetFrames() {	frames = 0;	}
+	public void resetFrames() { frames = 0;	}
 	
 	public static void quit() { isRunning = false;	}
 	
@@ -215,11 +275,16 @@ public class Controller extends Applet{
 	/* Config file reading */
 	private void readConfigFile() throws Exception{
 		Document dom;
+		//URL url = new URL("resources/models/config.xml");
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse("resources/models/config.xml");
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config.xml"));
+		
+		String configName;
+		window.tree.Model treeModel = new window.tree.Model();
+		HashMap<String, Vector3f> defaultPositions = new HashMap<String, Vector3f>();
 		
 		ArrayList<Node> tagList;
 		
@@ -228,11 +293,16 @@ public class Controller extends Applet{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("config")){
+				tagList = findChildrenByName(rootElement, "name");
+				configName = tagList.get(0).getTextContent();
+				
 				tagList = findChildrenByName(rootElement, "item");
 				for(int i = 0; i < tagList.size(); i++){
 					//Create nodes for all of them
-					createItem((Element)tagList.get(i), treeModel);
+					createItem((Element)tagList.get(i), treeModel, configName, defaultPositions);
 				}
+				
+				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions);
 			}else{
 				Exception e = new Exception();
 				e.initCause(new Throwable("Invalid config file"));
@@ -243,7 +313,7 @@ public class Controller extends Applet{
 		}
 	}
 
-	private void createItem(Element ele, TreeTableNode parent) throws Exception {
+	private void createItem(Element ele, TreeTableNode parent, String configName, HashMap<String, Vector3f> defaultPositions) throws Exception {
 		String name;
 		String value;
 		String path;
@@ -306,14 +376,16 @@ public class Controller extends Applet{
 			}
 			
 			ent.setPosition(position);
-			ent.setProperty("name", name);
+			ent.setProperty("name", configName + "-" + name);
 			objectList.enqueue(ent, QueueItem.ADD);
+			
+			defaultPositions.put(name, position);
 		}
 		
 		if(show == true){
 			window.tree.Node item;
-			if( parent == treeModel ){
-				 item = treeModel.insert(name, "");
+			if( parent.getClass() == window.tree.Model.class ){
+				 item = ((window.tree.Model)parent).insert(name, "");
 			}else{
 				item = ((window.tree.Node)parent).insert(name,value);
 			}
@@ -321,7 +393,7 @@ public class Controller extends Applet{
 			tagList = findChildrenByName(ele, "item");
 			for(int i = 0; i < tagList.size(); i++){
 				//Create nodes for all of them
-				createItem((Element)tagList.get(i), item);
+				createItem((Element)tagList.get(i),item, configName, defaultPositions);
 			}
 		}
 	}

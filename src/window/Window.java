@@ -1,6 +1,5 @@
 package window;
 
-import java.io.File;
 import java.io.IOException;
 import org.lwjgl.LWJGLException;
 
@@ -46,7 +45,7 @@ public class Window extends DesktopArea {
 		gui = new GUI(this, renderer);
 		try {
 			theme = ThemeManager.createThemeManager(
-					(new File("resources/themes/default.xml")).toURI().toURL(),
+					this.getClass().getClassLoader().getResource("resources/themes/default.xml"),
 					renderer);
 			gui.applyTheme(theme);
 		} catch (IOException e) {
@@ -67,22 +66,27 @@ public class Window extends DesktopArea {
 		*/
 
 		input = new Input(objectList);
-		entityMenu = new EntityMenu(m);
+		entityMenu = new EntityMenu(objectList, m);
 		add(entityMenu);
 		entityMenu.setTheme("entitymenu");
 
+		try{
+			rotationMenu = new RotationMenu();
+			add(rotationMenu);
+			rotationMenu.setObjectList(objectList);
+			rotationMenu.setTheme("rotationmenu");
+		}catch(Exception e){
+			System.out.println("Couldn't create rotation Menu");
+			e.printStackTrace();
+		}
 		
-		rotationMenu = new RotationMenu();
-		add(rotationMenu);
-		rotationMenu.setObjectList(objectList);
-		rotationMenu.setTheme("rotationmenu");
-		
-
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
 		
 		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
-		rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
+		if( rotationMenu != null){
+			rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
+		}
 	}
 
 	public void draw() {

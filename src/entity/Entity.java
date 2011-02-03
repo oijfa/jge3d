@@ -1,4 +1,4 @@
-/*
+ /*
  * This class is what holds any object in the world.
  * 	The user can add/remove custom properties (though a few are 
  * 	unremovable for internal engine reasons)
@@ -298,5 +298,37 @@ public class Entity {
 	}
 	public void setCollisionShape(CollisionShape createCollisionShape) {
 		collision_object.setCollisionShape(createCollisionShape);		
+	}
+	
+	public void setAngularFactor(float factor,Vector3f velocity){
+		if(object_type==ObjectType.rigidbody) {
+			((RigidBody) collision_object).setAngularFactor(factor);
+			((RigidBody) collision_object).setAngularVelocity(velocity);
+		}
+		else
+			System.out.println("Method [setAngularFactor] not supported for ghost object");	
+	}
+	
+	public void setDamping(float linear_damping, float angular_damping) {
+		if(object_type==ObjectType.rigidbody) {
+			//((RigidBody) collision_object).setInterpolationLinearVelocity(velocity);
+			((RigidBody) collision_object).setDamping(linear_damping, angular_damping);
+			//((RigidBody) collision_object).applyDamping(0);
+		}
+		else
+			System.out.println("Method [setVelocity] not supported for ghost object");	
+	}
+	public void setAngularIdentity() {
+		if(object_type==ObjectType.rigidbody) {
+			//((RigidBody) collision_object).setInterpolationLinearVelocity(velocity);
+			DefaultMotionState motionState = new DefaultMotionState();
+			Transform t = new Transform();
+			t.setIdentity();
+			motionState.setWorldTransform(t);
+			((RigidBody) collision_object).setMotionState(motionState);
+			//((RigidBody) collision_object).applyDamping(0);
+		}
+		else
+			System.out.println("Method [setVelocity] not supported for ghost object");	
 	}
 }
