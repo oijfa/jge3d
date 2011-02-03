@@ -114,11 +114,7 @@ public class Face {
 	public void createFaceBufferVNT() {
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
-			for(int i=0;i<vertices.size();i++) {
-				buffer = BufferUtils.createIntBuffer(1);
-			    ARBVertexBufferObject.glGenBuffersARB(buffer);
-			    vbo_id = buffer.get(0);
-			    
+			for(int i=0;i<vertices.size();i++) {	    
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
 				faceVNT.put(vertices.get(i).z);
@@ -134,10 +130,16 @@ public class Face {
 				faceVNT.put(1.0f);
 				faceVNT.put(1.0f);
 				faceVNT.put(1.0f);
-					
+				
+				buffer = BufferUtils.createIntBuffer(1);
+			    ARBVertexBufferObject.glGenBuffersARB(buffer);
+			    vbo_id = buffer.get(0);
 				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id);
 			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 			    
+			    buffer = BufferUtils.createIntBuffer(1);
+			    ARBVertexBufferObject.glGenBuffersARB(buffer);
+			    vbo_id = buffer.get(0);
 			    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
 			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer.get(0), ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 			}
