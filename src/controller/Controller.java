@@ -9,7 +9,6 @@ import java.awt.Canvas;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import importing.Obj_Parser;
