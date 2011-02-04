@@ -75,13 +75,6 @@ public class Camera extends Entity implements ConfigListener {
 		}else{
 			focus = newFocus;
 		}
-		/*
-		parentList.removeJoint(FOCUS_JOINT);
-		parentList.addBallJoint(FOCUS_JOINT, 
-				newFocus, new Vector3f(0.0f,0.0f,0.0f),
-				this, new Vector3f(0.0f, 0.0f, -15.0f)
-		);
-		*/
 	}
 	
 	/*Accessors*/
@@ -122,8 +115,6 @@ public class Camera extends Entity implements ConfigListener {
 				distance = f;
 			}
 		}
-		//Not needed because renderer always calls it
-		//updatePosition();
 	}
 	
 	public void incrementDistance( Float change ){

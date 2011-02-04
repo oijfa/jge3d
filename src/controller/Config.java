@@ -42,7 +42,6 @@ public class Config {
 			try {
 				changeConfig(name);
 			} catch (Exception e) {
-				System.out.println("Can't find the config we just added!!! FUUUUU");
 				e.printStackTrace();
 			}
 		}

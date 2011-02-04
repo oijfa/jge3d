@@ -83,7 +83,6 @@ public class RotationMenu extends ResizableFrame {
 		explode.setTheme("explode");
 		align.setTheme("align");
 
-		//Center doesn't need continuous input capabilities, sad little center button :(
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
