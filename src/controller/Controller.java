@@ -136,13 +136,25 @@ public class Controller extends Applet{
 		
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
-
-		readConfigFile();
-		physics_thread.start();
-		
-		//Renderer has to be after entity list
 		renderer = new Renderer(objectList, display_parent);
+		
+		
+		//Make a camera	
+		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+
+		Camera cam = new Camera(0.0f, boxShape, false);
+		objectList.enqueue(cam, QueueItem.ADD);
+		
+		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+		objectList.parseQueue();
+		
+		physics_thread.start();
 		render_thread.start();
+		
+		render_thread.join();
+		readConfigFile();
+		
+		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
 	// Create the Physics Listening thread
@@ -178,13 +190,7 @@ public class Controller extends Applet{
 	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel() throws Exception{
-		//Make a camera	
-		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
-		Camera cam = new Camera(0.0f, boxShape, false, Config.getFullAssemblyFocus());
-		objectList.enqueue(cam, QueueItem.ADD);
 		
-		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)

@@ -59,7 +59,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
         setContent(t);
         setTheme("/tableScrollPane");
         
-        configChanged();
+        //configChanged();
 		Config.registerObserver(this);
     }
     
