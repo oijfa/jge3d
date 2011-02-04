@@ -47,6 +47,7 @@ public class Camera extends Entity implements ConfigListener {
 
 	private void cameraInit(Entity defFocus) {
 		default_focus = defFocus;
+		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
 		setPosition(new Vector3f(0,0,0));
 		declination = 0;
@@ -57,7 +58,8 @@ public class Camera extends Entity implements ConfigListener {
 		
 		Config.registerObserver(this);
 		configChanged();
-		if(default_focus == null){
+		
+		if(default_focus == null || focus == null){
 			try {
 				throw new Exception("DONT SET THE FOCUS TO NULL DIPSHIT");
 			} catch (Exception e) {
@@ -69,7 +71,7 @@ public class Camera extends Entity implements ConfigListener {
 	
 	public void focusOn(Entity newFocus){
 		if(newFocus == null){
-			focus = Config.getDefaultFocus();
+			focus = default_focus;
 		}else{
 			focus = newFocus;
 		}
@@ -240,7 +242,7 @@ public class Camera extends Entity implements ConfigListener {
 	}
 	@Override
 	public void configChanged() {
-		Entity newFocus = Config.getDefaultFocus();
+		Entity newFocus = Config.getFullAssemblyFocus();
 		if(focus == default_focus){
 			focus = newFocus;
 		}

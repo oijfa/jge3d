@@ -1,5 +1,7 @@
 <config>
 	<name>Mini</name>
+	<fullassembly>Full_Assembly</fullassembly>
+	<lineup>Braze Coat</lineup>
 	<item>
 		<name>Coating</name>
 		<value></value>
@@ -12,14 +14,14 @@
 		</item>
 	</item>
 	<item>
-		<name>Pellet</name>
+		<name>Cathode Pellet</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
 		<position>105,0,0</position>
 		
 		<item>
-			<name>prop_name</name>
-			<value>prop_value</value>
+			<name>10008052</name>
+			<value>W80% .343 OD</value>
 		</item>
 	</item>
 	<item>
@@ -83,7 +85,6 @@
 		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
 		<position>0,0,0</position>
 		<show>false</show>
-		<defaultfocus>Full_Assembly</defaultfocus>
 		<item>
 			<name>prop_name</name>
 			<value>prop_value</value>

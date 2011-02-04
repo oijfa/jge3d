@@ -132,12 +132,15 @@ public class RotationMenu extends ResizableFrame {
 					}
 				}
 				
+				
 				if(!linearShow){
-					cam.focusOn(objectList.getItem("Mini-Braze Coat"));
+					cam.focusOn(Config.getLineupFocus());
 					linearShow = true;
+					System.out.println(Config.getLineupFocus().getProperty("name"));
 				}else{
-					cam.focusOn(Config.getDefaultFocus());
+					cam.focusOn(Config.getFullAssemblyFocus());
 					linearShow = false;
+					System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
 				}
 			}
 		});

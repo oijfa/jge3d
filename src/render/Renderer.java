@@ -152,10 +152,11 @@ public class Renderer {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(
-				45.0f/zoom, 
-				(float) window.getWidth() / window.getHeight(), 
-				nearClipping, 
-				farClipping);
+			45.0f/zoom, 
+			(float) window.getWidth() / window.getHeight(), 
+			nearClipping, 
+			farClipping
+		);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 	}

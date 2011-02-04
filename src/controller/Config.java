@@ -12,16 +12,22 @@ import window.tree.Node;
 
 public class Config {
 	static class ConfigItem {
-		public Entity default_focus;
+		public Entity fullassembly_focus;
+		public Entity lineup_focus;
 		public Model treeModel;
 		public String name;
 		public HashMap<String, Vector3f> positions;
 		
-		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity default_focus){
+		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity fullassembly_focus, Entity lineup_focus) throws Exception{
 			this.treeModel = treeModel;
 			this.name = name;
 			this.positions = defaultPositions;
-			this.default_focus = default_focus;
+			this.fullassembly_focus = fullassembly_focus;
+			this.lineup_focus = lineup_focus;
+			
+			if( this.fullassembly_focus == null || this.lineup_focus == null){
+				throw new Exception("A focus has been set to null");
+			}
 		}
 	}
 	
@@ -29,9 +35,8 @@ public class Config {
 	private static String currentKey;
 	private static ArrayList<ConfigListener> listeners = new ArrayList<ConfigListener>();
 	
-	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity default_focus){
-		
-		configs.put(name, new ConfigItem(name, treeModel, defaultPositions, default_focus));
+	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity fullassembly_focus, Entity lineup_focus) throws Exception{
+		configs.put(name, new ConfigItem(name, treeModel, defaultPositions, fullassembly_focus, lineup_focus));
 		
 		if(currentKey == null){
 			try {
@@ -92,7 +97,11 @@ public class Config {
 	}
 
 
-	public static synchronized Entity getDefaultFocus() {
-		return configs.get(currentKey).default_focus;
+	public static synchronized Entity getFullAssemblyFocus() {
+		return configs.get(currentKey).fullassembly_focus;
+	}
+	
+	public static synchronized Entity getLineupFocus() {
+		return configs.get(currentKey).lineup_focus;
 	}
 }
