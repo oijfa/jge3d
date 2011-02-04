@@ -59,7 +59,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
         setContent(t);
         setTheme("/tableScrollPane");
         
-        configChanged();
+        //configChanged();
 		Config.registerObserver(this);
     }
     
@@ -154,6 +154,8 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			
 			treeModel.removeAll();
 			for(Node n: nodes){
+				//TODO: wtf if you remove this next line it crashes
+				//probable race condition
 				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
 				n.changeParent(treeModel);
 			}

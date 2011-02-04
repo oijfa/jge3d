@@ -7,6 +7,7 @@ public class QueueItem {
 	
 	public static final int REMOVE = 0;
 	public static final int ADD = 1;
+	public static final int VBO = 1;
 	
 	public QueueItem(Entity ent, int action) {
 		this.ent = ent;

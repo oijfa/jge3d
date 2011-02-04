@@ -118,6 +118,9 @@ public class Face {
 			for(int i=0;i<vertices.size();i++) {
 				VBOElementID = createVBOID();
 				
+				faceVNT = BufferUtils.createFloatBuffer(12);
+				faceVBOid = BufferUtils.createIntBuffer(1);
+				
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
 				faceVNT.put(vertices.get(i).z);
@@ -264,12 +267,9 @@ public class Face {
 	}
 
 	public static int createVBOID() {
-		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object) {
-			IntBuffer buffer = BufferUtils.createIntBuffer(1);
-			ARBVertexBufferObject.glGenBuffersARB(buffer);
-			return buffer.get(0);
-		}
-		return 0;
+		IntBuffer buffer = BufferUtils.createIntBuffer(1);
+		ARBVertexBufferObject.glGenBuffersARB(buffer);
+		return buffer.get(0);
 	}
 	
 	public static void bufferData(int id, FloatBuffer buffer) {

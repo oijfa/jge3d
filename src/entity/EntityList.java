@@ -19,14 +19,16 @@ public class EntityList implements EntityObserver, Subject{
 	//private HashMap<String,TypedConstraint> constraints;
 
 	private ArrayList<Observer> observers;
-	private ArrayList<QueueItem> queue;
+	private ArrayList<QueueItem> physicsQueue;
+	private ArrayList<QueueItem> renderQueue;
 
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
 		observers = new ArrayList<Observer>();
-		queue = new ArrayList<QueueItem>();
+		physicsQueue = new ArrayList<QueueItem>();
+		renderQueue = new ArrayList<QueueItem>();
 	}
 	
 	public void drawList(){ 
@@ -37,15 +39,25 @@ public class EntityList implements EntityObserver, Subject{
 		}
 	}
 	
-	public void parseQueue() {
-		Object[] itemArray = queue.toArray();
+	public void parsePhysicsQueue() {
+		Object[] itemArray = physicsQueue.toArray();
 		for(Object item:itemArray) {
 			if(QueueItem.ADD == ((QueueItem) item).getAction())
 				addItem(((QueueItem) item).getEnt());
 			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
 				removeItem(((QueueItem) item).getEnt());
 			
-			queue.remove(item);
+			physicsQueue.remove(item);
+		}
+	}
+	
+	public void parseRenderQueue() {
+		Object[] itemArray = renderQueue.toArray();
+		for(Object item:itemArray) {
+			if(QueueItem.ADD == ((QueueItem) item).getAction())
+				((QueueItem)item).getEnt().getModel().createVBO();
+			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
+				((QueueItem)item).getEnt().getModel().destroyVBO();
 		}
 	}
 	
@@ -54,7 +66,7 @@ public class EntityList implements EntityObserver, Subject{
 	public int size(){return names.size();}
 	public Set<String> getKeySet(){return names.keySet();}
 	public Physics getPhysics() {return physics;}
-	public int queueSize(){return queue.size();}
+	public int queueSize(){return physicsQueue.size();}
 	
 	/* MUTATORS */
 	//Add an item to the entity List
@@ -82,15 +94,19 @@ public class EntityList implements EntityObserver, Subject{
 	}
 
 	//Set actions that need to wait on the physics
-	public void enqueue(Entity ent, int action) {
-		queue.add(new QueueItem(ent,action));
+	public void enqueuePhysics(Entity ent, int action) {
+		physicsQueue.add(new QueueItem(ent,action));
+	}
+	
+	public void enqueueRenderer(Entity ent, int action) {
+		renderQueue.add(new QueueItem(ent,action));
 	}
 	
 	/* ENTITY OBSERVER IMPLEMENTATION */
 	public void update(String key, Object old_val, Object new_val) {
 		if(key == "name"){
 			Entity ent = this.getItem(key);
-			enqueue(ent, QueueItem.REMOVE);
+			enqueuePhysics(ent, QueueItem.REMOVE);
 			this.addItem(ent);
 			notifyObservers(key);
 		}

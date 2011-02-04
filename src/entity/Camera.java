@@ -13,7 +13,10 @@ import render.Renderer;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 
-public class Camera extends Entity {
+import controller.Config;
+import controller.ConfigListener;
+
+public class Camera extends Entity implements ConfigListener {
 	
 	/*Static class variables*/
 	//Don't flip over, its confusing.
@@ -29,19 +32,21 @@ public class Camera extends Entity {
 	private float distance;						//distance from focus
 	private Vector3f up_vector;					//vector pointing up
 	
-	private Entity focus;
+	private volatile Entity focus;
+	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Float f, CollisionShape c, boolean collide ) {
+	public Camera(Float f, CollisionShape c, boolean collide) {
 		super(f,c,collide);
 		cameraInit();
 	}
-	public Camera(String _name,Float f, CollisionShape c, boolean collide ) {
+	public Camera(String _name,Float f, CollisionShape c, boolean collide) {
 		super(f,c,collide);
 		cameraInit();
 	}
 
-	private void cameraInit(){
+	private void cameraInit() {
+		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
 		setPosition(new Vector3f(0,0,0));
 		declination = 0;
@@ -49,17 +54,16 @@ public class Camera extends Entity {
 		distance = 5.0f;
 		setUpVector( new Vector3f(0, 1, 0) );
 		updatePosition();
+		
+		Config.registerObserver(this);
 	}
 	
 	public void focusOn(Entity newFocus){
-		focus = newFocus;
-		/*
-		parentList.removeJoint(FOCUS_JOINT);
-		parentList.addBallJoint(FOCUS_JOINT, 
-				newFocus, new Vector3f(0.0f,0.0f,0.0f),
-				this, new Vector3f(0.0f, 0.0f, -15.0f)
-		);
-		*/
+		if(newFocus == null){
+			focus = default_focus;
+		}else{
+			focus = newFocus;
+		}
 	}
 	
 	/*Accessors*/
@@ -100,8 +104,6 @@ public class Camera extends Entity {
 				distance = f;
 			}
 		}
-		//Not needed because renderer always calls it
-		//updatePosition();
 	}
 	
 	public void incrementDistance( Float change ){
@@ -217,5 +219,17 @@ public class Camera extends Entity {
 		pos.set(position.get(0), position.get(1), position.get(2));
 
 		return pos;
+	}
+	
+	public void changeDefaultFocus(Entity newFocus){
+		if(focus == default_focus){
+			focus = newFocus;
+		}
+		default_focus = newFocus;
+	}
+	@Override
+	public void configChanged() {
+		Entity newFocus = Config.getFullAssemblyFocus();
+		changeDefaultFocus(newFocus);
 	}
 }

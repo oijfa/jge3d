@@ -4,8 +4,11 @@ import input.components.ButtonRunnable;
 import input.components.InputRunnable;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.vecmath.Vector3f;
+
+import controller.Config;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
@@ -81,7 +84,6 @@ public class RotationMenu extends ResizableFrame {
 		explode.setTheme("explode");
 		align.setTheme("align");
 
-		//Center doesn't need continuous input capabilities, sad little center button :(
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -94,9 +96,9 @@ public class RotationMenu extends ResizableFrame {
 			@Override
 			public void run() {
 				for(String key:objectList.getKeySet()) {
-					//Entity ent = objectList.getItem(key);
+					Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
-						/*
+						
 						Random rand = new Random();
 						Vector3f force = new Vector3f(
 							rand.nextFloat()*10,
@@ -105,7 +107,7 @@ public class RotationMenu extends ResizableFrame {
 						);
 						ent.applyImpulse(force, ent.getPosition());
 						ent.activate();
-						*/
+						
 						
 						//ent.setPosition(Config.getByName(ent.getProperty("name")).getPosition());
 					}
@@ -116,17 +118,26 @@ public class RotationMenu extends ResizableFrame {
 		align.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				if(!linearShow){
-					int x = 0;
-					for(String name: objectList.getKeySet()) {
-						//objectList.getItem(name).setPosition(new Vector3f(x,0,0));
-						//x+=3;
+				for(String name: objectList.getKeySet()) {
+					//For everything but the camera do the following
+					if(!name.equals(Camera.CAMERA_NAME)) {
+						//Stop the movement
+						objectList.getItem(name).setDamping(1.0f,1.0f);
+						objectList.getItem(name).activate();
+						objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
 						
-						//cam.focusOn(objectList.getItem(name));
+						//Move the object back to its original position
+						objectList.getItem(name).setAngularIdentity();
+						objectList.getItem(name).setPosition(Config.getPosition(name));
 					}
+				}
+				
+				
+				if(!linearShow){
+					cam.focusOn(Config.getLineupFocus());
 					linearShow = true;
 				}else{
-					cam.focusOn(null);
+					cam.focusOn(Config.getFullAssemblyFocus());
 					linearShow = false;
 				}
 			}
@@ -165,11 +176,7 @@ public class RotationMenu extends ResizableFrame {
 	}
 	
 	public synchronized void startThread(String key) throws SecurityException, NoSuchMethodException{
-		if(key.equals("Left")){
-			System.out.println();
-		}
 		if(buttonThreads.get(key) != null){
-			//System.out.println("buttonpress");
 			buttonPressed();
 			resetThread(key);
 			buttonThreads.get(key).start();

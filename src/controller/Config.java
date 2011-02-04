@@ -5,19 +5,29 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
+import entity.Entity;
+
 import window.tree.Model;
 import window.tree.Node;
 
 public class Config {
 	static class ConfigItem {
+		public Entity fullassembly_focus;
+		public Entity lineup_focus;
 		public Model treeModel;
 		public String name;
 		public HashMap<String, Vector3f> positions;
 		
-		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions){
+		public ConfigItem(String name, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity fullassembly_focus, Entity lineup_focus) throws Exception{
 			this.treeModel = treeModel;
 			this.name = name;
 			this.positions = defaultPositions;
+			this.fullassembly_focus = fullassembly_focus;
+			this.lineup_focus = lineup_focus;
+			
+			if( this.fullassembly_focus == null || this.lineup_focus == null){
+				throw new Exception("A focus has been set to null");
+			}
 		}
 	}
 	
@@ -25,15 +35,13 @@ public class Config {
 	private static String currentKey;
 	private static ArrayList<ConfigListener> listeners = new ArrayList<ConfigListener>();
 	
-	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions){
-		
-		configs.put(name, new ConfigItem(name, treeModel, defaultPositions));
+	public synchronized static void addConfig(String name, Vector3f position, Model treeModel, HashMap<String, Vector3f> defaultPositions, Entity fullassembly_focus, Entity lineup_focus) throws Exception{
+		configs.put(name, new ConfigItem(name, treeModel, defaultPositions, fullassembly_focus, lineup_focus));
 		
 		if(currentKey == null){
 			try {
 				changeConfig(name);
 			} catch (Exception e) {
-				System.out.println("Can't find the config we just added!!! FUUUUU");
 				e.printStackTrace();
 			}
 		}
@@ -85,5 +93,14 @@ public class Config {
 		Vector3f temp = configs.get(args[0]).positions.get(args[1]);
 		
 		return new Vector3f(temp.x, temp.y, temp.z);
+	}
+
+
+	public static synchronized Entity getFullAssemblyFocus() {
+		return configs.get(currentKey).fullassembly_focus;
+	}
+	
+	public static synchronized Entity getLineupFocus() {
+		return configs.get(currentKey).lineup_focus;
 	}
 }

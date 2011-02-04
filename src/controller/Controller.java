@@ -132,24 +132,45 @@ public class Controller extends Applet{
 	private void startThreads() throws Exception {
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
-		physics_thread.start();
 		
 		//Next is the entity list, since it only depends on the physics
 		objectList = new EntityList(physics);
+		renderer = new Renderer(objectList, display_parent);
+		
+		//Make a camera	
+		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 
+		Camera cam = new Camera(0.0f, boxShape, false);
+		objectList.enqueuePhysics(cam, QueueItem.ADD);
+		
+		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+		objectList.parsePhysicsQueue();
+		
+		physics_thread.start();
+		render_thread.start();
+		
+		//render_thread.join();
 		readConfigFile();
 		
-		//Renderer has to be after entity list
-		renderer = new Renderer(objectList, display_parent);
-		render_thread.start();
+		//if the renderer supports VBOs
+		//while(!renderer.isInitialized()) {}
+		if(renderer.supportsVBO()) {
+			//Create a vbo for each model
+			for(String name:objectList.getKeySet()) {
+				objectList.enqueuePhysics(objectList.getItem(name), QueueItem.VBO);
+				//objectList.getItem(name).getModel().createVBO();
+			}
+		}
+		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {
+			objectList.parsePhysicsQueue();
 			while (isRunning) {
 				if(objectList != null && objectList.queueSize() > 0)
-					objectList.parseQueue();
+					objectList.parsePhysicsQueue();
 				else{
 					physics.clientUpdate();
 				}
@@ -165,7 +186,10 @@ public class Controller extends Applet{
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;
-				renderer.draw();
+				if(objectList.queueSize() > 0)
+					objectList.parseRenderQueue();
+				else
+					renderer.draw();
 			}
 		}
 	};
@@ -176,14 +200,6 @@ public class Controller extends Applet{
 	public static void quit() { isRunning = false;	}
 	
 	public void loadLevel() throws Exception{
-		//Make a camera	
-		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
-		Camera cam = new Camera(0.0f, boxShape, false);
-		objectList.enqueue(cam, QueueItem.ADD);
-		
-		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
-		
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
 		//loadTestShapes(cam);
@@ -217,7 +233,7 @@ public class Controller extends Applet{
 		ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 		//physics.reduceHull(ent);
 
-		objectList.enqueue(ent, QueueItem.ADD);
+		objectList.enqueuePhysics(ent, QueueItem.ADD);
 		cam.setDistance(20.0f);
 		
 		cam.focusOn(ent);
@@ -229,7 +245,7 @@ public class Controller extends Applet{
 			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 			//physics.reduceHull(ent);
 			//ent.setGravity(new Vector3f(0,-1,0));
-			objectList.enqueue(ent, QueueItem.ADD);
+			objectList.enqueuePhysics(ent, QueueItem.ADD);
 		}
 	}
 	
@@ -262,7 +278,7 @@ public class Controller extends Applet{
 						ent.setModel(p.createModel());	
 						//ent.setPosition(new Vector3f(0.0f,0.0f,(float) Math.random()));
 						ent.setProperty("name", f.getPath().substring(0,dotPos-1));
-						objectList.enqueue(ent, QueueItem.ADD);
+						objectList.enqueuePhysics(ent, QueueItem.ADD);
 						ent.setShouldDraw(true);
 					}
 		        }
@@ -285,6 +301,8 @@ public class Controller extends Applet{
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();
 		HashMap<String, Vector3f> defaultPositions = new HashMap<String, Vector3f>();
+		String fullassemblyFocus = null;
+		String lineupFocus = null;
 		
 		ArrayList<Node> tagList;
 		
@@ -293,6 +311,20 @@ public class Controller extends Applet{
 			Element rootElement = dom.getDocumentElement();
 			
 			if( rootElement.getNodeName().equals("config")){
+				tagList = findChildrenByName(rootElement, "fullassembly");
+				if(tagList.size() == 1){
+					fullassemblyFocus = tagList.get(0).getTextContent();
+				}else{
+					throw new Exception("No default focus");
+				}
+				
+				tagList = findChildrenByName(rootElement, "lineup");
+				if(tagList.size() == 1){
+					lineupFocus = tagList.get(0).getTextContent();
+				}else{
+					throw new Exception("No default focus");
+				}
+				
 				tagList = findChildrenByName(rootElement, "name");
 				configName = tagList.get(0).getTextContent();
 				
@@ -301,8 +333,8 @@ public class Controller extends Applet{
 					//Create nodes for all of them
 					createItem((Element)tagList.get(i), treeModel, configName, defaultPositions);
 				}
-				
-				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions);
+				objectList.parsePhysicsQueue();
+				Config.addConfig(configName, new Vector3f(0,0,0), treeModel, defaultPositions, objectList.getItem(configName + "-" + fullassemblyFocus), objectList.getItem(configName + "-" + lineupFocus));
 			}else{
 				Exception e = new Exception();
 				e.initCause(new Throwable("Invalid config file"));
@@ -372,12 +404,13 @@ public class Controller extends Applet{
 				Model model = new Model();
 				model = p.createModel();
 				ent.setModel(model);
+				objectList.enqueueRenderer(ent, QueueItem.ADD);
 				ent.setCollisionShape(model.createCollisionShape());
 			}
 			
 			ent.setPosition(position);
 			ent.setProperty("name", configName + "-" + name);
-			objectList.enqueue(ent, QueueItem.ADD);
+			objectList.enqueuePhysics(ent, QueueItem.ADD);
 			
 			defaultPositions.put(name, position);
 		}

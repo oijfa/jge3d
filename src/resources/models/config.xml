@@ -1,10 +1,12 @@
 <config>
 	<name>Mini</name>
+	<fullassembly>Full_Assembly</fullassembly>
+	<lineup>Braze Coat</lineup>
 	<item>
 		<name>Coating</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/coating.xgl</path>
-		<position>100,0,0</position>
+		<position>106,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -12,21 +14,21 @@
 		</item>
 	</item>
 	<item>
-		<name>Pellet</name>
+		<name>Cathode Pellet</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/minicathode.xgl</path>
-		<position>100,0,0</position>
+		<position>105,0,0</position>
 		
 		<item>
-			<name>prop_name</name>
-			<value>prop_value</value>
+			<name>10008052</name>
+			<value>W80% .343 OD</value>
 		</item>
 	</item>
 	<item>
 		<name>Impregnant</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/impregnant.xgl</path>
-		<position>100,0,0</position>
+		<position>104,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -37,7 +39,7 @@
 		<name>Braze Coat</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/brazecoat.xgl</path>
-		<position>100,0,0</position>
+		<position>103,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -48,7 +50,7 @@
 		<name>Body</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/minibody.xgl</path>
-		<position>100,0,0</position>
+		<position>102,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -59,7 +61,7 @@
 		<name>Potting</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/potting.xgl</path>
-		<position>100,0,0</position>
+		<position>101,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -70,7 +72,7 @@
 		<name>Heater</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/heater.xgl</path>
-		<position>100,0,0</position>
+		<position>99,0,0</position>
 		
 		<item>
 			<name>prop_name</name>
@@ -78,7 +80,7 @@
 		</item>
 	</item>
 	<item>
-		<name>Cathode Assembly</name>
+		<name>Full_Assembly</name>
 		<value></value>
 		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
 		<position>0,0,0</position>

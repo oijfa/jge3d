@@ -29,7 +29,8 @@ public class Renderer {
 	private Window window;
 	private EntityList objectList;
     private Camera camera;
-    
+    private boolean isInitialized=false;
+    private boolean supportsVBO=false;
 	//private float x=0,y=0,z=0;
 	
     public static float nearClipping = 0.01f;
@@ -53,6 +54,7 @@ public class Renderer {
 	}
 
 	public void draw() {
+		GLContext.getCapabilities().toString();
 		//Move the camera with its focus
 		camera.updatePosition();
 		
@@ -133,6 +135,12 @@ public class Renderer {
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION,(FloatBuffer)temp.asFloatBuffer().put(lightPosition).flip());
         
         GL11.glEnable(GL11.GL_LIGHT1);
+        
+        if(GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
+        	supportsVBO=true;
+        else
+        	supportsVBO=false;
+		isInitialized=true;
 	}
 
 	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}
@@ -154,14 +162,18 @@ public class Renderer {
 			45.0f/zoom, 
 			(float) window.getWidth() / window.getHeight(), 
 			nearClipping, 
-			farClipping);
+			farClipping
+		);
+
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 	}
 	
-	public static boolean supportsVBO() {
-		return GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
+	public boolean supportsVBO() {
+		return supportsVBO;
 	}
 	
 	public void destroy() {window.destroy();}
+	
+	public boolean isInitialized() {return isInitialized;}
 }

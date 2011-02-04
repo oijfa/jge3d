@@ -101,7 +101,7 @@ public class Input {
 					impulse.scale(0.02f);
 					ent.setGravity(new Vector3f(0,0,0));
 					ent.applyImpulse(impulse, camera.getPosition());
-					objectList.enqueue(ent, QueueItem.ADD);
+					objectList.enqueuePhysics(ent, QueueItem.ADD);
 				}
 				break;
 			case 0://Left Button

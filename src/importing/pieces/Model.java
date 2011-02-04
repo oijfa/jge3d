@@ -11,15 +11,13 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
-import render.Renderer;
-
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
 public class Model {
 	ArrayList<Mesh> meshes;
 	Vector3f max, min, center;
-	int vbo_id;
+	boolean hasVBO = false;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -68,7 +66,8 @@ public class Model {
 		//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
-		if(Renderer.supportsVBO()) {
+		System.out.println("VBO:" + hasVBO);
+		if(hasVBO) {
 			for(Mesh m: meshes){
 				for(Face f: m.getFaces()) {
 					f.draw_vbo();
@@ -131,18 +130,17 @@ public class Model {
 		//find the center of the model using our min/max values
 		center.add(max,min);
 		center.scale(0.5f);
-		
+	}
+	
+	public void createVBO() {
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
-		System.out.print("dicks");
-		if(Renderer.supportsVBO()) {
-			System.out.print("everywhere");
-			for(Mesh m: meshes) {
-				for(Face f: m.getFaces()) {
-					f.createFaceBufferVNTC();
-				}
+		for(Mesh m: meshes) {
+			for(Face f: m.getFaces()) {
+				f.createFaceBufferVNTC();
 			}
 		}
+		hasVBO=true;
 	}
 	
 	/*Export*/
@@ -186,10 +184,11 @@ public class Model {
 		return new BoxShape(shape);
 	}
 
-	public int getModelID() {
-		return vbo_id;
-}
 	public ArrayList<Float> getColor() {
 		return meshes.get(0).getMaterial().getColor();
+	}
+	public void destroyVBO() {
+		// TODO: we need to deallocate the vbo here if the model gets destroyed
+		
 	}
 }
