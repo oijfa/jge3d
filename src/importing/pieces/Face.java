@@ -11,15 +11,15 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GLContext;
 
 public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	FloatBuffer faceVNT;
-	IntBuffer buffer;
+	IntBuffer faceVBOid;
 	
 	Vector3f normal;
-	int vbo_id;
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
 	public static final int VERTEX_STRIDE=48;
 	
@@ -111,10 +111,13 @@ public class Face {
 	
 	//LWJGL wants floatbuffers so we just return them in the
 	//native format here
-	public void createFaceBufferVNT() {
+	public void createFaceBufferVNTC() {
+		int VBOElementID;
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
-			for(int i=0;i<vertices.size();i++) {	    
+			for(int i=0;i<vertices.size();i++) {
+				VBOElementID = createVBOID();
+				
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
 				faceVNT.put(vertices.get(i).z);
@@ -131,19 +134,12 @@ public class Face {
 				faceVNT.put(1.0f);
 				faceVNT.put(1.0f);
 				
-				buffer = BufferUtils.createIntBuffer(1);
-			    ARBVertexBufferObject.glGenBuffersARB(buffer);
-			    vbo_id = buffer.get(0);
-				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id);
-			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVNT, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
-			    
-			    buffer = BufferUtils.createIntBuffer(1);
-			    ARBVertexBufferObject.glGenBuffersARB(buffer);
-			    vbo_id = buffer.get(0);
-			    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
-			    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer.get(0), ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+				System.out.println("VBOElementID: " + String.valueOf(VBOElementID));
+				faceVBOid.put(VBOElementID);
+				
+			    bufferData(VBOElementID, faceVNT);
+			    bufferElementData(VBOElementID, faceVBOid);
 			}
-			vbo_id-=vertices.size()-1;
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 		}
@@ -183,7 +179,7 @@ public class Face {
 		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 		 
 		//Bind the index of the object
-		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vbo_id );
+		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVBOid.get(0) );
 		
 		//vertices
 		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
@@ -201,13 +197,9 @@ public class Face {
 		offset = (3 + 3) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
 		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
 
-		IntBuffer index = BufferUtils.createIntBuffer(1);
-		for (int i=0;i<vertices.size();i++)
-			index.put(vbo_id+i);
-			
 		//GL11.glDrawElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_SHORT, vbo_id);
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, vbo_id);
-		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, 0, vertices.size()-1, index);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, faceVBOid.get(0));
+		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, 0, vertices.size()-1, faceVBOid);
 	}
 	
 	@SuppressWarnings("unused")
@@ -271,7 +263,25 @@ public class Face {
 		return data;
 	}
 
-	public void setVertexID(int id) {
-		vbo_id=id;
+	public static int createVBOID() {
+		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object) {
+			IntBuffer buffer = BufferUtils.createIntBuffer(1);
+			ARBVertexBufferObject.glGenBuffersARB(buffer);
+			return buffer.get(0);
+		}
+		return 0;
+	}
+	
+	public static void bufferData(int id, FloatBuffer buffer) {
+		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object) {
+			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
+			ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		}
+	}
+	public static void bufferElementData(int id, IntBuffer buffer) {
+		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object) {
+			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
+			ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		}
 	}
 }

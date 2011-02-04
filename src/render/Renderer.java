@@ -41,8 +41,6 @@ public class Renderer {
     private float lightDiffuse[]={ 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
     private float lightSpecular[]={ 1f, 1f, 1f, 1.0f };
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
-
-	private static boolean supportsVBO = false;
 	private Canvas display_parent;
 
 	public Renderer(EntityList objectList, Canvas display_parent){
@@ -103,10 +101,6 @@ public class Renderer {
 		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
 			
 		}
-		
-		//Get supported openGL extensions
-		getVideoExtensions();		
-		
 		camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 
 		window.setCamera(camera);
@@ -165,15 +159,8 @@ public class Renderer {
 		GL11.glLoadIdentity();
 	}
 	
-	private void getVideoExtensions() {
-		/* Check the video card for rendering capabilities */
-		//Check if VBOs are supported
-		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
-			supportsVBO  = true;
-	}
-	
 	public static boolean supportsVBO() {
-		return supportsVBO;
+		return GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
 	}
 	
 	public void destroy() {window.destroy();}

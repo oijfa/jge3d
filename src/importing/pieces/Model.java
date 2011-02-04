@@ -134,10 +134,12 @@ public class Model {
 		
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
+		System.out.print("dicks");
 		if(Renderer.supportsVBO()) {
+			System.out.print("everywhere");
 			for(Mesh m: meshes) {
 				for(Face f: m.getFaces()) {
-					f.createFaceBufferVNT();
+					f.createFaceBufferVNTC();
 				}
 			}
 		}
