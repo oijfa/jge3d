@@ -75,7 +75,6 @@ public class Model {
 			}
 		} else {
 			for(Mesh m: meshes){
-		
 				GL11.glPushMatrix();
 				m.draw();
 				GL11.glPopMatrix();

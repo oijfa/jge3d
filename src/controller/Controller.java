@@ -7,11 +7,9 @@ import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import importing.Obj_Parser;
 import importing.Parser;
 import importing.XGL_Parser;
 import importing.pieces.Model;
@@ -65,7 +63,6 @@ public class Controller extends Applet{
 	public void startApp() {
 		try {
 			startThreads();
-			loadLevel();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -148,19 +145,18 @@ public class Controller extends Applet{
 		
 		physics_thread.start();
 		render_thread.start();
-		
-		//render_thread.join();
+
 		readConfigFile();
 		
 		//if the renderer supports VBOs
 		//while(!renderer.isInitialized()) {}
-		if(renderer.supportsVBO()) {
-			//Create a vbo for each model
-			for(String name:objectList.getKeySet()) {
-				objectList.enqueuePhysics(objectList.getItem(name), QueueItem.VBO);
-				//objectList.getItem(name).getModel().createVBO();
-			}
-		}
+		//if(renderer.supportsVBO()) {
+		//	//Create a vbo for each model
+		//	for(String name:objectList.getKeySet()) {
+		//		objectList.enqueuePhysics(objectList.getItem(name), QueueItem.ADD);
+		//		//objectList.getItem(name).getModel().createVBO();
+		//	}
+		//}
 		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
@@ -198,15 +194,13 @@ public class Controller extends Applet{
 	public void resetFrames() { frames = 0;	}
 	
 	public static void quit() { isRunning = false;	}
-	
+	/*
 	public void loadLevel() throws Exception{
 		//Load some stuff (I would only pick one of the following
 		//two methods if I were you)
-		//loadTestShapes(cam);
-		//pullModelFiles("resources/models/cathodes/minixgl");
+		loadTestShapes(cam);
+		pullModelFiles("resources/models/cathodes/minixgl");
 	}
-
-	@SuppressWarnings("unused")
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -248,8 +242,6 @@ public class Controller extends Applet{
 			objectList.enqueuePhysics(ent, QueueItem.ADD);
 		}
 	}
-	
-	@SuppressWarnings("unused")
 	private void pullModelFiles(String filename) throws Exception{
 		File dir = new File(filename);
 		File[] subFiles;
@@ -287,7 +279,7 @@ public class Controller extends Applet{
 			}
 		}
 	}
-	
+	*/
 	/* Config file reading */
 	private void readConfigFile() throws Exception{
 		Document dom;
