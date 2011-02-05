@@ -8,7 +8,6 @@ import de.matthiasmann.twl.model.TreeTableNode;
 public class Node extends AbstractTreeTableNode {
     private Object str0;
     private Object str1;
-    @SuppressWarnings("unused")
 	private String color;
     
     public Node(TreeTableNode parent, Object str0, Object str1) {
@@ -97,8 +96,5 @@ public class Node extends AbstractTreeTableNode {
 		return children;
 	}
 
-	public String getColor() {
-
-		return color;
-	}
+	public String getColor() {	return color; }
 }

@@ -347,7 +347,10 @@ public class Controller extends Applet{
 		value = tagList.get(0).getTextContent();
 		
 		tagList = findChildrenByName(ele, "color");
-		color = tagList.get(0).getTextContent();
+		if(tagList.size() > 0)
+			color = tagList.get(0).getTextContent();
+		else
+			color = null;
 		
 		tagList = findChildrenByName(ele, "show");
 		if(tagList.size() == 0){

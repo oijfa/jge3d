@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import controller.Config;
 import controller.ConfigListener;
 import window.tree.EditFieldCellRenderer;
+import window.tree.JGETreeTable;
 import window.tree.Model;
 import window.tree.Node;
 import window.tree.SpanRenderer;
@@ -13,7 +14,6 @@ import window.tree.TreeListener;
 import monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.TableRowSelectionManager;
-import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
 import de.matthiasmann.twl.model.TableSingleSelectionModel;
 import de.matthiasmann.twl.model.TreeTableNode;
@@ -25,7 +25,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     int state;
     EntityList objectList;
     Model treeModel;
-    TreeTable treeTable;
+    JGETreeTable treeTable;
 
     
     public Tree(EntityList objectList, Model m){
@@ -43,7 +43,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	    	//this.createEntityListNode();
     	}
     	
-        treeTable = new TreeTable(treeModel);
+        treeTable = new JGETreeTable(treeModel);
         treeTable.setTheme("/table");
         treeTable.registerCellRenderer(SpanString.class, new SpanRenderer());
         treeTable.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
@@ -60,7 +60,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
         setContent(treeTable);
         setTheme("/tableScrollPane");
         
-        //configChanged();
+        configChanged();
 		Config.registerObserver(this);
     }
     
@@ -156,9 +156,8 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			treeModel.removeAll();
 			for(Node n: nodes){
 				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
-				@SuppressWarnings("unused")
 				Node newNode = n.changeParent(treeModel);
-				
+				treeTable.changeColor(newNode);
 			}
 		} catch (Exception e) {
 			System.out.println("Failed to create new treeTable");
