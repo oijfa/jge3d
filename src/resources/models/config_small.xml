@@ -1,0 +1,115 @@
+<config>
+	<name>Mini</name>
+	<fullassembly>Full_Assembly</fullassembly>
+	<lineup>Braze, MoRu</lineup>
+	<item>
+		<name>Coating</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/COATING.xgl</path>
+		<position>106,0,0</position>
+		<color>lightorange</color>
+		
+		<item>
+			<name>Osmium Ruthenium</name>
+			<value></value>
+		</item>
+	</item>
+	<item>
+		<name>Cathode Pellet</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/MINI CATHODE.xgl</path>
+		<position>105,0,0</position>
+		<color>red</color>
+		<item>
+			<name>W80% .343 OD</name>
+			<value></value>
+			<item>
+				<name>Tungsten U-4.5 Powder</name>
+				<value></value>
+			</item>
+		</item>
+	</item>
+	<item>
+		<name>Impregnant 4:1:1</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/IMPREGNANT.xgl</path>
+		<position>104,0,0</position>
+		<color>white</color>
+		
+		<item>
+			<name>Barium Carbonate</name>
+			<value></value>
+		</item>
+		<item>
+			<name>Alumina, .05 Micron Gamma</name>
+			<value></value>
+		</item>
+		<item>
+			<name>Calcium Carbonate</name>
+			<value></value>
+		</item>
+	</item>
+	<item>
+		<name>Braze, MoRu</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/BRAZE COAT.xgl</path>
+		<position>103,0,0</position>
+		<color>blue</color>
+		
+	</item>
+	<item>
+		<name>Body</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/MINI BODY.xgl</path>
+		<position>102,0,0</position>
+		<color>green</color>
+		
+		<item>
+			<name>Moly Rod .187 OD</name>
+			<value></value>
+		</item>
+	</item>
+	<item>
+		<name>Potting</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/POTTING.xgl</path>
+		<position>101,0,0</position>
+		<color>lightblue</color>
+		
+		<item>
+			<name>Calcium Oxide</name>
+			<value></value>
+		</item>
+		<item>
+			<name>Alundum, 38-900 Grit</name>
+			<value></value>
+		</item>
+		<item>
+			<name>Alundum, 38-220 Grit</name>
+			<value></value>
+		</item>
+	</item>
+	<item>
+		<name>Heater</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/MINI HEATER.xgl</path>
+		<position>99,0,0</position>
+		<color>salmon</color>
+		
+		<item>
+			<name>WRe3% Ø.003</name>
+			<value></value>
+		</item>
+	</item>
+	<item>
+		<name>Full_Assembly</name>
+		<value></value>
+		<path>resources/models/cathodes/minixgl/MINI CATHODE ASSEMBLY.xgl</path>
+		<position>0,0,0</position>
+		<show>false</show>
+		<item>
+			<name>prop_name</name>
+			<value>prop_value</value>
+		</item>
+	</item>
+</config>

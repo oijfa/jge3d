@@ -50,7 +50,7 @@ public class XGL_Parser extends Parser{
 		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
 		parseXGL(dom);
 		model.verify();
-	}	
+	}
 	
 	private void parseXGL(Document dom){
 		ArrayList<Mesh> drawableMeshes = new ArrayList<Mesh>();

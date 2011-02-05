@@ -25,6 +25,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     int state;
     EntityList objectList;
     Model treeModel;
+    TreeTable treeTable;
 
     
     public Tree(EntityList objectList, Model m){
@@ -42,24 +43,24 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	    	//this.createEntityListNode();
     	}
     	
-        TreeTable t = new TreeTable(treeModel);
-        t.setTheme("/table");
-        t.registerCellRenderer(SpanString.class, new SpanRenderer());
-        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        treeTable = new TreeTable(treeModel);
+        treeTable.setTheme("/table");
+        treeTable.registerCellRenderer(SpanString.class, new SpanRenderer());
+        treeTable.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
         
         TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
+        selectionModel.addSelectionChangeListener(new TreeListener(treeTable,selectionModel,objectList));
         
-        t.setSelectionManager(
+        treeTable.setSelectionManager(
     		new TableRowSelectionManager(
     			selectionModel
     		)
         );
 
-        setContent(t);
+        setContent(treeTable);
         setTheme("/tableScrollPane");
         
-        configChanged();
+        //configChanged();
 		Config.registerObserver(this);
     }
     
@@ -155,7 +156,9 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			treeModel.removeAll();
 			for(Node n: nodes){
 				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
-				n.changeParent(treeModel);
+				@SuppressWarnings("unused")
+				Node newNode = n.changeParent(treeModel);
+				
 			}
 		} catch (Exception e) {
 			System.out.println("Failed to create new treeTable");

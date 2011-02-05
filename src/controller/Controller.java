@@ -282,7 +282,7 @@ public class Controller extends Applet{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config.xml"));
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config_small.xml"));
 		
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();
@@ -334,6 +334,7 @@ public class Controller extends Applet{
 	private void createItem(Element ele, TreeTableNode parent, String configName, HashMap<String, Vector3f> defaultPositions) throws Exception {
 		String name;
 		String value;
+		String color;
 		String path;
 		boolean show;
 		Vector3f position;
@@ -344,6 +345,9 @@ public class Controller extends Applet{
 		
 		tagList = findChildrenByName(ele, "value");
 		value = tagList.get(0).getTextContent();
+		
+		tagList = findChildrenByName(ele, "color");
+		color = tagList.get(0).getTextContent();
 		
 		tagList = findChildrenByName(ele, "show");
 		if(tagList.size() == 0){
@@ -403,9 +407,9 @@ public class Controller extends Applet{
 		if(show == true){
 			window.tree.Node item;
 			if( parent.getClass() == window.tree.Model.class ){
-				 item = ((window.tree.Model)parent).insert(name, "");
+				 item = ((window.tree.Model)parent).insert(name, "", color);
 			}else{
-				item = ((window.tree.Node)parent).insert(name,value);
+				item = ((window.tree.Node)parent).insert(name,value, color);
 			}
 			
 			tagList = findChildrenByName(ele, "item");
