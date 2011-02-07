@@ -66,7 +66,7 @@ public class Model {
 		//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
-		System.out.println("VBO:" + hasVBO);
+		//System.out.println("VBO:" + hasVBO);
 		if(hasVBO) {
 			for(Mesh m: meshes){
 				for(Face f: m.getFaces()) {

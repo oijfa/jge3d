@@ -11,7 +11,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GLContext;
 
 public class Face {
 	ArrayList<Vector3f> vertices;
@@ -200,9 +199,15 @@ public class Face {
 		offset = (3 + 3) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
 		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
 
-		//GL11.glDrawElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_SHORT, vbo_id);
-		//ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, faceVBOid.get(0));
-		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, 0, vertices.size()-1, faceVBOid);
+		//Draw the bound indices
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			faceVBOid.get(0), 
+			faceVBOid.get(vertices.size()-1), 
+			vertices.size(),
+			GL11.GL_UNSIGNED_INT,
+			0
+		);
 	}
 	
 	@SuppressWarnings("unused")
