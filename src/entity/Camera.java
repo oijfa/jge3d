@@ -36,17 +36,17 @@ public class Camera extends Entity implements ConfigListener {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Double d, CollisionShape c, boolean collide, Entity defFocus) {
+	public Camera(Double d, CollisionShape c, boolean collide) {
 		super(d.floatValue(),c,collide);
-		cameraInit(defFocus);
+		cameraInit();
 	}
-	public Camera(String _name,Double d, CollisionShape c, boolean collide, Entity defFocus) {
+	public Camera(String _name,Double d, CollisionShape c, boolean collide) {
 		super(d.floatValue(),c,collide);
-		cameraInit(defFocus);
+		cameraInit();
+
 	}
 
-	private void cameraInit(Entity defFocus) {
-		default_focus = defFocus;
+	private void cameraInit() {
 		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
 		setPosition(new Vector3f(0,0,0));
@@ -57,16 +57,6 @@ public class Camera extends Entity implements ConfigListener {
 		updatePosition();
 		
 		Config.registerObserver(this);
-		configChanged();
-		
-		if(default_focus == null || focus == null){
-			try {
-				throw new Exception("DONT SET THE FOCUS TO NULL DIPSHIT");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
-		}
 	}
 	
 	public void focusOn(Entity newFocus){
@@ -229,12 +219,16 @@ public class Camera extends Entity implements ConfigListener {
 
 		return pos;
 	}
-	@Override
-	public void configChanged() {
-		Entity newFocus = Config.getFullAssemblyFocus();
+	
+	public void changeDefaultFocus(Entity newFocus){
 		if(focus == default_focus){
 			focus = newFocus;
 		}
 		default_focus = newFocus;
+	}
+	@Override
+	public void configChanged() {
+		Entity newFocus = Config.getFullAssemblyFocus();
+		changeDefaultFocus(newFocus);
 	}
 }
