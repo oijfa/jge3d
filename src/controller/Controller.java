@@ -154,6 +154,8 @@ public class Controller extends Applet{
 	
 		readConfigFile();
 		
+		render_thread.interrupt();
+		
 		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
@@ -175,7 +177,9 @@ public class Controller extends Applet{
 	Thread render_thread = new Thread() {
 		public void run() {
 			renderer.initGL();
-			this.interrupt();
+			try {
+				this.join();
+			} catch (InterruptedException e) {}
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;
