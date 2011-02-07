@@ -26,11 +26,11 @@ public class Input {
 	private Physics physics;
 	
 	// ANGLES
-	private static final float LEFT_RIGHT_INC = 0.00001f;
-	private static final float UP_DOWN_INC = 0.00001f;
+	private static final double LEFT_RIGHT_INC = 0.00001f;
+	private static final double UP_DOWN_INC = 0.00001f;
 
 	// DISTANCE
-	private static final float IN_OUT_INC = 1f;
+	private static final double IN_OUT_INC = 1f;
 
 	public Input(EntityList objectList) {
 		this.objectList = objectList;

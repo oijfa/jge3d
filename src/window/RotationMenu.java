@@ -31,10 +31,10 @@ public class RotationMenu extends ResizableFrame {
 	private Camera cam;
 	private EntityList objectList;
 
-	//private static final float ZOOM_INC = 0.00000001f;
-	private static final float ZOOM_INC = 0.0000001f;
-	private static final float LEFT_RIGHT_INC = 0.00000001f;
-	private static final float UP_DOWN_INC = 0.00000001f;
+	private static final double ZOOM_INC = 0.00000001f;
+	//private static final double ZOOM_INC = 0.0000001f;
+	private static final double LEFT_RIGHT_INC = 0.00000001f;
+	private static final double UP_DOWN_INC = -0.00000001f;
 	private HashMap<String, InputRunnable> buttonThreads;
 	
 	static boolean linearShow = false;
@@ -87,8 +87,8 @@ public class RotationMenu extends ResizableFrame {
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				cam.setDeclination(0f);
-				cam.setRotation(0f);
+				cam.setDeclination(0.0);
+				cam.setRotation(0.0);
 			}
 		});
 		
@@ -194,11 +194,7 @@ public class RotationMenu extends ResizableFrame {
 	}
 	
 	public synchronized void startThread(String key) throws SecurityException, NoSuchMethodException{
-		if(key.equals("Left")){
-			System.out.println();
-		}
 		if(buttonThreads.get(key) != null){
-			//System.out.println("buttonpress");
 			buttonPressed();
 			resetThread(key);
 			buttonThreads.get(key).start();

@@ -20,28 +20,28 @@ public class Camera extends Entity implements ConfigListener {
 	
 	/*Static class variables*/
 	//Don't flip over, its confusing.
-	private static final float maximum_declination = (float) (Math.PI/2.0f) - 0.01f;
-	private static final float minimum_declination = (float) ((float) -1.0f*((Math.PI/2.0f) - 0.01f));
-	private static final float minimum_distance = 0.000001f;
-	private static final float maximum_distance = 25f;
+	private static final double maximum_declination = (Math.PI/2.0f) - 0.01f;
+	private static final double minimum_declination = (-1.0f*((Math.PI/2.0f) - 0.01f));
+	private static final double minimum_distance = 1.5;
+	private static final double maximum_distance = 25f;
 	public static final String CAMERA_NAME = "camera";
 	
 	/*Class fields*/
-	private float declination;					//Angle up and down
-	private float rotation;						//Angle left and right
-	private float distance;						//distance from focus
+	private double declination;					//Angle up and down
+	private double rotation;						//Angle left and right
+	private double distance;						//distance from focus
 	private Vector3f up_vector;					//vector pointing up
 	
 	private volatile Entity focus;
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Float f, CollisionShape c, boolean collide, Entity defFocus) {
-		super(f,c,collide);
+	public Camera(Double d, CollisionShape c, boolean collide, Entity defFocus) {
+		super(d.floatValue(),c,collide);
 		cameraInit(defFocus);
 	}
-	public Camera(String _name,Float f, CollisionShape c, boolean collide, Entity defFocus) {
-		super(f,c,collide);
+	public Camera(String _name,Double d, CollisionShape c, boolean collide, Entity defFocus) {
+		super(d.floatValue(),c,collide);
 		cameraInit(defFocus);
 	}
 
@@ -117,8 +117,8 @@ public class Camera extends Entity implements ConfigListener {
 		}
 	}
 	
-	public synchronized void incrementDistance( Float change ){
-		float temp = distance + change;
+	public synchronized void incrementDistance( Double change ){
+		double temp = distance + change;
 		if( temp > maximum_distance)
 		{
 			distance = maximum_distance;
@@ -129,11 +129,11 @@ public class Camera extends Entity implements ConfigListener {
 		}
 	}
 	
-	public float getDistance(){
+	public double getDistance(){
 		return distance;
 	}
 	
-	public void incrementDeclination(Float angle){
+	public void incrementDeclination(Double angle){
 		declination += angle;
 		if( declination > maximum_declination ){
 			declination = maximum_declination;
@@ -142,16 +142,16 @@ public class Camera extends Entity implements ConfigListener {
 			declination = minimum_declination;
 		}
 		
-		System.out.println(distance);
+		//System.out.println(distance);
 		//Not needed because renderer always calls it
 		//updatePosition();
 	}
 	
-	public void setDeclination(Float angle){
+	public void setDeclination(Double angle){
 		this.declination = angle;
 	}
 	
-	public void incrementRotation(Float angle){
+	public void incrementRotation(Double angle){
 		rotation += angle;
 		/*
 		 * Checks if rotation is over 2*Pi and adjusts it accordingly.
@@ -169,7 +169,7 @@ public class Camera extends Entity implements ConfigListener {
 		//updatePosition();
 	}
 	
-	public void setRotation(Float angle){
+	public void setRotation(Double angle){
 		this.rotation = angle;
 	}
 	
