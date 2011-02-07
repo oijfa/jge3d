@@ -37,6 +37,7 @@ import entity.Entity;
 import entity.EntityList;
 import entity.QueueItem;
 import render.Renderer;
+import window.tree.ColoredTextString;
 
 public class Controller extends Applet{
 	private static final long serialVersionUID = 4458487765324323938L;
@@ -137,7 +138,7 @@ public class Controller extends Applet{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 
-		Camera cam = new Camera(0.0f, boxShape, false);
+		Camera cam = new Camera(0.0, boxShape, false);
 		objectList.enqueuePhysics(cam, QueueItem.ADD);
 		
 		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
@@ -145,20 +146,11 @@ public class Controller extends Applet{
 		
 		physics_thread.start();
 		render_thread.start();
-		
+
 		readConfigFile();
 		
 		render_thread.interrupt();
-		
-		//if the renderer supports VBOs
-		//while(!renderer.isInitialized()) {}
-		//if(renderer.supportsVBO()) {
-		//	//Create a vbo for each model
-		//	for(String name:objectList.getKeySet()) {
-		//		objectList.enqueuePhysics(objectList.getItem(name), QueueItem.ADD);
-		//		//objectList.getItem(name).getModel().createVBO();
-		//	}
-		//}
+
 		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
@@ -293,7 +285,7 @@ public class Controller extends Applet{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config.xml"));
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config_small.xml"));
 		
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();
@@ -345,6 +337,7 @@ public class Controller extends Applet{
 	private void createItem(Element ele, TreeTableNode parent, String configName, HashMap<String, Vector3f> defaultPositions) throws Exception {
 		String name;
 		String value;
+		ArrayList<Byte> color = null; 
 		String path;
 		boolean show;
 		Vector3f position;
@@ -410,14 +403,23 @@ public class Controller extends Applet{
 			objectList.enqueuePhysics(ent, QueueItem.ADD);
 			
 			defaultPositions.put(name, position);
+			color = ent.getModel().getColor();
 		}
 		
 		if(show == true){
 			window.tree.Node item;
 			if( parent.getClass() == window.tree.Model.class ){
-				 item = ((window.tree.Model)parent).insert(name, "");
+				if(color != null){
+					item = ((window.tree.Model)parent).insert(new ColoredTextString(name, color.get(0), color.get(1), color.get(2)), "");
+				}else{
+					item = ((window.tree.Model)parent).insert(name, "");
+				}
 			}else{
-				item = ((window.tree.Node)parent).insert(name,value);
+				if(color != null){
+					item = ((window.tree.Node)parent).insert(new ColoredTextString(name, color.get(0), color.get(1), color.get(2)),value);
+				}else{
+					item = ((window.tree.Node)parent).insert(name,value);
+				}
 			}
 			
 			tagList = findChildrenByName(ele, "item");

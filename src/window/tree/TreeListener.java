@@ -28,7 +28,7 @@ public class TreeListener implements Runnable{
 	
 			Entity newFocus;
 			try {
-				newFocus = objects.getItem(Config.getName() + "-" + (String)n.getData(0));
+				newFocus = objects.getItem(Config.getName() + "-" + (String)n.getData(0).toString());
 				if( newFocus != null){
 					stopResetAndMove(newFocus);
 				}
@@ -63,5 +63,7 @@ public class TreeListener implements Runnable{
 		newFocus.setDamping(0.0f,0.0f);
 		newFocus.activate();
 		newFocus.setAngularFactor(0.0f, new Vector3f(1,1,0));
+		
+		((Camera)objects.getItem(Camera.CAMERA_NAME)).setDistance(2.0f);
 	}
 }

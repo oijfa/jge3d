@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import controller.Config;
 import controller.ConfigListener;
+import window.tree.ColoredTextRenderer;
+import window.tree.ColoredTextString;
 import window.tree.EditFieldCellRenderer;
 import window.tree.Model;
 import window.tree.Node;
@@ -25,6 +27,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
     int state;
     EntityList objectList;
     Model treeModel;
+    TreeTable treeTable;
 
     
     public Tree(EntityList objectList, Model m){
@@ -42,21 +45,22 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	    	//this.createEntityListNode();
     	}
     	
-        TreeTable t = new TreeTable(treeModel);
-        t.setTheme("/table");
-        t.registerCellRenderer(SpanString.class, new SpanRenderer());
-        t.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        treeTable = new TreeTable(treeModel);
+        treeTable.setTheme("/table");
+        treeTable.registerCellRenderer(SpanString.class, new SpanRenderer());
+        treeTable.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        treeTable.registerCellRenderer(ColoredTextString.class, new ColoredTextRenderer());
         
         TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-        selectionModel.addSelectionChangeListener(new TreeListener(t,selectionModel,objectList));
+        selectionModel.addSelectionChangeListener(new TreeListener(treeTable,selectionModel,objectList));
         
-        t.setSelectionManager(
+        treeTable.setSelectionManager(
     		new TableRowSelectionManager(
     			selectionModel
     		)
         );
 
-        setContent(t);
+        setContent(treeTable);
         setTheme("/tableScrollPane");
         
         //configChanged();
@@ -154,9 +158,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			
 			treeModel.removeAll();
 			for(Node n: nodes){
-				//TODO: wtf if you remove this next line it crashes
-				//probable race condition
-				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
+				//System.out.println("Config Changed, Node " + n.getData(0) + " being added");
 				n.changeParent(treeModel);
 			}
 		} catch (Exception e) {

@@ -17,6 +17,13 @@ public class Model extends AbstractTreeTableModel {
         insertChild(n, getNumChildren());
         return n;
     }
+    
+    public Node insert(Object str0, String str1, String color) {
+        Node n = new Node(this, str0, str1, color);
+        insertChild(n, getNumChildren());
+        return n;
+    }
+    
     public void remove(String name){
     	for(int i=0; i < this.getNumChildren();i++) {
     		if(this.getChild(i).equals(name))

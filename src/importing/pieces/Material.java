@@ -206,13 +206,17 @@ public class Material {
 		return data;
 	}
 	
-	public ArrayList<Float> getColor() {
-		ArrayList<Float> color = new ArrayList<Float>();
+	public ArrayList<Byte> getColor() {
+		ArrayList<Byte> color = new ArrayList<Byte>();
 		
-		color.add(ambientReflect.x);
-		color.add(ambientReflect.y);
-		color.add(ambientReflect.z);
+		color.add(average(ambientReflect.x, diffuseReflect.x,specularReflect.x));
+		color.add(average(ambientReflect.y, diffuseReflect.y,specularReflect.y));
+		color.add(average(ambientReflect.z, diffuseReflect.z,specularReflect.z));
 		
 		return color;
+	}
+	
+	private byte average(float a, float b, float c){
+		return (byte)(((a*255)+(b*255)+(c*255))/3);
 	}
 }

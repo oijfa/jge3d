@@ -4,7 +4,6 @@ import input.components.ButtonRunnable;
 import input.components.InputRunnable;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.vecmath.Vector3f;
 
@@ -32,9 +31,10 @@ public class RotationMenu extends ResizableFrame {
 	private Camera cam;
 	private EntityList objectList;
 
-	private static final float ZOOM_INC = 0.00000001f;
-	private static final float LEFT_RIGHT_INC = 0.00000001f;
-	private static final float UP_DOWN_INC = 0.00000001f;
+	private static final double ZOOM_INC = 0.00000001f;
+	//private static final double ZOOM_INC = 0.0000001f;
+	private static final double LEFT_RIGHT_INC = 0.00000001f;
+	private static final double UP_DOWN_INC = -0.00000001f;
 	private HashMap<String, InputRunnable> buttonThreads;
 	
 	static boolean linearShow = false;
@@ -87,8 +87,8 @@ public class RotationMenu extends ResizableFrame {
 		center.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				cam.setDeclination(0f);
-				cam.setRotation(0f);
+				cam.setDeclination(0.0);
+				cam.setRotation(0.0);
 			}
 		});
 		
@@ -96,20 +96,21 @@ public class RotationMenu extends ResizableFrame {
 			@Override
 			public void run() {
 				for(String key:objectList.getKeySet()) {
-					Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
-						
-						Random rand = new Random();
-						Vector3f force = new Vector3f(
-							rand.nextFloat()*10,
-							rand.nextFloat()*10,
-							rand.nextFloat()*10
-						);
-						ent.applyImpulse(force, ent.getPosition());
-						ent.activate();
-						
-						
-						//ent.setPosition(Config.getByName(ent.getProperty("name")).getPosition());
+						//Reset position of all other objects
+						for(String name: objectList.getKeySet()) {
+							//For everything but the camera do the following
+							if(!name.equals(Camera.CAMERA_NAME)) {
+								//Stop the movement
+								objectList.getItem(name).setDamping(1.0f,1.0f);
+								objectList.getItem(name).activate();
+								objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
+								
+								//Move the object back to its original position
+								objectList.getItem(name).setAngularIdentity();
+								objectList.getItem(name).setPosition(Config.getPosition(name));
+							}
+						}
 					}
 				}
 			}
@@ -135,10 +136,12 @@ public class RotationMenu extends ResizableFrame {
 				
 				if(!linearShow){
 					cam.focusOn(Config.getLineupFocus());
+					cam.setDistance(9.0f);
 					linearShow = true;
 				}else{
 					cam.focusOn(Config.getFullAssemblyFocus());
 					linearShow = false;
+					//System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
 				}
 			}
 		});
