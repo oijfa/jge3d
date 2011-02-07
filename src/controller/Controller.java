@@ -145,8 +145,10 @@ public class Controller extends Applet{
 		
 		physics_thread.start();
 		render_thread.start();
-
+		
 		readConfigFile();
+		
+		render_thread.interrupt();
 		
 		//if the renderer supports VBOs
 		//while(!renderer.isInitialized()) {}
@@ -178,7 +180,10 @@ public class Controller extends Applet{
 	Thread render_thread = new Thread() {
 		public void run() {
 			renderer.initGL();
-			this.interrupt();
+			try {
+				this.join();
+			} catch (InterruptedException e) {}
+			objectList.parseRenderQueue();
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;

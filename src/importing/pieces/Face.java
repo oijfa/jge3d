@@ -118,7 +118,7 @@ public class Face {
 				VBOElementID = createVBOID();
 				
 				faceVNT = BufferUtils.createFloatBuffer(12);
-				faceVBOid = BufferUtils.createIntBuffer(1);
+				faceVBOid = BufferUtils.createIntBuffer(vertices.size());
 				
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
@@ -142,6 +142,8 @@ public class Face {
 			    bufferData(VBOElementID, faceVNT);
 			    bufferElementData(VBOElementID, faceVBOid);
 			}
+			//faceVNT.flip();
+			//faceVBOid.flip();
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 		}
@@ -206,7 +208,7 @@ public class Face {
 			faceVBOid.get(vertices.size()-1), 
 			vertices.size(),
 			GL11.GL_UNSIGNED_INT,
-			0
+			1
 		);
 	}
 	
