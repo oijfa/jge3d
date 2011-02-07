@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import controller.Config;
 import controller.ConfigListener;
+import window.tree.ColoredTextRenderer;
+import window.tree.ColoredTextString;
 import window.tree.EditFieldCellRenderer;
 import window.tree.JGETreeTable;
 import window.tree.Model;
@@ -47,6 +49,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
         treeTable.setTheme("/table");
         treeTable.registerCellRenderer(SpanString.class, new SpanRenderer());
         treeTable.registerCellRenderer(StringModel.class, new EditFieldCellRenderer());
+        treeTable.registerCellRenderer(ColoredTextString.class, new ColoredTextRenderer());
         
         TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
         selectionModel.addSelectionChangeListener(new TreeListener(treeTable,selectionModel,objectList));

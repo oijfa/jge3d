@@ -75,6 +75,14 @@
    	<images file="images/align.png" format="RGBA">
     	<area name="align" xywh="*"/>
    	</images>
+    <images file="images/colors.png">
+        <area name="orange" xywh="0,0,1,1"/>
+        <area name="blue" xywh="125,4,1,1"/>
+        <area name="red" xywh="146,4,1,1"/>
+        <area name="lightblue" xywh="224,5,1,1"/>
+        <area name="green" xywh="276,4,1,1"/>
+        <area name="salmon" xywh="346,5,1,1"/>
+    </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
@@ -252,6 +260,24 @@
         <param name="treeIndent"><int>13</int></param>
         <param name="treeButtonSize"><dimension>30,30</dimension></param>
     </theme>
+    <theme name="treecellblue" ref="-treecellrenderer">
+        <param name="background"><image>blue</image></param>
+    </theme>
+    <theme name="treecellorange" ref="-treecellrenderer">
+        <param name="background"><image>orange</image></param>
+    </theme>
+    <theme name="treecellred" ref="-treecellrenderer">
+        <param name="background"><image>red</image></param>
+    </theme>
+    <theme name="treecellgreen" ref="-treecellrenderer">
+        <param name="background"><image>green</image></param>
+    </theme>
+    <theme name="treecelllightblue" ref="-treecellrenderer">
+        <param name="background"><image>lightblue</image></param>
+    </theme>
+    <theme name="treecellsalmon" ref="-treecellrenderer">
+        <param name="background"><image>salmon</image></param>
+    </theme>
     <theme name="table" ref="-defaults" allowWildcard="true">
     	<theme name="" ref="*"/>
         <param name="row.background"><image>none</image></param>
@@ -262,6 +288,7 @@
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
         <theme name="spanrenderer" ref="-defaults"/>
+        <theme name="coloredtextrenderer" ref="-defaults"/>
         <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button">
         </theme>
@@ -363,7 +390,7 @@
             		<param name="maxWidth"><int>300</int></param>
        				<param name="minHeight"><int>200</int></param>
         			<param name="maxHeight"><int>5000</int></param>
-        		</theme>				
+        		</theme>		
             </theme>
         </theme>
         <theme name="rotationmenu" ref="resizableframe">
@@ -373,13 +400,13 @@
         	<param name="maxHeight"><int>400</int></param>
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
-				<theme name="up" ref="button" />
-				<theme name="down" ref="button" />
-				<theme name="right" ref="button" />
-				<theme name="left" ref="button" />	
-				<theme name="center" ref="button" />
-				<theme name="zoomin" ref="button" />	
-				<theme name="zoomout" ref="button" />
+				<theme name="up" ref="button"/>
+				<theme name="down" ref="button"/>
+				<theme name="right" ref="button"/>
+				<theme name="left" ref="button"/>	
+				<theme name="center" ref="button"/>
+				<theme name="zoomin" ref="button"/>	
+				<theme name="zoomout" ref="button"/>
 				<theme name="explode" ref="button">
 					<param name="overlay"><image>bomb</image></param>
 				</theme>

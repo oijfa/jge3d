@@ -39,6 +39,8 @@ import entity.Entity;
 import entity.EntityList;
 import entity.QueueItem;
 import render.Renderer;
+import window.tree.ColoredTextRenderer;
+import window.tree.ColoredTextString;
 
 public class Controller extends Applet{
 	private static final long serialVersionUID = 4458487765324323938L;
@@ -410,7 +412,7 @@ public class Controller extends Applet{
 		if(show == true){
 			window.tree.Node item;
 			if( parent.getClass() == window.tree.Model.class ){
-				 item = ((window.tree.Model)parent).insert(name, "", color);
+				 item = ((window.tree.Model)parent).insert(new ColoredTextString(name, color), "", color);
 			}else{
 				item = ((window.tree.Node)parent).insert(name,value, color);
 			}
