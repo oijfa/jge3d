@@ -1,16 +1,21 @@
 package window.tree;
 
+import de.matthiasmann.twl.Color;
+
 public class ColoredTextString {
-	    private final String str;
-	    final String color;
+    private final String str;
+    final Color color;
 
-	    public ColoredTextString(String str, String colorTheme) {
-	        this.str = str;
-	        this.color = colorTheme;
-	    }
+    public ColoredTextString(String str, byte r, byte g, byte b) {
+        this.str = str;
+        this.color = new Color(r,g,b,(byte) 0xFFFF);
 
-	    @Override
-	    public String toString() {
-	        return str;
-	    }
+    }
+
+    @Override
+    public String toString() {
+        return str;
+    }
+
+	public Color getColor() {return this.color;}
 }

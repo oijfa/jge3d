@@ -39,7 +39,6 @@ import entity.Entity;
 import entity.EntityList;
 import entity.QueueItem;
 import render.Renderer;
-import window.tree.ColoredTextRenderer;
 import window.tree.ColoredTextString;
 
 public class Controller extends Applet{
@@ -336,7 +335,7 @@ public class Controller extends Applet{
 	private void createItem(Element ele, TreeTableNode parent, String configName, HashMap<String, Vector3f> defaultPositions) throws Exception {
 		String name;
 		String value;
-		String color;
+		ArrayList<Byte> color = null; 
 		String path;
 		boolean show;
 		Vector3f position;
@@ -347,12 +346,6 @@ public class Controller extends Applet{
 		
 		tagList = findChildrenByName(ele, "value");
 		value = tagList.get(0).getTextContent();
-		
-		tagList = findChildrenByName(ele, "color");
-		if(tagList.size() > 0)
-			color = tagList.get(0).getTextContent();
-		else
-			color = null;
 		
 		tagList = findChildrenByName(ele, "show");
 		if(tagList.size() == 0){
@@ -407,14 +400,23 @@ public class Controller extends Applet{
 			objectList.enqueue(ent, QueueItem.ADD);
 			
 			defaultPositions.put(name, position);
+			color = ent.getModel().getColor();
 		}
 		
 		if(show == true){
 			window.tree.Node item;
 			if( parent.getClass() == window.tree.Model.class ){
-				 item = ((window.tree.Model)parent).insert(new ColoredTextString(name, color), "", color);
+				if(color != null){
+					item = ((window.tree.Model)parent).insert(new ColoredTextString(name, color.get(0), color.get(1), color.get(2)), "");
+				}else{
+					item = ((window.tree.Model)parent).insert(name, "");
+				}
 			}else{
-				item = ((window.tree.Node)parent).insert(name,value, color);
+				if(color != null){
+					item = ((window.tree.Node)parent).insert(new ColoredTextString(name, color.get(0), color.get(1), color.get(2)),value);
+				}else{
+					item = ((window.tree.Node)parent).insert(name,value);
+				}
 			}
 			
 			tagList = findChildrenByName(ele, "item");

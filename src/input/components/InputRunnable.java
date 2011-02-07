@@ -17,8 +17,8 @@ public class InputRunnable extends Thread{
 	}
 	@Override
 	public void run() {
+		previousTime = System.nanoTime();
 		while(!shouldStop){
-			previousTime = System.nanoTime();
 			float inc = (System.nanoTime() - previousTime) * -increment;
 			//System.out.println(inc);
 			try {

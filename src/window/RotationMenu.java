@@ -31,7 +31,8 @@ public class RotationMenu extends ResizableFrame {
 	private Camera cam;
 	private EntityList objectList;
 
-	private static final float ZOOM_INC = 0.00000001f;
+	//private static final float ZOOM_INC = 0.00000001f;
+	private static final float ZOOM_INC = 0.0000001f;
 	private static final float LEFT_RIGHT_INC = 0.00000001f;
 	private static final float UP_DOWN_INC = 0.00000001f;
 	private HashMap<String, InputRunnable> buttonThreads;
@@ -97,6 +98,21 @@ public class RotationMenu extends ResizableFrame {
 				for(String key:objectList.getKeySet()) {
 					//Entity ent = objectList.getItem(key);
 					if(!key.equals(Camera.CAMERA_NAME)) {
+						
+						//Reset position of all other objects
+						for(String name: objectList.getKeySet()) {
+							//For everything but the camera do the following
+							if(!name.equals(Camera.CAMERA_NAME)) {
+								//Stop the movement
+								objectList.getItem(name).setDamping(1.0f,1.0f);
+								objectList.getItem(name).activate();
+								objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
+								
+								//Move the object back to its original position
+								objectList.getItem(name).setAngularIdentity();
+								objectList.getItem(name).setPosition(Config.getPosition(name));
+							}
+						}
 						/*
 						Random rand = new Random();
 						Vector3f force = new Vector3f(
@@ -134,12 +150,13 @@ public class RotationMenu extends ResizableFrame {
 				
 				if(!linearShow){
 					cam.focusOn(Config.getLineupFocus());
+					cam.setDistance(9.0f);
 					linearShow = true;
-					System.out.println(Config.getLineupFocus().getProperty("name"));
+					//System.out.println(Config.getLineupFocus().getProperty("name"));
 				}else{
 					cam.focusOn(Config.getFullAssemblyFocus());
 					linearShow = false;
-					System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
+					//System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
 				}
 			}
 		});

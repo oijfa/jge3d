@@ -23,7 +23,7 @@ public class Camera extends Entity implements ConfigListener {
 	private static final float maximum_declination = (float) (Math.PI/2.0f) - 0.01f;
 	private static final float minimum_declination = (float) ((float) -1.0f*((Math.PI/2.0f) - 0.01f));
 	private static final float minimum_distance = 0.000001f;
-	private static final float maximum_distance = 50.0f;
+	private static final float maximum_distance = 25f;
 	public static final String CAMERA_NAME = "camera";
 	
 	/*Class fields*/
@@ -117,7 +117,7 @@ public class Camera extends Entity implements ConfigListener {
 		}
 	}
 	
-	public void incrementDistance( Float change ){
+	public synchronized void incrementDistance( Float change ){
 		float temp = distance + change;
 		if( temp > maximum_distance)
 		{
@@ -127,9 +127,6 @@ public class Camera extends Entity implements ConfigListener {
 		}else{
 			distance = temp;
 		}
-	
-		//Not needed because renderer always calls it
-		//updatePosition();
 	}
 	
 	public float getDistance(){
@@ -145,6 +142,7 @@ public class Camera extends Entity implements ConfigListener {
 			declination = minimum_declination;
 		}
 		
+		System.out.println(distance);
 		//Not needed because renderer always calls it
 		//updatePosition();
 	}

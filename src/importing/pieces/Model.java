@@ -152,7 +152,7 @@ public class Model {
 		return new BoxShape(shape);
 	}
 	
-	public ArrayList<Float> getColor() {
+	public ArrayList<Byte> getColor() {
 		return meshes.get(0).getMaterial().getColor();
 	}
 }

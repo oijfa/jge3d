@@ -158,7 +158,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			
 			treeModel.removeAll();
 			for(Node n: nodes){
-				System.out.println("Config Changed, Node " + n.getData(0) + " being added");
+				//System.out.println("Config Changed, Node " + n.getData(0) + " being added");
 				n.changeParent(treeModel);
 			}
 		} catch (Exception e) {
