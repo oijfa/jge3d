@@ -402,7 +402,7 @@ public class Controller extends Applet{
 			defaultPositions.put(name, position);
 			color = ent.getModel().getColor();
 			
-			ent.setProperty("resetydist", 15);
+			ent.setProperty("resetydist", 4);
 		}
 		
 		if(show == true){
