@@ -55,8 +55,9 @@ public class TreeListener implements Runnable{
 			}
 		}
 		
+		Camera cam = ((Camera)objects.getItem(Camera.CAMERA_NAME));
 		//Focus to this ent
-		((Camera)objects.getItem(Camera.CAMERA_NAME)).focusOn(newFocus);
+		cam.focusOn(newFocus);
 		
 		//Move the ent out of the lineup
 		newFocus.applyImpulse(new Vector3f(0,1,0), newFocus.getPosition());
@@ -64,6 +65,9 @@ public class TreeListener implements Runnable{
 		newFocus.activate();
 		newFocus.setAngularFactor(0.0f, new Vector3f(1,1,0));
 		
-		((Camera)objects.getItem(Camera.CAMERA_NAME)).setDistance(2.0f);
+		
+		cam.setDeclination(0.0);
+		cam.setRotation(0.0);
+		cam.setDistance(2.0f);
 	}
 }
