@@ -113,6 +113,9 @@ public class RotationMenu extends ResizableFrame {
 								objectList.getItem(name).setPosition(Config.getPosition(name));
 							}
 						}
+						
+						cam.setDeclination(0.0);
+						cam.setRotation(0.0);
 						/*
 						Random rand = new Random();
 						Vector3f force = new Vector3f(
@@ -158,6 +161,9 @@ public class RotationMenu extends ResizableFrame {
 					linearShow = false;
 					//System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
 				}
+				
+				cam.setDeclination(0.0);
+				cam.setRotation(0.0);
 			}
 		});
 		
