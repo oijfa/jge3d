@@ -16,7 +16,9 @@ public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	FloatBuffer faceVNT;
-	IntBuffer faceVBOid;
+	IntBuffer faceVBOids;
+	int faceVBOindex;
+	static int vid;
 	
 	Vector3f normal;
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
@@ -111,15 +113,11 @@ public class Face {
 	//LWJGL wants floatbuffers so we just return them in the
 	//native format here
 	public void createFaceBufferVNTC() {
-		int VBOElementID;
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
+			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
 			for(int i=0;i<vertices.size();i++) {
-				VBOElementID = createVBOID();
-				
-				faceVNT = BufferUtils.createFloatBuffer(12);
-				faceVBOid = BufferUtils.createIntBuffer(vertices.size());
-				
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
 				faceVNT.put(vertices.get(i).z);
@@ -136,12 +134,13 @@ public class Face {
 				faceVNT.put(1.0f);
 				faceVNT.put(1.0f);
 				
+				faceVBOids.put(i);
 				//System.out.println("VBOElementID: " + String.valueOf(VBOElementID));
-				faceVBOid.put(VBOElementID);
-				
-			    bufferData(VBOElementID, faceVNT);
-			    bufferElementData(VBOElementID, faceVBOid);
 			}
+			
+			bufferData(createVBOID(), faceVNT);
+			faceVBOindex = createVBOID();
+		    bufferElementData(faceVBOindex, faceVBOids);
 			//faceVNT.flip();
 			//faceVBOid.flip();
 		} else {
@@ -183,7 +182,7 @@ public class Face {
 		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 		 
 		//Bind the index of the object
-		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVBOid.get(0) );
+		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVBOindex );
 		
 		//vertices
 		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
@@ -221,14 +220,15 @@ public class Face {
 			faceVBOid
 		);
 		*/
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, faceVBOid.get(0));
+
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, faceVBOindex);
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
-			faceVBOid.get(0), 
-			faceVBOid.get(vertices.size()-1), 
+			faceVBOids.get(0), 
+			faceVBOids.get(vertices.size()-1), 
 			vertices.size(),
 			GL11.GL_UNSIGNED_INT,
-			4
+			0
 		);
 		
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
