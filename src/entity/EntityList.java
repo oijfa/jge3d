@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import monitoring.Observer;
 import monitoring.Subject;
@@ -19,14 +20,14 @@ public class EntityList implements EntityObserver, Subject{
 	//private HashMap<String,TypedConstraint> constraints;
 
 	private ArrayList<Observer> observers;
-	private ArrayList<QueueItem> queue;
+	private ConcurrentLinkedQueue<QueueItem> queue;
 
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
 		observers = new ArrayList<Observer>();
-		queue = new ArrayList<QueueItem>();
+		queue = new ConcurrentLinkedQueue<QueueItem>();
 	}
 	
 	public void drawList(){ 
