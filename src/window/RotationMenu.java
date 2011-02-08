@@ -26,8 +26,8 @@ public class RotationMenu extends ResizableFrame {
 	private final Button center;
 	private final Button zoomIn;
 	private final Button zoomOut;
-	Button explode = new Button();
-	Button align = new Button();
+	private final Button reset;
+	private final Button align;
 	private Camera cam;
 	private EntityList objectList;
 
@@ -81,7 +81,9 @@ public class RotationMenu extends ResizableFrame {
 		zoomIn.setTheme("zoomin");
 		zoomOut = new Button("-");
 		zoomOut.setTheme("zoomout");
-		explode.setTheme("explode");
+		reset = new Button("Reset");
+		reset.setTheme("reset");
+		align = new Button();
 		align.setTheme("align");
 
 		center.addCallback(new Runnable() {
@@ -92,7 +94,7 @@ public class RotationMenu extends ResizableFrame {
 			}
 		});
 		
-		explode.addCallback(new Runnable() {
+		reset.addCallback(new Runnable() {
 			@Override
 			public void run() {
 				for(String key:objectList.getKeySet()) {
@@ -148,13 +150,13 @@ public class RotationMenu extends ResizableFrame {
 		
 		Group row1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(up).addGap().addWidget(zoomOut);
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
-		Group row3 = layout.createSequentialGroup().addWidget(explode).addGap().addWidget(down).addGap().addWidget(align);
+		Group row3 = layout.createSequentialGroup().addWidget(reset).addGap().addWidget(down).addGap().addWidget(align);
 		Group button_hgroup = layout.createParallelGroup()
 			.addGroup(row1)
 			.addGroup(row2)
 			.addGroup(row3);
 		
-		Group col1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(left).addGap().addWidget(explode);
+		Group col1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(left).addGap().addWidget(reset);
 		Group col2 = layout.createSequentialGroup().addWidget(up).addGap().addWidget(center).addGap().addWidget(down);
 		Group col3 = layout.createSequentialGroup().addWidget(zoomOut).addGap().addWidget(right).addGap().addWidget(align);
 		Group button_vgroup = layout.createParallelGroup()
@@ -215,5 +217,7 @@ public class RotationMenu extends ResizableFrame {
 	public synchronized void buttonPressed() {
 		Entity ent = ((Camera)objectList.getItem(Camera.CAMERA_NAME)).getFocus();
 		ent.setAngularFactor(0, new Vector3f(0,0,0));
+		ent.setDamping(1.0f,1.0f);
+		ent.activate();
 	}
 }

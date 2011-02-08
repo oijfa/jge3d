@@ -75,21 +75,12 @@
    	<images file="images/align.png" format="RGBA">
     	<area name="align" xywh="*"/>
    	</images>
-    <images file="images/colors.png">
-        <area name="orange" xywh="0,0,1,1"/>
-        <area name="blue" xywh="125,4,1,1"/>
-        <area name="red" xywh="146,4,1,1"/>
-        <area name="lightblue" xywh="224,5,1,1"/>
-        <area name="green" xywh="276,4,1,1"/>
-        <area name="salmon" xywh="346,5,1,1"/>
-    </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
         <fontParam if="disabled" color="gray"/>
         <fontParam if="textSelection" color="blue"/>
     </fontDef>
-
     <inputMapDef name="-defaultInputMap">
         <action name="selectAll">ctrl A</action>
         <action name="selectAll">cmd A</action>
@@ -260,24 +251,6 @@
         <param name="treeIndent"><int>13</int></param>
         <param name="treeButtonSize"><dimension>30,30</dimension></param>
     </theme>
-    <theme name="treecellblue" ref="-treecellrenderer">
-        <param name="background"><image>blue</image></param>
-    </theme>
-    <theme name="treecellorange" ref="-treecellrenderer">
-        <param name="background"><image>orange</image></param>
-    </theme>
-    <theme name="treecellred" ref="-treecellrenderer">
-        <param name="background"><image>red</image></param>
-    </theme>
-    <theme name="treecellgreen" ref="-treecellrenderer">
-        <param name="background"><image>green</image></param>
-    </theme>
-    <theme name="treecelllightblue" ref="-treecellrenderer">
-        <param name="background"><image>lightblue</image></param>
-    </theme>
-    <theme name="treecellsalmon" ref="-treecellrenderer">
-        <param name="background"><image>salmon</image></param>
-    </theme>
     <theme name="table" ref="-defaults" allowWildcard="true">
     	<theme name="" ref="*"/>
         <param name="row.background"><image>none</image></param>
@@ -407,9 +380,7 @@
 				<theme name="center" ref="button"/>
 				<theme name="zoomin" ref="button"/>	
 				<theme name="zoomout" ref="button"/>
-				<theme name="explode" ref="button">
-					<param name="overlay"><image>bomb</image></param>
-				</theme>
+				<theme name="reset" ref="button" />
 				<theme name="align" ref="button">
 					<param name="overlay"><image>align</image></param>
 				</theme>

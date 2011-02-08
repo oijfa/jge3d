@@ -91,7 +91,6 @@ public class Window extends DesktopArea {
 
 	public void draw() {
 		gui.update();
-		//input.run();
 	}
 
 	public void destroy() {

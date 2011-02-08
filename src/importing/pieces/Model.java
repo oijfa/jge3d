@@ -140,6 +140,7 @@ public class Model {
 			}
 		}
 		hasVBO=true;
+		System.out.println("Model VBO created");
 	}
 	
 	/*Export*/

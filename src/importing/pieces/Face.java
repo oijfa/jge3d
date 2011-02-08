@@ -136,7 +136,7 @@ public class Face {
 				faceVNT.put(1.0f);
 				faceVNT.put(1.0f);
 				
-				System.out.println("VBOElementID: " + String.valueOf(VBOElementID));
+				//System.out.println("VBOElementID: " + String.valueOf(VBOElementID));
 				faceVBOid.put(VBOElementID);
 				
 			    bufferData(VBOElementID, faceVNT);
@@ -202,6 +202,7 @@ public class Face {
 		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
 
 		//Draw the bound indices
+		/*
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			faceVBOid.get(0), 
@@ -210,6 +211,30 @@ public class Face {
 			GL11.GL_UNSIGNED_INT,
 			1
 		);
+		
+		OR
+		
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			faceVBOid.get(0), 
+			faceVBOid.get(vertices.size()-1),
+			faceVBOid
+		);
+		*/
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, faceVBOid.get(0));
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			faceVBOid.get(0), 
+			faceVBOid.get(vertices.size()-1), 
+			vertices.size(),
+			GL11.GL_UNSIGNED_INT,
+			4
+		);
+		
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 	}
 	
 	@SuppressWarnings("unused")
