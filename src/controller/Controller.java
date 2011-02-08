@@ -135,13 +135,7 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 		renderer = new Renderer(objectList, display_parent);
 		
-		//Make a camera	
-		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
-		Camera cam = new Camera(0.0, boxShape, false);
-		objectList.enqueuePhysics(cam, QueueItem.ADD);
 		
-		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		objectList.parsePhysicsQueue();
 		
 		physics_thread.start();
@@ -149,11 +143,22 @@ public class Controller extends Applet{
 
 		readConfigFile();
 		
+		createCamera();
+		
 		render_thread.interrupt();
-
-		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
+	public Camera createCamera(){
+		//Make a camera	
+		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
+
+		Camera cam = new Camera(0.0, boxShape, false, Config.getFullAssemblyFocus());
+		objectList.enqueuePhysics(cam, QueueItem.ADD);
+		
+		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
+		return cam;
+	}
+	
 	// Create the Physics Listening thread
 	Thread physics_thread = new Thread() {
 		public void run() {

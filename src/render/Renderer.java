@@ -136,10 +136,11 @@ public class Renderer {
         
         GL11.glEnable(GL11.GL_LIGHT1);
         
-        if(GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
+        if(GLContext.getCapabilities().GL_ARB_vertex_buffer_object){
         	supportsVBO=true;
-        else
+        }else{
         	supportsVBO=false;
+        }
 		isInitialized=true;
 	}
 
