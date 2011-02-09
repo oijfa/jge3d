@@ -36,17 +36,23 @@ public class Camera extends Entity implements ConfigListener {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Double d, CollisionShape c, boolean collide) {
+	public Camera(Double d, CollisionShape c, boolean collide, Entity e) {
 		super(d.floatValue(),c,collide);
-		cameraInit();
+		cameraInit(e);
 	}
-	public Camera(String _name,Double d, CollisionShape c, boolean collide) {
+	public Camera(String _name,Double d, CollisionShape c, boolean collide, Entity e) {
 		super(d.floatValue(),c,collide);
-		cameraInit();
+		cameraInit(e);
 
 	}
 
-	private void cameraInit() {
+	private void cameraInit(Entity defFocus) {
+		if(defFocus == null){
+			System.out.println("Can't initialize camera's default focus to null");
+			System.exit(0);
+		}
+		
+		default_focus = defFocus;
 		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
 		setPosition(new Vector3f(0,0,0));

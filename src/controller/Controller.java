@@ -58,6 +58,8 @@ public class Controller extends Applet{
 	
 	private Canvas display_parent;
 	
+	Object renderlock = new Object();
+	
 	public static void main(String[] args) throws Exception {
 		Applet app = new Controller();
 		app.init();
@@ -66,7 +68,6 @@ public class Controller extends Applet{
 	public void startApp() {
 		try {
 			startThreads();
-			loadLevel();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,24 +140,25 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 		renderer = new Renderer(objectList, display_parent);
 		
+		//InitGL
+		render_thread.start();
 		
+		readConfigFile();
+		createCamera();
+		
+		physics_thread.start();
+		render_thread.interrupt();
+	}
+	
+	private void createCamera(){
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 
-		Camera cam = new Camera(0.0, boxShape, false);
+		Camera cam = new Camera(0.0, boxShape, false, Config.getFullAssemblyFocus());
+		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		objectList.enqueue(cam, QueueItem.ADD);
 		
-		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		objectList.parseQueue();
-		
-		physics_thread.start();
-		render_thread.start();
-	
-		readConfigFile();
-		
-		render_thread.interrupt();
-		
-		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
 	}
 
 	// Create the Physics Listening thread
@@ -180,6 +182,7 @@ public class Controller extends Applet{
 			try {
 				this.join();
 			} catch (InterruptedException e) {}
+		
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;
@@ -193,20 +196,6 @@ public class Controller extends Applet{
 	
 	public static void quit() { isRunning = false;	}
 	
-	public void loadLevel() throws Exception{
-		//Make a camera	
-		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
-		Camera cam = new Camera(0.0, boxShape, false );
-		objectList.enqueue(cam, QueueItem.ADD);
-		
-		
-		//Load some stuff (I would only pick one of the following
-		//two methods if I were you)
-		//loadTestShapes(cam);
-		//pullModelFiles("resources/models/cathodes/minixgl");
-	}
-
 	@SuppressWarnings("unused")
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
