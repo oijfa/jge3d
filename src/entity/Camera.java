@@ -83,6 +83,12 @@ public class Camera extends Entity implements ConfigListener {
 	}
 	
 	public Entity getFocus() {
+		if(focus == null){
+			if(default_focus == null){
+				default_focus = Config.getFullAssemblyFocus();
+			}
+			focus = default_focus;
+		}
 		return focus;
 	}
 	
@@ -221,6 +227,10 @@ public class Camera extends Entity implements ConfigListener {
 	}
 	
 	public void changeDefaultFocus(Entity newFocus){
+		if(newFocus == null){
+			System.out.println("FAIL");
+			System.exit(0);
+		}
 		if(focus == default_focus){
 			focus = newFocus;
 		}

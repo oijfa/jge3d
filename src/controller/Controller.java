@@ -157,6 +157,7 @@ public class Controller extends Applet{
 		render_thread.interrupt();
 		
 		cam.changeDefaultFocus(Config.getFullAssemblyFocus());
+		Entity entitty = ((Camera)objectList.getItem(Camera.CAMERA_NAME)).getFocus();
 	}
 
 	// Create the Physics Listening thread
