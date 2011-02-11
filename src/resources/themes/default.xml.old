@@ -76,10 +76,10 @@
     	<area name="align" xywh="*"/>
    	</images>
     <images file="images/arrows.png">
-        <area name="up" xywh="0,0,26,32"/>
-        <area name="down" xywh="28,0,26,32"/>
-        <area name="right" xywh="57,0,31,32"/>
-        <area name="left" xywh="92,0,31,32"/>
+        <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
+        <area name="down" xywh="28,0,26,32" inset="10"/>
+        <area name="right" xywh="57,0,31,32" inset="10"/>
+        <area name="left" xywh="92,0,31,32" inset="10"/>
     </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
@@ -162,7 +162,7 @@
     </theme>
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
-        <param name="border"><border>5,5,5,5</border></param>
+        <param name="border"><border>5</border></param>
         <param name="maxWidth"><int>75</int></param>
         <param name="maxHeight"><int>75</int></param>
         <param name="minWidth"><int>75</int></param>
@@ -376,7 +376,7 @@
         		</theme>		
             </theme>
         </theme>
-        <theme name="rotationmenu" allowWildcard="true" ref="resizableframe">
+        <theme name="rotationmenu" ref="resizableframe">
 	       	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>
@@ -384,19 +384,16 @@
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
 				<theme name="up" ref="button">
-					<param name="border"><border>15,15,15,15</border></param>
 					<param name="overlay"><image>up</image></param>
+                    <param name="border"><border>10</border></param>
 				</theme>
 				<theme name="down" ref="button">
-					<param name="border"><border>15,15,15,15</border></param>
 					<param name="overlay"><image>down</image></param>
 				</theme>
 				<theme name="right" ref="button">
-					<param name="border"><border>15,15,15,15</border></param>
 					<param name="overlay"><image>right</image></param>
 				</theme>
 				<theme name="left" ref="button">
-					<param name="border"><border>15,15,15,15</border></param>
 					<param name="overlay"><image>left</image></param>
 				</theme>	
 				<theme name="center" ref="button"/>
