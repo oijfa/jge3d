@@ -31,8 +31,6 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-import controller.Config;
-
 public class Entity {
 	//Properties
 	private CollisionObject collision_object;
