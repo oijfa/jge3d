@@ -59,12 +59,20 @@ public class TreeListener implements Runnable{
 		//Focus to this ent
 		cam.focusOn(newFocus);
 		
-		//Move the ent out of the lineup
-		newFocus.applyImpulse(new Vector3f(0,1,0), newFocus.getPosition());
-		newFocus.setDamping(0.0f,0.0f);
+		
+		for(String name: objects.getKeySet()) {
+			//For everything but the camera do the following
+			if(!name.equals(Camera.CAMERA_NAME) && !name.equals(newFocus.getProperty("name"))) {
+				//Stop the movement
+				objects.getItem(name).applyImpulse(new Vector3f(0,1,0), newFocus.getPosition());
+				objects.getItem(name).setDamping(0.0f,0.0f);
+				
+			}
+		}
+		
+		newFocus.setDamping(1.0f,0.0f);
 		newFocus.activate();
 		newFocus.setAngularFactor(0.0f, new Vector3f(1,1,0));
-		
 		
 		cam.setDeclination(0.0);
 		cam.setRotation(0.0);

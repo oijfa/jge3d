@@ -213,16 +213,7 @@ public class Entity {
 	/* MISC */
 
 	public void draw(){
-		if (getProperty("resetydist") != null){
-			Integer dist = (Integer) getProperty("resetydist");
-			Vector3f position = getPosition();
-			Vector3f origin = Config.getPosition((String) getProperty("name"));
-			
-			if(Math.abs(position.y - origin.y) > dist){
-				setDamping(1.0f,0.0f);
-				activate();
-			}
-		}
+
 		//Retrieve the current motionstate to get the transform
 		//versus the world
 		if( shouldDraw && this.getObjectType()==ObjectType.rigidbody){
