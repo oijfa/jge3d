@@ -44,14 +44,16 @@ public class TreeListener implements Runnable{
 		for(String name: objects.getKeySet()) {
 			//For everything but the camera do the following
 			if(!name.equals(Camera.CAMERA_NAME)) {
-				//Stop the movement
-				objects.getItem(name).activate();
-				objects.getItem(name).setDamping(1.0f,1.0f);
-				objects.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
-				
-				//Move the object back to its original position
-				objects.getItem(name).setAngularIdentity();
-				objects.getItem(name).setPosition(Config.getPosition(name));
+				for( int i = 0; i < 100; i++){
+					//Stop the movement
+					objects.getItem(name).activate();
+					objects.getItem(name).setDamping(1.0f,1.0f);
+					objects.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
+					
+					//Move the object back to its original position
+					objects.getItem(name).setAngularIdentity();
+					objects.getItem(name).setPosition(Config.getPosition(name));
+				}
 			}
 		}
 		
