@@ -75,6 +75,12 @@
    	<images file="images/align.png" format="RGBA">
     	<area name="align" xywh="*"/>
    	</images>
+    <images file="images/arrows.png">
+        <area name="up" xywh="0,0,26,32"/>
+        <area name="down" xywh="28,0,26,32"/>
+        <area name="right" xywh="57,0,31,32"/>
+        <area name="left" xywh="92,0,31,32"/>
+    </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
@@ -156,7 +162,7 @@
     </theme>
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
-        <param name="border"><border>5,5,5,5</border></param>
+        <param name="border"><border>5</border></param>
         <param name="maxWidth"><int>75</int></param>
         <param name="maxHeight"><int>75</int></param>
         <param name="minWidth"><int>75</int></param>
@@ -377,10 +383,18 @@
         	<param name="maxHeight"><int>400</int></param>
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
-				<theme name="up" ref="button"/>
-				<theme name="down" ref="button"/>
-				<theme name="right" ref="button"/>
-				<theme name="left" ref="button"/>	
+				<theme name="up" ref="button">
+					<param name="overlay"><image>up</image></param>
+				</theme>
+				<theme name="down" ref="button">
+					<param name="overlay"><image>down</image></param>
+				</theme>
+				<theme name="right" ref="button">
+					<param name="overlay"><image>right</image></param>
+				</theme>
+				<theme name="left" ref="button">
+					<param name="overlay"><image>left</image></param>
+				</theme>	
 				<theme name="center" ref="button"/>
 				<theme name="zoomin" ref="button"/>	
 				<theme name="zoomout" ref="button"/>

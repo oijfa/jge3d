@@ -67,13 +67,13 @@ public class RotationMenu extends ResizableFrame {
 		setTitle("Camera Rotation");
 		
 		layout = new DialogLayout();
-		up= new Button("Up");
+		up= new Button();
 		up.setTheme("up");
-		down = new Button("Down");
+		down = new Button();
 		down.setTheme("down");
-		right = new Button("Right");
+		right = new Button();
 		right.setTheme("right");
-		left = new Button("Left");
+		left = new Button();
 		left.setTheme("left");
 		center = new Button("Center");
 		center.setTheme("center");
