@@ -4,20 +4,30 @@ package importing.pieces;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
 public class Model {
-	ArrayList<Mesh> meshes;
-	Vector3f max, min, center;
-	boolean hasVBO = false;
+	private ArrayList<Mesh> meshes;
+	private Vector3f max, min, center;
+	private boolean hasVBO = false;
+	private int modelVBOID;
+	private int modelVBOindexID;
+	private FloatBuffer vertex_buffer;
+	private IntBuffer index_buffer;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -68,11 +78,7 @@ public class Model {
 		//we fall-back to immediate mode
 		//System.out.println("VBO:" + hasVBO);
 		if(hasVBO) {
-			for(Mesh m: meshes){
-				for(Face f: m.getFaces()) {
-					f.draw_vbo();
-				}
-			}
+			draw_vbo();
 		} else {
 			for(Mesh m: meshes){
 				GL11.glPushMatrix();
@@ -131,18 +137,6 @@ public class Model {
 		center.scale(0.5f);
 	}
 	
-	public void createVBO() {
-		//if we support VBOs we need to precompute the thing now
-		//that we have normals and the model is fully loaded
-		for(Mesh m: meshes) {
-			for(Face f: m.getFaces()) {
-				f.createFaceBufferVNTC();
-			}
-		}
-		hasVBO=true;
-		System.out.println("Model VBO created");
-	}
-	
 	/*Export*/
 	public void saveXGL(String filename){
 		StringBuffer data = new StringBuffer();
@@ -187,8 +181,125 @@ public class Model {
 	public ArrayList<Byte> getColor() {
 		return meshes.get(0).getMaterial().getColor();
 	}
-	public void destroyVBO() {
-		// TODO: we need to deallocate the vbo here if the model gets destroyed
-		
+	
+	//*******************VBO METHODS**************************
+	public static int createVBOID(int i) {
+		IntBuffer buffer = BufferUtils.createIntBuffer(i);
+		ARBVertexBufferObject.glGenBuffersARB(buffer);
+		return buffer.get(0);
 	}
+	public static void bufferData(int id, FloatBuffer buffer) {
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
+		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+	}
+	public static void bufferElementData(int id, IntBuffer buffer) {
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
+		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+	}
+
+	public void createVBO() {
+		//if we support VBOs we need to precompute the thing now
+		//that we have normals and the model is fully loaded
+		int num_meshes=meshes.size();
+		int num_faces=0;
+		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
+		for(Mesh m: meshes) {
+			num_faces=m.getFaceCount();
+		}
+		vertex_buffer = ByteBuffer.allocateDirect(
+			num_meshes*num_faces*Face.VERTEX_ARRAY_LENGTH*num_vertices
+		).asFloatBuffer();
+		index_buffer = ByteBuffer.allocateDirect(
+			num_meshes*num_faces*num_vertices
+		).asIntBuffer();
+		for(Mesh m: meshes) {
+			for(Face f: m.getFaces()) {
+				vertex_buffer.put(f.createFaceBufferVNTC());
+				index_buffer.put(f.createIndexBufferVNTC());
+			}
+		}
+		vertex_buffer.flip();
+		index_buffer.flip();
+		modelVBOID = createVBOID(1);
+		bufferData(modelVBOID, vertex_buffer);
+		modelVBOindexID = createVBOID(1);
+	    bufferElementData(modelVBOindexID, index_buffer);
+		hasVBO=true;
+		System.out.println("Model VBO created");
+		vertex_buffer.clear();
+		index_buffer.clear();
+	}
+	public void draw_vbo() {
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+		 
+		//Bind the index of the object
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB,
+			modelVBOID
+		);
+		
+		//vertices
+		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		 
+		// normals
+		offset = 3 * 4; // 3 components is the initial offset from 0, then convert to bytes
+		GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		
+		// texture coordinates
+		offset = (3 + 3) * 4;
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);				
+		
+		//colors
+		offset = (3 + 3 + 2) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
+		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		//Draw the bound indices
+		/*
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			index_buffer.get(0), 
+			index_buffer.get(index_buffer.capacity()-1), 
+			index_buffer.capacity(),
+			GL11.GL_UNSIGNED_INT,
+			0
+		);
+		
+		OR
+		
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			index_buffer.get(0), 
+			index_buffer.get(index_buffer.capacity()-1),
+			index_buffer
+		);
+		
+		*/
+
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
+			modelVBOindexID
+		);
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			index_buffer.get(0), 
+			index_buffer.get(index_buffer.capacity()-1), 
+			index_buffer.capacity(),
+			GL11.GL_UNSIGNED_INT,
+			0
+		);
+		
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+	}
+	public void destroyVBO() {
+		ARBVertexBufferObject.glDeleteBuffersARB(modelVBOID);	
+	}
+	
+	//*****************END VBO METHODS***********************
 }

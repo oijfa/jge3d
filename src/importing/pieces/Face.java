@@ -8,21 +8,21 @@ import java.util.Arrays;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 	FloatBuffer faceVNT;
 	IntBuffer faceVBOids;
-	int faceVBOindex;
-	static int vid;
+
+	private static int pointIndex=0;
 	
 	Vector3f normal;
+	
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
 	public static final int VERTEX_STRIDE=48;
+	public static final int VERTEX_ARRAY_LENGTH=12;
 	
 	public Face(){ 
 		vertices = new ArrayList<Vector3f>();
@@ -110,43 +110,6 @@ public class Face {
 		return vertexlist;
 	}
 	
-	//LWJGL wants floatbuffers so we just return them in the
-	//native format here
-	public void createFaceBufferVNTC() {
-		//Make sure that the face is at least a triangle
-		if(vertices.size() >= 3) {
-			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
-			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
-			for(int i=0;i<vertices.size();i++) {
-				faceVNT.put(vertices.get(i).x);
-				faceVNT.put(vertices.get(i).y);
-				faceVNT.put(vertices.get(i).z);
-				
-				faceVNT.put(vertexNormals.get(i).x);
-				faceVNT.put(vertexNormals.get(i).y);
-				faceVNT.put(vertexNormals.get(i).z);
-				
-				faceVNT.put(0.0f);
-				faceVNT.put(1.0f);
-				
-				faceVNT.put(1.0f);
-				faceVNT.put(1.0f);
-				faceVNT.put(1.0f);
-				faceVNT.put(1.0f);
-				
-				faceVBOids.put(i);
-				//System.out.println("VBOElementID: " + String.valueOf(VBOElementID));
-			}
-			
-			bufferData(createVBOID(), faceVNT);
-			faceVBOindex = createVBOID();
-		    bufferElementData(faceVBOindex, faceVBOids);
-			//faceVNT.flip();
-			//faceVBOid.flip();
-		} else {
-			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
-		}
-	}
 	public FloatBuffer getVertBuffer(int i) {
 		//Create a primitive float array to wrap in the float buffer
 		float[] float_array = new float[3];
@@ -174,69 +137,7 @@ public class Face {
 			GL11.glNormal3f(n.x, n.y, n.z);
 		}
 	}
-	
-	public void draw_vbo() {
-		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-		 
-		//Bind the index of the object
-		ARBVertexBufferObject.glBindBufferARB( ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, faceVBOindex );
 		
-		//vertices
-		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
-		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-		 
-		// normals
-		offset = 3 * 4; // 3 components is the initial offset from 0, then convert to bytes
-		GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-		
-		// texture coordinates
-		offset = (3 + 3 + 2) * 4;
-		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);				
-		
-		//colors
-		offset = (3 + 3) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
-		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
-
-		//Draw the bound indices
-		/*
-		GL12.glDrawRangeElements(
-			GL11.GL_TRIANGLES, 
-			faceVBOid.get(0), 
-			faceVBOid.get(vertices.size()-1), 
-			vertices.size(),
-			GL11.GL_UNSIGNED_INT,
-			1
-		);
-		
-		OR
-		
-		GL12.glDrawRangeElements(
-			GL11.GL_TRIANGLES, 
-			faceVBOid.get(0), 
-			faceVBOid.get(vertices.size()-1),
-			faceVBOid
-		);
-		*/
-
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, faceVBOindex);
-		GL12.glDrawRangeElements(
-			GL11.GL_TRIANGLES, 
-			faceVBOids.get(0), 
-			faceVBOids.get(vertices.size()-1), 
-			vertices.size(),
-			GL11.GL_UNSIGNED_INT,
-			0
-		);
-		
-		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
-	}
-	
 	@SuppressWarnings("unused")
 	private Vector3f calculateNormal(Vector3f p1, Vector3f p2, Vector3f p3){
 		int x = 0;
@@ -297,19 +198,48 @@ public class Face {
 		data.append("</F>\n");
 		return data;
 	}
-
-	public static int createVBOID() {
-		IntBuffer buffer = BufferUtils.createIntBuffer(1);
-		ARBVertexBufferObject.glGenBuffersARB(buffer);
-		return buffer.get(0);
-	}
 	
-	public static void bufferData(int id, FloatBuffer buffer) {
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
-		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+	//*************VBO methods************************
+	public FloatBuffer createFaceBufferVNTC() {
+		//Make sure that the face is at least a triangle
+		if(vertices.size() >= 3) {
+			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+			for(int i=0;i<vertices.size();i++) {
+				faceVNT.put(vertices.get(i).x);
+				faceVNT.put(vertices.get(i).y);
+				faceVNT.put(vertices.get(i).z);
+				
+				faceVNT.put(vertexNormals.get(i).x);
+				faceVNT.put(vertexNormals.get(i).y);
+				faceVNT.put(vertexNormals.get(i).z);
+				
+				faceVNT.put(0.0f);
+				faceVNT.put(1.0f);
+				
+				faceVNT.put(1.0f);
+				faceVNT.put(1.0f);
+				faceVNT.put(1.0f);
+				faceVNT.put(0.0f);
+			}
+		} else {
+			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
+			return null;
+		}
+		return faceVNT;
 	}
-	public static void bufferElementData(int id, IntBuffer buffer) {
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
-		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+	public IntBuffer createIndexBufferVNTC() {
+		//Make sure that the face is at least a triangle
+		if(vertices.size() >= 3) {
+			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
+			for(int i=0;i<vertices.size();i++) {
+				faceVBOids.put(pointIndex);
+				pointIndex++;
+			}
+		} else {
+			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
+			return null;
+		}
+		return faceVBOids;
 	}
+	//*************End VBO methods************************
 }
