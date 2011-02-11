@@ -13,8 +13,6 @@ import org.lwjgl.opengl.GL11;
 public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
-	FloatBuffer faceVNT;
-	IntBuffer faceVBOids;
 
 	private static int pointIndex=0;
 	
@@ -202,8 +200,9 @@ public class Face {
 	//*************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC() {
 		//Make sure that the face is at least a triangle
+		FloatBuffer faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
 		if(vertices.size() >= 3) {
-			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+			
 			for(int i=0;i<vertices.size();i++) {
 				faceVNT.put(vertices.get(i).x);
 				faceVNT.put(vertices.get(i).y);
@@ -229,8 +228,9 @@ public class Face {
 	}
 	public IntBuffer createIndexBufferVNTC() {
 		//Make sure that the face is at least a triangle
+		IntBuffer faceVBOids = BufferUtils.createIntBuffer(vertices.size());
 		if(vertices.size() >= 3) {
-			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
+			
 			for(int i=0;i<vertices.size();i++) {
 				faceVBOids.put(pointIndex);
 				pointIndex++;

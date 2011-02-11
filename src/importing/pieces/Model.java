@@ -214,8 +214,9 @@ public class Model {
 		).asIntBuffer();
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
-				vertex_buffer.put(f.createFaceBufferVNTC());
+				//vertex_buffer.put(f.createFaceBufferVNTC());
 				index_buffer.put(f.createIndexBufferVNTC());
+				System.out.println(":"+index_buffer.get(0));
 			}
 		}
 		vertex_buffer.flip();
@@ -283,6 +284,7 @@ public class Model {
 			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
 			modelVBOindexID
 		);
+		//System.out.println(index_buffer.get(0)+" "+index_buffer.get(index_buffer.capacity()-1));
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			index_buffer.get(0), 
