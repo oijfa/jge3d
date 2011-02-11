@@ -45,8 +45,8 @@ public class TreeListener implements Runnable{
 			//For everything but the camera do the following
 			if(!name.equals(Camera.CAMERA_NAME)) {
 				//Stop the movement
-				objects.getItem(name).setDamping(1.0f,1.0f);
 				objects.getItem(name).activate();
+				objects.getItem(name).setDamping(1.0f,1.0f);
 				objects.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
 				
 				//Move the object back to its original position
@@ -59,12 +59,22 @@ public class TreeListener implements Runnable{
 		//Focus to this ent
 		cam.focusOn(newFocus);
 		
-		//Move the ent out of the lineup
-		newFocus.applyImpulse(new Vector3f(0,1,0), newFocus.getPosition());
-		newFocus.setDamping(0.0f,0.0f);
+		try {
+			wait(10);
+		} catch (InterruptedException e) {}
+		
+		for(String name: objects.getKeySet()) {
+			//For everything but the camera do the following
+			if(!name.equals(Camera.CAMERA_NAME) && !name.equals(newFocus.getProperty("name"))) {
+				//Stop the movement.
+				objects.getItem(name).setDamping(0.0f,0.0f);
+				objects.getItem(name).applyImpulse(new Vector3f(0,0,-1), newFocus.getPosition());
+			}
+		}
+		
+		newFocus.setDamping(1.0f,0.0f);
 		newFocus.activate();
 		newFocus.setAngularFactor(0.0f, new Vector3f(1,1,0));
-		
 		
 		cam.setDeclination(0.0);
 		cam.setRotation(0.0);
