@@ -267,7 +267,9 @@
         <theme name="spanrenderer" ref="-defaults"/>
         <theme name="coloredtextrenderer" ref="-defaults"/>
         <theme name="treeButton" ref="button"/>
-        <theme name="columnHeader" ref="button"/>
+        <theme name="columnHeader" ref="button">
+        	<param name="text"><string>20</string></param>
+        </theme>
         <param name="columnHeaderWidth"><int>300</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>1</int></param>
