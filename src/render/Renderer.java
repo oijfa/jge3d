@@ -134,6 +134,8 @@ public class Renderer {
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION,(FloatBuffer)temp.asFloatBuffer().put(lightPosition).flip());
         
         GL11.glEnable(GL11.GL_LIGHT1);
+        
+        //GL11.glEnable (GL11.GL_LINE_SMOOTH);
 	}
 	
 	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}
