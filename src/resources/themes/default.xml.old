@@ -77,9 +77,15 @@
    	</images>
     <images file="images/arrows.png">
         <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
-        <area name="down" xywh="28,0,26,32" inset="10"/>
-        <area name="right" xywh="57,0,31,32" inset="10"/>
-        <area name="left" xywh="92,0,31,32" inset="10"/>
+        <area name="down" xywh="28,0,26,32" inset="10" center="true"/>
+        <area name="right" xywh="57,0,31,32" inset="10" center="true"/>
+        <area name="left" xywh="92,0,31,32" inset="10" center="true"/>
+    </images>
+    <images file="images/symbols.png">
+        <area name="zoomout" xywh="6,12,28,7"/>
+        <area name="zoomin" xywh="46,1,28,29"/>
+        <area name="center" xywh="85,1,29,30"/>
+        <area name="explode" xywh="118,0,31,31"/>
     </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>

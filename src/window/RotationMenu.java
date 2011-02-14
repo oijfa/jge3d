@@ -75,11 +75,11 @@ public class RotationMenu extends ResizableFrame {
 		right.setTheme("right");
 		left = new Button();
 		left.setTheme("left");
-		center = new Button("Center");
+		center = new Button();
 		center.setTheme("center");
-		zoomIn = new Button("+");
+		zoomIn = new Button();
 		zoomIn.setTheme("zoomin");
-		zoomOut = new Button("-");
+		zoomOut = new Button();
 		zoomOut.setTheme("zoomout");
 		explode.setTheme("explode");
 		align.setTheme("align");

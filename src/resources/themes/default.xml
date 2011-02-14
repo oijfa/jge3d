@@ -81,6 +81,12 @@
         <area name="right" xywh="57,0,31,32" inset="10" center="true"/>
         <area name="left" xywh="92,0,31,32" inset="10" center="true"/>
     </images>
+    <images file="images/symbols.png">
+        <area name="zoomout" xywh="6,12,28,7" center="true"/>
+        <area name="zoomin" xywh="46,1,28,29" center="true"/>
+        <area name="center" xywh="85,1,29,30" center="true"/>
+        <area name="explode" xywh="118,0,31,31" center="true"/>
+    </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
@@ -396,11 +402,17 @@
 				<theme name="left" ref="button">
 					<param name="overlay"><image>left</image></param>
 				</theme>	
-				<theme name="center" ref="button"/>
-				<theme name="zoomin" ref="button"/>	
-				<theme name="zoomout" ref="button"/>
+				<theme name="center" ref="button">
+					<param name="overlay"><image>center</image></param>
+				</theme>
+				<theme name="zoomin" ref="button">
+					<param name="overlay"><image>zoomin</image></param>
+				</theme>
+				<theme name="zoomout" ref="button">
+					<param name="overlay"><image>zoomout</image></param>
+				</theme>
 				<theme name="explode" ref="button">
-					<param name="overlay"><image>bomb</image></param>
+					<param name="overlay"><image>explode</image></param>
 				</theme>
 				<theme name="align" ref="button">
 					<param name="overlay"><image>align</image></param>
