@@ -4,7 +4,6 @@ package importing.pieces;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -204,13 +203,13 @@ public class Model {
 		int num_faces=0;
 		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
 		for(Mesh m: meshes) {
-			num_faces=m.getFaceCount();
+			num_faces+=m.getFaceCount();
 		}
 		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_meshes*num_faces*Face.VERTEX_ARRAY_LENGTH*num_vertices
+			num_meshes*num_faces*Face.VERTEX_STRIDE*num_vertices
 		);
 		index_buffer = BufferUtils.createIntBuffer(
-			num_meshes*num_faces*num_vertices
+			num_meshes*num_faces*num_vertices*4
 		);
 		
 		vertex_buffer.clear();
@@ -221,17 +220,16 @@ public class Model {
 				index_buffer.put(f.createIndexBufferVNTC());
 			}
 		}
-		//vertex_buffer.flip();
-		//index_buffer.flip();
-
+		
+		vertex_buffer.flip();
+		index_buffer.flip();
+		
 		modelVBOID = createVBOID(1);
 		bufferData(modelVBOID, vertex_buffer);
 		modelVBOindexID = createVBOID(1);
 	    bufferElementData(modelVBOindexID, index_buffer);
 		hasVBO=true;
 		System.out.println("Model VBO created");
-		vertex_buffer.clear();
-		index_buffer.clear();
 	}
 	public void draw_vbo() {
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
@@ -288,11 +286,18 @@ public class Model {
 			modelVBOindexID
 		);
 		//System.out.println(index_buffer.get(0)+" "+index_buffer.get(index_buffer.capacity()-1));
+		Integer first = index_buffer.get(0);
+		Integer last = index_buffer.limit();
+		
+		/*while(index_buffer.hasRemaining()){
+			last = index_buffer.get();
+		}*/
+		System.out.println(first+":"+last);
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
-			index_buffer.get(0), 
-			index_buffer.get(index_buffer.capacity()-1), 
-			index_buffer.capacity(),
+			first, 
+			last, 
+			last-first,
 			GL11.GL_UNSIGNED_INT,
 			0
 		);

@@ -20,7 +20,6 @@ public class Face {
 	
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
 	public static final int VERTEX_STRIDE=48;
-	public static final int VERTEX_ARRAY_LENGTH=12;
 	
 	public Face(){ 
 		vertices = new ArrayList<Vector3f>();
