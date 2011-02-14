@@ -206,21 +206,24 @@ public class Model {
 		for(Mesh m: meshes) {
 			num_faces=m.getFaceCount();
 		}
-		vertex_buffer = ByteBuffer.allocateDirect(
+		vertex_buffer = BufferUtils.createFloatBuffer(
 			num_meshes*num_faces*Face.VERTEX_ARRAY_LENGTH*num_vertices
-		).asFloatBuffer();
-		index_buffer = ByteBuffer.allocateDirect(
+		);
+		index_buffer = BufferUtils.createIntBuffer(
 			num_meshes*num_faces*num_vertices
-		).asIntBuffer();
+		);
+		
+		vertex_buffer.clear();
+		index_buffer.clear();
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
-				//vertex_buffer.put(f.createFaceBufferVNTC());
+				vertex_buffer.put(f.createFaceBufferVNTC());
 				index_buffer.put(f.createIndexBufferVNTC());
-				System.out.println(":"+index_buffer.get(0));
 			}
 		}
-		vertex_buffer.flip();
-		index_buffer.flip();
+		//vertex_buffer.flip();
+		//index_buffer.flip();
+
 		modelVBOID = createVBOID(1);
 		bufferData(modelVBOID, vertex_buffer);
 		modelVBOindexID = createVBOID(1);

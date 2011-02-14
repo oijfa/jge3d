@@ -224,6 +224,7 @@ public class Face {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;
 		}
+		faceVNT.flip();
 		return faceVNT;
 	}
 	public IntBuffer createIndexBufferVNTC() {
@@ -239,6 +240,7 @@ public class Face {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;
 		}
+		faceVBOids.flip();
 		return faceVBOids;
 	}
 	//*************End VBO methods************************
