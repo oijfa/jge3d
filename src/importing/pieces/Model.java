@@ -67,9 +67,9 @@ public class Model {
 	public void addMesh(Mesh m){meshes.add(m);}
 	
 	/*Getters*/
-	public Mesh getMesh(int i){ return meshes.get(i);}
-	
-	public int getMeshCount() { return meshes.size();}
+	public Mesh getMesh(int i){ return meshes.get(i); }
+	public Vector3f getCenter(){ return center; }
+	public int getMeshCount() { return meshes.size(); }
 	
 	public void draw(){
 		//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
@@ -316,6 +316,5 @@ public class Model {
 	public void destroyVBO() {
 		ARBVertexBufferObject.glDeleteBuffersARB(modelVBOID);	
 	}
-	
 	//*****************END VBO METHODS***********************
 }

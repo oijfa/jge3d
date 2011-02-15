@@ -297,7 +297,21 @@ public class Entity {
 		collision_object.activate();
 	}
 	public void setCollisionShape(CollisionShape createCollisionShape) {
-		collision_object.setCollisionShape(createCollisionShape);		
+		//Sets the new collision shape
+		collision_object.setCollisionShape(createCollisionShape);
+
+		//This is to correct for the fact that the center of mass
+		//is not the same as the origin of the model
+		//we have to do this here because the offset is calculated
+		//by the model which doesn't get associated until now
+		//TODO: This has not been tested at all
+		//		Someone should see if this actually corrects for the
+		//		offset problem
+		Transform offset = new Transform();
+		offset.origin.set(model.getCenter());
+		Transform position = new Transform();
+		position.origin.set(this.getPosition());
+		this.setMotionState(new DefaultMotionState(position,offset));
 	}
 	
 	public void setAngularFactor(float factor,Vector3f velocity){
