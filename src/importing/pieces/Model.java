@@ -21,7 +21,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 
 public class Model {
 	private ArrayList<Mesh> meshes;
-	private Vector3f max, min, center;
+	private volatile Vector3f max, min, center;
 	private boolean hasVBO = false;
 	private int modelVBOID;
 	private int modelVBOindexID;
@@ -54,7 +54,7 @@ public class Model {
 			this.meshes.add(new Mesh(m));
 		}
 		init();
-		verify();
+		//verify();
 	}
 	
 	public void init() {
@@ -76,7 +76,7 @@ public class Model {
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
 		//System.out.println("VBO:" + hasVBO);
-		if(true) {
+		if(hasVBO) {
 			draw_vbo();
 		} else {
 			for(Mesh m: meshes){
@@ -134,6 +134,9 @@ public class Model {
 		//find the center of the model using our min/max values
 		center.add(max,min);
 		center.scale(0.5f);
+		
+		System.out.println("MAX: " + String.valueOf(max));
+		System.out.println("MIN: " + String.valueOf(min));
 	}
 	
 	/*Export*/
@@ -294,7 +297,7 @@ public class Model {
 		//The limit is the last readable INDEX....
 		Integer last = index_buffer.get(index_buffer.limit()-1);
 
-		System.out.println(first+":"+last);
+		//System.out.println(first+":"+last);
 		index_buffer.rewind();
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
