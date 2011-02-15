@@ -1,0 +1,12 @@
+<config>
+	<name>Mini</name>
+	<fullassembly>Box</fullassembly>
+	<lineup>Box</lineup>
+	<item>
+		<name>Box</name>
+		<value></value>
+		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
+		<position>0,0,0</position>
+		<color>lightorange</color>
+	</item>
+</config>

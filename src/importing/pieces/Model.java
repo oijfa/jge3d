@@ -76,7 +76,7 @@ public class Model {
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
 		//System.out.println("VBO:" + hasVBO);
-		if(hasVBO) {
+		if(true) {
 			draw_vbo();
 		} else {
 			for(Mesh m: meshes){
@@ -190,10 +190,12 @@ public class Model {
 	public static void bufferData(int id, FloatBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		buffer.rewind();
 	}
 	public static void bufferElementData(int id, IntBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		buffer.rewind();
 	}
 
 	public void createVBO() {
@@ -220,7 +222,7 @@ public class Model {
 				index_buffer.put(f.createIndexBufferVNTC());
 			}
 		}
-		
+		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
 		vertex_buffer.flip();
 		index_buffer.flip();
 		
@@ -286,13 +288,14 @@ public class Model {
 			modelVBOindexID
 		);
 		//System.out.println(index_buffer.get(0)+" "+index_buffer.get(index_buffer.capacity()-1));
+		index_buffer.rewind();
 		Integer first = index_buffer.get(0);
-		Integer last = index_buffer.limit();
 		
-		/*while(index_buffer.hasRemaining()){
-			last = index_buffer.get();
-		}*/
+		//The limit is the last readable INDEX....
+		Integer last = index_buffer.get(index_buffer.limit()-1);
+
 		System.out.println(first+":"+last);
+		index_buffer.rewind();
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			first, 
