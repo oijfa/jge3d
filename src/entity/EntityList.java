@@ -22,7 +22,6 @@ public class EntityList implements EntityObserver, Subject{
 	private ArrayList<Observer> observers;
 	private ConcurrentLinkedQueue<QueueItem> physicsQueue;
 	private ConcurrentLinkedQueue<QueueItem> renderQueue;
-
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();

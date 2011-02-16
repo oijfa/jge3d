@@ -56,6 +56,8 @@ public class Controller extends Applet{
 	
 	private Canvas display_parent;
 	
+	Object renderlock = new Object();
+	
 	public static void main(String[] args) throws Exception {
 		Applet app = new Controller();
 		app.init();
@@ -135,7 +137,12 @@ public class Controller extends Applet{
 		objectList = new EntityList(physics);
 		renderer = new Renderer(objectList, display_parent);
 		
+		//InitGL
+		render_thread.start();
 		
+		readConfigFile();
+		createCamera();
+
 		objectList.parsePhysicsQueue();
 		
 		physics_thread.start();
@@ -206,6 +213,7 @@ public class Controller extends Applet{
 		loadTestShapes(cam);
 		pullModelFiles("resources/models/cathodes/minixgl");
 	}
+
 	private void loadTestShapes(Camera cam) {
 		physics.setGravity(new Vector3f(0,-10,0));
 		
@@ -412,6 +420,8 @@ public class Controller extends Applet{
 			
 			defaultPositions.put(name, position);
 			color = ent.getModel().getColor();
+			
+			ent.setProperty("resetydist", 4);
 		}
 		
 		if(show == true){

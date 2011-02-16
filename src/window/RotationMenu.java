@@ -67,19 +67,19 @@ public class RotationMenu extends ResizableFrame {
 		setTitle("Camera Rotation");
 		
 		layout = new DialogLayout();
-		up= new Button("Up");
+		up= new Button();
 		up.setTheme("up");
-		down = new Button("Down");
+		down = new Button();
 		down.setTheme("down");
-		right = new Button("Right");
+		right = new Button();
 		right.setTheme("right");
-		left = new Button("Left");
+		left = new Button();
 		left.setTheme("left");
-		center = new Button("Center");
+		center = new Button();
 		center.setTheme("center");
-		zoomIn = new Button("+");
+		zoomIn = new Button();
 		zoomIn.setTheme("zoomin");
-		zoomOut = new Button("-");
+		zoomOut = new Button();
 		zoomOut.setTheme("zoomout");
 		reset = new Button("Reset");
 		reset.setTheme("reset");
@@ -145,6 +145,9 @@ public class RotationMenu extends ResizableFrame {
 					linearShow = false;
 					//System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
 				}
+				
+				cam.setDeclination(0.0);
+				cam.setRotation(0.0);
 			}
 		});
 		

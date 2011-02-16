@@ -211,6 +211,7 @@ public class Entity {
 	/* MISC */
 
 	public void draw(){
+
 		//Retrieve the current motionstate to get the transform
 		//versus the world
 		if( shouldDraw && this.getObjectType()==ObjectType.rigidbody){
