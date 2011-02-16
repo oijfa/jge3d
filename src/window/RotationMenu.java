@@ -27,7 +27,7 @@ public class RotationMenu extends ResizableFrame {
 	private final Button zoomIn;
 	private final Button zoomOut;
 	private final Button reset;
-	private final Button align;
+	private final Button explode;
 	private Camera cam;
 	private EntityList objectList;
 
@@ -62,8 +62,7 @@ public class RotationMenu extends ResizableFrame {
 		this.objectList = objectList;
 	}
 	
-	public RotationMenu() throws SecurityException, NoSuchMethodException{
-		
+	public RotationMenu() throws SecurityException, NoSuchMethodException{	
 		setTitle("Camera Rotation");
 		
 		layout = new DialogLayout();
@@ -83,8 +82,8 @@ public class RotationMenu extends ResizableFrame {
 		zoomOut.setTheme("zoomout");
 		reset = new Button("Reset");
 		reset.setTheme("reset");
-		align = new Button();
-		align.setTheme("align");
+		explode = new Button();
+		explode.setTheme("explode");
 
 		center.addCallback(new Runnable() {
 			@Override
@@ -113,12 +112,27 @@ public class RotationMenu extends ResizableFrame {
 								objectList.getItem(name).setPosition(Config.getPosition(name));
 							}
 						}
+						
+						cam.setDeclination(0.0);
+						cam.setRotation(0.0);
+						/*
+						Random rand = new Random();
+						Vector3f force = new Vector3f(
+							rand.nextFloat()*10,
+							rand.nextFloat()*10,
+							rand.nextFloat()*10
+						);
+						ent.applyImpulse(force, ent.getPosition());
+						ent.activate();
+						*/
+						
+						//ent.setPosition(Config.getByName(ent.getProperty("name")).getPosition());
 					}
 				}
 			}
 		});
 		
-		align.addCallback(new Runnable() {
+		explode.addCallback(new Runnable() {
 			@Override
 			public void run() {
 				for(String name: objectList.getKeySet()) {
@@ -153,7 +167,7 @@ public class RotationMenu extends ResizableFrame {
 		
 		Group row1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(up).addGap().addWidget(zoomOut);
 		Group row2 = layout.createSequentialGroup().addWidget(left).addGap().addWidget(center).addGap().addWidget(right);
-		Group row3 = layout.createSequentialGroup().addWidget(reset).addGap().addWidget(down).addGap().addWidget(align);
+		Group row3 = layout.createSequentialGroup().addWidget(reset).addGap().addWidget(down).addGap().addWidget(explode);
 		Group button_hgroup = layout.createParallelGroup()
 			.addGroup(row1)
 			.addGroup(row2)
@@ -161,7 +175,7 @@ public class RotationMenu extends ResizableFrame {
 		
 		Group col1 = layout.createSequentialGroup().addWidget(zoomIn).addGap().addWidget(left).addGap().addWidget(reset);
 		Group col2 = layout.createSequentialGroup().addWidget(up).addGap().addWidget(center).addGap().addWidget(down);
-		Group col3 = layout.createSequentialGroup().addWidget(zoomOut).addGap().addWidget(right).addGap().addWidget(align);
+		Group col3 = layout.createSequentialGroup().addWidget(zoomOut).addGap().addWidget(right).addGap().addWidget(explode);
 		Group button_vgroup = layout.createParallelGroup()
 			.addGroup(col1)
 			.addGroup(col2)

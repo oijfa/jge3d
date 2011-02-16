@@ -169,7 +169,11 @@
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <param name="border"><border>5,5,5,5</border></param>
+=======
+        <param name="border"><border>5</border></param>
+>>>>>>> master
 =======
         <param name="border"><border>5</border></param>
 >>>>>>> master
@@ -388,7 +392,11 @@
         </theme>
         <theme name="rotationmenu" ref="resizableframe">
 <<<<<<< HEAD
+<<<<<<< HEAD
         	<param name="minWidth"><int>100</int></param>
+=======
+	       	<param name="minWidth"><int>100</int></param>
+>>>>>>> master
 =======
 	       	<param name="minWidth"><int>100</int></param>
 >>>>>>> master

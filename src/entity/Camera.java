@@ -239,6 +239,7 @@ public class Camera extends Entity implements ConfigListener {
 	@Override
 	public void configChanged() {
 		Entity newFocus = Config.getFullAssemblyFocus();
+
 		if(focus == default_focus){
 			focus = newFocus;
 		}
