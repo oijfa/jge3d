@@ -150,7 +150,7 @@ public class Controller extends Applet{
 	private void createCamera(){
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
-
+		
 		Camera cam = new Camera(0.0, boxShape, false, Config.getFullAssemblyFocus());
 		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		objectList.enqueuePhysics(cam, QueueItem.ADD);
@@ -163,7 +163,7 @@ public class Controller extends Applet{
 		public void run() {
 			objectList.parsePhysicsQueue();
 			while (isRunning) {
-				if(objectList != null && objectList.queueSize() > 0)
+				if(objectList != null && objectList.physicsQueueSize() > 0)
 					objectList.parsePhysicsQueue();
 				else{
 					physics.clientUpdate();
@@ -183,7 +183,7 @@ public class Controller extends Applet{
 			while (isRunning) {
 				if(Display.isCloseRequested())
 					isRunning=false;
-				if(objectList.queueSize() > 0)
+				if(objectList != null && objectList.renderQueueSize() > 0)
 					objectList.parseRenderQueue();
 				else
 					renderer.draw();

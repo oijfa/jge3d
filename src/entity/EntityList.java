@@ -44,9 +44,9 @@ public class EntityList implements EntityObserver, Subject{
 		Object[] itemArray = physicsQueue.toArray();
 		for(Object item:itemArray) {
 			if(QueueItem.ADD == ((QueueItem) item).getAction())
-				addItem(((QueueItem) item).getEnt());
+				addPhysicsItem(((QueueItem) item).getEnt());
 			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
-				removeItem(((QueueItem) item).getEnt());
+				removePhysicsItem(((QueueItem) item).getEnt());
 			
 			physicsQueue.remove(item);
 		}
@@ -56,9 +56,11 @@ public class EntityList implements EntityObserver, Subject{
 		Object[] itemArray = renderQueue.toArray();
 		for(Object item:itemArray) {
 			if(QueueItem.ADD == ((QueueItem) item).getAction())
-				((QueueItem)item).getEnt().getModel().createVBO();
+				addRenderItem(((QueueItem) item).getEnt());
 			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
-				((QueueItem)item).getEnt().getModel().destroyVBO();
+				removeRenderItem(((QueueItem) item).getEnt());
+			
+			renderQueue.remove(item);
 		}
 	}
 	
@@ -67,11 +69,12 @@ public class EntityList implements EntityObserver, Subject{
 	public int size(){return names.size();}
 	public Set<String> getKeySet(){return names.keySet();}
 	public Physics getPhysics() {return physics;}
-	public int queueSize(){return physicsQueue.size();}
+	public int physicsQueueSize(){return physicsQueue.size();}
+	public int renderQueueSize(){return renderQueue.size();}
 	
 	/* MUTATORS */
 	//Add an item to the entity List
-	private boolean addItem(Entity e){
+	private boolean addPhysicsItem(Entity e){
 		boolean ret = false;
 		
 		if(e.keyExists("name")){
@@ -87,7 +90,21 @@ public class EntityList implements EntityObserver, Subject{
 		}
 		return ret;
 	}
-	private void removeItem(Entity entity){
+	private void addRenderItem(Entity e){
+		if(e.keyExists("name")){
+			if( e.getModel() != null ){
+				e.getModel().createVBO();
+			}
+		}
+	}
+	private void removeRenderItem(Entity e){
+		if(e.keyExists("name")){
+			if( e.getModel() != null ){
+				e.getModel().destroyVBO();
+			}
+		}
+	}
+	private void removePhysicsItem(Entity entity){
 		names.remove(entity);
 		entity.removeObserver(this);
 		physics.removeEntity(entity);
@@ -108,7 +125,7 @@ public class EntityList implements EntityObserver, Subject{
 		if(key == "name"){
 			Entity ent = this.getItem(key);
 			enqueuePhysics(ent, QueueItem.REMOVE);
-			this.addItem(ent);
+			this.addPhysicsItem(ent);
 			notifyObservers(key);
 		}
 	}

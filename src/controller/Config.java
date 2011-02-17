@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
@@ -102,5 +103,9 @@ public class Config {
 	
 	public static synchronized Entity getLineupFocus() {
 		return configs.get(currentKey).lineup_focus;
+	}
+	
+	public static Set<String> getKeys() {
+		return configs.get(currentKey).positions.keySet();
 	}
 }

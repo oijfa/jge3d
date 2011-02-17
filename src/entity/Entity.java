@@ -209,7 +209,6 @@ public class Entity {
 	public boolean shouldDraw() {return shouldDraw;}
 	
 	/* MISC */
-
 	public void draw(){
 
 		//Retrieve the current motionstate to get the transform
