@@ -73,7 +73,7 @@ public class Renderer {
 				focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
 				up.x, up.y, up.z			//Up Vector
 		);
-
+		
 		//Draw the 3d stuff
 		objectList.drawList();
 		
@@ -143,7 +143,16 @@ public class Renderer {
         }
 		isInitialized=true;
 		
-        GL11.glEnable (GL11.GL_LINE_SMOOTH);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glEnable(GL11.GL_BLEND);
+		
+		//Anti-aliasing stuff (probably isn't working)
+		GL11.glEnable (GL11.GL_POINT_SMOOTH);
+		GL11.glEnable (GL11.GL_LINE_SMOOTH);
+		GL11.glEnable (GL11.GL_POLYGON_SMOOTH);
+		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT,GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT,GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT,GL11.GL_NICEST);
 	}
 
 	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}
