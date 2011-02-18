@@ -210,7 +210,6 @@ public class Entity {
 	
 	/* MISC */
 	public void draw(){
-
 		//Retrieve the current motionstate to get the transform
 		//versus the world
 		if( shouldDraw && this.getObjectType()==ObjectType.rigidbody){
@@ -228,7 +227,7 @@ public class Entity {
 				transform_matrix.getOpenGLMatrix(body_matrix);
 				buf.put(body_matrix);
 				buf.flip();
-				GL11.glMultMatrix(buf);
+				//GL11.glMultMatrix(buf);
 				buf.clear();
 				
 				//Scaling code (testing)
@@ -237,10 +236,8 @@ public class Entity {
 				GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
 				
 				//Draw the model
-				GL11.glPushMatrix();
-					if( model != null)
-						model.draw();		
-				GL11.glPopMatrix();
+				if( model != null)
+					model.draw();		
 			GL11.glPopMatrix();
 		} else {
 			//System.out.println("Method [draw] not supported for ghost object");

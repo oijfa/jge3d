@@ -130,8 +130,8 @@ public class Face {
 		for(int i = 0; i < vertices.size(); i++){
 			Vector3f v = vertices.get(i);
 			Vector3f n = vertexNormals.get(i);
-			GL11.glVertex3f(v.x, v.y, v.z);
 			GL11.glNormal3f(n.x, n.y, n.z);
+			GL11.glVertex3f(v.x, v.y, v.z);
 		}
 	}
 		
@@ -197,19 +197,18 @@ public class Face {
 	}
 	
 	//*************VBO methods************************
-	public FloatBuffer createFaceBufferVNTC() {
+	public FloatBuffer createFaceBufferVNTC(Vector3f location) {
 		//Make sure that the face is at least a triangle
 		FloatBuffer faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
 		if(vertices.size() >= 3) {
-			
 			for(int i=0;i<vertices.size();i++) {
-				faceVNT.put(vertices.get(i).x);
-				faceVNT.put(vertices.get(i).y);
-				faceVNT.put(vertices.get(i).z);
+				faceVNT.put(vertices.get(i).x+location.x);
+				faceVNT.put(vertices.get(i).y+location.y);
+				faceVNT.put(vertices.get(i).z+location.z);
 				
-				faceVNT.put(vertexNormals.get(i).x);
-				faceVNT.put(vertexNormals.get(i).y);
-				faceVNT.put(vertexNormals.get(i).z);
+				faceVNT.put(vertexNormals.get(i).x+location.x);
+				faceVNT.put(vertexNormals.get(i).y+location.y);
+				faceVNT.put(vertexNormals.get(i).z+location.z);
 				
 				faceVNT.put(0.0f);
 				faceVNT.put(1.0f);

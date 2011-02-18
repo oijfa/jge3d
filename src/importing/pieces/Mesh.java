@@ -118,14 +118,12 @@ public class Mesh {
 		
 		//Transform
 		GL11.glTranslatef(location.x, location.y, location.z);
-		//TODO:  Rotate somehow based on forward and up vectors?
-		//GL11.glRotatef(angle, x, y, z);
 		
 		GL11.glBegin(GL11.GL_TRIANGLES);
-		//Draw faces
-		for(Face f : faces){
-			f.draw();
-		}
+			//Draw faces
+			for(Face f : faces){
+				f.draw();
+			}
 		GL11.glEnd();
 	}
 	

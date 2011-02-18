@@ -77,7 +77,9 @@ public class Model {
 		//we fall-back to immediate mode
 		//System.out.println("VBO:" + hasVBO);
 		if(hasVBO) {
+			GL11.glPushMatrix();
 			draw_vbo();
+			GL11.glPopMatrix();
 		} else {
 			for(Mesh m: meshes){
 				GL11.glPushMatrix();
@@ -221,7 +223,7 @@ public class Model {
 		index_buffer.clear();
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
-				vertex_buffer.put(f.createFaceBufferVNTC());
+				vertex_buffer.put(f.createFaceBufferVNTC(m.location));
 				index_buffer.put(f.createIndexBufferVNTC());
 			}
 		}
@@ -297,8 +299,9 @@ public class Model {
 		//The limit is the last readable INDEX....
 		Integer last = index_buffer.get(index_buffer.limit()-1);
 
-		//System.out.println(first+":"+last);
+		System.out.println(first+":"+last);
 		index_buffer.rewind();
+		
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			first, 
@@ -307,7 +310,7 @@ public class Model {
 			GL11.GL_UNSIGNED_INT,
 			0
 		);
-		
+
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);

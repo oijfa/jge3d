@@ -411,6 +411,14 @@ public class Controller extends Applet{
 			color = ent.getModel().getColor();
 			
 			ent.setProperty("resetydist", 4);
+			
+			//Stop the movement
+			ent.setDamping(1.0f,1.0f);
+			ent.activate();
+			ent.setAngularFactor(0.0f, new Vector3f(0,0,0));
+			
+			//Move the object back to its original position
+			ent.setAngularIdentity();
 		}
 		
 		if(show == true){
