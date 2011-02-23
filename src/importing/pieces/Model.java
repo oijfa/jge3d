@@ -195,11 +195,13 @@ public class Model {
 	public static void bufferData(int id, FloatBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB,0);
 		buffer.rewind();
 	}
 	public static void bufferElementData(int id, IntBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 		buffer.rewind();
 	}
 
@@ -216,11 +218,9 @@ public class Model {
 			num_meshes*num_faces*Face.VERTEX_STRIDE*num_vertices
 		);
 		index_buffer = BufferUtils.createIntBuffer(
-			num_meshes*num_faces*num_vertices*4
+			num_meshes*num_faces*num_vertices
 		);
-		
-		vertex_buffer.clear();
-		index_buffer.clear();
+
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
 				vertex_buffer.put(f.createFaceBufferVNTC(m.location));
@@ -248,6 +248,11 @@ public class Model {
 		ARBVertexBufferObject.glBindBufferARB(
 			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB,
 			modelVBOID
+		);
+
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
+			modelVBOindexID
 		);
 		
 		//vertices
@@ -288,27 +293,18 @@ public class Model {
 		
 		*/
 
-		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
-			modelVBOindexID
-		);
-		//System.out.println(index_buffer.get(0)+" "+index_buffer.get(index_buffer.capacity()-1));
 		index_buffer.rewind();
-		Integer first = index_buffer.get(0);
-		
-		//The limit is the last readable INDEX....
-		Integer last = index_buffer.get(index_buffer.limit()-1);
-
-		System.out.println(first+":"+last);
+		int first = index_buffer.get(0);
 		index_buffer.rewind();
+		int last = index_buffer.get(index_buffer.limit()-1);
+		index_buffer.rewind();
+		System.out.println("Model#: "+modelVBOID+" ModelIndex#: "+modelVBOindexID+" FirstIndex: "+first+" LastIndex: "+last);
 		
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			first, 
-			last, 
-			last-first,
-			GL11.GL_UNSIGNED_INT,
-			0
+			last,
+			index_buffer
 		);
 
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
