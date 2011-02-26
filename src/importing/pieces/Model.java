@@ -215,7 +215,7 @@ public class Model {
 			num_faces+=m.getFaceCount();
 		}
 		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_meshes*num_faces*Face.VERTEX_STRIDE*num_vertices
+			num_meshes*num_faces*3*num_vertices
 		);
 		index_buffer = BufferUtils.createIntBuffer(
 			num_meshes*num_faces*num_vertices

@@ -199,7 +199,7 @@ public class Face {
 	//*************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC(Vector3f location) {
 		//Make sure that the face is at least a triangle
-		FloatBuffer faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+		FloatBuffer faceVNT = FloatBuffer.allocate(12*vertices.size());
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
 				faceVNT.put(vertices.get(i).x+location.x);
@@ -227,13 +227,13 @@ public class Face {
 	}
 	public IntBuffer createIndexBufferVNTC() {
 		//Make sure that the face is at least a triangle
-		IntBuffer faceVBOids = BufferUtils.createIntBuffer(vertices.size());
+		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
 		if(vertices.size() >= 3) {
 			
-			for(int i=0;i<vertices.size();i++) {
+			//for(int i=0;i<vertices.size();i++) {
 				faceVBOids.put(pointIndex);
 				pointIndex++;
-			}
+			//}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;
