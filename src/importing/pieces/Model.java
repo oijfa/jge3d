@@ -27,6 +27,7 @@ public class Model {
 	private int modelVBOindexID;
 	private FloatBuffer vertex_buffer;
 	private IntBuffer index_buffer;
+	private Integer pointIndex = 0;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -224,12 +225,27 @@ public class Model {
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
 				vertex_buffer.put(f.createFaceBufferVNTC(m.location));
-				index_buffer.put(f.createIndexBufferVNTC());
+				index_buffer.put(f.createIndexBufferVNTC(pointIndex));
+				pointIndex += 3;
 			}
 		}
 		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
 		vertex_buffer.flip();
 		index_buffer.flip();
+		
+		/*
+		System.out.println("Vertex Buffer has:");
+		int i = 0;
+		while(vertex_buffer.hasRemaining()){
+			System.out.println(String.valueOf(i) + vertex_buffer.get());
+		}
+		
+		System.out.println("Index buffer has:");
+		i = 0;
+		while(index_buffer.hasRemaining()){
+			System.out.println(String.valueOf(i) + index_buffer.get());
+		}
+		*/
 		
 		modelVBOID = createVBOID(1);
 		bufferData(modelVBOID, vertex_buffer);
@@ -303,7 +319,7 @@ public class Model {
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			first, 
-			last+999,
+			last,
 			index_buffer
 		);
 

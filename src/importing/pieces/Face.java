@@ -13,8 +13,6 @@ public class Face {
 	ArrayList<Vector3f> vertices;
 	ArrayList<Vector3f> vertexNormals;
 
-	private static int pointIndex=0;
-	
 	Vector3f normal;
 	
 	//[(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
@@ -224,7 +222,7 @@ public class Face {
 		faceVNT.flip();
 		return faceVNT;
 	}
-	public IntBuffer createIndexBufferVNTC() {
+	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
 		//Make sure that the face is at least a triangle
 		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
 		if(vertices.size() >= 3) {

@@ -290,7 +290,7 @@ public class Controller extends Applet{
 		
 		//Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config_small.xml"));
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream("resources/models/config_test.xml"));
 		
 		String configName;
 		window.tree.Model treeModel = new window.tree.Model();

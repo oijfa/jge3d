@@ -5,7 +5,7 @@
 	<item>
 		<name>Box</name>
 		<value></value>
-		<path>resources/models/cathodes/normalxgl/normalminiassembly.xgl</path>
+		<path>resources/models/misc/box2.xgl</path>
 		<position>0,0,0</position>
 		<color>lightorange</color>
 	</item>
