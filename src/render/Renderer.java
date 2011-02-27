@@ -34,7 +34,7 @@ public class Renderer {
 	//private float x=0,y=0,z=0;
 	
     public static float nearClipping = 0.01f;
-	public static float farClipping = 10000.0f;
+	public static float farClipping = 1000.0f;
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
@@ -109,32 +109,16 @@ public class Renderer {
 		
 		setPerspective();
 
+		//Set default openGL for drawing
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
-		
-		GL11.glEnable(GL11.GL_LIGHTING);
 		
 		//Initialize default settings
         ByteBuffer temp = ByteBuffer.allocateDirect(16);
         temp.order(ByteOrder.nativeOrder());
-        
-        // Setup The Ambient Light
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, (FloatBuffer)temp.asFloatBuffer().put(lightAmbient).flip());              
-        
-        // Setup The Diffuse Light
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, (FloatBuffer)temp.asFloatBuffer().put(lightDiffuse).flip());              
-        
-        // Setup The Specular Light
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPECULAR, (FloatBuffer)temp.asFloatBuffer().put(lightSpecular).flip());        
-        
-        // Position The Light
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION,(FloatBuffer)temp.asFloatBuffer().put(lightPosition).flip());
-        
-        GL11.glEnable(GL11.GL_LIGHT1);
 
         if(GLContext.getCapabilities().GL_ARB_vertex_buffer_object){
         	supportsVBO=true;
@@ -143,16 +127,43 @@ public class Renderer {
         }
 		isInitialized=true;
 		
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable(GL11.GL_BLEND);
+		//Blending functions so we can have transparency
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//GL11.glEnable(GL11.GL_BLEND);
 		
+		//???
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		
+		//Enable texturing
+	    GL11.glEnable(GL11.GL_TEXTURE_2D);
+	    
+	    //Enable color materials (hopefully will speedup since we don't call
+	    //glMaterial anymore this way)
+	    GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
+	    GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		
+		//Setup openGL hints for quality
+		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT,GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT,GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT,GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		//Anti-aliasing stuff (probably isn't working)
 		GL11.glEnable (GL11.GL_POINT_SMOOTH);
 		GL11.glEnable (GL11.GL_LINE_SMOOTH);
 		GL11.glEnable (GL11.GL_POLYGON_SMOOTH);
-		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT,GL11.GL_NICEST);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT,GL11.GL_NICEST);
-        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT,GL11.GL_NICEST);
+		
+        //Enable lighting
+        GL11.glEnable(GL11.GL_LIGHTING);
+        //Create some debug lights        
+        // Setup The Ambient Light
+        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, (FloatBuffer)temp.asFloatBuffer().put(lightAmbient).flip());              
+        // Setup The Diffuse Light
+        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, (FloatBuffer)temp.asFloatBuffer().put(lightDiffuse).flip());              
+        // Setup The Specular Light
+        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPECULAR, (FloatBuffer)temp.asFloatBuffer().put(lightSpecular).flip());        
+        // Position The Light
+        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION,(FloatBuffer)temp.asFloatBuffer().put(lightPosition).flip());
+        GL11.glEnable(GL11.GL_LIGHT1);
 	}
 
 	public void setPerspective(){setPerspective(nearClipping,farClipping,zoom);}

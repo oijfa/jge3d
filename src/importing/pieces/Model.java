@@ -220,7 +220,7 @@ public class Model {
 		);
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
-				vertex_buffer.put(f.createFaceBufferVNTC(m.location));
+				vertex_buffer.put(f.createFaceBufferVNTC(m));
 				index_buffer.put(f.createIndexBufferVNTC(pointIndex));
 				pointIndex += 3;
 			}
@@ -267,7 +267,7 @@ public class Model {
 			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
 			modelVBOindexID
 		);
-		
+
 		//vertices
 		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset. * 4 to convert to bytes.
 		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
@@ -308,7 +308,7 @@ public class Model {
 
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit()-1);
-		System.out.println("Model#: "+modelVBOID+" ModelIndex#: "+modelVBOindexID+" FirstIndex: "+first+" LastIndex: "+last);
+		//System.out.println("Model#: "+modelVBOID+" ModelIndex#: "+modelVBOindexID+" FirstIndex: "+first+" LastIndex: "+last);
 		
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 

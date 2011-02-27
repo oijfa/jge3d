@@ -194,26 +194,26 @@ public class Face {
 	}
 	
 	//*************VBO methods************************
-	public FloatBuffer createFaceBufferVNTC(Vector3f location) {
+	public FloatBuffer createFaceBufferVNTC(Mesh mesh) {
 		//Make sure that the face is at least a triangle
 		FloatBuffer faceVNT = FloatBuffer.allocate(12*vertices.size());
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
-				faceVNT.put(vertices.get(i).x+location.x);
-				faceVNT.put(vertices.get(i).y+location.y);
-				faceVNT.put(vertices.get(i).z+location.z);
+				faceVNT.put(vertices.get(i).x+mesh.location.x);
+				faceVNT.put(vertices.get(i).y+mesh.location.y);
+				faceVNT.put(vertices.get(i).z+mesh.location.z);
 				
-				faceVNT.put(vertexNormals.get(i).x+location.x);
-				faceVNT.put(vertexNormals.get(i).y+location.y);
-				faceVNT.put(vertexNormals.get(i).z+location.z);
+				faceVNT.put(vertexNormals.get(i).x+mesh.location.x);
+				faceVNT.put(vertexNormals.get(i).y+mesh.location.y);
+				faceVNT.put(vertexNormals.get(i).z+mesh.location.z);
 				
 				faceVNT.put(0.0f);
 				faceVNT.put(1.0f);
 				
-				faceVNT.put(1.0f);
-				faceVNT.put(1.0f);
-				faceVNT.put(1.0f);
-				faceVNT.put(0.0f);
+				faceVNT.put(mesh.getMaterial().getColor().get(0));
+				faceVNT.put(mesh.getMaterial().getColor().get(1));
+				faceVNT.put(mesh.getMaterial().getColor().get(2));
+				faceVNT.put(mesh.getMaterial().getAlpha());
 			}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
