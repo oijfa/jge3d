@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class Face {
@@ -230,10 +229,10 @@ public class Face {
 		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
 		if(vertices.size() >= 3) {
 			
-			//for(int i=0;i<vertices.size();i++) {
+			for(int i=0;i<vertices.size();i++) {
 				faceVBOids.put(pointIndex);
 				pointIndex++;
-			//}
+			}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;

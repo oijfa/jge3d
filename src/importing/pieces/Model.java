@@ -215,7 +215,7 @@ public class Model {
 			num_faces+=m.getFaceCount();
 		}
 		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_meshes*num_faces*3*num_vertices
+			num_meshes*num_faces*12*num_vertices
 		);
 		index_buffer = BufferUtils.createIntBuffer(
 			num_meshes*num_faces*num_vertices
@@ -303,7 +303,7 @@ public class Model {
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
 			first, 
-			last,
+			last+999,
 			index_buffer
 		);
 
