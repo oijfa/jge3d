@@ -197,31 +197,27 @@ public class Model {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB,0);
-		buffer.rewind();
 	}
 	public static void bufferElementData(int id, IntBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, buffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-		buffer.rewind();
 	}
 
 	public void createVBO() {
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
-		int num_meshes=meshes.size();
-		int num_faces=0;
+		int num_faces_all_meshes=0;
 		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
 		for(Mesh m: meshes) {
-			num_faces+=m.getFaceCount();
+			num_faces_all_meshes+=m.getFaceCount();
 		}
 		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_meshes*num_faces*12*num_vertices
+			num_faces_all_meshes*num_vertices*12
 		);
 		index_buffer = BufferUtils.createIntBuffer(
-			num_meshes*num_faces*num_vertices
+			num_faces_all_meshes*num_vertices
 		);
-
 		for(Mesh m: meshes) {
 			for(Face f: m.getFaces()) {
 				vertex_buffer.put(f.createFaceBufferVNTC(m.location));
@@ -229,6 +225,7 @@ public class Model {
 				pointIndex += 3;
 			}
 		}
+		
 		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
 		vertex_buffer.flip();
 		index_buffer.flip();
@@ -309,11 +306,8 @@ public class Model {
 		
 		*/
 
-		index_buffer.rewind();
 		int first = index_buffer.get(0);
-		index_buffer.rewind();
 		int last = index_buffer.get(index_buffer.limit()-1);
-		index_buffer.rewind();
 		System.out.println("Model#: "+modelVBOID+" ModelIndex#: "+modelVBOindexID+" FirstIndex: "+first+" LastIndex: "+last);
 		
 		GL12.glDrawRangeElements(

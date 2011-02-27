@@ -226,7 +226,6 @@ public class Face {
 		//Make sure that the face is at least a triangle
 		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
 		if(vertices.size() >= 3) {
-			
 			for(int i=0;i<vertices.size();i++) {
 				faceVBOids.put(pointIndex);
 				pointIndex++;

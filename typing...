@@ -1,0 +1,47 @@
+diff --git a/src/importing/pieces/Face.java b/src/importing/pieces/Face.java
+index 2d58727..fb17e60 100644
+--- a/src/importing/pieces/Face.java
++++ b/src/importing/pieces/Face.java
+@@ -7,6 +7,7 @@ import java.util.Arrays;
+ 
+ import javax.vecmath.Vector3f;
+ 
++import org.lwjgl.BufferUtils;
+ import org.lwjgl.opengl.GL11;
+ 
+ public class Face {
+@@ -229,10 +230,10 @@ public class Face {
+ 		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
+ 		if(vertices.size() >= 3) {
+ 			
+-			for(int i=0;i<vertices.size();i++) {
++			//for(int i=0;i<vertices.size();i++) {
+ 				faceVBOids.put(pointIndex);
+ 				pointIndex++;
+-			}
++			//}
+ 		} else {
+ 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
+ 			return null;
+diff --git a/src/importing/pieces/Model.java b/src/importing/pieces/Model.java
+index cb5fc2b..3ab08a8 100644
+--- a/src/importing/pieces/Model.java
++++ b/src/importing/pieces/Model.java
+@@ -215,7 +215,7 @@ public class Model {
+ 			num_faces+=m.getFaceCount();
+ 		}
+ 		vertex_buffer = BufferUtils.createFloatBuffer(
+-			num_meshes*num_faces*12*num_vertices
++			num_meshes*num_faces*3*num_vertices
+ 		);
+ 		index_buffer = BufferUtils.createIntBuffer(
+ 			num_meshes*num_faces*num_vertices
+@@ -303,7 +303,7 @@ public class Model {
+ 		GL12.glDrawRangeElements(
+ 			GL11.GL_TRIANGLES, 
+ 			first, 
+-			last+999,
++			last,
+ 			index_buffer
+ 		);
+ 
