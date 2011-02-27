@@ -34,7 +34,7 @@ public class Renderer {
 	//private float x=0,y=0,z=0;
 	
     public static float nearClipping = 0.01f;
-	public static float farClipping = 50.0f;
+	public static float farClipping = 10000.0f;
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity

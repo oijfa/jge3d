@@ -227,7 +227,7 @@ public class Entity {
 				transform_matrix.getOpenGLMatrix(body_matrix);
 				buf.put(body_matrix);
 				buf.flip();
-				//GL11.glMultMatrix(buf);
+				GL11.glMultMatrix(buf);
 				buf.clear();
 				
 				//Scaling code (testing)
