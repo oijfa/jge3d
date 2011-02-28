@@ -132,10 +132,10 @@ public class Renderer {
 		//GL11.glEnable(GL11.GL_BLEND);
 		
 		//???
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		//GL11.glEnable(GL11.GL_CULL_FACE);
 		
 		//Enable texturing
-	    GL11.glEnable(GL11.GL_TEXTURE_2D);
+	    //GL11.glEnable(GL11.GL_TEXTURE_2D);
 	    
 	    //Enable color materials (hopefully will speedup since we don't call
 	    //glMaterial anymore this way)

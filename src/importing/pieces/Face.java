@@ -210,6 +210,12 @@ public class Face {
 				faceVNT.put(0.0f);
 				faceVNT.put(1.0f);
 				
+				System.out.println(
+					mesh.getMaterial().getColor().get(0).floatValue() + "," +
+					mesh.getMaterial().getColor().get(1).floatValue() + "," +
+					mesh.getMaterial().getColor().get(2).floatValue()
+				);
+				
 				faceVNT.put(mesh.getMaterial().getColor().get(0));
 				faceVNT.put(mesh.getMaterial().getColor().get(1));
 				faceVNT.put(mesh.getMaterial().getColor().get(2));
