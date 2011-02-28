@@ -216,9 +216,9 @@ public class Face {
 					mesh.getMaterial().getColor().get(2).floatValue()
 				);
 				
-				faceVNT.put(mesh.getMaterial().getColor().get(0));
-				faceVNT.put(mesh.getMaterial().getColor().get(1));
-				faceVNT.put(mesh.getMaterial().getColor().get(2));
+				faceVNT.put(mesh.getMaterial().getFloatColor().get(0));
+				faceVNT.put(mesh.getMaterial().getFloatColor().get(1));
+				faceVNT.put(mesh.getMaterial().getFloatColor().get(2));
 				faceVNT.put(mesh.getMaterial().getAlpha());
 			}
 		} else {
