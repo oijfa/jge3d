@@ -138,8 +138,9 @@ public class Model {
 		center.add(max,min);
 		center.scale(0.5f);
 		
-		System.out.println("MAX: " + String.valueOf(max));
-		System.out.println("MIN: " + String.valueOf(min));
+		//TODO: check to see if the max/min are working
+		//System.out.println("MAX: " + String.valueOf(max));
+		//System.out.println("MIN: " + String.valueOf(min));
 	}
 	
 	/*Export*/
@@ -249,7 +250,6 @@ public class Model {
 		modelVBOindexID = createVBOID(1);
 	    bufferElementData(modelVBOindexID, index_buffer);
 		hasVBO=true;
-		System.out.println("Model VBO created");
 	}
 	public void draw_vbo() {
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
