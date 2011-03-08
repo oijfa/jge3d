@@ -11,7 +11,6 @@ package entity;
 
 import importing.pieces.Model;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -19,9 +18,6 @@ import java.util.Set;
 import javax.vecmath.Vector3f;
 
 import monitoring.EntityObserver;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;
@@ -213,32 +209,7 @@ public class Entity {
 		//Retrieve the current motionstate to get the transform
 		//versus the world
 		if( shouldDraw && this.getObjectType()==ObjectType.rigidbody){
-			GL11.glPushMatrix();
-				//Retrieve the current motionstate to get the transform
-				//versus the world
-				Transform transform_matrix = new Transform();
-				DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
-
-				transform_matrix.set(motion_state.graphicsWorldTrans);
-				
-				//Adjust the position and rotation of the object from physics
-				float[] body_matrix = new float[16];
-				FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-				transform_matrix.getOpenGLMatrix(body_matrix);
-				buf.put(body_matrix);
-				buf.flip();
-				GL11.glMultMatrix(buf);
-				buf.clear();
-				
-				//Scaling code (testing)
-				Vector3f halfExtent = new Vector3f();
-				collision_object.getCollisionShape().getLocalScaling(halfExtent);
-				GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
-				
-				//Draw the model
-				if( model != null)
-					model.draw();		
-			GL11.glPopMatrix();
+			model.draw(collision_object);
 		} else {
 			//System.out.println("Method [draw] not supported for ghost object");
 		}

@@ -8,5 +8,6 @@
 		<path>resources/models/misc/box2.xgl</path>
 		<position>0,0,0</position>
 		<color>lightorange</color>
+		<show>false</show>
 	</item>
 </config>

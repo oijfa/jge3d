@@ -56,7 +56,9 @@ public class FileLoader {
 		int listID = GL11.glGenLists(1);
 		GL11.glNewList(listID,GL11.GL_COMPILE);
 		
-		parser.getWorld().draw();
+		//TODO: Broken! this needs a collisionobject passed in
+		//to do the rotation and scaling... it's dead jim...
+		//parser.getWorld().draw();
 		//drawDebug();
 
 		GL11.glEndList();

@@ -16,8 +16,12 @@ import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.Transform;
 
 public class Model {
 	private ArrayList<Mesh> meshes;
@@ -72,24 +76,48 @@ public class Model {
 	public Vector3f getCenter(){ return center; }
 	public int getMeshCount() { return meshes.size(); }
 	
-	public void draw(){
-		//http://lwjgl.org/wiki/index.php?title=Using_Vertex_Buffer_Objects_(VBO)
+	public void draw(CollisionObject collision_object){
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
-		//System.out.println("VBO:" + hasVBO);
 		if(hasVBO) {
-			GL11.glPushMatrix();
-			draw_vbo();
-			GL11.glPopMatrix();
+			draw_vbo(collision_object);
 		} else {
-			for(Mesh m: meshes){
-				GL11.glPushMatrix();
-				m.draw();
-				GL11.glPopMatrix();
-			}
+			draw_immediate(collision_object);
 		}
 	}
 	
+	public void draw_immediate(CollisionObject collision_object) {
+		GL11.glPushMatrix();
+			rotateAndScaleImmediate(collision_object);
+		
+			for(Mesh m: meshes){
+				m.draw();
+			}
+		GL11.glPopMatrix();
+	}
+	
+	private void rotateAndScaleImmediate(CollisionObject collision_object) {
+		//Retrieve the current motionstate to get the transform
+		//versus the world
+		Transform transform_matrix = new Transform();
+		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
+
+		transform_matrix.set(motion_state.graphicsWorldTrans);
+		
+		//Adjust the position and rotation of the object from physics
+		float[] body_matrix = new float[16];
+		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+		transform_matrix.getOpenGLMatrix(body_matrix);
+		buf.put(body_matrix);
+		buf.flip();
+		GL11.glMultMatrix(buf);
+		buf.clear();
+		
+		//Scaling code (testing)
+		Vector3f halfExtent = new Vector3f();
+		collision_object.getCollisionShape().getLocalScaling(halfExtent);
+		GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y, 1.0f * halfExtent.z);
+	}
 	/* Verify */
 	//This function will verify whether the file had normals defined
 	//and also check for shading groups and normalize if possible
@@ -231,27 +259,32 @@ public class Model {
 		vertex_buffer.flip();
 		index_buffer.flip();
 		
-		/*
-		System.out.println("Vertex Buffer has:");
-		int i = 0;
-		while(vertex_buffer.hasRemaining()){
-			System.out.println(String.valueOf(i) + vertex_buffer.get());
-		}
-		
-		System.out.println("Index buffer has:");
-		i = 0;
-		while(index_buffer.hasRemaining()){
-			System.out.println(String.valueOf(i) + index_buffer.get());
-		}
-		*/
-		
 		modelVBOID = createVBOID(1);
 		bufferData(modelVBOID, vertex_buffer);
 		modelVBOindexID = createVBOID(1);
 	    bufferElementData(modelVBOindexID, index_buffer);
 		hasVBO=true;
 	}
-	public void draw_vbo() {
+	public void draw_vbo(CollisionObject collision_object) {
+		//TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE
+		//If we're going to be using VBO's we need to switch
+		//off the immediate pipeline modularly;
+		//meaning that right here we need to have an if
+		//statement that controls whether we are drawing to
+		//the corespec or to the old shitty mode.
+		//This is different than all-or-nothing since we still get the speed
+		//increase of the VBO on older hardware and embedded systems
+		//but we also want to take advantage of the shaders
+		//and optimizations in new hardware if they exist
+		//I don't have time to port it yet since we need to write
+		//the correct shaders, but here is a helpful link:
+		//http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
+		if(true) {
+			GL11.glPushMatrix();
+			rotateAndScaleImmediate(collision_object);
+		}//else {
+			//do the shader using glUniform etc. here
+		
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -284,31 +317,8 @@ public class Model {
 		offset = (3 + 3 + 2) * 4; // (6*4) is the number of byte to skip to get to the colour chunk
 		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
 
-		//Draw the bound indices
-		/*
-		GL12.glDrawRangeElements(
-			GL11.GL_TRIANGLES, 
-			index_buffer.get(0), 
-			index_buffer.get(index_buffer.capacity()-1), 
-			index_buffer.capacity(),
-			GL11.GL_UNSIGNED_INT,
-			0
-		);
-		
-		OR
-		
-		GL12.glDrawRangeElements(
-			GL11.GL_TRIANGLES, 
-			index_buffer.get(0), 
-			index_buffer.get(index_buffer.capacity()-1),
-			index_buffer
-		);
-		
-		*/
-
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit()-1);
-		//System.out.println("Model#: "+modelVBOID+" ModelIndex#: "+modelVBOindexID+" FirstIndex: "+first+" LastIndex: "+last);
 		
 		GL12.glDrawRangeElements(
 			GL11.GL_TRIANGLES, 
@@ -321,6 +331,10 @@ public class Model {
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+		
+		//Pop the matrix if we are in immediate mode
+		if(true)
+			GL11.glPopMatrix();
 	}
 	public void destroyVBO() {
 		ARBVertexBufferObject.glDeleteBuffersARB(modelVBOID);	
