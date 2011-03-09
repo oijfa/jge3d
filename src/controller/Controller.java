@@ -125,11 +125,13 @@ public class Controller extends Applet{
 		//InitGL
 		render_thread.start();
 		
+		//Load Roberts weird config file deal
 		ParseConfig config = new ParseConfig(objectList);
 		config.readConfigFile("resources/models/config_test.xml");
+		
+		//Testing the terrain stuff here
 		Terrain terrain = new Terrain(objectList);
 		terrain.createTerrain(25);
-		//terrain.toString();
 		
 		createCamera();
 		

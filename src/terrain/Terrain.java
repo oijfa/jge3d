@@ -34,7 +34,7 @@ public class Terrain {
 		terrain = new DynamicMatrix();
 		for(int i=0; i<land_size;i++)
 			terrain.expand();
-		
+
 		for(int i=0; i<terrain.getSize();i++) {
 			ent = new Entity(0.0f, boxShape, true);
 			ent.setModel(p.createModel());
