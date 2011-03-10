@@ -131,7 +131,7 @@ public class Controller extends Applet{
 		
 		//Testing the terrain stuff here
 		Terrain terrain = new Terrain(objectList);
-		terrain.createTerrain(25);
+		terrain.createTerrain(50);
 		
 		createCamera();
 		

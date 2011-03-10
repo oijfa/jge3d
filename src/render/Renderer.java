@@ -30,7 +30,7 @@ public class Renderer {
 	private EntityList objectList;
     private Camera camera;
     private boolean isInitialized=false;
-    private boolean supportsVBO=false;
+    private static boolean supportsVBO=false;
 	//private float x=0,y=0,z=0;
 	
     public static float nearClipping = 0.01f;
@@ -192,7 +192,7 @@ public class Renderer {
 		GL11.glLoadIdentity();
 	}
 	
-	public boolean supportsVBO() {
+	public static boolean supportsVBO() {
 		return supportsVBO;
 	}
 	

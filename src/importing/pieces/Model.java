@@ -32,6 +32,7 @@ public class Model {
 	private FloatBuffer vertex_buffer;
 	private IntBuffer index_buffer;
 	private Integer pointIndex = 0;
+	private FloatBuffer buf;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -106,7 +107,7 @@ public class Model {
 		
 		//Adjust the position and rotation of the object from physics
 		float[] body_matrix = new float[16];
-		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+		
 		transform_matrix.getOpenGLMatrix(body_matrix);
 		buf.put(body_matrix);
 		buf.flip();
@@ -264,6 +265,8 @@ public class Model {
 		modelVBOindexID = createVBOID(1);
 	    bufferElementData(modelVBOindexID, index_buffer);
 		hasVBO=true;
+		
+		buf = BufferUtils.createFloatBuffer(16);
 	}
 	public void draw_vbo(CollisionObject collision_object) {
 		//TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE

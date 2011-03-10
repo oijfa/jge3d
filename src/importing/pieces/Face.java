@@ -7,11 +7,14 @@ import java.util.Arrays;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class Face {
-	ArrayList<Vector3f> vertices;
-	ArrayList<Vector3f> vertexNormals;
+	private ArrayList<Vector3f> vertices;
+	private ArrayList<Vector3f> vertexNormals;
+	private FloatBuffer faceVNT;
+	private IntBuffer faceVBOids;
 
 	Vector3f normal;
 	
@@ -22,6 +25,7 @@ public class Face {
 		vertices = new ArrayList<Vector3f>();
 		vertexNormals = new ArrayList<Vector3f>();
 		normal = new Vector3f(0.0f,0.0f,1.0f);
+		init();
 	}
 	
 	public Face(Vector3f[] verts, Vector3f[] vertnorms, Vector3f norm){
@@ -34,18 +38,21 @@ public class Face {
 			vertexNormals.add(vertnorms[i]);
 		}
 		normal = norm;
+		init();
 	}
 	
 	public Face(ArrayList<Vector3f> verts, ArrayList<Vector3f> vertnorms, Vector3f norm){
 		vertices = verts;
 		vertexNormals = vertnorms;
 		normal = norm;
+		init();
 	}
 	
 	public Face(Vector3f[] verts, Vector3f[] vertnorms){
 		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
 		vertexNormals = (ArrayList<Vector3f>) Arrays.asList(vertnorms);
 		normal =  new Vector3f(0.0f,0.0f,1.0f);
+		init();
 	}
 
 	//Copy Constructor
@@ -70,6 +77,16 @@ public class Face {
 			Vector3f temp = f.vertexNormals.get(j);
 			this.vertexNormals.set(j,new Vector3f(temp.x,temp.y,temp.z));
 		}
+		init();
+	}
+	
+	public void init() {
+		//if(Renderer.supportsVBO()) {
+			//TODO: I know there has to be a better way to do this...
+			//the only reason it's here is to prevent a memory leak
+			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
+		//}
 	}
 
 	/*Setters*/
@@ -196,7 +213,6 @@ public class Face {
 	//*************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC(Mesh mesh) {
 		//Make sure that the face is at least a triangle
-		FloatBuffer faceVNT = FloatBuffer.allocate(12*vertices.size());
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
 				faceVNT.put(vertices.get(i).x+mesh.location.x);
@@ -224,7 +240,6 @@ public class Face {
 	}
 	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
 		//Make sure that the face is at least a triangle
-		IntBuffer faceVBOids = IntBuffer.allocate(vertices.size());
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
 				faceVBOids.put(pointIndex);
