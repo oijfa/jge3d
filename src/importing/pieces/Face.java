@@ -7,14 +7,11 @@ import java.util.Arrays;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class Face {
 	private ArrayList<Vector3f> vertices;
 	private ArrayList<Vector3f> vertexNormals;
-	private FloatBuffer faceVNT;
-	private IntBuffer faceVBOids;
 
 	Vector3f normal;
 	
@@ -84,8 +81,8 @@ public class Face {
 		//if(Renderer.supportsVBO()) {
 			//TODO: I know there has to be a better way to do this...
 			//the only reason it's here is to prevent a memory leak
-			faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
-			faceVBOids = BufferUtils.createIntBuffer(vertices.size());
+			//faceVNT = BufferUtils.createFloatBuffer(12*vertices.size());
+			//faceVBOids = BufferUtils.createIntBuffer(vertices.size());
 		//}
 	}
 
@@ -212,45 +209,47 @@ public class Face {
 	
 	//*************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC(Mesh mesh) {
+		float faceVNT[] = new float[36];
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
-			for(int i=0;i<vertices.size();i++) {
-				faceVNT.put(vertices.get(i).x+mesh.location.x);
-				faceVNT.put(vertices.get(i).y+mesh.location.y);
-				faceVNT.put(vertices.get(i).z+mesh.location.z);
+			for(int i=0;i<vertices.size()*12;i+=12) {
+				faceVNT[i] = vertices.get(i/12).x+mesh.location.x;
+				faceVNT[1+i] = vertices.get(i/12).y+mesh.location.y;
+				faceVNT[2+i] = vertices.get(i/12).z+mesh.location.z;
 				
-				faceVNT.put(vertexNormals.get(i).x+mesh.location.x);
-				faceVNT.put(vertexNormals.get(i).y+mesh.location.y);
-				faceVNT.put(vertexNormals.get(i).z+mesh.location.z);
-				
-				faceVNT.put(0.0f);
-				faceVNT.put(1.0f);
+				faceVNT[3+i] = vertexNormals.get(i/12).x+mesh.location.x;
+				faceVNT[4+i] = vertexNormals.get(i/12).y+mesh.location.y;
+				faceVNT[5+i] = vertexNormals.get(i/12).z+mesh.location.z;
+			
+				faceVNT[6+i] = 0.0f;
+				faceVNT[7+i] = 1.0f;
 
-				faceVNT.put(mesh.getMaterial().getFloatColor().get(0));
-				faceVNT.put(mesh.getMaterial().getFloatColor().get(1));
-				faceVNT.put(mesh.getMaterial().getFloatColor().get(2));
-				faceVNT.put(mesh.getMaterial().getAlpha());
+				faceVNT[8+i] = mesh.getMaterial().getFloatColor().get(0);
+				faceVNT[9+i] = mesh.getMaterial().getFloatColor().get(1);
+				faceVNT[10+i] = mesh.getMaterial().getFloatColor().get(2);
+				faceVNT[11+i] = mesh.getMaterial().getAlpha();
 			}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;
 		}
-		faceVNT.flip();
-		return faceVNT;
+		
+		return FloatBuffer.wrap(faceVNT);
 	}
 	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
+		int[] faceVBOids = new int[3];
 		//Make sure that the face is at least a triangle
 		if(vertices.size() >= 3) {
 			for(int i=0;i<vertices.size();i++) {
-				faceVBOids.put(pointIndex);
+				faceVBOids[i] = pointIndex;
 				pointIndex++;
 			}
 		} else {
 			System.out.println("Tried to parse face, but it has only " + vertices.size() + " verts");
 			return null;
 		}
-		faceVBOids.flip();
-		return faceVBOids;
+		
+		return IntBuffer.wrap(faceVBOids);
 	}
 	//*************End VBO methods************************
 }

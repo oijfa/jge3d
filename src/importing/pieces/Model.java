@@ -59,6 +59,8 @@ public class Model {
 		for(Mesh m: model.meshes){
 			this.meshes.add(new Mesh(m));
 		}
+		modelVBOID = model.getVBOID();
+		modelVBOindexID = model.getVBOindexID();
 		init();
 		//verify();
 	}
@@ -76,7 +78,11 @@ public class Model {
 	public Mesh getMesh(int i){ return meshes.get(i); }
 	public Vector3f getCenter(){ return center; }
 	public int getMeshCount() { return meshes.size(); }
+	public boolean getHasVBO() { return hasVBO; }
+	public int getVBOID() { return modelVBOID; }
+	public int getVBOindexID() { return modelVBOindexID; };
 	
+	/*Draw Methods*/
 	public void draw(CollisionObject collision_object){
 		//if the renderer supports VBOs definitely use them; if it doesn't
 		//we fall-back to immediate mode
