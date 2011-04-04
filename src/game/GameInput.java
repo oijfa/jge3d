@@ -14,6 +14,7 @@ import engine.entity.QueueItem;
 import engine.importing.Parser;
 import engine.importing.XGL_Parser;
 import engine.input.Input;
+import engine.entity.Player;
 
 public class GameInput extends Input {
 	public GameInput(EntityList objectList) {
@@ -43,6 +44,27 @@ public class GameInput extends Input {
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			camera.incrementDeclination(-UP_DOWN_INC);
+			event_caught=true;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			Player p1 = ((Player) objectList.getItem("player1"));
+			p1.movePlayer(new Vector3f(10.0f,0.0f,0.0f));
+			event_caught=true;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			Player p1 = (Player) objectList.getItem("player1");
+			p1.movePlayer(new Vector3f(-10.0f,0.0f,0.0f));
+			event_caught=true;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			Player p1 = (Player) objectList.getItem("player1");
+			p1.movePlayer(new Vector3f(0.0f,10.0f,0.0f));
+			event_caught=true;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			Player p1 = (Player) objectList.getItem("player1");
+			p1.movePlayer(new Vector3f(0.0f,-10.0f,0.0f));
 			event_caught=true;
 		}
 		

@@ -20,7 +20,7 @@ import javax.vecmath.Vector3f;
 import engine.monitoring.EntityObserver;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.GhostObject;
+import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -29,7 +29,7 @@ import com.bulletphysics.linearmath.Transform;
 
 public class Entity {
 	//Properties
-	private CollisionObject collision_object;
+	protected CollisionObject collision_object;
 	private HashMap<String,Object> data;
 	private Model model;
 	private ArrayList<EntityObserver> observers;
@@ -97,10 +97,10 @@ public class Entity {
 		((RigidBody) collision_object).updateInertiaTensor();
 	}
 	
-	private void createGhostBody(float mass, CollisionShape shape) {
+	protected void createGhostBody(float mass, CollisionShape shape) {
 		//rigid body is dynamic if and only if mass is non zero,
 		//otherwise static
-		GhostObject ghost = new GhostObject();
+		PairCachingGhostObject ghost = new PairCachingGhostObject();
 		boolean isDynamic = (mass != 0f);
 
 		Vector3f localInertia = new Vector3f(0f, 0f, 0f);

@@ -20,6 +20,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
+import engine.entity.Player;
 import engine.entity.QueueItem;
 import engine.render.Renderer;
 import engine.terrain.Terrain;
@@ -134,6 +135,12 @@ public class Controller extends Applet{
 		terrain.createTerrain(75);
 		
 		createCamera();
+		
+		Player player1 = new Player(1.0f,  new BoxShape(new Vector3f(1, 1, 1)),0.5f);
+		player1.setProperty("name", "player1");
+		objectList.enqueuePhysics(player1, QueueItem.ADD);
+		objectList.parsePhysicsQueue();
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);
 		
 		physics_thread.start();
 		render_thread.interrupt();
