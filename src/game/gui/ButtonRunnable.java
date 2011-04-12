@@ -1,6 +1,5 @@
-package engine.input.components;
+package game.gui;
 
-import engine.window.RotationMenu;
 
 import de.matthiasmann.twl.model.ButtonModel;
 

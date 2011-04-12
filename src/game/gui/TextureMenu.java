@@ -1,4 +1,4 @@
-package engine.window;
+package game.gui;
 
 import java.awt.Graphics;
 import java.awt.Image;

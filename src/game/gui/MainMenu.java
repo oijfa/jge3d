@@ -1,4 +1,4 @@
-package engine.window;
+package game.gui;
 
 import engine.controller.Controller;
 import de.matthiasmann.twl.Button;

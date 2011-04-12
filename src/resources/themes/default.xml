@@ -377,6 +377,9 @@
             </theme>
         </theme>
         <theme name="rotationmenu" ref="resizableframe">
+			<theme name="game" allowWildcard="true">
+				
+			</theme>
 	       	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>

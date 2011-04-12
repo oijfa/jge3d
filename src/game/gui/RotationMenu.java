@@ -1,6 +1,5 @@
-package engine.window;
+package game.gui;
 
-import engine.input.components.ButtonRunnable;
 import engine.input.components.InputRunnable;
 
 import java.util.HashMap;

@@ -104,8 +104,6 @@ public class Renderer {
 			
 		}
 		camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
-
-		window.setCamera(camera);
 		
 		setPerspective();
 
@@ -194,6 +192,10 @@ public class Renderer {
 	
 	public static boolean supportsVBO() {
 		return supportsVBO;
+	}
+	
+	public Window getWindow() {
+		return window;
 	}
 	
 	public void destroy() {window.destroy();}

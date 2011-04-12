@@ -20,33 +20,30 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
-import engine.entity.Player;
 import engine.entity.QueueItem;
 import engine.render.Renderer;
-import engine.terrain.Terrain;
 
-public class Controller extends Applet{
+public abstract class Controller extends Applet{
 	private static final long serialVersionUID = 4458487765324323938L;
 
 	// the game always runs (except when it doesn't)
 	private volatile static boolean isRunning = true;
 	
-	private Renderer renderer;
-	private Physics physics;
+	protected Renderer renderer;
+	protected Physics physics;
 	
 	private long frames = 0;
 
-	private EntityList objectList;
+	protected EntityList objectList;
 	
 	Runnable treeListener;
 	
 	private Canvas display_parent;
 	
 	Object renderlock = new Object();
-	
-	public static void main(String[] args) throws Exception {
-		Applet app = new Controller();
-		app.init();
+
+	public Controller(){
+		super();
 	}
 
 	public void startApp() {
@@ -113,8 +110,6 @@ public class Controller extends Applet{
 		}
 	}
 
-	public Controller(){	}
-
 	private void startThreads() throws Exception {
 		//Instantiate Physics first, as it depends on nothing
 		physics = new Physics();
@@ -126,27 +121,16 @@ public class Controller extends Applet{
 		//InitGL
 		render_thread.start();
 		
-		//Load Roberts weird config file deal
-		ParseConfig config = new ParseConfig(objectList);
-		config.readConfigFile("resources/models/config_test.xml");
-		
-		//Testing the terrain stuff here
-		Terrain terrain = new Terrain(objectList);
-		terrain.createTerrain(75);
-		
-		createCamera();
-		
-		Player player1 = new Player(1.0f,  new BoxShape(new Vector3f(1, 1, 1)),0.5f);
-		player1.setProperty("name", "player1");
-		objectList.enqueuePhysics(player1, QueueItem.ADD);
-		objectList.parsePhysicsQueue();
-		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);
+		//User overridable call to initialize any functions before the engine starts running
+		initialize();
 		
 		physics_thread.start();
 		render_thread.interrupt();
 	}
 	
-	private void createCamera(){
+	public abstract void initialize();
+	
+	public void createCamera(){
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		

@@ -1,4 +1,4 @@
-package engine.window;
+package game.gui;
 
 import engine.window.components.Tree;
 import engine.window.tree.Model;

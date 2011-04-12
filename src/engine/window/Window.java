@@ -1,6 +1,8 @@
 package engine.window;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.lwjgl.LWJGLException;
 
 import engine.window.tree.Model;
@@ -9,23 +11,22 @@ import engine.window.tree.Model;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
+import de.matthiasmann.twl.ResizableFrame;
 import engine.input.Input;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
-import engine.entity.Camera;
 import engine.entity.EntityList;
 import game.GameInput;
 
 public class Window extends DesktopArea {
 	//private MainMenu mainMenu;
 	//private TextureMenu textureMenu;
-	private RotationMenu rotationMenu;
-	private EntityMenu entityMenu;
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
 	private Input input;
-	//private EntityList objectList;
+	private ArrayList<ResizableFrame> windows;
+	private EntityList objectList;
 	
 	public Window(EntityList objectList) {
 		super();
@@ -38,6 +39,7 @@ public class Window extends DesktopArea {
 	}
 	
 	public void windowInit(EntityList objectList, Model m){
+		this.objectList = objectList;
 		try {
 			renderer = new LWJGLRenderer();
 		} catch (LWJGLException e1) {
@@ -53,41 +55,12 @@ public class Window extends DesktopArea {
 			e.printStackTrace();
 		}
 		
-		/*
-		// Create the main menu
-		mainMenu = new MainMenu();
-		add(mainMenu);
-		mainMenu.setTheme("mainmenu");
-		mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
-		
-		textureMenu = new TextureMenu();
-		//add(textureMenu);
-		textureMenu.setTheme("texturemenu");
-		textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
-		*/
-
-		input = new GameInput(objectList);
-		entityMenu = new EntityMenu(objectList, m);
-		add(entityMenu);
-		entityMenu.setTheme("entitymenu");
-
-		try{
-			rotationMenu = new RotationMenu();
-			add(rotationMenu);
-			rotationMenu.setObjectList(objectList);
-			rotationMenu.setTheme("rotationmenu");
-		}catch(Exception e){
-			System.out.println("Couldn't create rotation Menu");
-			e.printStackTrace();
-		}
-		
+		input = new GameInput(this.objectList);
+				
 		//you have to do a gui update or it won't give you the sizes of the subwindows
 		gui.update();
 		
-		entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
-		if( rotationMenu != null){
-			rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
-		}
+		windows = new ArrayList<ResizableFrame>();
 	}
 
 	public void draw() {
@@ -99,9 +72,6 @@ public class Window extends DesktopArea {
 		theme.destroy();
 	}
 
-	public void setCamera(Camera cam) {
-		rotationMenu.setCameraRef(cam);
-	}
 	protected boolean handleEvent(Event evt) { 
 		//twl event handling
 		//if(super.handleEvent(evt)) { 
@@ -113,5 +83,19 @@ public class Window extends DesktopArea {
 	    }
 	    
 	    return false; 
+	}
+	
+	public void addWindow(ResizableFrame window) {
+		windows.add(window);
+		ResizableFrame current_window = windows.get(windows.indexOf(window));
+		add(current_window);
+		current_window.setTheme(window.getClass().getName().toLowerCase());
+		
+		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
+		//if( rotationMenu != null){
+		//	rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
+		//}
+		//mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
+		//textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
 	}
 }
