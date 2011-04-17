@@ -23,7 +23,7 @@ import engine.entity.EntityList;
 import engine.entity.QueueItem;
 import engine.render.Renderer;
 
-public abstract class Controller extends Applet{
+public class Controller extends Applet{		
 	private static final long serialVersionUID = 4458487765324323938L;
 
 	// the game always runs (except when it doesn't)
@@ -128,7 +128,8 @@ public abstract class Controller extends Applet{
 		render_thread.interrupt();
 	}
 	
-	public abstract void initialize();
+	public void initialize() {
+	}
 	
 	public void createCamera(){
 		//Make a camera	
