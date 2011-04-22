@@ -1,4 +1,4 @@
-package Editor;
+package editor;
 public class Model<E extends Number> {
 	private CubicGrid<Block<E>> cubic_grid;
 	private int size;

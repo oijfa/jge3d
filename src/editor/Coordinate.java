@@ -1,4 +1,4 @@
-package Editor;
+package editor;
 
 public class Coordinate<E extends Number> implements Cloneable {
 	private E x, y, z;
