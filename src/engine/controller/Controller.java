@@ -9,6 +9,7 @@ import java.awt.Canvas;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import engine.physics.Physics;
@@ -119,13 +120,16 @@ public class Controller extends Applet{
 		renderer = new Renderer(objectList, display_parent);
 		
 		//InitGL
-		render_thread.start();
+		renderer.initGL();
+		
+		Display.releaseContext();
+		
 		
 		//User overridable call to initialize any functions before the engine starts running
 		initialize();
 		
 		physics_thread.start();
-		render_thread.interrupt();
+		render_thread.start();
 	}
 	
 	public void initialize() {
@@ -140,6 +144,8 @@ public class Controller extends Applet{
 		objectList.enqueuePhysics(cam, QueueItem.ADD);
 		
 		objectList.parsePhysicsQueue();
+		
+		renderer.setCamera(cam); 
 	}
 	
 	// Create the Physics Listening thread
@@ -159,18 +165,22 @@ public class Controller extends Applet{
 	// Create the vidya thread
 	Thread render_thread = new Thread() {
 		public void run() {
-			renderer.initGL();
 			try {
-				this.join();
-			} catch (InterruptedException e) {}
-			objectList.parseRenderQueue();
-			while (isRunning) {
-				if(Display.isCloseRequested())
-					isRunning=false;
-				if(objectList != null && objectList.renderQueueSize() > 0)
-					objectList.parseRenderQueue();
-				else
-					renderer.draw();
+				Display.makeCurrent();
+			
+				objectList.parseRenderQueue();
+				while (isRunning) {
+					if(Display.isCloseRequested())
+						isRunning=false;
+					if(objectList != null && objectList.renderQueueSize() > 0)
+						objectList.parseRenderQueue();
+					else
+						renderer.draw();
+				}
+			
+			} catch (LWJGLException e) {
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 	};
