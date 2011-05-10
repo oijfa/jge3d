@@ -55,27 +55,29 @@ public class Renderer {
 
 	public void draw() {
 		GLContext.getCapabilities().toString();
-		//Move the camera with its focus
-		camera.updatePosition();
 		
-		//Get its new position
-		Vector3f camPos = camera.getPosition();
-		Vector3f focusPos = camera.getFocusPosition();
-		Vector3f up = camera.getUp();
-
 		// Clear The Screen And The Depth Buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
 		GL11.glLoadIdentity();
 		
-		//Look at the camera's focus
-		GLU.gluLookAt(
-				camPos.x, camPos.y, camPos.z, 	//Camera Location
-				focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
-				up.x, up.y, up.z			//Up Vector
-		);
+		if(camera!=null){
+			camera.updatePosition();		
 		
-		//Draw the 3d stuff
-		objectList.drawList();
+			//Get its new position
+			Vector3f camPos = camera.getPosition();
+			Vector3f focusPos = camera.getFocusPosition();
+			Vector3f up = camera.getUp();
+			
+			//Look at the camera's focus
+			GLU.gluLookAt(
+					camPos.x, camPos.y, camPos.z, 	//Camera Location
+					focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
+					up.x, up.y, up.z			//Up Vector
+			);
+			
+			//Draw the 3d stuff
+			objectList.drawList();
+		}
 		
 		//Draw the window manager stuff
 		window.draw();
@@ -100,10 +102,7 @@ public class Renderer {
 		}
 		window = new Window(objectList);
 
-		while(objectList.getItem(Camera.CAMERA_NAME)==null) {
-			
-		}
-		camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
+		//camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		
 		setPerspective();
 
@@ -201,4 +200,8 @@ public class Renderer {
 	public void destroy() {window.destroy();}
 	
 	public boolean isInitialized() {return isInitialized;}
+
+	public void setCamera(Camera camera) {
+		this.camera = camera;		
+	}
 }

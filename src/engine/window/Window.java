@@ -27,6 +27,7 @@ public class Window extends DesktopArea {
 	private Input input;
 	private ArrayList<ResizableFrame> windows;
 	private EntityList objectList;
+	private Integer layers;
 	
 	public Window(EntityList objectList) {
 		super();
@@ -97,5 +98,10 @@ public class Window extends DesktopArea {
 		//}
 		//mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
 		//textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
+	}
+
+	public Integer getNumLayers() {
+		// TODO Auto-generated method stub
+		return layers;
 	}
 }
