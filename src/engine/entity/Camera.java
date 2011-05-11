@@ -57,7 +57,7 @@ public class Camera extends Entity implements ConfigListener {
 		setPosition(new Vector3f(0,0,0));
 		declination = 0;
 		rotation = 0;
-		distance = 5.0f;
+		distance = 20.0f;
 		setUpVector( new Vector3f(0, 1, 0) );
 		updatePosition();
 		
