@@ -1,7 +1,5 @@
 package editor;
 
-import CubicGrid;
-
 import org.lwjgl.opengl.GL11;
 
 public class Model<E extends Number> {
