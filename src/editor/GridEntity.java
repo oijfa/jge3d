@@ -7,9 +7,6 @@ import engine.entity.Entity;
 public class GridEntity extends Entity{
 
 	public GridEntity(float mass, CollisionShape shape, boolean collide) {
-		super(mass, shape, collide);
+		super("grid",mass, shape, collide);
 	}
-
-	
-	
 }

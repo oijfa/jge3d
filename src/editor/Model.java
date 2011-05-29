@@ -29,7 +29,7 @@ public class Model<E extends Number> {
   	    
   	    
   	    double x_start = -drawn_size * size;
-  	    double increment = (drawn_size*size*2);
+  	    //double increment = (drawn_size*size*2);
   	    for(int i = (int) drawn_size*2; i < drawn_size*size*2; i+= drawn_size*2){
   	      //Vertical Divisions
   	      GL11.glVertex2d(x_start + drawn_size * i, -drawn_size * size);

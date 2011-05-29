@@ -47,8 +47,7 @@ public class Camera extends Entity implements ConfigListener {
 
 	private void cameraInit(Entity defFocus) {
 		if(defFocus == null){
-			System.out.println("Can't initialize camera's default focus to null");
-			System.exit(0);
+			throw new Error("Can't initialize camera's default focus to null");
 		}
 		
 		default_focus = defFocus;
