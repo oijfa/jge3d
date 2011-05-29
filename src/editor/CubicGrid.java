@@ -1,21 +1,25 @@
 package editor;
 
-import java.util.ArrayList;
-
-
 public class CubicGrid<E> {
-	private ArrayList<E> items;
-	private int size;
+	private E items[];
+	private Integer size;
 	
+	@SuppressWarnings("unchecked")
 	public CubicGrid(int dim){
-		items = new ArrayList<E>(dim*dim*dim);
+		//Can't instantiate array of E, but can do this:
+		items = (E[]) new Object[dim*dim*dim];
+		size=dim;
 	}
 	
 	public void set(int x, int y, int z, E item){
-		items.set(x+(size*y)+(size*size*z),item);
+		items[x+(size*y)+(size*size*z)] = item;
 	}
 	
 	public E get(int x, int y, int z){
-		return items.get(x+(size*y)+(size*size*z));
+		return items[x+(size*y)+(size*size*z)];
+	}
+	
+	public Integer size() {
+		return size;
 	}
 }
