@@ -37,30 +37,30 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		// Parallel groups align each start and size and can be cascaded
 		//
 		// Group for holding the Horizontal alignment of the buttons
-		Group h_grid = layout.createParallelGroup().addGap();
-		Group h_row = layout.createParallelGroup().addGap();
+		Group h_grid = layout.createParallelGroup();//.addGap();
+		Group h_row = layout.createParallelGroup();//.addGap();
 		for(int k=0;k<grid.size();k++) {
 			for(int i=0;i<grid.size();i++) {
-				h_row = layout.createParallelGroup().addGap();
+				h_row = layout.createParallelGroup();//.addGap();
 				for(int j=0;j<grid.size();j++) {
 					//TODO: *un*fix the z axis
 					h_row.addWidget(grid.get(j, i, 0));
 				}
-				h_row.addGap();
+				//h_row.addGap();
 			}
 			h_grid.addGroup(h_row);
 		}
 		
-		Group v_grid = layout.createParallelGroup().addGap();
-		Group v_row = layout.createSequentialGroup().addGap();
+		Group v_grid = layout.createParallelGroup();//.addGap();
+		Group v_row = layout.createSequentialGroup();//.addGap();
 		for(int k=0;k<grid.size();k++) {
 			for(int i=0;i<grid.size();i++) {
-				v_row = layout.createParallelGroup().addGap();
+				v_row = layout.createParallelGroup();//.addGap();
 				for(int j=0;j<grid.size();j++) {
 					//TODO: *un*fix the z axis
 					v_row.addWidget(grid.get(j, i, 0));
 				}
-				v_row.addGap();
+				//v_row.addGap();
 			}
 			v_grid.addGroup(v_row);
 		}

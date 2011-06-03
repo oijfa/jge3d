@@ -139,7 +139,7 @@ public class Controller extends Applet{
 		//Make a camera	
 		CollisionShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 		
-		Camera cam = new Camera(0.0, boxShape, false, objectList.getItem("grid"));
+		Camera cam = new Camera(0.0, boxShape, false, objectList.getItem("player1"));
 		cam.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		objectList.enqueuePhysics(cam, QueueItem.ADD);
 		

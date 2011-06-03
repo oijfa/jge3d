@@ -325,14 +325,108 @@
     </theme>
     -->
     <theme name="window" ref="-defaults">
-        <theme name="gridwindow" ref="resizableframe">
+        <theme name="mainmenu" ref="resizableframe">
+        	<param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>300</int></param>
+       		<param name="minHeight"><int>225</int></param>
+        	<param name="maxHeight"><int>225</int></param>
+            <theme name="dialoglayout" ref="-default-gaps">
+                <theme name="new_game" ref="button"/>
+                <theme name="load_game" ref="button"/>
+                <theme name="options" ref="button"/>
+                <theme name="quit" ref="button"/>
+            </theme>
+        </theme>
+        <theme name="texturemenu" ref="resizableframe">
+        	<param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>300</int></param>
+       		<param name="minHeight"><int>500</int></param>
+        	<param name="maxHeight"><int>500</int></param>
+            <theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+                <theme name="preview" ref="widget">
+                    <param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>225</int></param>
+        			<param name="maxHeight"><int>225</int></param>
+                </theme>
+				<theme name="textree" ref="tree">
+                    <param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>225</int></param>
+        			<param name="maxHeight"><int>225</int></param>
+        		</theme>				
+                <theme name="add" ref="button"/>
+                <theme name="remove" ref="button"/>
+            </theme>
+        </theme>
+        <theme name="entitymenu" ref="resizableframe">
+        	<param name="resizableAxis"><string>VERTICAL</string></param>
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>300</int></param>
         	<param name="maxHeight"><int>1000</int></param>
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
-  				<theme name="block" ref="button" />	
+				<theme name="textree" ref="tree">
+					<param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>300</int></param>
+        			<param name="maxHeight"><int>1000</int></param>
+        		</theme>		
+            </theme>
+        </theme>
+        <theme name="rotationmenu" ref="resizableframe">
+			<theme name="game" allowWildcard="true">
+				
+			</theme>
+	       	<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>400</int></param>
+        	<theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+				<theme name="up" ref="button">
+					<param name="overlay"><image>up</image></param>
+                    <param name="border"><border>10</border></param>
+				</theme>
+				<theme name="down" ref="button">
+					<param name="overlay"><image>down</image></param>
+				</theme>
+				<theme name="right" ref="button">
+					<param name="overlay"><image>right</image></param>
+				</theme>
+				<theme name="left" ref="button">
+					<param name="overlay"><image>left</image></param>
+				</theme>	
+				<theme name="center" ref="button">
+					<param name="overlay"><image>center</image></param>
+				</theme>
+				<theme name="zoomin" ref="button">
+					<param name="overlay"><image>zoomin</image></param>
+				</theme>
+				<theme name="zoomout" ref="button">
+					<param name="overlay"><image>zoomout</image></param>
+				</theme>
+				<theme name="reset" ref="button" />
+				<theme name="right" ref="button">
+					<param name="overlay"><image>right</image></param>
+				</theme>
+				<theme name="left" ref="button">
+					<param name="overlay"><image>left</image></param>
+				</theme>	
+				<theme name="center" ref="button">
+					<param name="overlay"><image>center</image></param>
+				</theme>
+				<theme name="zoomin" ref="button">
+					<param name="overlay"><image>zoomin</image></param>
+				</theme>
+				<theme name="zoomout" ref="button">
+					<param name="overlay"><image>zoomout</image></param>
+				</theme>
+				<theme name="explode" ref="button">
+					<param name="overlay"><image>explode</image></param>
+				</theme>
             </theme>
         </theme>
     </theme>

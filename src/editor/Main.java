@@ -1,6 +1,7 @@
-package editor.window;
+package editor;
 import javax.vecmath.Vector3f;
 
+import editor.window.GridWindow;
 import engine.controller.*;
 import engine.entity.*;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -11,12 +12,12 @@ public class Main extends Controller {
 	@Override
 	public void initialize() {
 		Player player1 = new Player(1.0f, new BoxShape(new Vector3f(1, 1, 1)),0.5f);
-		player1.setProperty("name", "grid");
+		player1.setProperty("name", "player1");
 		objectList.enqueuePhysics(player1, QueueItem.ADD);
 		objectList.parsePhysicsQueue();
 
 		//Adding windows back in (pretty fucked)
-		//while(!renderer.isInitialized()) {}
+		while(!renderer.isInitialized()) {}
 		
 		try {
 			renderer.getWindow().addWindow(new GridWindow(5));
