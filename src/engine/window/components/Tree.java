@@ -1,9 +1,6 @@
 package engine.window.components;
 
-import java.util.ArrayList;
-
 import engine.controller.Config;
-import engine.controller.ConfigListener;
 import engine.window.tree.ColoredTextRenderer;
 import engine.window.tree.ColoredTextString;
 import engine.window.tree.EditFieldCellRenderer;
@@ -22,7 +19,7 @@ import de.matthiasmann.twl.model.TreeTableNode;
 import engine.entity.Entity;
 import engine.entity.EntityList;
 
-public class Tree extends ScrollPane implements Observer, ConfigListener {
+public class Tree extends ScrollPane implements Observer {
     //private MyNode dynamicNode;
     int state;
     EntityList objectList;
@@ -62,9 +59,6 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 
         setContent(treeTable);
         setTheme("/tableScrollPane");
-        
-        //configChanged();
-		Config.registerObserver(this);
     }
     
     //From here down Not used when using config files --Robert
@@ -72,11 +66,9 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 	public void update(Object _name){
 		String name = (String)_name;
 		
+		Model model = treeModel;
 		//If the node does not exist, create it
-		Model model;
 		try {
-			model = Config.treeModel();
-		
 			Node n = findChildNode(name, model);
 			if( n == null ){
 				model.insert(name, "");
@@ -89,7 +81,7 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			//Create new children with updated values
 			createEntityNode(objectList.getItem(name), n);
 		} catch (Exception e) {
-			System.out.println("Failed to update node, error from Config.treeModel");
+			System.out.println("Failed to update node");
 			e.printStackTrace();
 		}
 	}
@@ -150,20 +142,5 @@ public class Tree extends ScrollPane implements Observer, ConfigListener {
 			}
 		}
 		return null;
-	}
-	
-	public void configChanged(){
-		try {
-			ArrayList<Node> nodes = Config.getNodes();
-			
-			treeModel.removeAll();
-			for(Node n: nodes){
-				//System.out.println("Config Changed, Node " + n.getData(0) + " being added");
-				n.changeParent(treeModel);
-			}
-		} catch (Exception e) {
-			System.out.println("Failed to create new treeTable");
-			e.printStackTrace();
-		}
 	}
 }

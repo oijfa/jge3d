@@ -11,13 +11,10 @@ import org.lwjgl.util.glu.GLU;
 
 import engine.render.Renderer;
 
+import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
-import engine.controller.Config;
-import engine.controller.ConfigListener;
-
-public class Camera extends Entity implements ConfigListener {
-	
+public class Camera extends Entity {
 	/*Static class variables*/
 	//Don't flip over, its confusing.
 	private static final double maximum_declination = (Math.PI/2.0f) - 0.01f;
@@ -59,8 +56,6 @@ public class Camera extends Entity implements ConfigListener {
 		distance = 20.0f;
 		setUpVector( new Vector3f(0, 1, 0) );
 		updatePosition();
-		
-		Config.registerObserver(this);
 	}
 	
 	public void focusOn(Entity newFocus){
@@ -89,7 +84,7 @@ public class Camera extends Entity implements ConfigListener {
 	public Entity getFocus() {
 		if(focus == null){
 			if(default_focus == null){
-				default_focus = Config.getFullAssemblyFocus();
+			default_focus = new Entity("def_focus",0f,new BoxShape(new Vector3f(0,0,0)),false);
 			}
 			focus = default_focus;
 		}
@@ -228,15 +223,5 @@ public class Camera extends Entity implements ConfigListener {
 		pos.set(position.get(0), position.get(1), position.get(2));
 
 		return pos;
-	}
-
-	@Override
-	public void configChanged() {
-		Entity newFocus = Config.getFullAssemblyFocus();
-
-		if(focus == default_focus){
-			focus = newFocus;
-		}
-		default_focus = newFocus;
 	}
 }

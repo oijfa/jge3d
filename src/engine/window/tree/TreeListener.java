@@ -28,7 +28,7 @@ public class TreeListener implements Runnable{
 	
 			Entity newFocus;
 			try {
-				newFocus = objects.getItem(Config.getName() + "-" + (String)n.getData(0).toString());
+				newFocus = objects.getItem("hurr" + "-" + (String)n.getData(0).toString());
 				if( newFocus != null){
 					stopResetAndMove(newFocus);
 				}
