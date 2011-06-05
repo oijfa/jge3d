@@ -90,7 +90,7 @@ public class Window extends DesktopArea {
 		windows.add(window);
 		ResizableFrame current_window = windows.get(windows.indexOf(window));
 		add(current_window);
-		current_window.setTheme(window.getClass().getName().toLowerCase());
+		//current_window.setTheme(window.getClass().getName().toLowerCase());
 		
 		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
 		//if( rotationMenu != null){

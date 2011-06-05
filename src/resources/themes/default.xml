@@ -331,7 +331,7 @@
        		<param name="minHeight"><int>300</int></param>
         	<param name="maxHeight"><int>1000</int></param>
         	<theme name="dialoglayout" ref="-default-gaps">
-  				<theme name="" ref="*"/>
+        	    <theme name="" ref="*"/>
   				<theme name="block" ref="button" />	
             </theme>
         </theme>

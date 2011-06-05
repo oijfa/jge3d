@@ -77,8 +77,8 @@ public class Renderer {
 			
 			//Draw the 3d stuff
 			//objectList.drawList();
-			editor.Model<Integer> m = new editor.Model<Integer>(10);
-			m.draw();
+			//editor.Model<Integer> m = new editor.Model<Integer>(10);
+			//m.draw();
 		}
 		
 		//Draw the window manager stuff
