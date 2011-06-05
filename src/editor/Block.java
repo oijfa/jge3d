@@ -19,7 +19,12 @@ public class Block<E extends Number> extends Button{
 		this.addCallback(new Callback(this));
 	}
 	public Coordinate<E> getCoordinate(){return position.clone();}
-	public Color getColor(){return new Color(base_color.toARGB());}
+	public Color getColor(){
+		if(base_color==null)
+			return new Color((byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00);
+		else
+			return new Color(base_color.toARGB());
+	}
 	
 	public void setPosition(Coordinate<E> position){
 		this.position = position;

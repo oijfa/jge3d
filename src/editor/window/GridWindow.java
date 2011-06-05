@@ -31,6 +31,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 			}
 		}
 
+		this.addCellListener(this);
+		
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
 		// to bottom
@@ -87,6 +89,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((Block<Integer>) e.getSource()).getColor().toString());
+		//TODO: unfuck this
+		System.out.println(((Block<Integer>) e.getSource()).getColor());
+		//((Block<Integer>) e.getSource()).setColor(this);
 	}
 }
