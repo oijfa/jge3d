@@ -1,29 +1,23 @@
 package engine.entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import engine.monitoring.Observer;
-import engine.monitoring.Subject;
-
 import engine.physics.Physics;
 
-public class EntityList implements Subject{
+public class EntityList{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 
 	//private HashMap<String,TypedConstraint> constraints;
 
-	private ArrayList<Observer> observers;
 	private ConcurrentLinkedQueue<QueueItem> physicsQueue;
 	private ConcurrentLinkedQueue<QueueItem> renderQueue;
 	
 	public EntityList(Physics physics){
 		names = new HashMap<String,Entity>();
 		this.physics=physics;
-		observers = new ArrayList<Observer>();
 		
 		physicsQueue = new ConcurrentLinkedQueue<QueueItem>();
 		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
@@ -78,7 +72,6 @@ public class EntityList implements Subject{
 			if( e.getCollisionObject() != null ){
 				physics.getDynamicsWorld().addCollisionObject(e.getCollisionObject());
 			}
-			notifyObservers(e.getProperty("name"));
 			ret = true;
 		}
 		return ret;
@@ -100,7 +93,6 @@ public class EntityList implements Subject{
 	private void removePhysicsItem(Entity entity){
 		names.remove(entity);
 		physics.removeEntity(entity);
-		notifyObservers(entity.getProperty("name"));
 	}
 	
 	public void addEntity(Entity ent){
@@ -139,21 +131,4 @@ public class EntityList implements Subject{
 			constraints.remove(constraint_name);
 		}
 	}*/
-	
-	/* SUBJECT IMPLEMENTATION */
-	@Override
-	public void registerObserver(Observer o) {
-		observers.add(o);
-	}
-	@Override
-	public void removeObserver(Observer o) {
-		observers.remove(o);
-	}
-	@Override
-	public void notifyObservers(Object o) {
-		for(int i = 0; i < observers.size(); i++){
-			Observer observer = (Observer)observers.get(i);
-				observer.update(o);
-		}	
-	}
 }

@@ -10,7 +10,6 @@ import engine.importing.pieces.Material;
 import engine.importing.pieces.Mesh;
 import engine.importing.pieces.Model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
