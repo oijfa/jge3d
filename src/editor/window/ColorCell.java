@@ -1,4 +1,4 @@
-package editor;
+package editor.window;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
@@ -9,20 +9,20 @@ import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.utils.TintAnimator;
 import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 
-public class Block<E extends Number> extends Button{
-	private Coordinate<E> position;
+public class ColorCell extends Button{
 	private Color base_color;
 	private ArrayList<ActionListener> action_listeners;
-	//TODO: Textures?
-	public Block(){
+	
+	public ColorCell(){
 		this.addCallback(new Callback(this));
 	}
-	public Coordinate<E> getCoordinate(){return position.clone();}
-	public Color getColor(){return new Color(base_color.toARGB());}
-	
-	public void setPosition(Coordinate<E> position){
-		this.position = position;
+
+	public ColorCell(Color base_color){
+		this.addCallback(new Callback(this));
+		setColor(base_color);
 	}
+	
+	public Color getColor(){return new Color(base_color.toARGB());}
 	
 	public void setColor(Color color){
 		this.base_color = color;
@@ -43,8 +43,8 @@ public class Block<E extends Number> extends Button{
 	}
 	
 	private class Callback implements Runnable{
-		Block<E> owner;
-		public Callback(Block<E> owner){
+		ColorCell owner;
+		public Callback(ColorCell owner){
 			this.owner = owner;
 		}
 		@Override

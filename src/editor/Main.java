@@ -2,6 +2,7 @@ package editor;
 import javax.vecmath.Vector3f;
 
 import editor.window.GridWindow;
+import editor.window.PaletteMenu;
 import engine.controller.*;
 import engine.entity.*;
 
@@ -33,6 +34,7 @@ public class Main extends Controller {
 		while(!renderer.isInitialized()) {}
 		
 		renderer.getWindow().addWindow(new GridWindow(5));
+		renderer.getWindow().addWindow(new PaletteMenu(216));
 		
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);

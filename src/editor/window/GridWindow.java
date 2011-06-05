@@ -16,7 +16,7 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);
 		
-		setTitle("JGE3d test");
+		setTitle("Grid View");
 
 		// Create the layout and button instances
 		layout = new DialogLayout();
@@ -53,6 +53,7 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 			h_grid.addGroup(row);
 		}
 
+		//Create vertical rows
 		for(int i=0;i<grid.size();i++) {
 			row = layout.createSequentialGroup();
 			for(int j=0;j<grid.size();j++) {

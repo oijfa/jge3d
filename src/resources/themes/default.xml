@@ -119,6 +119,18 @@
     		</map>
 		</param>
     </theme>
+    <theme name="-no-gaps" ref="-defaults">
+    	<param name="smallGap"><dimension>0,0</dimension></param>
+		<param name="mediumGap"><dimension>00,0</dimension></param>
+		<param name="largeGap"><dimension>0,0</dimension></param>
+		<param name="defaultGap"><dimension>0,0</dimension></param>
+		<param name="namedGaps">
+		    <map>
+				<param name="reggap"><gap>0</gap></param>
+    		</map>
+		</param>
+    </theme>
+    
     <theme name="resizableframe" ref="-defaults" allowWildcard="true">
         <param name="background"><image>border_round</image></param>
         <param name="border"><border>15,15,15,15</border></param>
@@ -167,6 +179,14 @@
         <param name="maxHeight"><int>75</int></param>
         <param name="minWidth"><int>75</int></param>
         <param name="minHeight"><int>75</int></param>
+    </theme>
+        <theme name="smallbutton" allowWildcard="true" ref="-defaults">
+        <param name="background"><image>white</image></param>
+        <param name="border"><border>10</border></param>
+        <param name="maxWidth"><int>20</int></param>
+        <param name="maxHeight"><int>20</int></param>
+        <param name="minWidth"><int>20</int></param>
+        <param name="minHeight"><int>20</int></param>
     </theme>
     <theme name="vscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="upbutton" ref="-defaults">
@@ -330,9 +350,19 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>300</int></param>
         	<param name="maxHeight"><int>1000</int></param>
-        	<theme name="dialoglayout" ref="-default-gaps">
+        	<theme name="dialoglayout" ref="-no-gaps">
         	    <theme name="" ref="*"/>
-  				<theme name="block" ref="button" />	
+  				<theme name="block" ref="smallbutton" />	
+            </theme>
+        </theme>
+        <theme name="palettemenu" ref="resizableframe">
+        	<param name="minWidth"><int>400</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>200</int></param>
+        	<param name="maxHeight"><int>200</int></param>
+        	<theme name="dialoglayout" ref="-no-gaps">
+        	    <theme name="" ref="*"/>
+  				<theme name="colorcell" ref="smallbutton" />	
             </theme>
         </theme>
     </theme>
