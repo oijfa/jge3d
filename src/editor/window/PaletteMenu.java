@@ -49,6 +49,8 @@ public class PaletteMenu extends ResizableFrame implements ActionListener{
 			}
 		}
 		
+		this.addCellListener(this);
+		
 		
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top

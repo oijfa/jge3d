@@ -42,6 +42,7 @@ public class ColorCell extends Button{
 	}
 	
 	public void addActionListener(ActionListener listener){
+	  action_listeners.add(listener);
 	}
 	
 	private class Callback implements Runnable{
