@@ -13,14 +13,6 @@ public class Main extends Controller {
 
 	@Override
 	public void initialize() {
-		try {
-			ParseConfig config = new ParseConfig(objectList);
-			config.readConfigFile("resources/models/config_test.xml");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		//Testing the terrain stuff here
 		//Terrain terrain = new Terrain(objectList);
 		//terrain.createTerrain(75);
