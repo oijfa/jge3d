@@ -15,10 +15,12 @@ public class ColorCell extends Button{
 	
 	public ColorCell(){
 		this.addCallback(new Callback(this));
+		action_listeners = new ArrayList<ActionListener>();
 	}
 
 	public ColorCell(Color base_color){
 		this.addCallback(new Callback(this));
+		action_listeners = new ArrayList<ActionListener>();
 		setColor(base_color);
 	}
 	

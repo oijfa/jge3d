@@ -362,7 +362,9 @@
         	<param name="maxHeight"><int>200</int></param>
         	<theme name="dialoglayout" ref="-no-gaps">
         	    <theme name="" ref="*"/>
-  				<theme name="colorcell" ref="smallbutton" />	
+  				<theme name="colorcell" ref="smallbutton" />
+  				<theme name="primary_color" ref="button" />
+  				<theme name="alt_color" ref="button" />		
             </theme>
         </theme>
     </theme>

@@ -13,19 +13,23 @@ import editor.action_listener.ActionListener;
 public class PaletteMenu extends ResizableFrame implements ActionListener{
 	private DialogLayout layout;
 	private ArrayList<ColorCell> grid;
+	private ColorCell primary_color;
+	private ColorCell alt_color;
 	
 	public PaletteMenu(Integer grid_size) {
-		this.setSize(400, 200);
-		
 		setTitle("Palette Menu");
 
 		// Create the layout and button instances
 		layout = new DialogLayout();
+		
+		primary_color  = new ColorCell();
+		alt_color = new ColorCell();
+		
+		layout = new DialogLayout();
 
 		grid = new ArrayList<ColorCell>(grid_size);
-
 		
-		int num_rows=3;
+		int num_rows=10;
 		Integer num_colors = (int)Math.pow(grid_size, 1.0f/3.0f);
 		for(int b=0;b<num_colors;b++) {
 			for(int g=0;g<num_colors;g++) {
@@ -41,7 +45,6 @@ public class PaletteMenu extends ResizableFrame implements ActionListener{
 							)
 						)
 					);
-					grid.get(r+b+g).reapplyTheme();
 				}
 			}
 		}
@@ -98,6 +101,6 @@ public class PaletteMenu extends ResizableFrame implements ActionListener{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((Block<Integer>) e.getSource()).getColor().toString());
+		System.out.println(((ColorCell) e.getSource()).getColor().toString());
 	}
 }
