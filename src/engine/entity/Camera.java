@@ -9,8 +9,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import engine.render.Renderer;
-
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
@@ -195,8 +193,10 @@ public class Camera extends Entity {
 		System.out.print("Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y + "	Z:	" + up_vector.z + "\n\n");	
 	}
 	
+	
 	//TODO: This needs cleaned up and commented real bad
-	public Vector3f getRayTo(int x, int y) { return getRayTo(x, y, (int)Renderer.farClipping); }
+	//TODO: Magic Number for far clipping
+	public Vector3f getRayTo(int x, int y) { return getRayTo(x, y, (int)1000); }
 	public Vector3f getRayTo(int x, int y, int farDistance) {	
 		//Create stupid floatbuffers for LWJGL
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);

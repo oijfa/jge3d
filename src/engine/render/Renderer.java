@@ -15,25 +15,24 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
-
 import engine.window.Window;
-import engine.window.tree.Model;
 
 public class Renderer {
 	private Window window;
 	private EntityList objectList;
-    private Camera camera;
-    private boolean isInitialized=false;
-    private static boolean supportsVBO=false;
+  private Camera camera;
+  private boolean isInitialized=false;
+  private static boolean supportsVBO=false;
 	//private float x=0,y=0,z=0;
 	
-    public static float nearClipping = 0.01f;
+  public static float nearClipping = 0.01f;
 	public static float farClipping = 1000.0f;
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
@@ -44,13 +43,13 @@ public class Renderer {
     private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
 	private Canvas display_parent;
 
+	public Renderer(EntityList objectList){
+    this(objectList,null);
+  }
+	
 	public Renderer(EntityList objectList, Canvas display_parent){
 		this.objectList = objectList;
 		this.display_parent = display_parent;
-	}
-
-	public Renderer(EntityList objectList, Model m) {
-		this.objectList = objectList;
 	}
 
 	public void draw() {
@@ -76,13 +75,13 @@ public class Renderer {
 			);
 			
 			//Draw the 3d stuff
-			//objectList.drawList();
+			objectList.drawList();
 			//editor.Model<Integer> m = new editor.Model<Integer>(10);
 			//m.draw();
 		}
 		
 		//Draw the window manager stuff
-		window.draw();
+		//window.draw();
 		
 		GL11.glFlush();
 		Display.update();
@@ -91,18 +90,28 @@ public class Renderer {
 		//Display.processMessages(); // process new native messages since
 	}
 	
-	public void initGL() {		
+	public void initGL() {	
+    
 		//Setup Display
 		try {
-			Display.setParent(display_parent);
+		  if( display_parent != null){
+		    Display.setParent(display_parent);
+		  }
 			Display.create();
 			Display.setTitle("JGE3d");
-			//TODO:  Make Configurable by User
-			Display.setVSyncEnabled(true);
+
+  		// Create a fullscreen window with 1:1 orthographic 2D projection (default)
+      Display.setFullscreen(false);
+      Display.setDisplayMode(new DisplayMode(640,480));
+   
+      // Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
+      //TODO:  Make Configurable by User
+      Display.setVSyncEnabled(true);
+			
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		window = new Window(objectList);
+		//window = new Window(objectList);
 
 		//camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 		
@@ -182,7 +191,7 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(
 			45.0f/zoom, 
-			(float) window.getWidth() / window.getHeight(), 
+			(float) Display.getDisplayMode().getWidth() / Display.getDisplayMode().getHeight(), 
 			nearClipping, 
 			farClipping
 		);

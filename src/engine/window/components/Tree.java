@@ -1,6 +1,5 @@
 package engine.window.components;
 
-import engine.controller.Config;
 import engine.window.tree.ColoredTextRenderer;
 import engine.window.tree.ColoredTextString;
 import engine.window.tree.EditFieldCellRenderer;
@@ -91,7 +90,7 @@ public class Tree extends ScrollPane implements Observer {
 		for( String key : objectList.getKeySet()){
 			Entity ent = objectList.getItem(key);
 			try {
-				entityNode = Config.treeModel().insert(ent.getProperty("name"), ent.getPosition().toString());
+				entityNode = treeModel.insert(ent.getProperty("name"), ent.getPosition().toString());
 			
 			this.createEntityNode(ent, entityNode);
 			} catch (Exception e) {
