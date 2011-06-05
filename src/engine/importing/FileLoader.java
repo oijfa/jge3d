@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 public class FileLoader {
 	public FileLoader(){}
 	
-	public static Model loadFile(String[] filePaths) throws LWJGLException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
+	public static Model loadFile(String... filePaths) throws LWJGLException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
 	{
 		String[] temp;
 		Parser parser = null;

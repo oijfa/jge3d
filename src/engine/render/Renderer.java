@@ -59,29 +59,38 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
 		GL11.glLoadIdentity();
 		
+		Vector3f camPos;
+    Vector3f focusPos;
+    Vector3f up;;
 		if(camera!=null){
 			camera.updatePosition();		
 		
 			//Get its new position
-			Vector3f camPos = camera.getPosition();
-			Vector3f focusPos = camera.getFocusPosition();
-			Vector3f up = camera.getUp();
-			
-			//Look at the camera's focus
-			GLU.gluLookAt(
-					camPos.x, camPos.y, camPos.z, 	//Camera Location
-					focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
-					up.x, up.y, up.z			//Up Vector
-			);
-			
-			//Draw the 3d stuff
-			objectList.drawList();
-			//editor.Model<Integer> m = new editor.Model<Integer>(10);
-			//m.draw();
+			camPos = camera.getPosition();
+			focusPos = camera.getFocusPosition();
+			up = camera.getUp();
+		}else{
+		  camPos = new Vector3f(0,0,5);
+		  focusPos = new Vector3f(0,0,0);
+		  up = new Vector3f(0,1,0);
 		}
 		
+		//Look at the camera's focus
+		GLU.gluLookAt(
+				camPos.x, camPos.y, camPos.z, 	//Camera Location
+				focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
+				up.x, up.y, up.z			//Up Vector
+		);
+		
+		//Draw the 3d stuff
+		objectList.drawList();
+		//editor.Model<Integer> m = new editor.Model<Integer>(10);
+		//m.draw();
+		
+		
 		//Draw the window manager stuff
-		//window.draw();
+		if( window != null)
+		  window.draw();
 		
 		GL11.glFlush();
 		Display.update();

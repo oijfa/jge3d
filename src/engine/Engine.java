@@ -1,8 +1,9 @@
 package engine;
 
-
-
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.vecmath.Vector3f;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -10,9 +11,14 @@ import org.lwjgl.opengl.Display;
 import de.matthiasmann.twl.ResizableFrame;
 
 import engine.entity.Camera;
+import engine.entity.Entity;
 import engine.entity.EntityList;
+import engine.importing.FileLoader;
 import engine.physics.Physics;
 import engine.render.Renderer;
+
+import com.bulletphysics.collision.shapes.BoxShape;
+
 
 public class Engine {
   
@@ -31,8 +37,25 @@ public class Engine {
   
   public static void main(String args[]) throws LWJGLException{
     Engine r = new Engine();
-    r.run();
+    r.run();  
     
+    r.addEntity("BLAH", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH").setPosition(new Vector3f(0,0,-5));
+    
+    r.addEntity("BLAH1", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH1").setPosition(new Vector3f(0,0,5));
+    
+    r.addEntity("BLAH2", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH2").setPosition(new Vector3f(0,-5,0));
+    
+    r.addEntity("BLAH3", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH3").setPosition(new Vector3f(0,5,0));
+    
+    r.addEntity("BLAH4", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH4").setPosition(new Vector3f(-5,0,0));
+    
+    r.addEntity("BLAH5", "resources/models/misc/box2.xgl");
+    r.getEntity("BLAH5").setPosition(new Vector3f(5,0,0));
   }
 
   @SuppressWarnings("unused")
@@ -47,17 +70,44 @@ public class Engine {
     renderer = new Renderer(entity_list);
   }
   
-  public void setupDisplay() throws LWJGLException{
-    renderer.initGL();
-  }
-  
   public void run() throws LWJGLException{
     startPhysics();
     startRendering();
   }
   
+  /* Entity API */
+  public void addEntity(String name, String model_location){
+    try {
+      Entity ent = new Entity(1, new BoxShape(new Vector3f(1f,1f,1f)), true );
+      ent.setProperty(Entity.NAME, name);
+      ent.setModel(FileLoader.loadFile(model_location));
+      entity_list.addEntity(ent);
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (LWJGLException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public Entity getEntity(String name){
+    return entity_list.getItem(name);
+  }
+  
+  public void removeEntity(String name){
+    entity_list.removeEntity(name);
+  }
+  
+  /* Private Methods */
   private void startRendering() throws LWJGLException {
-    setupDisplay();
+    renderer.initGL();
     render_thread = new Thread(){
       public void run(){
         
@@ -71,7 +121,6 @@ public class Engine {
   }
 
   private void startPhysics() {
-    //TODO Make the physics actually run
     physics_thread = new Thread() {
       public void run() {
         entity_list.parsePhysicsQueue();
@@ -87,7 +136,7 @@ public class Engine {
     physics_thread.start();
   }
 
-  public void render() {
+  private void render() {
     try {
       Display.makeCurrent();
       entity_list.parseRenderQueue();
@@ -103,8 +152,7 @@ public class Engine {
         } else if (entity_list != null && entity_list.renderQueueSize() > 0){
           entity_list.parseRenderQueue();
         }else if (Display.isActive()) {
-       // The window is in the foreground, so we should play the game
-          logic();
+          // The window is in the foreground, so we should play the game
           renderer.draw();
           Display.sync(FRAMERATE);
         } else {
@@ -113,8 +161,6 @@ public class Engine {
           try {
             Thread.sleep(100);
           } catch (InterruptedException e) {}
-          logic();
-   
           // Only bother rendering if the window is visible or dirty
           if (Display.isVisible() || Display.isDirty()) {
             renderer.draw();
@@ -124,9 +170,5 @@ public class Engine {
     } catch (LWJGLException e1) {
       e1.printStackTrace();
     }
-  }
-  
-  public void logic(){
-    //TODO it'd be nice if the user could pass in a ruby proc here >.>
   }
 }

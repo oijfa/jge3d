@@ -8,12 +8,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import engine.monitoring.Observer;
 import engine.monitoring.Subject;
 
-
-import engine.monitoring.EntityObserver;
-
 import engine.physics.Physics;
 
-public class EntityList implements EntityObserver, Subject{
+public class EntityList implements Subject{
 	private HashMap<String,Entity> names;
 	private Physics physics;
 
@@ -78,13 +75,9 @@ public class EntityList implements EntityObserver, Subject{
 		boolean ret = false;
 		
 		if(e.keyExists("name")){
-			names.put((String)e.getProperty("name"), e);
-			names.size();
-			
 			if( e.getCollisionObject() != null ){
 				physics.getDynamicsWorld().addCollisionObject(e.getCollisionObject());
 			}
-			e.registerObserver(this);
 			notifyObservers(e.getProperty("name"));
 			ret = true;
 		}
@@ -106,28 +99,26 @@ public class EntityList implements EntityObserver, Subject{
 	}
 	private void removePhysicsItem(Entity entity){
 		names.remove(entity);
-		entity.removeObserver(this);
 		physics.removeEntity(entity);
 		notifyObservers(entity.getProperty("name"));
 	}
-
-	//Set actions that need to wait on the physics
-	public void enqueuePhysics(Entity ent, int action) {
-		physicsQueue.add(new QueueItem(ent,action));
+	
+	public void addEntity(Entity ent){
+	  names.put((String)ent.getProperty("name"), ent);
+	  physicsQueue.add(new QueueItem(ent,QueueItem.ADD));
+	  renderQueue.add(new QueueItem(ent,QueueItem.ADD));
 	}
 	
-	public void enqueueRenderer(Entity ent, int action) {
-		renderQueue.add(new QueueItem(ent,action));
-	}
 	
-	/* ENTITY OBSERVER IMPLEMENTATION */
-	public void update(String key, Object old_val, Object new_val) {
-		if(key == "name"){
-			Entity ent = this.getItem(key);
-			enqueuePhysics(ent, QueueItem.REMOVE);
-			this.addPhysicsItem(ent);
-			notifyObservers(key);
-		}
+	public void removeEntity(String name){
+	  if(names.containsKey(name)){
+	    removeEntity(names.get(name));
+	  }
+	}
+	public void removeEntity(Entity ent){ 
+    names.remove(ent.getProperty(Entity.NAME));
+    physicsQueue.add(new QueueItem(ent,QueueItem.REMOVE));
+    renderQueue.add(new QueueItem(ent,QueueItem.REMOVE));
 	}
 	
 	/*Physics Constraints*/
