@@ -3,6 +3,7 @@ package editor.window;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
+import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
@@ -12,6 +13,7 @@ import editor.CubicGrid;
 public class GridWindow extends ResizableFrame implements ActionListener{
 	private DialogLayout layout;
 	private CubicGrid<Block<Integer>> grid;
+	private Color current_color;
 	
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);
@@ -77,20 +79,22 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	}
 
 	public void addCellListener(ActionListener listener){
-	    for(int i = 0; i < grid.size(); i++){
-	      for(int j = 0; j < grid.size(); j++){
-	        for(int k = 0; k < grid.size(); k++){
-	          grid.get(i, j, k).addActionListener(listener);
-	        }
-	      }
-	    }
-	  }
+    for(int i = 0; i < grid.size(); i++){
+      for(int j = 0; j < grid.size(); j++){
+        for(int k = 0; k < grid.size(); k++){
+          grid.get(i, j, k).addActionListener(listener);
+        }
+      }
+    }
+  }
+	
+	public void setCurrentColor(Color color){
+	  current_color = color;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO: unfuck this
-		System.out.println(((Block<Integer>) e.getSource()).getColor());
-		//((Block<Integer>) e.getSource()).setColor(this);
+		((Block<Integer>) e.getSource()).setColor(current_color);
 	}
 }
