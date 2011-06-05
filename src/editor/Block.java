@@ -15,6 +15,7 @@ public class Block<E extends Number> extends Button{
 	private ArrayList<ActionListener> action_listeners;
 	//TODO: Textures?
 	public Block(){
+	  action_listeners = new ArrayList<ActionListener>();
 		this.addCallback(new Callback(this));
 	}
 	public Coordinate<E> getCoordinate(){return position.clone();}
