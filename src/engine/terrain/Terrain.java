@@ -10,7 +10,6 @@ import com.bulletphysics.collision.shapes.BoxShape;
 
 import engine.entity.Entity;
 import engine.entity.EntityList;
-import engine.entity.QueueItem;
 
 public class Terrain {
 	private EntityList objectList;
@@ -41,8 +40,7 @@ public class Terrain {
 			ent.setPosition(terrain.get(i));
 			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 			
-			objectList.enqueuePhysics(ent, QueueItem.ADD);
-			objectList.enqueueRenderer(ent, QueueItem.ADD);
+			objectList.addEntity(ent);
 		}
 	}
 	
