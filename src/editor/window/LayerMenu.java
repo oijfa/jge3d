@@ -12,21 +12,20 @@ public class LayerMenu extends ResizableFrame implements ActionListener {
 		setTitle("Layer Menu");
 		
 		layer_cb = new ComboBox<Integer>();
-		
 		layer_cb.setTheme("layer_cb");
+		this.addListener(this);
 		
 		add(layer_cb);
 	}
 
 	public void populateLayers(Integer num_layers) {
 		layer_cb.removeAllItems();
-		for(int i=1; i <= num_layers; i++) {
+		for(int i=0; i < num_layers; i++) {
 			layer_cb.addItem(i);
 		}
 	}
-	
 
-	public void addCellListener(ActionListener listener){
+	public void addListener(ActionListener listener){
 	    layer_cb.addActionListener(listener);
 	}
 

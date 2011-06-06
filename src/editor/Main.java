@@ -36,8 +36,10 @@ public class Main extends Controller implements ActionListener {
 		grid_window = new GridWindow(5);
 		palette_menu = new PaletteMenu(216);
 		layer_menu = new LayerMenu();
+		layer_menu.populateLayers(5);
 		
-		palette_menu.addCellListener(this);
+		//palette_menu.addCellListener(this);
+		//layer_menu.
 		
 		renderer.getWindow().addWindow(grid_window);
 		renderer.getWindow().addWindow(palette_menu);

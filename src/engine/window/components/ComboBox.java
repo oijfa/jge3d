@@ -21,23 +21,16 @@ public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<Object>{
 	}
 	
 	public void addItem(Object item) {
-		ListModel<Object> old_list_model = this.getModel();
-		
-		SimpleChangableListModel<Object> new_list_model = new SimpleChangableListModel<Object>();
-		
-		new_list_model.addElements(old_list_model);
+		//ListModel<Object> old_list_model = this.getModel();
+		SimpleChangableListModel<Object> new_list_model = (SimpleChangableListModel<Object>) this.getModel();
 		new_list_model.addElement(item);
-		
 		this.setModel(new_list_model);
 	}
 	
 	public void removeItem(Object item) {
 		ListModel<Object> old_list_model = this.getModel();
-		
 		SimpleChangableListModel<Object> new_list_model = new SimpleChangableListModel<Object>();
-		
 		new_list_model.addElements(old_list_model);
-		
 		for(int i=0; i<new_list_model.getNumEntries();i++) {
 			if(new_list_model.getEntry(i).equals(item))
 				new_list_model.removeElement(i);	
@@ -52,6 +45,7 @@ public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<Object>{
 		for(int i=0; i<new_list_model.getNumEntries();i++) {
 			new_list_model.removeElement(i);	
 		}
+		this.setModel(new_list_model);
 	}
 	
 	public void fireActionEvent(){

@@ -280,14 +280,20 @@
         <param name="fixedCellHeight"><bool>false</bool></param>
         <param name="rowMajor"><bool>true</bool></param>
     </theme>
-    <theme name="combobox" ref="label">
+    <theme name="combobox" ref="widget">
         <theme name="display" ref="-defaults">
         </theme>
         <param name="background"><image>border_round</image></param>
-        <param name="minWidth"><int>140</int></param>
-        <param name="minHeight"><int>40</int></param>
-        <param name="maxHeight"><int>40</int></param>
-        <theme name="button" ref="button"/>
+        <param name="minWidth"><int>100</int></param>
+        <param name="minHeight"><int>30</int></param>
+        <param name="maxHeight"><int>50</int></param>
+        <param name="maxWidth"><int>1000</int></param>
+        <theme name="button" ref="button">
+            <param name="minWidth"><int>30</int></param>
+	        <param name="minHeight"><int>30</int></param>
+	        <param name="maxHeight"><int>30</int></param>
+	        <param name="maxWidth"><int>30</int></param>
+        </theme>
     </theme>
     <theme name="comboboxPopup" ref="-defaults">
         <theme name="listbox" ref="listbox">
@@ -388,11 +394,12 @@
         	</theme>
     	</theme>
     	<theme name="layermenu" ref="resizableframe">
-    		<param name="minWidth"><int>400</int></param>
-            <param name="maxWidth"><int>400</int></param>
-       		<param name="minHeight"><int>200</int></param>
-        	<param name="maxHeight"><int>200</int></param>
-        	<theme name="layer_cb" ref="combobox" />
+    		<param name="minWidth"><int>200</int></param>
+            <param name="maxWidth"><int>200</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>100</int></param>
+        	<theme name="layer_cb" ref="combobox">
+        	</theme>
     	</theme>
     </theme>
 </themes>

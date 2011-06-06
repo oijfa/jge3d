@@ -79,17 +79,17 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	}
 
 	public void addCellListener(ActionListener listener){
-    for(int i = 0; i < grid.size(); i++){
-      for(int j = 0; j < grid.size(); j++){
-        for(int k = 0; k < grid.size(); k++){
-          grid.get(i, j, k).addActionListener(listener);
-        }
-      }
-    }
-  }
+		for(int i = 0; i < grid.size(); i++){
+	    	for(int j = 0; j < grid.size(); j++){
+	    		for(int k = 0; k < grid.size(); k++){
+	        		grid.get(i, j, k).addActionListener(listener);
+	        	}
+	    	}
+		}
+	}
 	
 	public void setCurrentColor(Color color){
-	  current_color = color;
+		current_color = color;
 	}
 	
 	@SuppressWarnings("unchecked")
