@@ -21,7 +21,7 @@ public class Block<E extends Number> extends Button{
 	public Coordinate<E> getCoordinate(){return position.clone();}
 	public Color getColor(){
 		if(base_color==null)
-			return new Color((byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00);
+			return new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
 		else
 			return new Color(base_color.toARGB());
 	}

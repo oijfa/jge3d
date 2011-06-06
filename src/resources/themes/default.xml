@@ -130,7 +130,17 @@
     		</map>
 		</param>
     </theme>
-    
+    <theme name="-small-gaps" ref="-defaults">
+    	<param name="smallGap"><dimension>1,1</dimension></param>
+		<param name="mediumGap"><dimension>1,1</dimension></param>
+		<param name="largeGap"><dimension>1,1</dimension></param>
+		<param name="defaultGap"><dimension>1,1</dimension></param>
+		<param name="namedGaps">
+		    <map>
+				<param name="reggap"><gap>1</gap></param>
+    		</map>
+		</param>
+    </theme>
     <theme name="resizableframe" ref="-defaults" allowWildcard="true">
         <param name="background"><image>border_round</image></param>
         <param name="border"><border>15,15,15,15</border></param>
@@ -180,7 +190,15 @@
         <param name="minWidth"><int>75</int></param>
         <param name="minHeight"><int>75</int></param>
     </theme>
-        <theme name="smallbutton" allowWildcard="true" ref="-defaults">
+    <theme name="medbutton" allowWildcard="true" ref="-defaults">
+        <param name="background"><image>white</image></param>
+        <param name="border"><border>20</border></param>
+        <param name="maxWidth"><int>20</int></param>
+        <param name="maxHeight"><int>20</int></param>
+        <param name="minWidth"><int>20</int></param>
+        <param name="minHeight"><int>20</int></param>
+    </theme>
+    <theme name="smallbutton" allowWildcard="true" ref="-defaults">
         <param name="background"><image>white</image></param>
         <param name="border"><border>10</border></param>
         <param name="maxWidth"><int>20</int></param>
@@ -350,9 +368,9 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>300</int></param>
         	<param name="maxHeight"><int>1000</int></param>
-        	<theme name="dialoglayout" ref="-no-gaps">
+        	<theme name="dialoglayout" ref="-small-gaps">
         	    <theme name="" ref="*"/>
-  				<theme name="block" ref="button" />	
+  				<theme name="block" ref="medbutton" />	
             </theme>
         </theme>
         <theme name="palettemenu" ref="resizableframe">
@@ -368,6 +386,13 @@
   					<theme name="alt_color" ref="button" />		
             	</theme>
         	</theme>
+    	</theme>
+    	<theme name="layermenu" ref="resizableframe">
+    		<param name="minWidth"><int>400</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>200</int></param>
+        	<param name="maxHeight"><int>200</int></param>
+        	<theme name="layer_cb" ref="combobox" />
     	</theme>
     </theme>
 </themes>

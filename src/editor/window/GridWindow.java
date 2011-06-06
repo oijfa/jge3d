@@ -13,7 +13,7 @@ import editor.CubicGrid;
 public class GridWindow extends ResizableFrame implements ActionListener{
 	private DialogLayout layout;
 	private CubicGrid<Block<Integer>> grid;
-	private Color current_color;
+	private Color current_color = new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
 	
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);

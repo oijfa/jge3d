@@ -5,6 +5,7 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import editor.window.ColorCell;
 import editor.window.GridWindow;
+import editor.window.LayerMenu;
 import editor.window.PaletteMenu;
 import engine.controller.*;
 import engine.entity.*;
@@ -16,6 +17,7 @@ public class Main extends Controller implements ActionListener {
 
 	GridWindow grid_window;
 	PaletteMenu palette_menu;
+	LayerMenu layer_menu;
 	
 	@Override
 	public void initialize() {
@@ -33,11 +35,13 @@ public class Main extends Controller implements ActionListener {
 		
 		grid_window = new GridWindow(5);
 		palette_menu = new PaletteMenu(216);
+		layer_menu = new LayerMenu();
 		
 		palette_menu.addCellListener(this);
 		
 		renderer.getWindow().addWindow(grid_window);
 		renderer.getWindow().addWindow(palette_menu);
+		renderer.getWindow().addWindow(layer_menu);
 		
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);

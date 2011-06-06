@@ -24,7 +24,12 @@ public class ColorCell extends Button{
 		setColor(base_color);
 	}
 	
-	public Color getColor(){return new Color(base_color.toARGB());}
+	public Color getColor(){
+		if(base_color==null)
+			return new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
+		else
+			return new Color(base_color.toARGB());
+	}
 	
 	public void setColor(Color color){
 		this.base_color = color;
