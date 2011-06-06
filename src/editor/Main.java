@@ -3,7 +3,6 @@ import javax.vecmath.Vector3f;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
-import editor.window.ColorCell;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
 import editor.window.PaletteMenu;
@@ -38,7 +37,7 @@ public class Main extends Controller implements ActionListener {
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(5);
 		
-		//palette_menu.addCellListener(this);
+		palette_menu.addActionListener(this);
 		//layer_menu.
 		
 		renderer.getWindow().addWindow(grid_window);
@@ -51,6 +50,6 @@ public class Main extends Controller implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent ae) {
-    grid_window.setCurrentColor(((ColorCell) ae.getSource()).getColor());
+    grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
   }
 }

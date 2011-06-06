@@ -17,7 +17,10 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 	private ColorCell primary_color;
 	private ColorCell alt_color;
 	
+	private ArrayList<ActionListener> action_listeners;
+	
 	public PaletteMenu(Integer grid_size) {
+	  action_listeners = new ArrayList<ActionListener>();
 		setTitle("Palette Menu");
 
 		// Create the layout and button instances
@@ -115,8 +118,22 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 		add(frame_layout);
 		// !!! END EXAMPLE !!!//
 	}
+	
+	public Color getPrimaryColor(){
+	  return primary_color.getColor();
+	}
 
-	public void addCellListener(ActionListener listener){
+	public void addActionListener(ActionListener al){
+	  action_listeners.add(al);
+	}
+	
+	public void fireActionEvent(){
+	  for(ActionListener al : action_listeners){
+	    al.actionPerformed(new ActionEvent(this));
+	  }
+	}
+	
+	private void addCellListener(ActionListener listener){
 	    for(int i = 0; i < grid.size(); i++){
 	      grid.get(i).addActionListener(listener);
 	    }
@@ -126,5 +143,6 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(((ColorCell) e.getSource()).getColor().toString());
 		primary_color.setColor(((ColorCell) e.getSource()).getColor());
+		fireActionEvent();
 	}
 }
