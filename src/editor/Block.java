@@ -41,7 +41,7 @@ public class Block<E extends Number> extends Button{
 	
 	public void removeParent() {
 		if(this.getParent() != null) {
-			this.removeParent();
+			System.out.println("fuck");
 		}
 	}
 	
