@@ -38,6 +38,7 @@ public class Main extends Controller implements ActionListener {
 		layer_menu.populateLayers(5);
 		
 		palette_menu.addActionListener(this);
+		layer_menu.addActionListener(this);
 		//layer_menu.
 		
 		renderer.getWindow().addWindow(grid_window);
@@ -50,6 +51,10 @@ public class Main extends Controller implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent ae) {
-    grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+    if( ae.getSource() == palette_menu){
+      grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+    }else{
+      grid_window.loadLayer(layer_menu.getSelection());
+    }
   }
 }
