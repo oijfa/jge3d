@@ -370,9 +370,9 @@
     -->
     <theme name="window" ref="-defaults">
         <theme name="gridwindow" ref="resizableframe">
-        	<param name="minWidth"><int>300</int></param>
-            <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>300</int></param>
+        	<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>1000</int></param>
+       		<param name="minHeight"><int>100</int></param>
         	<param name="maxHeight"><int>1000</int></param>
         	<theme name="dialoglayout" ref="-small-gaps">
         	    <theme name="" ref="*"/>
@@ -380,10 +380,10 @@
             </theme>
         </theme>
         <theme name="palettemenu" ref="resizableframe">
-        	<param name="minWidth"><int>400</int></param>
+        	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
-       		<param name="minHeight"><int>200</int></param>
-        	<param name="maxHeight"><int>200</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>400</int></param>
         	<theme name="frame_layout" ref="-no-gaps">
         		<theme name="dialoglayout" ref="-no-gaps">
 	        	    <theme name="" ref="*"/>
@@ -394,10 +394,10 @@
         	</theme>
     	</theme>
     	<theme name="layermenu" ref="resizableframe">
-    		<param name="minWidth"><int>200</int></param>
-            <param name="maxWidth"><int>200</int></param>
-       		<param name="minHeight"><int>100</int></param>
-        	<param name="maxHeight"><int>100</int></param>
+    		<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>30</int></param>
+        	<param name="maxHeight"><int>50</int></param>
         	<theme name="layer_cb" ref="combobox">
         	</theme>
     	</theme>

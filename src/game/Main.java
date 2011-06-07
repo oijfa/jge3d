@@ -44,7 +44,7 @@ public class Main extends Controller {
 		System.out.println("hurr");
 		System.out.println(renderer.isInitialized());
 		try {
-			renderer.getWindow().addWindow(new RotationMenu());
+			renderer.getWindow().addWindow(new RotationMenu(),400,400);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

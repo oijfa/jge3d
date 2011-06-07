@@ -32,18 +32,17 @@ public class Main extends Controller implements ActionListener {
 		//Adding windows back in (pretty fucked)
 		while(!renderer.isInitialized()) {}
 		
-		grid_window = new GridWindow(5);
+		int num_layers = 8;
+		grid_window = new GridWindow(num_layers);
+		layer_menu = new LayerMenu(); layer_menu.populateLayers(num_layers);
 		palette_menu = new PaletteMenu(216);
-		layer_menu = new LayerMenu();
-		layer_menu.populateLayers(5);
 		
 		palette_menu.addActionListener(this);
 		layer_menu.addActionListener(this);
-		//layer_menu.
 		
-		renderer.getWindow().addWindow(grid_window);
-		renderer.getWindow().addWindow(palette_menu);
-		renderer.getWindow().addWindow(layer_menu);
+		renderer.getWindow().addWindow(grid_window,200,200);
+		renderer.getWindow().addWindow(palette_menu,300,300);
+		renderer.getWindow().addWindow(layer_menu,200,30);
 		
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);

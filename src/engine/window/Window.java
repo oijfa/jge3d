@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 
 import engine.window.tree.Model;
 
@@ -86,9 +87,34 @@ public class Window extends DesktopArea {
 	    return false; 
 	}
 	
-	public void addWindow(ResizableFrame window) {
+	public void addWindow(ResizableFrame window, int width, int height) {
+		window.setSize(width, height);
+		try {
+			Display.makeCurrent();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gui.update();
+		try {
+			Display.releaseContext();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(windows.size() > 0) {	
+			ResizableFrame last_window =  windows.get(windows.size()-1);
+			if(window.getHeight()+last_window.getBottom() < this.getHeight()) {
+				window.setPosition(0, last_window.getBottom());
+			} else if(window.getHeight()+last_window.getBottom() > this.getHeight() && last_window.getX() == 0) {
+				window.setPosition(last_window.getRight(),0);
+			} else {
+				window.setPosition(last_window.getRight(),last_window.getBottom());
+			}
+			System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
+		}
 		windows.add(window);
-		ResizableFrame current_window = windows.get(windows.indexOf(window));
+		ResizableFrame current_window = windows.get(windows.indexOf(window));		
 		add(current_window);
 		//current_window.setTheme(window.getClass().getName().toLowerCase());
 		
