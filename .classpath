@@ -21,7 +21,7 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/jar/xpp3-1.1.4c.jar" sourcepath="lib/jar_src/xpp3-1.1.4c_src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/adam/workspace/jge3d_temp/lib/jar_src/xpp3-1.1.4c_all.zip!/xpp3-1.1.4c/doc/api"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/jge3d/lib/jar_src/xpp3-1.1.4c_all.zip!/xpp3-1.1.4c/doc/api"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/jar/jbullet.jar" sourcepath="lib/jar_src/jbullet.zip">

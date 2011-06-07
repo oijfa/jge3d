@@ -48,13 +48,19 @@ public class Main extends Controller implements ActionListener {
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);
 	}
-
-  @Override
-  public void actionPerformed(ActionEvent ae) {
-    if( ae.getSource() == palette_menu){
-      grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
-    }else{
-      grid_window.loadLayer(layer_menu.getSelection());
-    }
-  }
+	private Boolean i=true;
+	@Override
+  	public void actionPerformed(ActionEvent ae) {
+		if( ae.getSource() == palette_menu){
+			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+		}else{
+			if(i==true) {
+				System.out.println(layer_menu.getSelection());
+				grid_window.loadLayer(layer_menu.getSelection());
+				i=false;
+			}
+			else if(i==false)
+				i=true;
+		}
+  	}
 }

@@ -39,6 +39,13 @@ public class Block<E extends Number> extends Button{
 		this.getTintAnimator().setColor(base_color);
 	}
 	
+	public void removeParent() {
+		if(this.getParent() != null) {
+			System.out.println(this.getColor());
+			this.removeParent();
+		}
+	}
+	
 	public void fireActionEvent(){
 		for(ActionListener l : action_listeners){
 			l.actionPerformed(new ActionEvent(this));

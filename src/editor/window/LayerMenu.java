@@ -42,11 +42,9 @@ public class LayerMenu extends ResizableFrame implements ActionListener {
 	    ae.actionPerformed(new ActionEvent(this));
 	  }
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((ComboBox<Integer>) e.getSource()).getSelected());
 		fireActionEvent();
 	}
 }
