@@ -41,7 +41,6 @@ public class Block<E extends Number> extends Button{
 	
 	public void removeParent() {
 		if(this.getParent() != null) {
-			System.out.println(this.getColor());
 			this.removeParent();
 		}
 	}

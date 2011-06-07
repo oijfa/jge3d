@@ -25,8 +25,10 @@ public class CubicGrid<E> {
 	
 	@SuppressWarnings("unchecked")
 	public void removeParentReferences() {
-		for(E item: items) {
-			((Block<Integer>)item).removeParent();
+		System.out.println("&&&"+items.length+"&&&");
+		for(int i=0; i< items.length; i++) {
+			System.out.println(i);
+			((Block<Integer>)items[i]).removeParent();
 		}
 	}
 	
