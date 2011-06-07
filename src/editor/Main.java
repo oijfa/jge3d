@@ -54,7 +54,6 @@ public class Main extends Controller implements ActionListener {
 			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
 		}else{
 			if(i==true) {
-				System.out.println(layer_menu.getSelection());
 				grid_window.loadLayer(layer_menu.getSelection());
 				i=false;
 			}

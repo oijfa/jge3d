@@ -111,19 +111,11 @@ public class Window extends DesktopArea {
 			} else {
 				window.setPosition(last_window.getRight(),last_window.getBottom());
 			}
-			System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
+			//System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
 		}
 		windows.add(window);
 		ResizableFrame current_window = windows.get(windows.indexOf(window));		
 		add(current_window);
-		//current_window.setTheme(window.getClass().getName().toLowerCase());
-		
-		//entityMenu.setPosition(this.getWidth()-entityMenu.getWidth(),0);
-		//if( rotationMenu != null){
-		//	rotationMenu.setPosition(this.getWidth()-rotationMenu.getWidth(), this.getHeight()-rotationMenu.getHeight());
-		//}
-		//mainMenu.setPosition(this.getWidth()/2-mainMenu.getWidth()/2, this.getHeight()/2-mainMenu.getHeight()/2);
-		//textureMenu.setPosition(this.getWidth()-textureMenu.getWidth(),0);
 	}
 
 	public Integer getNumLayers() {
