@@ -13,6 +13,7 @@ import editor.CubicGrid;
 public class GridWindow extends ResizableFrame implements ActionListener{
 	private CubicGrid<Block<Integer>> grid;
 	private Color current_color = new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
+	private DialogLayout layout;
 	
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);
@@ -30,6 +31,9 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		}
 
 		this.addCellListener(this);
+		
+		// Create the layout and button instances
+		layout = new DialogLayout();
 		
 		if(grid_size > 0)
 			loadLayer(0);
@@ -56,11 +60,9 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	}
 	
 	public void loadLayer(Integer layer) {
-		grid.removeParentReferences();
-		this.removeAllChildren();
-		// Create the layout and button instances
-		DialogLayout layout = new DialogLayout();
-		
+		layout.removeAllChildren();
+		this.removeChild(layout);
+
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
 		// to bottom

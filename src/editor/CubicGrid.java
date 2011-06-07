@@ -23,15 +23,6 @@ public class CubicGrid<E> {
 		return size;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void removeParentReferences() {
-		System.out.println("&&&"+items.length+"&&&");
-		for(int i=0; i< items.length; i++) {
-			System.out.println(i);
-			((Block<Integer>)items[i]).removeParent();
-		}
-	}
-	
 	public void setFromXML() {
 		//TODO: parse the XML
 	}

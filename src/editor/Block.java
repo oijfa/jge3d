@@ -15,6 +15,7 @@ public class Block<E extends Number> extends Button{
 	private ArrayList<ActionListener> action_listeners;
 	//TODO: Textures?
 	public Block(){
+		super();
 		action_listeners = new ArrayList<ActionListener>();
 		this.addCallback(new Callback(this));
 	}
@@ -37,12 +38,6 @@ public class Block<E extends Number> extends Button{
 			@Override public int getTime() {return 0;}
 		}));
 		this.getTintAnimator().setColor(base_color);
-	}
-	
-	public void removeParent() {
-		if(this.getParent() != null) {
-			System.out.println("fuck");
-		}
 	}
 	
 	public void fireActionEvent(){
