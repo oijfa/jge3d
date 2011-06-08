@@ -8,6 +8,7 @@ import editor.window.LayerMenu;
 import editor.window.PaletteMenu;
 import engine.Engine;
 import engine.entity.*;
+import engine.importing.FileLoader;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
@@ -74,7 +75,32 @@ public class Main implements ActionListener {
 		player1.setProperty("name", "player1");
 		objectList.enqueuePhysics(player1, QueueItem.ADD);
 		objectList.parsePhysicsQueue();
+<<<<<<< HEAD
 		
+=======
+		
+		int num_layers = 8;
+		grid_window = new GridWindow(num_layers);
+		layer_menu = new LayerMenu(); layer_menu.populateLayers(num_layers);
+		palette_menu = new PaletteMenu(216);
+		
+		grid_window.addActionListener(this);
+		palette_menu.addActionListener(this);
+		layer_menu.addActionListener(this);
+		
+		renderer.getWindow().addWindow(grid_window,200,200);
+		renderer.getWindow().addWindow(palette_menu,300,300);
+		renderer.getWindow().addWindow(layer_menu,200,30);
+		
+		model = new Entity(1,new BoxShape(new Vector3f(1,1,1)),true);
+		model.setModel(FileLoader.loadFile("resources/models/misc/box2.xgl"));
+		objectList.enqueuePhysics(model,QueueItem.ADD);
+		objectList.enqueueRenderer(model, QueueItem.ADD);
+		
+		createCamera();
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(model);
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(20f);
+>>>>>>> master
 	}
   */
 	
