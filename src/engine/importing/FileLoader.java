@@ -10,8 +10,6 @@ package engine.importing;
 
 import engine.importing.pieces.Model;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -19,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 public class FileLoader {
 	public FileLoader(){}
 	
-	public static Model loadFile(String[] filePaths) throws LWJGLException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
+	public static Model loadFile(String[] filePaths)
 	{
 		String[] temp;
 		Parser parser = null;

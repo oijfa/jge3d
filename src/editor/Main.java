@@ -70,5 +70,5 @@ public class Main extends Controller implements ActionListener {
 			else if(i==false)
 				i=true;
 		}
-  	}
+  }
 }
