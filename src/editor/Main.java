@@ -53,7 +53,7 @@ public class Main extends Controller implements ActionListener {
 		
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(model);
-		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(-10f);
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(10f);
 	}
 	private Boolean i=true;
 	@Override
