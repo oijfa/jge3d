@@ -63,10 +63,15 @@ public class Material {
 	
 	//Deep Copy Constructor
 	public Material(Material mat) {
-		this.ambientReflect = new Vector3f(mat.ambientReflect.x,mat.ambientReflect.y,mat.ambientReflect.z); 	
-		this.diffuseReflect = new Vector3f(mat.diffuseReflect.x,mat.diffuseReflect.y,mat.diffuseReflect.z);	
-		this.specularReflect = new Vector3f(mat.specularReflect.x,mat.specularReflect.y,mat.specularReflect.z);
-		this.emission = new Vector3f(mat.emission.x,mat.emission.y,mat.emission.z); 
+		matInit();
+		if(mat.ambientReflect != null)
+			this.ambientReflect = new Vector3f(mat.ambientReflect.x,mat.ambientReflect.y,mat.ambientReflect.z); 	
+		if(mat.diffuseReflect != null)
+			this.diffuseReflect = new Vector3f(mat.diffuseReflect.x,mat.diffuseReflect.y,mat.diffuseReflect.z);	
+		if(mat.specularReflect != null)
+			this.specularReflect = new Vector3f(mat.specularReflect.x,mat.specularReflect.y,mat.specularReflect.z);
+		if(mat.emission != null)
+			this.emission = new Vector3f(mat.emission.x,mat.emission.y,mat.emission.z); 
 		this.alpha = mat.alpha;
 		this.shine = mat.shine;
 	}
@@ -74,9 +79,7 @@ public class Material {
 	private void matInit() {
 		ambientReflect = new Vector3f(0.216f,0.263f,0.333f);
 		diffuseReflect = new Vector3f(0.502f,0.502f,0.502f);
-		
 		specularReflect = new Vector3f(0.0f,0.0f,0.0f);
-		
 		emission = new Vector3f(0.0f,0.0f,0.0f);	
 		
 		alpha = 1.0f;

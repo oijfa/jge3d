@@ -66,7 +66,7 @@ public class Main extends Controller implements ActionListener {
 		if( ae.getSource() == palette_menu){
 			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
 			
-			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box2.xgl"));
+			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 		}else{
 			if(i==true) {
 				grid_window.loadLayer(layer_menu.getSelection());

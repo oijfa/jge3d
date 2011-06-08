@@ -2,7 +2,10 @@ package editor;
 
 import javax.vecmath.Vector3f;
 
+import de.matthiasmann.twl.Color;
+
 import engine.importing.XGL_Parser;
+import engine.importing.pieces.Material;
 import engine.importing.pieces.Mesh;
 
 public class CubicGrid<E> {
@@ -45,11 +48,27 @@ public class CubicGrid<E> {
 			for(int z=0;z<size;z++) {
 				for(int y=0;y<size;y++) {
 					for(int x=0;x<size;x++) {
-						mesh = base_model.getMesh(0);
+						mesh = new Mesh(base_model.getMesh(0));
 						mesh.transform(
 							new Vector3f(x,y,z),
 							new Vector3f(0,0,1),
 							new Vector3f(0,1,0)
+						);
+						@SuppressWarnings("unchecked")
+						Color mat_color = ((Block<Integer>)this.get(x,y,z)).getColor();
+						mesh.setMaterial(
+							new Material(
+								new Vector3f(
+									mat_color.getRedFloat(),
+									mat_color.getGreenFloat(),
+									mat_color.getBlueFloat()
+								),
+								new Vector3f(
+									mat_color.getRedFloat(),
+									mat_color.getGreenFloat(),
+									mat_color.getBlueFloat()
+								)
+							)
 						);
 						full_model.addMesh(mesh);
 					}
