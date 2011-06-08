@@ -69,6 +69,8 @@ public class Model {
 		max = new Vector3f();
 		min = new Vector3f();
 		center = new Vector3f();
+		buf = BufferUtils.createFloatBuffer(16);
+		
 	}
 	
 	/*Setters*/
@@ -272,7 +274,7 @@ public class Model {
 	    bufferElementData(modelVBOindexID, index_buffer);
 		hasVBO=true;
 		
-		buf = BufferUtils.createFloatBuffer(16);
+		//buf = BufferUtils.createFloatBuffer(16);
 	}
 	public void draw_vbo(CollisionObject collision_object) {
 		//TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE

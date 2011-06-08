@@ -141,7 +141,6 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((ColorCell) e.getSource()).getColor().toString());
 		primary_color.setColor(((ColorCell) e.getSource()).getColor());
 		fireActionEvent();
 	}
