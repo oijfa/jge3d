@@ -12,6 +12,8 @@ import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 public class Block<E extends Number> extends Button{
 	private Coordinate<E> position;
 	private Color base_color;
+	private Boolean active=false;
+	
 	private ArrayList<ActionListener> action_listeners;
 	//TODO: Textures?
 	public Block(){
@@ -32,12 +34,17 @@ public class Block<E extends Number> extends Button{
 	}
 	
 	public void setColor(Color color){
-		this.base_color = color;
-		super.setTintAnimator(new TintAnimator(new TimeSource() {
-			@Override public void resetTime() {}
-			@Override public int getTime() {return 0;}
-		}));
-		this.getTintAnimator().setColor(base_color);
+		if(color != null) {
+			this.base_color = color;
+			super.setTintAnimator(new TintAnimator(new TimeSource() {
+				@Override public void resetTime() {}
+				@Override public int getTime() {return 0;}
+			}));
+			this.getTintAnimator().setColor(base_color);
+			active = true;
+		} else {
+			active = false;
+		}
 	}
 	
 	public void fireActionEvent(){
@@ -59,5 +66,9 @@ public class Block<E extends Number> extends Button{
 		public void run() {
 			owner.fireActionEvent();
 		}
+	}
+	
+	public Boolean getActive() {
+		return active;
 	}
 }
