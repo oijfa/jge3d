@@ -3,6 +3,7 @@ package editor.window;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
+import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
@@ -10,26 +11,57 @@ import editor.Block;
 import editor.CubicGrid;
 
 public class GridWindow extends ResizableFrame implements ActionListener{
-	private DialogLayout layout;
 	private CubicGrid<Block<Integer>> grid;
+	private Color current_color = new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
+	private DialogLayout layout;
 	
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);
 		
 		setTitle("Grid View");
 
-		// Create the layout and button instances
-		layout = new DialogLayout();
-
 		this.grid = new CubicGrid<Block<Integer>>(grid_size);
 
-		for(int x = 0; x < grid_size; x++){
+		for(int z = 0; z < grid_size; z++){
 			for(int y = 0; y < grid_size; y++){
-				for(int z = 0; z < grid_size; z++){
+				for(int x = 0; x < grid_size; x++){
 					this.grid.set(x, y, z, new Block<Integer>());
 				}
 			}
 		}
+
+		this.addCellListener(this);
+		
+		// Create the layout and button instances
+		layout = new DialogLayout();
+		
+		if(grid_size > 0)
+			loadLayer(0);
+	}
+
+	public void addCellListener(ActionListener listener){
+		for(int i = 0; i < grid.size(); i++){
+	    	for(int j = 0; j < grid.size(); j++){
+	    		for(int k = 0; k < grid.size(); k++){
+	        		grid.get(i, j, k).addActionListener(listener);
+	        	}
+	    	}
+		}
+	}
+	
+	public void setCurrentColor(Color color){
+		current_color = color;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		((Block<Integer>) e.getSource()).setColor(current_color);
+	}
+	
+	public void loadLayer(Integer layer) {
+		layout.removeAllChildren();
+		this.removeChild(layout);
 
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
@@ -48,7 +80,7 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 			row = layout.createSequentialGroup();
 			for(int j=0;j<grid.size();j++) {
 				//TODO: *un*fix the z axis
-				row.addWidget(grid.get(j, i, 0));
+				row.addWidget(grid.get(j, i, layer));
 			}
 			h_grid.addGroup(row);
 		}
@@ -58,7 +90,7 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 			row = layout.createSequentialGroup();
 			for(int j=0;j<grid.size();j++) {
 				//TODO: *un*fix the z axis
-				row.addWidget(grid.get(i, j, 0));
+				row.addWidget(grid.get(i, j, layer));
 			}
 			v_grid.addGroup(row);
 		}
@@ -73,20 +105,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		add(layout);
 		// !!! END EXAMPLE !!!//
 	}
-
-	public void addCellListener(ActionListener listener){
-	    for(int i = 0; i < grid.size(); i++){
-	      for(int j = 0; j < grid.size(); j++){
-	        for(int k = 0; k < grid.size(); k++){
-	          grid.get(i, j, k).addActionListener(listener);
-	        }
-	      }
-	    }
-	  }
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		System.out.println(((Block<Integer>) e.getSource()).getColor().toString());
+	public CubicGrid<Block <Integer>> getGrid() {
+		return grid;
 	}
 }
