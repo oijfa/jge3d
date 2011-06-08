@@ -34,6 +34,8 @@ public class Model {
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
 	
+	private Boolean immediate_scale_rotate = false;
+	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
 		init();
@@ -90,8 +92,10 @@ public class Model {
 		//we fall-back to immediate mode
 		if(hasVBO) {
 			draw_vbo(collision_object);
+			System.out.println("VBO");
 		} else {
 			draw_immediate(collision_object);
+			System.out.println("Immediate");
 		}
 	}
 	
@@ -276,6 +280,7 @@ public class Model {
 		
 		//buf = BufferUtils.createFloatBuffer(16);
 	}
+	
 	public void draw_vbo(CollisionObject collision_object) {
 		//TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE
 		//If we're going to be using VBO's we need to switch
@@ -290,7 +295,7 @@ public class Model {
 		//I don't have time to port it yet since we need to write
 		//the correct shaders, but here is a helpful link:
 		//http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
-		if(true) {
+		if(immediate_scale_rotate) {
 			GL11.glPushMatrix();
 			rotateAndScaleImmediate(collision_object);
 		}//else {
@@ -344,7 +349,7 @@ public class Model {
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 		
 		//Pop the matrix if we are in immediate mode
-		if(true)
+		if(immediate_scale_rotate)
 			GL11.glPopMatrix();
 	}
 	public void destroyVBO() {

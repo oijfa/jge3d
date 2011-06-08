@@ -39,7 +39,7 @@ public class CubicGrid<E> {
 		XGL_Parser parser = new XGL_Parser();
 		engine.importing.pieces.Model base_model = new engine.importing.pieces.Model();
 		engine.importing.pieces.Model full_model = new engine.importing.pieces.Model();
-		Mesh mesh = new Mesh();
+		Mesh mesh;
 		
 		try {
 			parser.readFile(path_to_shape);
@@ -50,7 +50,7 @@ public class CubicGrid<E> {
 					for(int x=0;x<size;x++) {
 						mesh = new Mesh(base_model.getMesh(0));
 						mesh.transform(
-							new Vector3f(x,y,z),
+							new Vector3f(x,-y,z),
 							new Vector3f(0,0,1),
 							new Vector3f(0,1,0)
 						);
@@ -70,10 +70,12 @@ public class CubicGrid<E> {
 								)
 							)
 						);
+						mesh.calcNormals();
 						full_model.addMesh(mesh);
 					}
 				}
-			}			
+			}	
+			full_model.createVBO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

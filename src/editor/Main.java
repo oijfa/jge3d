@@ -32,15 +32,13 @@ public class Main extends Controller implements ActionListener {
 		player1.setProperty("name", "player1");
 		objectList.enqueuePhysics(player1, QueueItem.ADD);
 		objectList.parsePhysicsQueue();
-
-		//Adding windows back in (pretty fucked)
-		while(!renderer.isInitialized()) {}
 		
 		int num_layers = 8;
 		grid_window = new GridWindow(num_layers);
 		layer_menu = new LayerMenu(); layer_menu.populateLayers(num_layers);
 		palette_menu = new PaletteMenu(216);
 		
+		grid_window.addActionListener(this);
 		palette_menu.addActionListener(this);
 		layer_menu.addActionListener(this);
 		
@@ -49,25 +47,24 @@ public class Main extends Controller implements ActionListener {
 		renderer.getWindow().addWindow(layer_menu,200,30);
 		
 		model = new Entity(1,new BoxShape(new Vector3f(1,1,1)),true);
-		
 		model.setModel(FileLoader.loadFile("resources/models/misc/box2.xgl"));
-		
-		
 		objectList.enqueuePhysics(model,QueueItem.ADD);
 		objectList.enqueueRenderer(model, QueueItem.ADD);
 		
 		createCamera();
 		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(model);
-		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(10f);
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(20f);
 	}
 	private Boolean i=true;
 	@Override
   	public void actionPerformed(ActionEvent ae) {
 		if( ae.getSource() == palette_menu){
 			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
-			
+		}
+		if(ae.getSource() == grid_window) {
 			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
-		}else{
+		}
+		if(ae.getSource() == layer_menu) {
 			if(i==true) {
 				grid_window.loadLayer(layer_menu.getSelection());
 				i=false;

@@ -1,5 +1,7 @@
 package editor.window;
 
+import java.util.ArrayList;
+
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
@@ -14,6 +16,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 	private CubicGrid<Block<Integer>> grid;
 	private Color current_color = new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
 	private DialogLayout layout;
+
+	private ArrayList<ActionListener> action_listeners;
 	
 	public GridWindow(Integer grid_size) {
 		this.setSize(400, 400);
@@ -30,6 +34,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 			}
 		}
 
+		action_listeners = new ArrayList<ActionListener>();
+		
 		this.addCellListener(this);
 		
 		// Create the layout and button instances
@@ -38,25 +44,13 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		if(grid_size > 0)
 			loadLayer(0);
 	}
-
-	public void addCellListener(ActionListener listener){
-		for(int i = 0; i < grid.size(); i++){
-	    	for(int j = 0; j < grid.size(); j++){
-	    		for(int k = 0; k < grid.size(); k++){
-	        		grid.get(i, j, k).addActionListener(listener);
-	        	}
-	    	}
-		}
-	}
 	
 	public void setCurrentColor(Color color){
 		current_color = color;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		((Block<Integer>) e.getSource()).setColor(current_color);
+	public CubicGrid<Block <Integer>> getGrid() {
+		return grid;
 	}
 	
 	public void loadLayer(Integer layer) {
@@ -105,8 +99,31 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		add(layout);
 		// !!! END EXAMPLE !!!//
 	}
+
+	public void addCellListener(ActionListener listener){
+		for(int i = 0; i < grid.size(); i++){
+	    	for(int j = 0; j < grid.size(); j++){
+	    		for(int k = 0; k < grid.size(); k++){
+	        		grid.get(i, j, k).addActionListener(listener);
+	        	}
+	    	}
+		}
+	}
 	
-	public CubicGrid<Block <Integer>> getGrid() {
-		return grid;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		((Block<Integer>) e.getSource()).setColor(current_color);
+		fireActionEvent();
+	}
+		
+	public void fireActionEvent(){
+		for(ActionListener al : action_listeners){
+			al.actionPerformed(new ActionEvent(this));
+		}
+	}
+	
+	public void addActionListener(ActionListener al){
+		action_listeners.add(al);
 	}
 }
