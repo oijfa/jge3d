@@ -14,9 +14,11 @@ import com.bulletphysics.collision.shapes.BoxShape;
 public class Main extends Controller implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	GridWindow grid_window;
-	PaletteMenu palette_menu;
-	LayerMenu layer_menu;
+	private GridWindow grid_window;
+	private PaletteMenu palette_menu;
+	private LayerMenu layer_menu;
+	
+	private Entity model;
 	
 	@Override
 	public void initialize() {
@@ -25,6 +27,7 @@ public class Main extends Controller implements ActionListener {
 		//terrain.createTerrain(75);
 		
 		Player player1 = new Player(1.0f, new BoxShape(new Vector3f(1, 1, 1)),0.5f);
+		player1.setPosition(new Vector3f(0,100,0));
 		player1.setProperty("name", "player1");
 		objectList.enqueuePhysics(player1, QueueItem.ADD);
 		objectList.parsePhysicsQueue();
@@ -44,14 +47,21 @@ public class Main extends Controller implements ActionListener {
 		renderer.getWindow().addWindow(palette_menu,300,300);
 		renderer.getWindow().addWindow(layer_menu,200,30);
 		
+		model = new Entity(1,new BoxShape(new Vector3f(1,1,1)),true);
+		objectList.enqueuePhysics(model,QueueItem.ADD);
+		objectList.enqueueRenderer(model, QueueItem.ADD);
+		
 		createCamera();
-		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(player1);
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).focusOn(model);
+		((Camera)objectList.getItem(Camera.CAMERA_NAME)).setDistance(-10f);
 	}
 	private Boolean i=true;
 	@Override
   	public void actionPerformed(ActionEvent ae) {
 		if( ae.getSource() == palette_menu){
 			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+			
+			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box2.xgl"));
 		}else{
 			if(i==true) {
 				grid_window.loadLayer(layer_menu.getSelection());

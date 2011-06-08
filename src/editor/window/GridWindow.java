@@ -105,4 +105,8 @@ public class GridWindow extends ResizableFrame implements ActionListener{
 		add(layout);
 		// !!! END EXAMPLE !!!//
 	}
+	
+	public CubicGrid<Block <Integer>> getGrid() {
+		return grid;
+	}
 }
