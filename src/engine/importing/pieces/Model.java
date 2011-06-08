@@ -92,10 +92,8 @@ public class Model {
 		//we fall-back to immediate mode
 		if(hasVBO) {
 			draw_vbo(collision_object);
-			System.out.println("VBO");
 		} else {
 			draw_immediate(collision_object);
-			System.out.println("Immediate");
 		}
 	}
 	

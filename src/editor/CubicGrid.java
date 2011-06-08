@@ -57,7 +57,6 @@ public class CubicGrid<E> {
 								new Vector3f(0,0,1),
 								new Vector3f(0,1,0)
 							);
-							@SuppressWarnings("unchecked")
 							Color mat_color = ((Block<Integer>)this.get(x,y,z)).getColor();
 							mesh.setMaterial(
 								new Material(
