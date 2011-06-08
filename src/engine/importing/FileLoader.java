@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 public class FileLoader {
 	public FileLoader(){}
 	
-	public static Model loadFile(String[] filePaths)
+	public static Model loadFile(String... filePaths)
 	{
 		String[] temp;
 		Parser parser = null;
