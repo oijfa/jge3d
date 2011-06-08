@@ -6,7 +6,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
-public class Mesh {
+public class Mesh implements Cloneable {
 	ArrayList<Face> faces;
 	Material mat;
 	Vector3f location;
@@ -67,9 +67,18 @@ public class Mesh {
 		location = new Vector3f(loc.x,loc.y,loc.z);
 	}
 	
+	public Mesh clone() {
+		try {
+			return (Mesh) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			throw new InternalError(e.toString());
+		}
+	}
+	
 	//Copy Constructor
 	public Mesh(Mesh m) {
-		meshInit();
+		this.meshInit();
 
 		for(Face f : m.faces){
 			this.faces.add(new Face(f));
@@ -78,7 +87,7 @@ public class Mesh {
 		this.location = new Vector3f(m.location.x,m.location.y,m.location.z);
 		this.forward = new Vector3f(m.forward.x,m.forward.y,m.forward.z);
 		this.up = new Vector3f(m.up.x,m.up.y,m.up.z);
-		
+
 		this.mat = new Material(m.mat);
 	}
 	
@@ -88,7 +97,7 @@ public class Mesh {
 		up = new Vector3f();
 		
 		faces = new ArrayList<Face>();
-		mat = null;
+		mat = new Material();
 		location = new Vector3f(0.0f,0.0f,0.0f);
 		forward = new Vector3f(0.0f,0.0f,1.0f);
 		up = new Vector3f(0.0f,1.0f,0.0f);

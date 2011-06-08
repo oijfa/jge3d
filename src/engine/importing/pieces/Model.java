@@ -34,6 +34,8 @@ public class Model {
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
 	
+	private Boolean immediate_scale_rotate = false;
+	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
 		init();
@@ -69,6 +71,8 @@ public class Model {
 		max = new Vector3f();
 		min = new Vector3f();
 		center = new Vector3f();
+		buf = BufferUtils.createFloatBuffer(16);
+		
 	}
 	
 	/*Setters*/
@@ -244,36 +248,41 @@ public class Model {
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
 		int num_faces_all_meshes=0;
-		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
-		for(Mesh m: meshes) {
-			num_faces_all_meshes+=m.getFaceCount();
+		if( meshes.size() != 0 ){
+  		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
+  		for(Mesh m: meshes) {
+  			num_faces_all_meshes+=m.getFaceCount();
+  		}
+  		vertex_buffer = BufferUtils.createFloatBuffer(
+  			num_faces_all_meshes*num_vertices*12
+  		);
+  		index_buffer = BufferUtils.createIntBuffer(
+  			num_faces_all_meshes*num_vertices
+  		);
+  		for(Mesh m: meshes) {
+  			for(Face f: m.getFaces()) {
+  				vertex_buffer.put(f.createFaceBufferVNTC(m));
+  				index_buffer.put(f.createIndexBufferVNTC(pointIndex));
+  				pointIndex += 3;
+  			}
+  		}
+  		
+  		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
+  		vertex_buffer.flip();
+  		index_buffer.flip();
+  		
+  		modelVBOID = createVBOID(1);
+  		bufferData(modelVBOID, vertex_buffer);
+  		modelVBOindexID = createVBOID(1);
+  	    bufferElementData(modelVBOindexID, index_buffer);
+  		hasVBO=true;
+  		
+  		//buf = BufferUtils.createFloatBuffer(16);
+		}else{
+		  System.out.println("WARNING: Tried to create VBO with no available meshes. ");
 		}
-		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_faces_all_meshes*num_vertices*12
-		);
-		index_buffer = BufferUtils.createIntBuffer(
-			num_faces_all_meshes*num_vertices
-		);
-		for(Mesh m: meshes) {
-			for(Face f: m.getFaces()) {
-				vertex_buffer.put(f.createFaceBufferVNTC(m));
-				index_buffer.put(f.createIndexBufferVNTC(pointIndex));
-				pointIndex += 3;
-			}
-		}
-		
-		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
-		vertex_buffer.flip();
-		index_buffer.flip();
-		
-		modelVBOID = createVBOID(1);
-		bufferData(modelVBOID, vertex_buffer);
-		modelVBOindexID = createVBOID(1);
-	    bufferElementData(modelVBOindexID, index_buffer);
-		hasVBO=true;
-		
-		buf = BufferUtils.createFloatBuffer(16);
 	}
+	
 	public void draw_vbo(CollisionObject collision_object) {
 		//TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE
 		//If we're going to be using VBO's we need to switch
@@ -288,7 +297,7 @@ public class Model {
 		//I don't have time to port it yet since we need to write
 		//the correct shaders, but here is a helpful link:
 		//http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
-		if(true) {
+		if(immediate_scale_rotate) {
 			GL11.glPushMatrix();
 			rotateAndScaleImmediate(collision_object);
 		}//else {
@@ -342,7 +351,7 @@ public class Model {
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 		
 		//Pop the matrix if we are in immediate mode
-		if(true)
+		if(immediate_scale_rotate)
 			GL11.glPopMatrix();
 	}
 	public void destroyVBO() {

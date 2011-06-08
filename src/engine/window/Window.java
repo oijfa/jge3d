@@ -67,8 +67,8 @@ public class Window extends DesktopArea {
 
 	protected boolean handleEvent(Event evt) { 
 		//Our event handling
-    if(input.handleEvent(evt)) {
-        return true; 
+    if(input != null && input.handleEvent(evt)) {
+       return true; 
     }
     
     return false; 

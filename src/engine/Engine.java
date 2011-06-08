@@ -1,6 +1,5 @@
 package engine;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.vecmath.Vector3f;
@@ -35,6 +34,7 @@ public class Engine {
   private Camera camera;
   private EntityList entity_list;
   
+  /*
   public static void main(String args[]) throws LWJGLException{
     Engine r = new Engine();
     r.run();  
@@ -57,44 +57,35 @@ public class Engine {
     r.addEntity("BLAH5", "resources/models/misc/box2.xgl");
     r.getEntity("BLAH5").setPosition(new Vector3f(5,0,0));
   }
+  */
 
-  @SuppressWarnings("unused")
-  private void addWindow(ResizableFrame window) {
-    renderer.getWindow().addWindow(window);
+  public void addWindow(ResizableFrame window, int width, int height) {
+    renderer.getWindow().addWindow(window,width,height);
   }
 
-  public Engine() throws LWJGLException{
+  public Engine(){
     finished = new AtomicBoolean(false);
     physics = new Physics();
     entity_list = new EntityList(physics);
     renderer = new Renderer(entity_list);
+    renderer.initGL();
   }
   
-  public void run() throws LWJGLException{
+  public void run(){
     startPhysics();
     startRendering();
   }
   
   /* Entity API */
   public void addEntity(String name, String model_location){
-    try {
-      Entity ent = new Entity(1, new BoxShape(new Vector3f(1f,1f,1f)), true );
-      ent.setProperty(Entity.NAME, name);
-      ent.setModel(FileLoader.loadFile(model_location));
-      entity_list.addEntity(ent);
-    } catch (SecurityException e) {
-      e.printStackTrace();
-    } catch (IllegalArgumentException e) {
-      e.printStackTrace();
-    } catch (LWJGLException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
+    Entity ent = new Entity(1, new BoxShape(new Vector3f(1f,1f,1f)), true );
+    ent.setProperty(Entity.NAME, name);
+    ent.setModel(FileLoader.loadFile(model_location));
+    this.addEntity(ent);
+  }
+  
+  public void addEntity(Entity ent){
+    entity_list.addEntity(ent);
   }
   
   public Entity getEntity(String name){
@@ -106,8 +97,7 @@ public class Engine {
   }
   
   /* Private Methods */
-  private void startRendering() throws LWJGLException {
-    renderer.initGL();
+  private void startRendering() {
     render_thread = new Thread(){
       public void run(){
         
@@ -116,7 +106,11 @@ public class Engine {
       }//run()
     };//new Thread()
     
-    Display.releaseContext();
+    try {
+      Display.releaseContext();
+    } catch (LWJGLException e) {
+      e.printStackTrace();
+    }
     render_thread.start();
   }
 

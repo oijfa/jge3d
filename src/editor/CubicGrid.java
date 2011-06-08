@@ -2,7 +2,10 @@ package editor;
 
 import javax.vecmath.Vector3f;
 
+import de.matthiasmann.twl.Color;
+
 import engine.importing.XGL_Parser;
+import engine.importing.pieces.Material;
 import engine.importing.pieces.Mesh;
 
 public class CubicGrid<E> {
@@ -32,29 +35,50 @@ public class CubicGrid<E> {
 		//TODO: parse the XML
 	}
 	
+	@SuppressWarnings("unchecked")
 	public engine.importing.pieces.Model getModel(String path_to_shape) {
 		XGL_Parser parser = new XGL_Parser();
 		engine.importing.pieces.Model base_model = new engine.importing.pieces.Model();
 		engine.importing.pieces.Model full_model = new engine.importing.pieces.Model();
-		Mesh mesh = new Mesh();
+		Mesh mesh;
 		
 		try {
 			parser.readFile(path_to_shape);
 			base_model = parser.createModel();
-			
+			Block<Integer> current_block;
 			for(int z=0;z<size;z++) {
 				for(int y=0;y<size;y++) {
 					for(int x=0;x<size;x++) {
-						mesh = base_model.getMesh(0);
-						mesh.transform(
-							new Vector3f(x,y,z),
-							new Vector3f(0,0,1),
-							new Vector3f(0,1,0)
-						);
-						full_model.addMesh(mesh);
+						current_block = ((Block<Integer>)this.get(x,y,z));
+						if(current_block.getActive()) {
+							mesh = new Mesh(base_model.getMesh(0));
+							mesh.transform(
+								new Vector3f(x,-y,z),
+								new Vector3f(0,0,1),
+								new Vector3f(0,1,0)
+							);
+							Color mat_color = ((Block<Integer>)this.get(x,y,z)).getColor();
+							mesh.setMaterial(
+								new Material(
+									new Vector3f(
+										mat_color.getRedFloat(),
+										mat_color.getGreenFloat(),
+										mat_color.getBlueFloat()
+									),
+									new Vector3f(
+										mat_color.getRedFloat(),
+										mat_color.getGreenFloat(),
+										mat_color.getBlueFloat()
+									)
+								)
+							);
+							mesh.calcNormals();
+							full_model.addMesh(mesh);
+						}
 					}
 				}
-			}			
+			}	
+			full_model.createVBO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

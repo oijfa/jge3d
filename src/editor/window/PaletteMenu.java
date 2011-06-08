@@ -20,7 +20,7 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 	
 	public PaletteMenu(Integer grid_size) {
-	  action_listeners = new ArrayList<ActionListener>();
+		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Palette Menu");
 
 		// Create the layout and button instances
@@ -141,7 +141,6 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((ColorCell) e.getSource()).getColor().toString());
 		primary_color.setColor(((ColorCell) e.getSource()).getColor());
 		fireActionEvent();
 	}

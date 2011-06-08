@@ -31,12 +31,12 @@ public class Camera extends Entity {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Double d, CollisionShape c, boolean collide, Entity defFocus) {
-		super(d.floatValue(),c,collide);
+	public Camera(Double mass, CollisionShape c, boolean collide, Entity defFocus) {
+		super(mass.floatValue(),c,collide);
 		cameraInit(defFocus);
 	}
-	public Camera(String _name,Double d, CollisionShape c, boolean collide, Entity defFocus) {
-		super(d.floatValue(),c,collide);
+	public Camera(String _name,Double mass, CollisionShape c, boolean collide, Entity defFocus) {
+		super(mass.floatValue(),c,collide);
 		cameraInit(defFocus);
 	}
 
