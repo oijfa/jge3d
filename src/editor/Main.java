@@ -8,6 +8,7 @@ import editor.window.LayerMenu;
 import editor.window.PaletteMenu;
 import engine.controller.*;
 import engine.entity.*;
+import engine.importing.FileLoader;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
@@ -48,6 +49,10 @@ public class Main extends Controller implements ActionListener {
 		renderer.getWindow().addWindow(layer_menu,200,30);
 		
 		model = new Entity(1,new BoxShape(new Vector3f(1,1,1)),true);
+		
+		model.setModel(FileLoader.loadFile("resources/models/misc/box2.xgl"));
+		
+		
 		objectList.enqueuePhysics(model,QueueItem.ADD);
 		objectList.enqueueRenderer(model, QueueItem.ADD);
 		
@@ -70,5 +75,5 @@ public class Main extends Controller implements ActionListener {
 			else if(i==false)
 				i=true;
 		}
-  	}
+  }
 }
