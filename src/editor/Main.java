@@ -15,7 +15,7 @@ import com.bulletphysics.collision.shapes.BoxShape;
 public class Main implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	Engine engine;
+	private Engine engine;
 	
 	private GridWindow grid_window;
 	private PaletteMenu palette_menu;
@@ -25,8 +25,8 @@ public class Main implements ActionListener {
 	private Camera camera;
 	
 	public static void main(String args[]){
-	  Main m = new Main();
-	  m.run();
+		Main m = new Main();
+		m.run();
 	}
 	
 	public Main(){
@@ -54,15 +54,14 @@ public class Main implements ActionListener {
     
     engine.addEntity(model);
     engine.addEntity(camera);
-    
 	}
 	
 	public void run(){
-	  grid_window.addActionListener(this);
-    palette_menu.addActionListener(this);
-    layer_menu.addActionListener(this);
+		grid_window.addActionListener(this);
+		palette_menu.addActionListener(this);
+		layer_menu.addActionListener(this);
     
-     engine.run();
+		engine.run();
 	}
 	/*
 	@Override
@@ -109,17 +108,17 @@ public class Main implements ActionListener {
 	private Boolean i=true;
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-  	if( ae.getSource() == palette_menu){
-  		grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
-  	}else	if(ae.getSource() == grid_window) {
-  		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
-  	}else if(ae.getSource() == layer_menu) {
-  		if(i==true) {
-  			grid_window.loadLayer(layer_menu.getSelection());
-  			i=false;
-  		}else if(i==false){
-  			i=true;
+		if( ae.getSource() == palette_menu){
+  			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+  		}else if(ae.getSource() == grid_window) {
+  			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
+  		}else if(ae.getSource() == layer_menu) {
+  			if(i==true) {
+  				grid_window.loadLayer(layer_menu.getSelection());
+  				i=false;
+  			}else if(i==false){
+  				i=true;
+  			}
   		}
-  	}
-  }
+	}
 }
