@@ -134,7 +134,7 @@ public class Engine {
 	    	while (!finished.get()) {
 	    		// Always call Window.update(), all the time - it does some behind the
 	    		// scenes work, and also displays the rendered output
-	    		Display.update();
+	    		//Display.update();
 			
 	    		// Check for close requests
 	    		if (Display.isCloseRequested()) {

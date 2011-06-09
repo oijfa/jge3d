@@ -10,6 +10,7 @@ import editor.window.PaletteWindow;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
+import engine.importing.XGL_Parser;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
@@ -50,12 +51,22 @@ public class Main implements ActionListener {
 	    model.setProperty(Entity.NAME, "model");
 	    model.setPosition(new Vector3f(0,0,0));
 	    
-	    camera = new Camera(1d, new BoxShape(new Vector3f(1,1,1)), false, model);
+	    Entity shitdick = new Entity(1f, new BoxShape(new Vector3f(1,1,1)),true);
+	    XGL_Parser p = new XGL_Parser();
+	    try {
+			p.readFile("resources/models/misc/box.xgl");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    shitdick.setModel(p.createModel());
+	    
+	    camera = new Camera(1d, new BoxShape(new Vector3f(1,1,1)), false, shitdick);
 	    camera.setProperty(Entity.NAME, "camera");
 	    camera.setPosition(new Vector3f(0,0,0));
 	    camera.setDistance(20f);
 	    
-	    engine.addEntity(model);
+	    //engine.addEntity(model);
+	    engine.addEntity(shitdick);
 	    engine.addEntity(camera);
 	}
 	
