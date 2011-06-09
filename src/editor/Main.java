@@ -52,6 +52,7 @@ public class Main implements ActionListener {
 	    camera.setDistance(20f);
 	    
 	    engine.addEntity(model);
+	    engine.addEntity(camera);
 	}
 	
 	public void run(){

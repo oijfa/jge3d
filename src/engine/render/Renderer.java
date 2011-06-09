@@ -62,14 +62,16 @@ public class Renderer {
 		Vector3f camPos;
 	    Vector3f focusPos;
 	    Vector3f up;
+
 		if(camera!=null){
-			camera.updatePosition();		
+			camera.updatePosition();	
 		
 			//Get its new position
 			camPos = camera.getPosition();
 			focusPos = camera.getFocusPosition();
 			up = camera.getUp();
 		}else{
+		  camera = (Camera) objectList.getItem(Camera.NAME);
 		  camPos = new Vector3f(0,0,5);
 		  focusPos = new Vector3f(0,0,0);
 		  up = new Vector3f(0,1,0);
