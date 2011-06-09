@@ -144,7 +144,7 @@ public class Engine {
 	    		}else if (Display.isActive()) {
 	    			// The window is in the foreground, so we should play the game
 	    			renderer.draw();
-	    			Display.sync(FRAMERATE);
+	    			//Display.sync(FRAMERATE);
 	    		} else {
 	    			// The window is not in the foreground, so we can allow other stuff to run and
 	    			// infrequently update
