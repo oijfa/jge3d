@@ -1,4 +1,5 @@
 package editor;
+
 import javax.vecmath.Vector3f;
 
 import editor.action_listener.ActionEvent;
@@ -8,7 +9,6 @@ import editor.window.LayerMenu;
 import editor.window.PaletteMenu;
 import engine.Engine;
 import engine.entity.*;
-import engine.importing.FileLoader;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
