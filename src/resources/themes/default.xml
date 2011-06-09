@@ -379,7 +379,7 @@
   				<theme name="block" ref="medbutton" />	
             </theme>
         </theme>
-        <theme name="palettemenu" ref="resizableframe">
+        <theme name="palettewindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>
@@ -393,13 +393,35 @@
             	</theme>
         	</theme>
     	</theme>
+    	<theme name="toolbox" ref="resizableframe">
+    		<theme name="layermenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="layer_cb" ref="combobox" />
+    		</theme>
+    		<theme name="mirrormenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="mirror_cb" ref="combobox" />
+    		</theme>
+    		<theme name="persepectivemenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="perspective_cb" ref="combobox" />
+    		</theme>
+    	</theme>
     	<theme name="layermenu" ref="resizableframe">
     		<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>30</int></param>
         	<param name="maxHeight"><int>50</int></param>
-        	<theme name="layer_cb" ref="combobox">
-        	</theme>
+        	<theme name="layer_cb" ref="combobox" />
     	</theme>
     </theme>
 </themes>

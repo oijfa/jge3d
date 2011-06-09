@@ -76,7 +76,7 @@ public class Window extends DesktopArea {
 	public void addWindow(ResizableFrame window, int width, int height) {
 		window.setSize(width, height);
 
-		//gui.update();
+		gui.update();
 
 		if(windows.size() > 0) {	
 			ResizableFrame last_window =  windows.get(windows.size()-1);

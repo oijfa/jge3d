@@ -9,7 +9,7 @@ import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
-public class PaletteMenu extends ResizableFrame implements ActionListener {
+public class PaletteWindow extends ResizableFrame implements ActionListener {
 	private DialogLayout preview_layout;
 	private DialogLayout grid_layout;
 	private DialogLayout frame_layout;
@@ -19,7 +19,7 @@ public class PaletteMenu extends ResizableFrame implements ActionListener {
 	
 	private ArrayList<ActionListener> action_listeners;
 	
-	public PaletteMenu(Integer grid_size) {
+	public PaletteWindow(Integer grid_size) {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Palette Menu");
 

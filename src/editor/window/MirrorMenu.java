@@ -7,29 +7,33 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.ComboBox;
 
-public class PerspectiveMenu extends ResizableFrame implements ActionListener {
-	private ComboBox<Integer> perspective_cb;
+public class MirrorMenu extends ResizableFrame implements ActionListener {
+	private ComboBox<Integer> mirror_cb;
 	private ArrayList<ActionListener> action_listeners;
 	
-	public PerspectiveMenu() {
+	public MirrorMenu() {
 		action_listeners = new ArrayList<ActionListener>();
-		setTitle("Perspective Menu");
+		setTitle("Axis Mirror Menu");
 		
-		perspective_cb = new ComboBox<Integer>();
-		perspective_cb.setTheme("perspective_cb");
-		perspective_cb.addActionListener(this);
+		mirror_cb = new ComboBox<Integer>();
+		mirror_cb.setTheme("perspective_cb");
+		mirror_cb.addActionListener(this);
 		
-		add(perspective_cb);
+		add(mirror_cb);
 	}
 
 	public void populateLayers(Integer num_layers) {
-		perspective_cb.addItem("XY");
-		perspective_cb.addItem("XZ");
-		perspective_cb.addItem("YZ");
+		mirror_cb.addItem("X");
+		mirror_cb.addItem("Y");
+		mirror_cb.addItem("Z");
+		mirror_cb.addItem("XY");
+		mirror_cb.addItem("XZ");
+		mirror_cb.addItem("YZ");
+		mirror_cb.addItem("XYZ");
 	}
 	
 	public Integer getSelection(){
-	  return perspective_cb.getSelected();
+	  return mirror_cb.getSelected();
 	}
 
 	public void addActionListener(ActionListener listener){

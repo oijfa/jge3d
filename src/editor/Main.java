@@ -6,7 +6,8 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
-import editor.window.PaletteMenu;
+import editor.window.PaletteWindow;
+//import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
 
@@ -18,8 +19,9 @@ public class Main implements ActionListener {
 	private Engine engine;
 	
 	private GridWindow grid_window;
-	private PaletteMenu palette_menu;
+	private PaletteWindow palette_window;
 	private LayerMenu layer_menu;
+	//private ToolBox tool_box;
 	
 	private Entity model;
 	private Camera camera;
@@ -35,11 +37,13 @@ public class Main implements ActionListener {
 	    int num_layers = 8;
 	    grid_window = new GridWindow(num_layers);
 	    layer_menu = new LayerMenu(); layer_menu.populateLayers(num_layers);
-	    palette_menu = new PaletteMenu(216);
-	  
+	    palette_window = new PaletteWindow(216);
+	    //tool_box = new ToolBox();
+	    
 	    engine.addWindow(grid_window,400,400);
-	    engine.addWindow(palette_menu,300,300);
+	    engine.addWindow(palette_window,300,300);
 	    engine.addWindow(layer_menu,200,30);
+	    //engine.addWindow(tool_box, 200, 300);
 	    
 	    model = new Entity(1f,new BoxShape(new Vector3f(1,1,1)),true);
 	    model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
@@ -57,9 +61,10 @@ public class Main implements ActionListener {
 	
 	public void run(){
 		grid_window.addActionListener(this);
-		palette_menu.addActionListener(this);
+		palette_window.addActionListener(this);
 		layer_menu.addActionListener(this);
-    
+		//tool_box.addActionListener(this);
+		
 		engine.run();
 	}
 	/*
@@ -75,8 +80,8 @@ public class Main implements ActionListener {
 		player1.setProperty("name", "player1");
 		objectList.enqueuePhysics(player1, QueueItem.ADD);
 		objectList.parsePhysicsQueue();
-<<<<<<< HEAD
 		
+<<<<<<< HEAD
 =======
 		
 		int num_layers = 8;
@@ -107,8 +112,8 @@ public class Main implements ActionListener {
 	private Boolean i=true;
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		if( ae.getSource() == palette_menu){
-  			grid_window.setCurrentColor(((PaletteMenu) ae.getSource()).getPrimaryColor());
+		if( ae.getSource() == palette_window){
+  			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
   		}else if(ae.getSource() == grid_window) {
   			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
   		}else if(ae.getSource() == layer_menu) {
