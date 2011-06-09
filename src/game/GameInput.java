@@ -5,14 +5,8 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.bulletphysics.collision.shapes.BoxShape;
-
 import de.matthiasmann.twl.Event;
-import engine.entity.Entity;
 import engine.entity.EntityList;
-import engine.entity.QueueItem;
-import engine.importing.Parser;
-import engine.importing.XGL_Parser;
 import engine.input.Input;
 import engine.entity.Player;
 
@@ -77,6 +71,7 @@ public class GameInput extends Input {
 		switch(evt.getMouseButton()){
 			case 1:
 				if(evt.getType() == Event.Type.MOUSE_BTNDOWN){
+				  /*
 					BoxShape boxShape = new BoxShape(new Vector3f(1, 1, 1));
 					Entity ent = new Entity(1.0f,boxShape,true);
 					ent.setPosition(camera.getPosition());
@@ -97,6 +92,7 @@ public class GameInput extends Input {
 					ent.setGravity(new Vector3f(0,0,0));
 					ent.applyImpulse(impulse, camera.getPosition());
 					objectList.enqueuePhysics(ent, QueueItem.ADD);
+					*/
 				}
 				break;
 			case 0://Left Button

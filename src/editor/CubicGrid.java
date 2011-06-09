@@ -78,7 +78,7 @@ public class CubicGrid<E> {
 					}
 				}
 			}	
-			full_model.createVBO();
+			//full_model.createVBO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

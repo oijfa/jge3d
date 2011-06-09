@@ -49,10 +49,12 @@ public class Main implements ActionListener {
     model.setPosition(new Vector3f(0,0,0));
     
     camera = new Camera(10d, new BoxShape(new Vector3f(1,1,1)), false, model);
-    camera.setProperty(Entity.NAME, "camera");
+    camera.setProperty(Entity.NAME, Camera.NAME);
     camera.setPosition(new Vector3f(0,0,0));
     
     engine.addEntity(model);
+    engine.addEntity(camera);
+    
 	}
 	
 	public void run(){
