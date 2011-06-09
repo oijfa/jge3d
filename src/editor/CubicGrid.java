@@ -46,6 +46,7 @@ public class CubicGrid<E> {
 			parser.readFile(path_to_shape);
 			base_model = parser.createModel();
 			Block<Integer> current_block;
+			Color mat_color;
 			for(int z=0;z<size;z++) {
 				for(int y=0;y<size;y++) {
 					for(int x=0;x<size;x++) {
@@ -57,7 +58,7 @@ public class CubicGrid<E> {
 								new Vector3f(0,0,1),
 								new Vector3f(0,1,0)
 							);
-							Color mat_color = ((Block<Integer>)this.get(x,y,z)).getColor();
+							mat_color = ((Block<Integer>)this.get(x,y,z)).getColor();
 							mesh.setMaterial(
 								new Material(
 									new Vector3f(
@@ -72,8 +73,8 @@ public class CubicGrid<E> {
 									)
 								)
 							);
-							mesh.calcNormals();
-							full_model.addMesh(mesh);
+							//mesh.calcNormals();
+							//full_model.addMesh(mesh);
 						}
 					}
 				}
