@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
-import engine.controller.Config;
-
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.ResizableFrame;
@@ -95,72 +93,14 @@ public class RotationMenu extends ResizableFrame {
 		reset.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				for(String key:objectList.getKeySet()) {
-					if(!key.equals(Camera.CAMERA_NAME)) {
-						//Reset position of all other objects
-						for(String name: objectList.getKeySet()) {
-							//For everything but the camera do the following
-							if(!name.equals(Camera.CAMERA_NAME)) {
-								//Stop the movement
-								objectList.getItem(name).setDamping(1.0f,1.0f);
-								objectList.getItem(name).activate();
-								objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
-								
-								//Move the object back to its original position
-								objectList.getItem(name).setAngularIdentity();
-								objectList.getItem(name).setPosition(Config.getPosition(name));
-							}
-						}
-						
-						cam.setDeclination(0.0);
-						cam.setRotation(0.0);
-						/*
-						Random rand = new Random();
-						Vector3f force = new Vector3f(
-							rand.nextFloat()*10,
-							rand.nextFloat()*10,
-							rand.nextFloat()*10
-						);
-						ent.applyImpulse(force, ent.getPosition());
-						ent.activate();
-						*/
-						
-						//ent.setPosition(Config.getByName(ent.getProperty("name")).getPosition());
-					}
-				}
+
 			}
 		});
 		
 		explode.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				for(String name: objectList.getKeySet()) {
-					//For everything but the camera do the following
-					if(!name.equals(Camera.CAMERA_NAME)) {
-						//Stop the movement
-						objectList.getItem(name).setDamping(1.0f,1.0f);
-						objectList.getItem(name).activate();
-						objectList.getItem(name).setAngularFactor(0.0f, new Vector3f(0,0,0));
-						
-						//Move the object back to its original position
-						objectList.getItem(name).setAngularIdentity();
-						objectList.getItem(name).setPosition(Config.getPosition(name));
-					}
-				}
-				
-				
-				if(!linearShow){
-					cam.focusOn(Config.getLineupFocus());
-					cam.setDistance(9.0f);
-					linearShow = true;
-				}else{
-					cam.focusOn(Config.getFullAssemblyFocus());
-					linearShow = false;
-					//System.out.println(Config.getFullAssemblyFocus().getProperty("name"));
-				}
-				
-				cam.setDeclination(0.0);
-				cam.setRotation(0.0);
+
 			}
 		});
 		

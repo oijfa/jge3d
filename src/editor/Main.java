@@ -36,7 +36,7 @@ public class Main implements ActionListener {
 	    grid_window = new GridWindow(num_layers);
 	    layer_menu = new LayerMenu(); layer_menu.populateLayers(num_layers);
 	    palette_menu = new PaletteMenu(216);
-	    
+	  
 	    engine.addWindow(grid_window,400,400);
 	    engine.addWindow(palette_menu,300,300);
 	    engine.addWindow(layer_menu,200,30);

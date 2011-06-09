@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
 
 import engine.window.tree.Model;
 
@@ -76,19 +75,9 @@ public class Window extends DesktopArea {
 	
 	public void addWindow(ResizableFrame window, int width, int height) {
 		window.setSize(width, height);
-		try {
-			Display.makeCurrent();
-		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		gui.update();
-		try {
-			Display.releaseContext();
-		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		//gui.update();
+
 		if(windows.size() > 0) {	
 			ResizableFrame last_window =  windows.get(windows.size()-1);
 			if(window.getHeight()+last_window.getBottom() < this.getHeight()) {
@@ -109,7 +98,7 @@ public class Window extends DesktopArea {
 		return layers;
 	}
 	
-  public void setInput(Input i){
-    input = i;
-  }
+	public void setInput(Input i){
+		input = i;
+	} 
 }

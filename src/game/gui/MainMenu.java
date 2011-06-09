@@ -1,6 +1,5 @@
 package game.gui;
 
-import engine.controller.Controller;
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
@@ -15,7 +14,7 @@ public class MainMenu extends ResizableFrame {
 
 	public MainMenu() {
 		setTitle("JGE3d test");
-
+		
 		// Create the layout and button instances
 		layout = new DialogLayout();
 
@@ -27,13 +26,6 @@ public class MainMenu extends ResizableFrame {
 		this.options.setTheme("options");
 		this.quit = new Button("Quit");
 		this.quit.setTheme("quit");
-
-		// When the quit button is clicked run this command
-		quit.addCallback(new Runnable() {
-			public void run() {
-				Controller.quit();
-			}
-		});
 
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top

@@ -1,5 +1,6 @@
 package engine.terrain;
 
+import engine.Engine;
 import engine.importing.Parser;
 import engine.importing.XGL_Parser;
 
@@ -9,14 +10,13 @@ import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 import engine.entity.Entity;
-import engine.entity.EntityList;
 
 public class Terrain {
-	private EntityList objectList;
+	private Engine engine;
 	private DynamicMatrix terrain;
 	
-	public Terrain(EntityList objectList) {
-		this.objectList = objectList;
+	public Terrain(Engine engine) {
+		this.engine = engine;
 	}
 	public void createTerrain(int land_size) {
 		Parser p = new XGL_Parser();
@@ -40,7 +40,7 @@ public class Terrain {
 			ent.setPosition(terrain.get(i));
 			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 			
-			objectList.addEntity(ent);
+			engine.addEntity(ent);
 		}
 	}
 	

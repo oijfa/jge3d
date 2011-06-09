@@ -10,7 +10,6 @@ import com.bulletphysics.collision.shapes.BoxShape;
 import de.matthiasmann.twl.Event;
 import engine.entity.Entity;
 import engine.entity.EntityList;
-import engine.entity.QueueItem;
 import engine.importing.Parser;
 import engine.importing.XGL_Parser;
 import engine.input.Input;
@@ -96,7 +95,7 @@ public class GameInput extends Input {
 					impulse.scale(0.02f);
 					ent.setGravity(new Vector3f(0,0,0));
 					ent.applyImpulse(impulse, camera.getPosition());
-					objectList.enqueuePhysics(ent, QueueItem.ADD);
+					objectList.addEntity(ent);
 				}
 				break;
 			case 0://Left Button

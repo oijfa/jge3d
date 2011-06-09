@@ -60,8 +60,8 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		
 		Vector3f camPos;
-    Vector3f focusPos;
-    Vector3f up;;
+	    Vector3f focusPos;
+	    Vector3f up;
 		if(camera!=null){
 			camera.updatePosition();		
 		
@@ -110,12 +110,12 @@ public class Renderer {
 			Display.setTitle("JGE3d");
 
   		// Create a fullscreen window with 1:1 orthographic 2D projection (default)
-      Display.setFullscreen(false);
-      Display.setDisplayMode(new DisplayMode(1024,800));
+		Display.setFullscreen(false);
+		Display.setDisplayMode(new DisplayMode(1024,800));
    
-      // Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
-      //TODO:  Make Configurable by User
-      Display.setVSyncEnabled(true);
+		// Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
+		//TODO:  Make Configurable by User
+		Display.setVSyncEnabled(true);
 			
 		} catch (LWJGLException e) {
 			e.printStackTrace();
