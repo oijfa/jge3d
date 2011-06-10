@@ -57,13 +57,13 @@ public class Model {
 	
 	//Copy Constructor
 	public Model(Model model) {
+		init();
 		this.meshes = new ArrayList<Mesh>();
 		for(Mesh m: model.meshes){
 			this.meshes.add(new Mesh(m));
 		}
 		modelVBOID = model.getVBOID();
 		modelVBOindexID = model.getVBOindexID();
-		init();
 		//verify();
 	}
 	
@@ -292,8 +292,8 @@ public class Model {
   		
   		//buf = BufferUtils.createFloatBuffer(16);
 		}else{
-      System.out.println("WARNING: Tried to create VBO with no available meshes. ");
-    }
+			System.out.println("WARNING: Tried to create VBO with no available meshes. ");
+		}
 	}
 	
 	public void draw_vbo(CollisionObject collision_object) {
