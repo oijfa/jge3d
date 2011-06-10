@@ -102,7 +102,6 @@ public class Engine {
       		}//run()
     	};//new Thread()
     
-    	entity_list.parseRenderQueue();
     	try {
     		Display.releaseContext();
     	} catch (LWJGLException e) {
