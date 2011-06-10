@@ -247,7 +247,6 @@ public class Model {
 	public void createVBO() {
 		//if we support VBOs we need to precompute the thing now
 		//that we have normals and the model is fully loaded
-		/*
 		int num_faces_all_meshes=0;
 		if( meshes.size() != 0 ){
   		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
@@ -282,38 +281,6 @@ public class Model {
 		}else{
 			System.out.println("WARNING: Tried to create VBO with no available meshes. ");
 		}
-		*/
-		int num_faces_all_meshes=0;
-		int num_vertices = meshes.get(0).getFace(0).getVertexCount();
-		for(Mesh m: meshes) {
-			num_faces_all_meshes+=m.getFaceCount();
-		}
-		vertex_buffer = BufferUtils.createFloatBuffer(
-			num_faces_all_meshes*num_vertices*12
-		);
-		index_buffer = BufferUtils.createIntBuffer(
-			num_faces_all_meshes*num_vertices
-		);
-		for(Mesh m: meshes) {
-			for(Face f: m.getFaces()) {
-				vertex_buffer.put(f.createFaceBufferVNTC(m));
-				index_buffer.put(f.createIndexBufferVNTC(pointIndex));
-				pointIndex += 3;
-			}
-		}
-		
-		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
-		vertex_buffer.flip();
-		index_buffer.flip();
-		
-		modelVBOID = createVBOID(1);
-		bufferData(modelVBOID, vertex_buffer);
-		modelVBOindexID = createVBOID(1);
-	    bufferElementData(modelVBOindexID, index_buffer);
-		hasVBO=true;
-		
-		//buf = BufferUtils.createFloatBuffer(16);
-
 	}
 	
 	public void draw_vbo(CollisionObject collision_object) {
