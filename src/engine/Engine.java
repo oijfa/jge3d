@@ -102,11 +102,13 @@ public class Engine {
       		}//run()
     	};//new Thread()
     
+    	entity_list.parseRenderQueue();
     	try {
     		Display.releaseContext();
     	} catch (LWJGLException e) {
     		e.printStackTrace();
     	}
+    	
     	render_thread.start();
   	}
 
