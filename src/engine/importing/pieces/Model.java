@@ -278,19 +278,6 @@ public class Model {
   		hasVBO=true;
   		
   		//buf = BufferUtils.createFloatBuffer(16);
-		
-		
-  		//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
-  		vertex_buffer.flip();
-  		index_buffer.flip();
-  		
-  		modelVBOID = createVBOID(1);
-  		bufferData(modelVBOID, vertex_buffer);
-  		modelVBOindexID = createVBOID(1);
-  	    bufferElementData(modelVBOindexID, index_buffer);
-  		hasVBO=true;
-  		
-  		//buf = BufferUtils.createFloatBuffer(16);
 		}else{
 			System.out.println("WARNING: Tried to create VBO with no available meshes. ");
 		}
