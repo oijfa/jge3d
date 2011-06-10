@@ -107,6 +107,7 @@ public class Engine {
     	} catch (LWJGLException e) {
     		e.printStackTrace();
     	}
+    	
     	render_thread.start();
   	}
 
