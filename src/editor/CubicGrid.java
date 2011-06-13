@@ -73,13 +73,12 @@ public class CubicGrid<E> {
 									)
 								)
 							);
-							//mesh.calcNormals();
-							//full_model.addMesh(mesh);
+							mesh.calcNormals();
+							full_model.addMesh(mesh);
 						}
 					}
 				}
-			}	
-			//full_model.createVBO();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

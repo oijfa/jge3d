@@ -28,7 +28,6 @@ public class Renderer {
 	private Window window;
 	private EntityList objectList;
   private Camera camera;
-  private boolean isInitialized=false;
   private static boolean supportsVBO=false;
 	//private float x=0,y=0,z=0;
 	
@@ -44,8 +43,8 @@ public class Renderer {
 	private Canvas display_parent;
 
 	public Renderer(EntityList objectList){
-    this(objectList,null);
-  }
+		this(objectList,null);
+	}
 	
 	public Renderer(EntityList objectList, Canvas display_parent){
 		this.objectList = objectList;
@@ -71,28 +70,25 @@ public class Renderer {
 			focusPos = camera.getFocusPosition();
 			up = camera.getUp();
 		}else{
-		  camera = (Camera) objectList.getItem(Camera.NAME);
-		  camPos = new Vector3f(0,0,5);
-		  focusPos = new Vector3f(0,0,0);
-		  up = new Vector3f(0,1,0);
+			camera = (Camera) objectList.getItem(Camera.NAME);
+			camPos = new Vector3f(0,0,5);
+			focusPos = new Vector3f(0,0,0);
+			up = new Vector3f(0,1,0);
 		}
 		
 		//Look at the camera's focus
 		GLU.gluLookAt(
-				camPos.x, camPos.y, camPos.z, 	//Camera Location
-				focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
-				up.x, up.y, up.z			//Up Vector
+			camPos.x, camPos.y, camPos.z, 	//Camera Location
+			focusPos.x, focusPos.y, focusPos.z, 		//Focus On Location
+			up.x, up.y, up.z			//Up Vector
 		);
 		
 		//Draw the 3d stuff
 		objectList.drawList();
-		//editor.Model<Integer> m = new editor.Model<Integer>(10);
-		//m.draw();
-		
-		
+
 		//Draw the window manager stuff
 		if( window != null)
-		  window.draw();
+			window.draw();
 		
 		GL11.glFlush();
 		Display.update();
@@ -105,20 +101,20 @@ public class Renderer {
     
 		//Setup Display
 		try {
-		  if( display_parent != null){
-		    Display.setParent(display_parent);
-		  }
+			if( display_parent != null){
+				Display.setParent(display_parent);
+			}
+			Display.setDisplayMode(new DisplayMode(900,900));
 			Display.create();
 			Display.setTitle("JGE3d");
-
-  		// Create a fullscreen window with 1:1 orthographic 2D projection (default)
-		Display.setFullscreen(false);
-		Display.setDisplayMode(new DisplayMode(1024,800));
-   
-		// Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
-		//TODO:  Make Configurable by User
-		Display.setVSyncEnabled(true);
+	
+	  		// Create a fullscreen window with 1:1 orthographic 2D projection (default)
+			Display.setFullscreen(false);
 			
+	   
+			// Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
+			//TODO:  Make Configurable by User
+			Display.setVSyncEnabled(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
@@ -144,8 +140,7 @@ public class Renderer {
         }else{
         	supportsVBO=false;
         }
-		isInitialized=true;
-		
+
 		//Blending functions so we can have transparency
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		//GL11.glEnable(GL11.GL_BLEND);
@@ -221,8 +216,6 @@ public class Renderer {
 	
 	public void destroy() {window.destroy();}
 	
-	public boolean isInitialized() {return isInitialized;}
-
 	public void setCamera(Camera camera) {
 		this.camera = camera;		
 	}

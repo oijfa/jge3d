@@ -44,7 +44,7 @@ public class Window extends DesktopArea {
 			theme = ThemeManager.createThemeManager(
 					this.getClass().getClassLoader().getResource("resources/themes/default.xml"),
 					renderer);
-			gui.applyTheme(theme);
+  			gui.applyTheme(theme);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,11 +66,11 @@ public class Window extends DesktopArea {
 
 	protected boolean handleEvent(Event evt) { 
 		//Our event handling
-    if(input != null && input.handleEvent(evt)) {
-       return true; 
-    }
+	    if(input != null && input.handleEvent(evt)) {
+	       return true; 
+	    }
     
-    return false; 
+	    return false; 
 	}
 	
 	public void addWindow(ResizableFrame window, int width, int height) {
@@ -87,7 +87,7 @@ public class Window extends DesktopArea {
 			} else {
 				window.setPosition(last_window.getRight(),last_window.getBottom());
 			}
-			//System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
+			System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
 		}
 		windows.add(window);
 		ResizableFrame current_window = windows.get(windows.indexOf(window));		
