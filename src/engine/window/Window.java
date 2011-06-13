@@ -87,7 +87,7 @@ public class Window extends DesktopArea {
 			} else {
 				window.setPosition(last_window.getRight(),last_window.getBottom());
 			}
-			System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
+			//System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
 		}
 		windows.add(window);
 		ResizableFrame current_window = windows.get(windows.indexOf(window));		

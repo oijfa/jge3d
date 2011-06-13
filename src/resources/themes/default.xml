@@ -193,8 +193,8 @@
     <theme name="medbutton" allowWildcard="true" ref="-defaults">
         <param name="background"><image>white</image></param>
         <param name="border"><border>20</border></param>
-        <param name="maxWidth"><int>20</int></param>
-        <param name="maxHeight"><int>20</int></param>
+        <param name="maxWidth"><int>50</int></param>
+        <param name="maxHeight"><int>50</int></param>
         <param name="minWidth"><int>20</int></param>
         <param name="minHeight"><int>20</int></param>
     </theme>

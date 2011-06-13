@@ -73,7 +73,7 @@ public class CubicGrid<E> {
 									)
 								)
 							);
-							mesh.calcNormals();
+							//mesh.calcNormals();
 							full_model.addMesh(mesh);
 						}
 					}
