@@ -249,6 +249,13 @@ public class Model {
 		//that we have normals and the model is fully loaded
 		int num_faces_all_meshes=0;
 		if( meshes.size() != 0 ){
+			if(hasVBO)
+				destroyVBO();
+			else {
+				modelVBOID = createVBOID(1);
+				modelVBOindexID = createVBOID(1);
+			}
+			
 			int num_vertices = meshes.get(0).getFace(0).getVertexCount();
 			for(Mesh m: meshes) {
 				num_faces_all_meshes+=m.getFaceCount();
@@ -270,16 +277,16 @@ public class Model {
 			//NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN COMPLETELY NEW DATA
 			vertex_buffer.flip();
 			index_buffer.flip();
-			
-			modelVBOID = createVBOID(1);
+
+			//Put data in allocated buffers
 			bufferData(modelVBOID, vertex_buffer);
-			modelVBOindexID = createVBOID(1);
 			bufferElementData(modelVBOindexID, index_buffer);
+			
+			//Set the notifier
 			hasVBO=true;
-  		//buf = BufferUtils.createFloatBuffer(16);
+			//buf = BufferUtils.createFloatBuffer(16);
 		}else{
-			System.out.println("WARNING: Tried to create VBO with no available meshes. ");
-			System.out.println(meshes.toString());
+			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
 	}
 	
@@ -356,6 +363,8 @@ public class Model {
 	}
 	public void destroyVBO() {
 		ARBVertexBufferObject.glDeleteBuffersARB(modelVBOID);	
+		ARBVertexBufferObject.glDeleteBuffersARB(modelVBOindexID);
+		hasVBO=false;
 	}
 	//*****************END VBO METHODS***********************
 }

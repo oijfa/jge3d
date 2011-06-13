@@ -77,6 +77,7 @@ public class Main implements ActionListener {
   			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
   		}else if(ae.getSource() == grid_window) {
   			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
+  			engine.updateEntity(model);
   		}else if(ae.getSource() == layer_menu) {
   			if(combobox_hack==true) {
   				grid_window.loadLayer(layer_menu.getSelection());

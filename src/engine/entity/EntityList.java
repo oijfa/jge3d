@@ -38,7 +38,6 @@ public class EntityList{
 				addPhysicsItem(((QueueItem) item).getEnt());
 			else if(QueueItem.REMOVE == ((QueueItem) item).getAction())
 				removePhysicsItem(((QueueItem) item).getEnt());
-			
 			physicsQueue.remove(item);
 		}
 	}
@@ -96,21 +95,24 @@ public class EntityList{
 	}
 	
 	public void addEntity(Entity ent){
-	  names.put((String)ent.getProperty("name"), ent);
-	  physicsQueue.add(new QueueItem(ent,QueueItem.ADD));
-	  renderQueue.add(new QueueItem(ent,QueueItem.ADD));
+		names.put((String)ent.getProperty("name"), ent);
+		physicsQueue.add(new QueueItem(ent,QueueItem.ADD));
+		renderQueue.add(new QueueItem(ent,QueueItem.ADD));
 	}
 	
+	public void updateEntity(Entity ent){
+		renderQueue.add(new QueueItem(ent,QueueItem.ADD));
+	}
 	
 	public void removeEntity(String name){
-	  if(names.containsKey(name)){
-	    removeEntity(names.get(name));
-	  }
+		if(names.containsKey(name)){
+			removeEntity(names.get(name));
+		}
 	}
 	public void removeEntity(Entity ent){ 
-    names.remove(ent.getProperty(Entity.NAME));
-    physicsQueue.add(new QueueItem(ent,QueueItem.REMOVE));
-    renderQueue.add(new QueueItem(ent,QueueItem.REMOVE));
+	    names.remove(ent.getProperty(Entity.NAME));
+	    physicsQueue.add(new QueueItem(ent,QueueItem.REMOVE));
+	    renderQueue.add(new QueueItem(ent,QueueItem.REMOVE));
 	}
 	
 	/*Physics Constraints*/

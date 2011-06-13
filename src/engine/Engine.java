@@ -85,6 +85,10 @@ public class Engine {
   	public void addEntity(Entity ent){
   		entity_list.addEntity(ent);
   	}
+  	
+  	public void updateEntity(Entity ent){
+  		entity_list.updateEntity(ent);
+  	}
   
   	public Entity getEntity(String name){
   		return entity_list.getItem(name);
@@ -133,10 +137,6 @@ public class Engine {
 	    	entity_list.parseRenderQueue();
 	      
 	    	while (!finished.get()) {
-	    		// Always call Window.update(), all the time - it does some behind the
-	    		// scenes work, and also displays the rendered output
-	    		//Display.update();
-			
 	    		// Check for close requests
 	    		if (Display.isCloseRequested()) {
 	    			finished.set(true);
