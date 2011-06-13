@@ -34,7 +34,7 @@ public class Model {
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
 	
-	private Boolean immediate_scale_rotate = false;
+	private Boolean immediate_scale_rotate = true;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();

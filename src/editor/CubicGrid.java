@@ -54,7 +54,7 @@ public class CubicGrid<E> {
 						if(current_block.getActive()) {
 							mesh = new Mesh(base_model.getMesh(0));
 							mesh.transform(
-								new Vector3f(x,-y,z),
+								new Vector3f(x,y,z),
 								new Vector3f(0,0,1),
 								new Vector3f(0,1,0)
 							);
@@ -70,15 +70,27 @@ public class CubicGrid<E> {
 										mat_color.getRedFloat(),
 										mat_color.getGreenFloat(),
 										mat_color.getBlueFloat()
-									)
+									),
+									new Vector3f(
+										mat_color.getRedFloat(),
+										mat_color.getGreenFloat(),
+										mat_color.getBlueFloat()
+									),
+									new Vector3f(
+										mat_color.getRedFloat(),
+										mat_color.getGreenFloat(),
+										mat_color.getBlueFloat()
+									),
+									1f
 								)
 							);
-							//mesh.calcNormals();
+							mesh.calcNormals();
 							full_model.addMesh(mesh);
 						}
 					}
 				}
 			}
+			full_model.createVBO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

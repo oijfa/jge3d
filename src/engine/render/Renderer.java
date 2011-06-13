@@ -36,10 +36,10 @@ public class Renderer {
 	private float zoom = 1f;  //The closer this value is to 0, the farther you are zoomed in.
 	
 	//Default light (needs turning into an entity
-    private float lightAmbient[]={ 0.2f, 0.2f, 0.2f, 1.0f };    // Ambient Light Values ( NEW )
+    private float lightAmbient[]={ 0.5f, 0.5f, 0.5f, 1.0f };    // Ambient Light Values ( NEW )
     private float lightDiffuse[]={ 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f, 1.0f };    // Diffuse Light Values ( NEW )
     private float lightSpecular[]={ 1f, 1f, 1f, 1.0f };
-    private float lightPosition[]={ 0.0f, 15.0f, 0.0f, 1.0f };   // Light Position ( NEW )
+    private float lightPosition[]={ 0.0f, 0.0f, 0.0f, 1.0f };   // Light Position ( NEW )
 	private Canvas display_parent;
 
 	public Renderer(EntityList objectList){
