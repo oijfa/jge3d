@@ -73,7 +73,7 @@ public class Model {
 		min = new Vector3f();
 		center = new Vector3f();
 		buf = BufferUtils.createFloatBuffer(16);
-		shader = new Shader();
+		shader = new Shader("engine/importing/pieces/default");
 	}
 	
 	/*Setters*/
@@ -311,7 +311,7 @@ public class Model {
 		}//else {
 			//do the shader using glUniform etc. here
 		
-		shader.startShader();
+		shader.startShader(modelVBOID,center);
 		
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);

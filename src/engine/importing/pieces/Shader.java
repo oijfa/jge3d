@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -26,7 +28,7 @@ public class Shader {
     private int vertShader=0;
     private int fragShader=0;
 
-    public Shader(){
+    public Shader(String path){
     
         /*
         * create the shader program. If OK, create vertex
@@ -35,8 +37,8 @@ public class Shader {
         shader=ARBShaderObjects.glCreateProgramObjectARB();
         
         if(shader!=0){
-            vertShader=createVertShader("shaders/screen.vert");
-            fragShader=createFragShader("shaders/screen.frag");
+            vertShader=createVertShader(path + ".vert");
+            fragShader=createFragShader(path + ".frag");
         }
         else useShader=false;
 
@@ -58,9 +60,13 @@ public class Shader {
     * If the shader was setup succesfully, we use the shader. Otherwise
     * we run normal drawing code.
     */
-    public void startShader(){
+    public void startShader(int vbo_id, Vector3f location){
         if(useShader) {
             ARBShaderObjects.glUseProgramObjectARB(shader);
+            ARBShaderObjects.glUniform3fARB(vbo_id, location.x, location.y, location.z);
+      
+            
+            
         }
     }
     
