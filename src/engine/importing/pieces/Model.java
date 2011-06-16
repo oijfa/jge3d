@@ -33,8 +33,9 @@ public class Model {
 	private IntBuffer index_buffer;
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
+	private Shader shader;
 	
-	private Boolean immediate_scale_rotate = true;
+	private Boolean immediate_scale_rotate = false;
 	
 	public Model(){
 		meshes = new ArrayList<Mesh>();
@@ -72,7 +73,7 @@ public class Model {
 		min = new Vector3f();
 		center = new Vector3f();
 		buf = BufferUtils.createFloatBuffer(16);
-		
+		shader = new Shader();
 	}
 	
 	/*Setters*/
@@ -310,6 +311,8 @@ public class Model {
 		}//else {
 			//do the shader using glUniform etc. here
 		
+		shader.startShader();
+		
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -356,6 +359,8 @@ public class Model {
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+		
+		shader.stopShader();
 		
 		//Pop the matrix if we are in immediate mode
 		if(immediate_scale_rotate)

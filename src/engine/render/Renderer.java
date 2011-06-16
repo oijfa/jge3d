@@ -52,8 +52,6 @@ public class Renderer {
 	}
 
 	public void draw() {
-		GLContext.getCapabilities().toString();
-		
 		// Clear The Screen And The Depth Buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
 		GL11.glLoadIdentity();
@@ -110,7 +108,6 @@ public class Renderer {
 	
 	  		// Create a fullscreen window with 1:1 orthographic 2D projection (default)
 			Display.setFullscreen(false);
-			
 	   
 			// Enable vsync if we can (due to how OpenGL works, it cannot be guarenteed to always work)
 			//TODO:  Make Configurable by User
