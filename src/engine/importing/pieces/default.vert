@@ -1,6 +1,5 @@
-uniform vec3 transform;
+uniform mat4 transform;
 
-void main()
-{
+void main() {
 	gl_Position = transform * gl_Vertex;
 }

@@ -311,7 +311,7 @@ public class Model {
 		}//else {
 			//do the shader using glUniform etc. here
 		
-		shader.startShader(modelVBOID,center);
+		shader.startShader(modelVBOID, collision_object);
 		
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
