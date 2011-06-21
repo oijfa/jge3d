@@ -14,7 +14,7 @@ public abstract class Input {
 	protected Camera camera;
 	protected EntityList objectList;
 	protected Physics physics;
-	
+
 	protected Input(EntityList objectList) {
 		this.objectList = objectList;
 		physics = this.objectList.getPhysics();
@@ -33,9 +33,9 @@ public abstract class Input {
 	}
 
 	public boolean handleEvent(Event evt) {
-		//Keyboard.poll();
-		//Mouse.poll();
-		if(camera != null && Mouse.isInsideWindow()) {
+		// Keyboard.poll();
+		// Mouse.poll();
+		if (camera != null && Mouse.isInsideWindow()) {
 			handleMouse(evt);
 			handleKeyboard(evt);
 		} else {
@@ -45,5 +45,6 @@ public abstract class Input {
 	}
 
 	protected abstract boolean handleMouse(Event evt);
+
 	protected abstract boolean handleKeyboard(Event evt);
 }

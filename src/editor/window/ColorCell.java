@@ -9,52 +9,59 @@ import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.utils.TintAnimator;
 import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 
-public class ColorCell extends Button{
+public class ColorCell extends Button {
 	private Color base_color;
 	private ArrayList<ActionListener> action_listeners;
-	
-	public ColorCell(){
+
+	public ColorCell() {
 		this.addCallback(new Callback(this));
 		action_listeners = new ArrayList<ActionListener>();
 	}
 
-	public ColorCell(Color base_color){
+	public ColorCell(Color base_color) {
 		this.addCallback(new Callback(this));
 		action_listeners = new ArrayList<ActionListener>();
 		setColor(base_color);
 	}
-	
-	public Color getColor(){
-		if(base_color==null)
-			return new Color((byte) 0xFF,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF);
-		else
-			return new Color(base_color.toARGB());
+
+	public Color getColor() {
+		if (base_color == null) return new Color((byte) 0xFF, (byte) 0xFF,
+			(byte) 0xFF, (byte) 0xFF);
+		else return new Color(base_color.toARGB());
 	}
-	
-	public void setColor(Color color){
+
+	public void setColor(Color color) {
 		this.base_color = color;
 		super.setTintAnimator(new TintAnimator(new TimeSource() {
-			@Override public void resetTime() {}
-			@Override public int getTime() {return 0;}
+			@Override
+			public void resetTime() {
+			}
+
+			@Override
+			public int getTime() {
+				return 0;
+			}
 		}));
 		this.getTintAnimator().setColor(base_color);
 	}
-	
-	public void fireActionEvent(){
-		for(ActionListener l : action_listeners){
+
+	public void fireActionEvent() {
+		for (ActionListener l : action_listeners) {
 			l.actionPerformed(new ActionEvent(this));
 		}
 	}
-	
-	public void addActionListener(ActionListener listener){
-	  action_listeners.add(listener);
+
+	public void addActionListener(ActionListener listener) {
+		action_listeners.add(listener);
 	}
-	
-	private class Callback implements Runnable{
+
+	private class Callback implements Runnable {
 		ColorCell owner;
-		public Callback(ColorCell owner){
+
+		public Callback(ColorCell owner) {
 			this.owner = owner;
 		}
+
 		@Override
 		public void run() {
 			owner.fireActionEvent();

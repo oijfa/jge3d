@@ -14,7 +14,7 @@ public class MainMenu extends ResizableFrame {
 
 	public MainMenu() {
 		setTitle("JGE3d test");
-		
+
 		// Create the layout and button instances
 		layout = new DialogLayout();
 
@@ -33,18 +33,14 @@ public class MainMenu extends ResizableFrame {
 		// Parallel groups align each start and size and can be cascaded
 		//
 		// Group for holding the Horizontal alignment of the buttons
-		Group button_hgroup = layout.createSequentialGroup()
+		Group button_hgroup = layout
+			.createSequentialGroup()
 			.addGap()
 			// Keeps all the buttons in a single vertical line as opposed to
 			// staggering
 			// left to right per row
 			.addGroup(
-				layout.createParallelGroup(
-					new_game,
-					load_game,
-					options,
-					quit)
-				)
+				layout.createParallelGroup(new_game, load_game, options, quit))
 			.addGap();
 
 		// Group for holding the Vertical alignment of the buttons
@@ -52,11 +48,8 @@ public class MainMenu extends ResizableFrame {
 			.addGap()
 			// Add each widget without forming a group so that they rest one
 			// under the other
-			.addWidget(new_game)
-			.addWidget(load_game)
-			.addWidget(options)
-			.addWidget(quit)
-			.addGap();
+			.addWidget(new_game).addWidget(load_game).addWidget(options)
+			.addWidget(quit).addGap();
 
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup
