@@ -10,15 +10,15 @@ import engine.window.components.ComboBox;
 public class MirrorMenu extends ResizableFrame implements ActionListener {
 	private ComboBox<Integer> mirror_cb;
 	private ArrayList<ActionListener> action_listeners;
-	
+
 	public MirrorMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Axis Mirror Menu");
-		
+
 		mirror_cb = new ComboBox<Integer>();
 		mirror_cb.setTheme("perspective_cb");
 		mirror_cb.addActionListener(this);
-		
+
 		add(mirror_cb);
 	}
 
@@ -31,19 +31,19 @@ public class MirrorMenu extends ResizableFrame implements ActionListener {
 		mirror_cb.addItem("YZ");
 		mirror_cb.addItem("XYZ");
 	}
-	
-	public Integer getSelection(){
-	  return mirror_cb.getSelected();
+
+	public Integer getSelection() {
+		return mirror_cb.getSelected();
 	}
 
-	public void addActionListener(ActionListener listener){
-	   action_listeners.add(listener);
+	public void addActionListener(ActionListener listener) {
+		action_listeners.add(listener);
 	}
-	
-	private void fireActionEvent(){
-	  for(ActionListener ae : action_listeners){
-	    ae.actionPerformed(new ActionEvent(this));
-	  }
+
+	private void fireActionEvent() {
+		for (ActionListener ae : action_listeners) {
+			ae.actionPerformed(new ActionEvent(this));
+		}
 	}
 
 	@Override

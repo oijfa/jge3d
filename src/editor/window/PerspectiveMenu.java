@@ -10,15 +10,15 @@ import engine.window.components.ComboBox;
 public class PerspectiveMenu extends ResizableFrame implements ActionListener {
 	private ComboBox<Integer> perspective_cb;
 	private ArrayList<ActionListener> action_listeners;
-	
+
 	public PerspectiveMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Perspective Menu");
-		
+
 		perspective_cb = new ComboBox<Integer>();
 		perspective_cb.setTheme("perspective_cb");
 		perspective_cb.addActionListener(this);
-		
+
 		add(perspective_cb);
 	}
 
@@ -27,19 +27,19 @@ public class PerspectiveMenu extends ResizableFrame implements ActionListener {
 		perspective_cb.addItem("XZ");
 		perspective_cb.addItem("YZ");
 	}
-	
-	public Integer getSelection(){
-	  return perspective_cb.getSelected();
+
+	public Integer getSelection() {
+		return perspective_cb.getSelected();
 	}
 
-	public void addActionListener(ActionListener listener){
-	   action_listeners.add(listener);
+	public void addActionListener(ActionListener listener) {
+		action_listeners.add(listener);
 	}
-	
-	private void fireActionEvent(){
-	  for(ActionListener ae : action_listeners){
-	    ae.actionPerformed(new ActionEvent(this));
-	  }
+
+	private void fireActionEvent() {
+		for (ActionListener ae : action_listeners) {
+			ae.actionPerformed(new ActionEvent(this));
+		}
 	}
 
 	@Override

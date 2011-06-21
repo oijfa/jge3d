@@ -10,11 +10,18 @@ import engine.importing.pieces.Model;
 
 public abstract class Parser {
 	protected Model model;
-	
-	public void setWorld(Model _model) {this.model = _model;}
-	public Model getWorld() {return model;}
+
+	public void setWorld(Model _model) {
+		this.model = _model;
+	}
+
+	public Model getWorld() {
+		return model;
+	}
 
 	public abstract void readFile(String fileName) throws Exception;
+
 	public abstract void readUrl(String url) throws Exception;
+
 	public abstract Model createModel();
 }
