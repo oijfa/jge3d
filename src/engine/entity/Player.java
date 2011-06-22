@@ -10,26 +10,25 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 
 public class Player extends Entity {
 	private KinematicCharacterController player;
-	
-	public Player(String name, float mass, CollisionShape shape, float step_height) {
+
+	public Player(String name, float mass, CollisionShape shape,
+		float step_height) {
 		super(name, mass, shape, false);
 		initPlayer(step_height);
 	}
-	
+
 	public Player(float mass, CollisionShape shape, float step_height) {
 		super(mass, shape, false);
 		initPlayer(step_height);
 	}
-	
+
 	public void initPlayer(float step_height) {
 		player = new KinematicCharacterController(
-			(PairCachingGhostObject)((GhostObject)collision_object),
-			(ConvexShape)collision_object.getCollisionShape(),
-			step_height
-		);
+			(PairCachingGhostObject) ((GhostObject) collision_object),
+			(ConvexShape) collision_object.getCollisionShape(), step_height);
 		player.setJumpSpeed(1.0f);
 	}
-	
+
 	public void movePlayer(Vector3f walk_direction) {
 		player.setWalkDirection(walk_direction);
 	}
@@ -37,10 +36,9 @@ public class Player extends Entity {
 	public void setJumpSpeed(float jump_speed) {
 		player.setJumpSpeed(jump_speed);
 	}
-	
+
 	public void jump() {
-		if(player.canJump())
-			player.jump();
+		if (player.canJump()) player.jump();
 	}
 
 }

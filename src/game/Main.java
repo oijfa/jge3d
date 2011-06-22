@@ -14,30 +14,32 @@ import game.gui.RotationMenu;
 public class Main {
 	private static final long serialVersionUID = 1L;
 	private Engine engine;
-	
-	public static void main(String args[]){
+
+	public static void main(String args[]) {
 		Main m = new Main();
 		m.run();
 	}
-	
+
 	public Main() {
 		engine = new Engine();
 
-		//Testing the terrain stuff here
+		// Testing the terrain stuff here
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(75);
 
-		Player player1 = new Player(1.0f,  new BoxShape(new Vector3f(1, 1, 1)),0.5f);
+		Player player1 = new Player(1.0f, new BoxShape(new Vector3f(1, 1, 1)),
+			0.5f);
 		player1.setProperty("name", "player1");
 		engine.addEntity(player1);
-		
-		Camera camera = new Camera(1d, new BoxShape(new Vector3f(1,1,1)), false, player1);
+
+		Camera camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)),
+			false, player1);
 		camera.setProperty("name", "camera");
-	    camera.setPosition(new Vector3f(0,0,0));
-	    camera.setDistance(20f);
-		
+		camera.setPosition(new Vector3f(0, 0, 0));
+		camera.setDistance(20f);
+
 		try {
-			engine.addWindow(new RotationMenu(),400,400);
+			engine.addWindow(new RotationMenu(), 400, 400);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,10 +48,8 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void run() {
 		engine.run();
 	}
 }
-
-
