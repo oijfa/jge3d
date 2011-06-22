@@ -59,13 +59,12 @@ public class Shader {
             ARBShaderObjects.glLinkProgramARB(shader);
             ARBShaderObjects.glValidateProgramARB(shader);
             useShader=printLogInfo(shader);
+            buf = BufferUtils.createFloatBuffer(16);
         } else {
         	useShader=false;
         	System.out.println("Failed to create shader for: " + path);
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
-        }
-        
-        buf = BufferUtils.createFloatBuffer(16);
+        }        
     }
     /*
      * With the exception of syntax, setting up vertex and fragment shaders
@@ -96,7 +95,7 @@ public class Shader {
          ARBShaderObjects.glShaderSourceARB(vertShader, vertexCode);
          ARBShaderObjects.glCompileShaderARB(vertShader);
          //if there was a problem compiling, reset vertShader to zero
-         if(!printLogInfo(vertShader)){
+         if(printLogInfo(vertShader)){
              vertShader=0;
          }
          //if zero we won't be using the shader
@@ -184,8 +183,8 @@ public class Shader {
         );
         
         int length = iVal.get();
-        if (length > 1) {
             // We have some info we need to output.
+        if (length > 1) {
             ByteBuffer infoLog = BufferUtils.createByteBuffer(length);
             iVal.flip();
             ARBShaderObjects.glGetInfoLogARB(obj, iVal, infoLog);
