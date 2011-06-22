@@ -75,7 +75,6 @@ public class Model {
 		min = new Vector3f();
 		center = new Vector3f();
 		buf = BufferUtils.createFloatBuffer(16);
-		shader = new Shader("engine/importing/pieces/default");
 	}
 
 	/* Setters */
@@ -318,9 +317,10 @@ public class Model {
 			// Set the notifier
 			hasVBO = true;
 			// buf = BufferUtils.createFloatBuffer(16);
+			
+			shader = new Shader("engine/importing/pieces/default");
 		} else {
-			System.out
-				.println("WARNING: Tried to create VBO with no available meshes.");
+			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
 	}
 
@@ -343,8 +343,6 @@ public class Model {
 			rotateAndScaleImmediate(collision_object);
 		}// else {
 			// do the shader using glUniform etc. here
-
-		shader.startShader(modelVBOID, collision_object);
 
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
@@ -381,17 +379,18 @@ public class Model {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 
-		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
-
+		shader.startShader(modelVBOID, collision_object);
+			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
+		shader.stopShader();
+			
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 
-		shader.stopShader();
-
 		// Pop the matrix if we are in immediate mode
-		if (immediate_scale_rotate) GL11.glPopMatrix();
+		if (immediate_scale_rotate) 
+			GL11.glPopMatrix();
 	}
 
 	public void destroyVBO() {
