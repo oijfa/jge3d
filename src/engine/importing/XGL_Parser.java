@@ -50,8 +50,7 @@ public class XGL_Parser extends Parser {
 		// Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
-		dom = db.parse(this.getClass().getClassLoader()
-			.getResourceAsStream(fileName));
+		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
 		parseXGL(dom);
 		model.verify();
 	}

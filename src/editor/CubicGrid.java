@@ -4,6 +4,7 @@ import javax.vecmath.Vector3f;
 
 import de.matthiasmann.twl.Color;
 
+import engine.importing.FileLoader;
 import engine.importing.XGL_Parser;
 import engine.importing.pieces.Material;
 import engine.importing.pieces.Mesh;
@@ -37,14 +38,11 @@ public class CubicGrid<E> {
 
 	@SuppressWarnings("unchecked")
 	public engine.importing.pieces.Model getModel(String path_to_shape) {
-		XGL_Parser parser = new XGL_Parser();
-		engine.importing.pieces.Model base_model = new engine.importing.pieces.Model();
+		engine.importing.pieces.Model base_model = FileLoader.loadFile(path_to_shape);
 		engine.importing.pieces.Model full_model = new engine.importing.pieces.Model();
 		Mesh mesh;
 
 		try {
-			parser.readFile(path_to_shape);
-			base_model = parser.createModel();
 			Block<Integer> current_block;
 			Color mat_color;
 			for (int z = 0; z < size; z++) {

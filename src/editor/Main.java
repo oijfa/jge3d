@@ -50,8 +50,7 @@ public class Main implements ActionListener {
 		// engine.addWindow(tool_box, 200, 300);
 
 		model = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
-		model.setModel(grid_window.getGrid().getModel(
-			"resources/models/misc/box.xgl"));
+		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
 		model.setPosition(new Vector3f(1, 3, -20));
 

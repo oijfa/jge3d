@@ -46,8 +46,8 @@ public class Shader {
 		} else useShader = false;
 
 		/*
-		 * if the vertex and fragment shaders setup sucessfully, attach them to
-		 * the shader program, link the sahder program (into the GL context I
+		 * if the vertex and fragment shaders setup successfully, attach them to
+		 * the shader program, link the shaders program (into the GL context I
 		 * suppose), and validate
 		 */
 		if (vertShader != 0 && fragShader != 0) {
@@ -74,8 +74,7 @@ public class Shader {
 	 */
 	private int createVertShader(String filename) {
 		// vertShader will be non zero if successfully created
-		vertShader = ARBShaderObjects
-			.glCreateShaderObjectARB(ARBVertexShader.GL_VERTEX_SHADER_ARB);
+		vertShader = ARBShaderObjects.glCreateShaderObjectARB(ARBVertexShader.GL_VERTEX_SHADER_ARB);
 		// if created, convert the vertex shader code to a String
 		if (vertShader == 0) { return 0; }
 		String vertexCode = "";
@@ -102,6 +101,8 @@ public class Shader {
 		if (!printLogInfo(vertShader)) {
 			vertShader = 0;
 		}
+		
+
 		// if zero we won't be using the shader
 		return vertShader;
 	}
@@ -183,6 +184,7 @@ public class Shader {
 	 * System.out, and true is returned.
 	 */
 	private static boolean printLogInfo(int obj) {
+		/*
 		IntBuffer iVal = BufferUtils.createIntBuffer(1);
 		ARBShaderObjects.glGetObjectParameterARB(obj,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB, iVal);
@@ -191,16 +193,20 @@ public class Shader {
 		if (length > 1) {
 			// We have some info we need to output.
 			ByteBuffer infoLog = BufferUtils.createByteBuffer(length);
-			iVal.flip();
 			ARBShaderObjects.glGetInfoLogARB(obj, iVal, infoLog);
 			byte[] infoBytes = new byte[length];
 			infoLog.get(infoBytes);
 			String out = new String(infoBytes);
-			System.out.println("Info log:\n" + out);
+			System.out.println("\n");
+			System.out.print("Info log:^^^");
+			System.out.print(out);
+			System.out.println("+++");
+			System.out.println("^^^");
+			System.out.println("***");
 		} else {
 			return false;
 		}
-
+		*/
 		return true;
 	}
 }
