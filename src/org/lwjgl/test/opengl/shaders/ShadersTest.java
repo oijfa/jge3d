@@ -171,8 +171,8 @@ public final class ShadersTest {
 			if ( !caps.GL_ARB_fragment_shader )
 				kill("The ARB_fragment_shader extension is not supported.");
 
-			//shader = new ShaderFSH("shaderFSH.vsh", "shaderFSH.fsh");
-			shader = new ShaderFSH("default.vert", "shaderFSH.fsh");
+			shader = new ShaderFSH("shaderFSH.vsh", "shaderFSH.fsh");
+			//shader = new ShaderFSH("default.vert", "shaderFSH.fsh");
 		} else if ("UNI".equalsIgnoreCase(args[0]) ) {
 			if ( !(caps.OpenGL31 || caps.GL_ARB_uniform_buffer_object) )
 				kill("Neither OpenGL version 3.1 nor ARB_uniform_buffer_object are supported.");
