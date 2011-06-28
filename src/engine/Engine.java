@@ -81,6 +81,9 @@ public class Engine {
 	}
 
 	public void addEntity(Entity ent) {
+		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
+			renderer.setCamera((Camera)ent);
+		}
 		entity_list.addEntity(ent);
 	}
 

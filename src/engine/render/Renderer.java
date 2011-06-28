@@ -81,6 +81,8 @@ public class Renderer {
 			up = new Vector3f(0, 1, 0);
 		}
 
+		System.out.println("Camera Position:" + camPos.toString());
+		System.out.println("Focus Position:" + focusPos.toString());
 		// Look at the camera's focus
 		GLU.gluLookAt(camPos.x, camPos.y, camPos.z, // Camera Location
 			focusPos.x, focusPos.y, focusPos.z, // Focus On Location

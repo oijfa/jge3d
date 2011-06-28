@@ -129,10 +129,12 @@ public class Shader {
 		Matrix4f out = new Matrix4f();
 		transform_matrix.getMatrix(out);
 		
+		/*
 		System.out.println("transform origin: " 
 			+ String.valueOf(out.m03) + " " 
 			+ String.valueOf(out.m13) + " " 
 			+ String.valueOf(out.m23));
+		*/
 		//glUniform4fARB(uniformLocation, out.m03, out.m13, out.m23, 1.0f);
 		/*
 		glUniform4fARB(uniformLocation,
