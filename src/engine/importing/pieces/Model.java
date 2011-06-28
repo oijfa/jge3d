@@ -318,7 +318,7 @@ public class Model {
 			hasVBO = true;
 			// buf = BufferUtils.createFloatBuffer(16);
 			
-			shader = new Shader("engine/importing/pieces/default");
+			shader = new Shader("newtest.vert", "newtest.frag");
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
@@ -381,7 +381,7 @@ public class Model {
 
 		shader.startShader(modelVBOID, collision_object);
 			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
-		shader.stopShader();
+		shader.endShader();
 			
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);

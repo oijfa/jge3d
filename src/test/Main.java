@@ -28,11 +28,11 @@ public class Main {
 		model = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
 		model.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
-		model.setPosition(new Vector3f(0, 5, -200));
+		model.setPosition(new Vector3f(0, 0, -5));
 
 		camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)), false, model);
 		camera.setProperty(Entity.NAME, "camera");
-		camera.setPosition(new Vector3f(0, 0, 0));
+		camera.setPosition(new Vector3f(0, 0, 5));
 		camera.setDistance(50f);
 
 		engine.addEntity(model);
