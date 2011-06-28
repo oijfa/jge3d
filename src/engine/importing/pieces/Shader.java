@@ -40,8 +40,7 @@ public class Shader {
         * create the shader program. If OK, create vertex
         * and fragment shaders
         */
-        shader=ARBShaderObjects.glCreateProgramObjectARB();
-        
+
         if(shader!=0){
             vertShader=createVertShader(path + ".vert");
             fragShader=createFragShader(path + ".frag");
@@ -49,6 +48,7 @@ public class Shader {
         else 
         	useShader=false;
 
+        shader=ARBShaderObjects.glCreateProgramObjectARB();
         /*
         * if the vertex and fragment shaders setup sucessfully,
         * attach them to the shader program, link the shader program
@@ -93,8 +93,10 @@ public class Shader {
          * associate the vertex code String with the created vertex shader
          * and compile
          */
+         vertexCode = "void main(){gl_Position=gl_ModelViewProjectionMatrix*gl_Vertex;}";
          ARBShaderObjects.glShaderSourceARB(vertShader, vertexCode);
          ARBShaderObjects.glCompileShaderARB(vertShader);
+
          //if there was a problem compiling, reset vertShader to zero
          if(!printLogInfo(vertShader)){
         	 System.out.println("ERROR [vertshader id:" + vertShader + "]:\n" + vertexCode);
@@ -178,16 +180,16 @@ public class Shader {
     * information gets printed to System.out, and true is returned.
     */
     private static boolean printLogInfo(int obj){
-        IntBuffer iVal = BufferUtils.createIntBuffer(1);
+    	IntBuffer iVal = BufferUtils.createIntBuffer(1);
         ARBShaderObjects.glGetObjectParameterARB(
         	obj,
         	ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB,
         	iVal
         );
-        
+
         int length = iVal.get();
         // We have some info we need to output.
-        if (length > 1) {
+        if (length > 0) {
             ByteBuffer infoLog = BufferUtils.createByteBuffer(length);
             iVal.flip();
             ARBShaderObjects.glGetInfoLogARB(obj, iVal, infoLog);
