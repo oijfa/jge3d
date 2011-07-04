@@ -12,7 +12,6 @@ import engine.terrain.Terrain;
 import game.gui.RotationMenu;
 
 public class Main {
-	private static final long serialVersionUID = 1L;
 	private Engine engine;
 
 	public static void main(String args[]) {

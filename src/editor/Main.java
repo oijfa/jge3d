@@ -14,8 +14,6 @@ import engine.entity.*;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 public class Main implements ActionListener {
-	private static final long serialVersionUID = 1L;
-
 	// A filthy hack to get around the combobox sending to events on select
 	private Boolean combobox_hack = true;
 

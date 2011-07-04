@@ -26,7 +26,7 @@ public class Obj_Parser extends Parser {
 	// private ArrayList<Vector3f> vertexTextures = new ArrayList<Vector3f>();
 	// // Vertex Coordinates Textures
 
-	private static int faceCount = 0;
+	//private static int faceCount = 0;
 	private Model model;
 
 	public Obj_Parser() {
@@ -108,12 +108,11 @@ public class Obj_Parser extends Parser {
 				f.addVertex(vertices.get(Integer.parseInt(verts[0]) - 1));
 				f.addVertexNorm(vertexNormals.get(Integer.parseInt(verts[2]) - 1));
 			} else {
-				System.out
-					.println("Wierd OBJ file.  Uses alternative face format");
+				System.out.println("Weird OBJ file.  Uses alternative face format");
 				throw new Exception();
 			}
 		}
-		faceCount++;
+		//faceCount++;
 		return f;
 	}
 

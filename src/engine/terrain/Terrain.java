@@ -53,7 +53,7 @@ public class Terrain {
 			}
 			text += "\n";
 		}
-		return null;
+		return text;
 
 	}
 }

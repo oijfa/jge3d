@@ -5,7 +5,6 @@ import javax.vecmath.Vector3f;
 import de.matthiasmann.twl.Color;
 
 import engine.importing.FileLoader;
-import engine.importing.XGL_Parser;
 import engine.importing.pieces.Material;
 import engine.importing.pieces.Mesh;
 
