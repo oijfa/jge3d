@@ -1,11 +1,9 @@
 package engine.importing.pieces;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -14,7 +12,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
-import org.lwjgl.opengl.GL11;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.dynamics.RigidBody;
@@ -44,8 +41,7 @@ public class Shader {
         * create the shader program. If OK, create vertex
         * and fragment shaders
         */
-        shader=ARBShaderObjects.glCreateProgramObjectARB();
-        
+    	shader=ARBShaderObjects.glCreateProgramObjectARB();
         if(shader!=0){
             vertShader=createVertShader(path + ".vert");
             fragShader=createFragShader(path + ".frag");
@@ -79,6 +75,7 @@ public class Shader {
      private int createVertShader(String filename){
          //vertShader will be non zero if successfully created
          vertShader=ARBShaderObjects.glCreateShaderObjectARB(ARBVertexShader.GL_VERTEX_SHADER_ARB);
+         
          //if created, convert the vertex shader code to a String
          String vertexCode;
          if(vertShader==0){return 0;}
@@ -104,26 +101,25 @@ public class Shader {
      private int createFragShader(String filename){
      	//fragShader will be non zero if successfully created
          fragShader=ARBShaderObjects.glCreateShaderObjectARB(ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+         
+         //if created, convert the vertex shader code to a String
+         String fragCode;
          if(fragShader==0){return 0;}
-         String fragCode="";
-         String line;
-         try{
-        	 InputStreamReader is = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(filename));
-             BufferedReader reader = new BufferedReader(is);
-             while((line=reader.readLine())!=null){
-                 fragCode+=line + "\n";
-             }
-         }catch(Exception e){
-             System.out.println("Failed to read fragment shading code: " + filename);
-             return 0;
-         }
+         
+         fragCode = getShaderText(filename);
+
+         /*
+         * associate the vertex code String with the created vertex shader
+         * and compile
+         */
          ARBShaderObjects.glShaderSourceARB(fragShader, fragCode);
          ARBShaderObjects.glCompileShaderARB(fragShader);
+         //if there was a problem compiling, reset vertShader to zero
          if(!printLogInfo(fragShader)){
         	 System.out.println("ERROR [fragshader id:" + fragShader + "]:\n" + fragCode);
              fragShader=0;
          }
-
+         //if zero we won't be using the shader
          return fragShader;
      }
      
@@ -132,9 +128,7 @@ public class Shader {
     * we run normal drawing code.
     */
     public void startShader(int vbo_id, CollisionObject collision_object){
-    	if(useShader) {
-            ARBShaderObjects.glUseProgramObjectARB(shader);
-            
+    	if(useShader) {            
             Transform transform_matrix = new Transform();
     		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
 
@@ -147,16 +141,15 @@ public class Shader {
     		buf.put(body_matrix);
     		buf.flip();
 
-        	GL11.glLoadIdentity();
-    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
+    		//int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
         	//*****Shader drawing*****//
     		ARBShaderObjects.glUseProgramObjectARB(shader);
 
-	    	if(transform>0){
-	            ARBShaderObjects.glUniform4ARB(transform, buf);
-	    		buf.clear();
-	    	}else
-	    		ARBShaderObjects.glUseProgramObjectARB(0);
+	    	//if(transform>0){
+	            //ARBShaderObjects.glUniform4ARB(transform, buf);
+	    	//	buf.clear();
+	    	//}else
+	    	//	ARBShaderObjects.glUseProgramObjectARB(0);
         }
     }
     
@@ -183,19 +176,18 @@ public class Shader {
         
         int length = iVal.get();
         // We have some info we need to output.
-        if (length > 1) {
-            ByteBuffer infoLog = BufferUtils.createByteBuffer(length);
+        if(length == 1) {
+        	return true;
+        } else {
+        	ByteBuffer infoLog = BufferUtils.createByteBuffer(length);
             iVal.flip();
             ARBShaderObjects.glGetInfoLogARB(obj, iVal, infoLog);
             byte[] infoBytes = new byte[length];
             infoLog.get(infoBytes);
             String out = new String(infoBytes);
-            System.out.println("Info log:\n"+out);
-        } else {
-        	return false;
-        }
-        
-        return true;
+            System.out.println("Info log:\n"+out);   
+            return false;
+        }        
     }
     
 	protected static ByteBuffer fileBuffer = BufferUtils.createByteBuffer(1024 * 10);
