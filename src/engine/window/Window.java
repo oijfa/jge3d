@@ -12,6 +12,8 @@ import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.ResizableFrame;
 import engine.input.Input;
+import engine.input.components.KeyMap;
+import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
@@ -19,7 +21,7 @@ public class Window extends DesktopArea {
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
-	private Input input;
+	private KeyMap key_map;
 	private ArrayList<ResizableFrame> windows;
 	private Integer layers;
 
@@ -67,7 +69,12 @@ public class Window extends DesktopArea {
 
 	protected boolean handleEvent(Event evt) {
 		// Our event handling
-		if (input != null && input.handleEvent(evt)) { return true; }
+		try {
+			if (key_map != null && key_map.handleEvent(evt)) { return true; }
+		} catch (KeyMapException e) {
+			// TODO 
+			System.out.println("Failed to handle event for whatever reason." + e.getStackTrace());
+		}
 
 		return false;
 	}
@@ -99,7 +106,7 @@ public class Window extends DesktopArea {
 		return layers;
 	}
 
-	public void setInput(Input i) {
-		input = i;
+	public void setKeyMap(KeyMap i) {
+		key_map = i;
 	}
 }
