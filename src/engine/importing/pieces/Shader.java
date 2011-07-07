@@ -1,9 +1,7 @@
 package engine.importing.pieces;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -141,15 +139,16 @@ public class Shader {
     		buf.put(body_matrix);
     		buf.flip();
 
-    		//int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
+    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
         	//*****Shader drawing*****//
     		ARBShaderObjects.glUseProgramObjectARB(shader);
 
 	    	//if(transform>0){
-	            //ARBShaderObjects.glUniform4ARB(transform, buf);
-	    	//	buf.clear();
-	    	//}else
+	            ARBShaderObjects.glUniform4ARB(transform, buf);
+	    		buf.clear();
+	    	//}else{
 	    	//	ARBShaderObjects.glUseProgramObjectARB(0);
+	    	//}
         }
     }
     
@@ -190,48 +189,20 @@ public class Shader {
         }        
     }
     
-	protected static ByteBuffer fileBuffer = BufferUtils.createByteBuffer(1024 * 10);
-	protected static String getShaderText(String file) {
-		/*
+	protected String getShaderText(String filename) {
 		String vertexCode="";
         String line;
         try{
-        	InputStreamReader is = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(filename));
+        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream(filename));
         	BufferedReader reader = new BufferedReader(is);
            	while((line=reader.readLine())!=null){
            		vertexCode+=line + "\n";
            	}
         }catch(Exception e){
-            System.out.println("Failed to read vertex shading code: " + filename);
-            return 0;
+            System.out.println("Failed to read vertex shading code: " + "src/engine/importing/pieces/" + filename);
+            return "";
         }
-		*/
-		String shader = null;
-
-		try {
-			InputStream source = Shader.class.getResourceAsStream(file);
-			if ( source == null ) // dev-mode
-				source = new FileInputStream("src/engine/importing/pieces/" + file);
-
-			BufferedInputStream stream = new BufferedInputStream(source);
-
-			byte character;
-			while ( (character = (byte)stream.read()) != -1 )
-				fileBuffer.put(character);
-
-			stream.close();
-
-			fileBuffer.flip();
-
-			byte[] array = new byte[fileBuffer.remaining()];
-			fileBuffer.get(array);
-			shader = new String(array);
-
-			fileBuffer.clear();
-		} catch (IOException e) {
-			System.out.println("Failed to read the shader source file: " + file + " " + e.toString());
-		}
-
-		return shader;
+        
+        return vertexCode;
 	}
 }
