@@ -60,6 +60,8 @@ public class Main implements ActionListener {
 
 		engine.addEntity(model);
 		engine.addEntity(camera);
+		
+		engine.addKeyMap("keymap.txt");
 	}
 
 	public void run() {
