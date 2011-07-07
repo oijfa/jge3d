@@ -113,20 +113,18 @@ public class KeyMap {
 		return list;
 	}
   	
-  	
-  	
-  public void moveCameraLeft(){
-	  ((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.005d);
-  }
-  public void moveCameraRight(){
-	  ((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.005d);
-  }
-  public void moveCameraUp(){
-	  ((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.005d);
-  }
-  public void moveCameraDown(){
-	  ((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.005d);
-  }
+	public void moveCameraLeft(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.005d);
+	}
+	public void moveCameraRight(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.005d);
+	}
+	public void moveCameraUp(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.005d);
+	}
+	public void moveCameraDown(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.005d);
+	}
   
   	public boolean handleEvent(Event e) throws KeyMapException{
   		

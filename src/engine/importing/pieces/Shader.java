@@ -139,16 +139,12 @@ public class Shader {
     		buf.put(body_matrix);
     		buf.flip();
 
-    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
+    		//int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
         	//*****Shader drawing*****//
     		ARBShaderObjects.glUseProgramObjectARB(shader);
 
-	    	//if(transform>0){
-	            ARBShaderObjects.glUniform4ARB(transform, buf);
-	    		buf.clear();
-	    	//}else{
-	    	//	ARBShaderObjects.glUseProgramObjectARB(0);
-	    	//}
+    		//ARBShaderObjects.glUniform4ARB(transform, buf);
+	    	buf.clear();
         }
     }
     
