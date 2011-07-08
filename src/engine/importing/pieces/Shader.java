@@ -127,23 +127,20 @@ public class Shader {
     */
     public void startShader(int vbo_id, CollisionObject collision_object){
     	if(useShader) {            
-            Transform transform_matrix = new Transform();
+     		//Adjust the position and rotation of the object from physics
+    		Transform transform_matrix = new Transform();
     		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
-
     		transform_matrix.set(motion_state.graphicsWorldTrans);
-            
-    		//Adjust the position and rotation of the object from physics
     		float[] body_matrix = new float[16];
-    		
     		transform_matrix.getOpenGLMatrix(body_matrix);
     		buf.put(body_matrix);
     		buf.flip();
 
-    		//int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
         	//*****Shader drawing*****//
     		ARBShaderObjects.glUseProgramObjectARB(shader);
-
-    		//ARBShaderObjects.glUniform4ARB(transform, buf);
+    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
+    		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
+    		
 	    	buf.clear();
         }
     }
