@@ -1,0 +1,163 @@
+package engine.input.components;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.lwjgl.input.Keyboard;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+import engine.entity.Camera;
+import engine.entity.EntityList;
+import de.matthiasmann.twl.Event;
+
+public class KeyMap {
+  HashMap<String,String> key_map;
+  
+  final HashMap<String, Integer> lwjgl_key_enums;
+  final HashMap<Integer, String> enums_to_function; 
+  
+  EntityList entity_list;
+  
+  public KeyMap(String filename, EntityList ent_list) throws KeyMapException{
+    key_map = new HashMap<String,String>();
+    
+    lwjgl_key_enums = new HashMap<String,Integer>();
+    enums_to_function = new HashMap<Integer,String>();
+    
+    entity_list = ent_list;
+    
+    for(Field f : Keyboard.class.getFields()){
+    	if(f.getName().contains("KEY_")){
+    		try {
+				lwjgl_key_enums.put(f.getName(), (Integer)f.get(null));
+			} catch (IllegalArgumentException e) {
+			} catch (IllegalAccessException e) {}
+    	}
+    }
+
+    parseXml(filename);
+  }
+  
+  	private void parseXml(String filePath) throws KeyMapException{
+  		Document dom;
+  		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    
+  		//Create Dom Structure
+  		DocumentBuilder db;
+  		try {
+  			db = dbf.newDocumentBuilder();
+  			
+  			try {
+  				dom = db.parse(KeyMap.class.getResource(filePath).getPath());
+  				Element root_element = dom.getDocumentElement();
+  				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
+  					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
+  					for(Node n : key_settings){
+  						String id = ((Element) n).getAttribute("ID");
+	
+  						try {
+  							if(this.getClass().getMethod(n.getTextContent()) != null){
+  								enums_to_function.put(
+  									lwjgl_key_enums.get(id.toUpperCase()),
+  									n.getTextContent()
+  								);
+  							}
+  						
+						} catch (SecurityException e) {
+							throwKeyMapException();
+						} catch (DOMException e) {
+							throwKeyMapException();
+						} catch (NoSuchMethodException e) {
+							throwKeyMapException();
+						} finally {
+							System.out.println("Method Name: " + n.getTextContent());
+						}
+  					}
+  				}else{
+  					throwException("KeyMap tag should be root element.");
+  				}
+  			} catch (SAXException e) {
+				e.printStackTrace();
+				throwException("Sax Exception");
+		  	} catch (IOException e) {
+		  		e.printStackTrace();
+		  		throwException("IO Exception");
+		  	}
+		}catch (ParserConfigurationException e) {
+			throwException("ParserConfigurationException");
+		}
+}
+  
+  	private ArrayList<Node> findChildrenByName(Node root, String... names) {
+		ArrayList<Node> list = new ArrayList<Node>();
+		for (int i = 0; i < names.length; i++) {
+			Node e = root.getFirstChild();
+			while (e != null) {
+				if (e.getNodeName().equals(names[i])) {
+					list.add(e);
+				}
+				e = e.getNextSibling();
+			}
+		}
+		return list;
+	}
+  	
+	public void moveCameraLeft(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.005d);
+	}
+	public void moveCameraRight(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.005d);
+	}
+	public void moveCameraUp(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.005d);
+	}
+	public void moveCameraDown(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.005d);
+	}
+  
+  	public boolean handleEvent(Event e) throws KeyMapException{
+  		
+  		if(e.hasKeyChar()){
+  			String function_name = enums_to_function.get(e.getKeyCode());
+
+  			if( function_name != null){
+  				try {
+					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
+					
+					//TODO Throw warnings or something
+				} catch (IllegalArgumentException e1) {
+					throwKeyMapException();
+				} catch (SecurityException e1) {
+					throwKeyMapException();
+				} catch (IllegalAccessException e1) {
+					throwKeyMapException();
+				} catch (InvocationTargetException e1) {
+					throwKeyMapException();
+				} catch (NoSuchMethodException e1) {
+					throwKeyMapException();
+				}
+  			}
+  		}
+		
+		return true;
+	}
+  	
+  	private void throwException(String message) throws KeyMapException{
+  	    KeyMapException e = new KeyMapException();
+  	    e.initCause(new Throwable(message));
+  	    throw e;
+  	  }
+  	
+  	private void throwKeyMapException() throws KeyMapException{ throw new KeyMapException(); }
+}

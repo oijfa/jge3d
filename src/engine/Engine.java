@@ -12,6 +12,8 @@ import de.matthiasmann.twl.ResizableFrame;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.importing.FileLoader;
+import engine.input.components.KeyMap;
+import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
 import engine.render.Renderer;
@@ -81,6 +83,9 @@ public class Engine {
 	}
 
 	public void addEntity(Entity ent) {
+		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
+			renderer.setCamera((Camera)ent);
+		}
 		entity_list.addEntity(ent);
 	}
 
@@ -163,6 +168,16 @@ public class Engine {
 			}
 		} catch (LWJGLException e1) {
 			e1.printStackTrace();
+		}
+	}
+	
+	public void addKeyMap(String filename){
+		try {
+			renderer.getWindow().setKeyMap(new KeyMap(filename,entity_list));
+		} catch (KeyMapException e) {
+			// TODO Do something if fails?
+			System.out.println("Setting KeyMap failed");
+			e.printStackTrace();
 		}
 	}
 }

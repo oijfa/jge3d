@@ -318,7 +318,7 @@ public class Model {
 			hasVBO = true;
 			// buf = BufferUtils.createFloatBuffer(16);
 			
-			shader = new Shader("engine/importing/pieces/default");
+			shader = new Shader("newtest");
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}

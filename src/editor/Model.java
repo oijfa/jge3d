@@ -123,9 +123,8 @@ public class Model<E extends Number> {
 		}
 	}
 
-	public void setBlock(Coordinate<E> coor, Block<E> block) {/* TODO */
-	}
-
+	public void setBlock(Coordinate<E> coor, Block<E> block){ /*TODO*/ }
+	
 	/* Accessors */
 	public Block<E> getBlock(Coordinate<E> coor) {
 		return null;

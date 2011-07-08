@@ -14,8 +14,6 @@ import engine.entity.*;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 public class Main implements ActionListener {
-	private static final long serialVersionUID = 1L;
-
 	// A filthy hack to get around the combobox sending to events on select
 	private Boolean combobox_hack = true;
 
@@ -50,8 +48,7 @@ public class Main implements ActionListener {
 		// engine.addWindow(tool_box, 200, 300);
 
 		model = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
-		model.setModel(grid_window.getGrid().getModel(
-			"resources/models/misc/box.xgl"));
+		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
 		model.setPosition(new Vector3f(1, 3, -20));
 
@@ -63,6 +60,8 @@ public class Main implements ActionListener {
 
 		engine.addEntity(model);
 		engine.addEntity(camera);
+		
+		engine.addKeyMap("keymap.txt");
 	}
 
 	public void run() {
