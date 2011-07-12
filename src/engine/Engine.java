@@ -67,6 +67,8 @@ public class Engine {
 		entity_list = new EntityList(physics);
 		renderer = new Renderer(entity_list);
 		renderer.initGL();
+		
+		addKeyMap("default.xml");
 	}
 
 	public void run() {

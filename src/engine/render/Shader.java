@@ -36,6 +36,12 @@ public class Shader {
     
     private FloatBuffer buf;
 
+    private static final String default_path = "newtest";
+    
+    public Shader(){
+    	this(default_path);
+    }
+    
     public Shader(String path){
         /*
         * create the shader program. If OK, create vertex
