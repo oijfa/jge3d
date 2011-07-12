@@ -140,8 +140,6 @@ public class Shader {
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
-    		int color = ARBShaderObjects.glGetUniformLocationARB(shader, "color");
-    		ARBShaderObjects.glUniform4ARB(color, mesh.getMaterial().getAmbientAsBuffer());
     		
     		/*
     		FloatBuffer dicks = mesh.getMaterial().getAmbientAsBuffer();
