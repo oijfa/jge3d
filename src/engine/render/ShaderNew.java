@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render;
 
 import static org.lwjgl.opengl.ARBFragmentShader.GL_FRAGMENT_SHADER_ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB;

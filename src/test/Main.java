@@ -34,6 +34,7 @@ public class Main {
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
 		camera.setDistance(20f);
 
+
 		camera.focusOn(model);
 		
 		engine.addEntity(model);

@@ -69,7 +69,7 @@ public class Renderer {
 
 		if (camera != null) {
 			camera.updatePosition();
-
+			
 			// Get its new position
 			camPos = camera.getPosition();
 			focusPos = camera.getFocusPosition();

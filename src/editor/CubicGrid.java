@@ -36,9 +36,9 @@ public class CubicGrid<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public engine.importing.pieces.Model getModel(String path_to_shape) {
-		engine.importing.pieces.Model base_model = FileLoader.loadFile(path_to_shape);
-		engine.importing.pieces.Model full_model = new engine.importing.pieces.Model();
+	public engine.render.Model getModel(String path_to_shape) {
+		engine.render.Model base_model = FileLoader.loadFile(path_to_shape);
+		engine.render.Model full_model = new engine.render.Model();
 		Mesh mesh;
 
 		try {
