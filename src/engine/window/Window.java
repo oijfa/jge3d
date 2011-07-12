@@ -11,7 +11,7 @@ import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.ResizableFrame;
-import engine.input.components.KeyMap;
+import engine.input.KeyMap;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;

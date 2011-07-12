@@ -1,4 +1,4 @@
-package engine.input.components;
+package engine.input;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
+import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.Event;
 
 public class KeyMap {
@@ -59,7 +60,7 @@ public class KeyMap {
   			db = dbf.newDocumentBuilder();
   			
   			try {
-  				dom = db.parse(KeyMap.class.getResource(filePath).getPath());
+  				dom = db.parse(KeyMap.class.getResource("keymaps/" + filePath).getPath());
   				Element root_element = dom.getDocumentElement();
   				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
   					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
