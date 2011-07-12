@@ -5,9 +5,9 @@
 
 package engine.importing;
 
-import engine.importing.pieces.Face;
-import engine.importing.pieces.Material;
-import engine.importing.pieces.Mesh;
+import engine.render.model_pieces.Face;
+import engine.render.model_pieces.Material;
+import engine.render.model_pieces.Mesh;
 import engine.render.Model;
 
 import java.util.ArrayList;

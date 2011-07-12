@@ -5,8 +5,8 @@ import javax.vecmath.Vector3f;
 import de.matthiasmann.twl.Color;
 
 import engine.importing.FileLoader;
-import engine.importing.pieces.Material;
-import engine.importing.pieces.Mesh;
+import engine.render.model_pieces.Material;
+import engine.render.model_pieces.Mesh;
 
 public class CubicGrid<E> {
 	private E items[];
