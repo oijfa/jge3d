@@ -197,13 +197,13 @@ public class Shader {
 		String vertexCode="";
         String line;
         try{
-        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream(filename));
+        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream("shaders/" + filename));
         	BufferedReader reader = new BufferedReader(is);
            	while((line=reader.readLine())!=null){
            		vertexCode+=line + "\n";
            	}
         }catch(Exception e){
-            System.out.println("Failed to read vertex shading code: " + "src/engine/importing/pieces/" + filename);
+            System.out.println("Failed to read vertex shading code: " + "src/engine/render/shaders/" + filename);
             return "";
         }
         

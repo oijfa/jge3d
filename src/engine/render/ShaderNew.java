@@ -103,7 +103,7 @@ public class ShaderNew {
 		try {
 			InputStream source = ShaderNew.class.getResourceAsStream(file);
 			if ( source == null ) // dev-mode
-				source = new FileInputStream("src/engine/importing/pieces/" + file);
+				source = new FileInputStream(Shader.class.getResource("shaders/" + file).getFile());
 
 			BufferedInputStream stream = new BufferedInputStream(source);
 
