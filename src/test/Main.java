@@ -30,7 +30,7 @@ public class Main {
 		model.setProperty(Entity.NAME, "model");
 		model.setPosition(new Vector3f(0, 0, -20));
 
-		camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)), false, model);
+		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), false, model);
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
 		camera.setDistance(20f);
 

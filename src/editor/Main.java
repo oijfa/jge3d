@@ -50,12 +50,14 @@ public class Main implements ActionListener {
 		model = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
 		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
-		model.setPosition(new Vector3f(0,0,5));
+		model.setPosition(new Vector3f(0,0,0));
+		model.setGravity(new Vector3f(0,0,5));
 
-		camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)), false, model);
+		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), true, model);
 		camera.setProperty(Entity.NAME, "camera");
-		camera.setPosition(new Vector3f(0,0,0));
-		camera.setDistance(10.0f);
+		camera.setPosition(new Vector3f(0,0,5));
+		camera.setDistance(5.0f);
+		camera.setGravity(new Vector3f(0,0,0));
 
 		engine.addEntity(model);
 		engine.addEntity(camera);

@@ -68,8 +68,11 @@ public class Renderer {
 		Vector3f up;
 
 		if (camera != null) {
+			System.out.println("Before: " + camera.getPosition().toString());
+			System.out.println("Before Focus: " + camera.getFocusPosition().toString());
 			camera.updatePosition();
-
+			System.out.println("After: " + camera.getPosition().toString());
+			System.out.println("After Focus: " + camera.getFocusPosition().toString());
 			// Get its new position
 			camPos = camera.getPosition();
 			focusPos = camera.getFocusPosition();

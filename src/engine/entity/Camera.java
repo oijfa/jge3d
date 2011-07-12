@@ -31,9 +31,9 @@ public class Camera extends Entity {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Double mass, CollisionShape c, boolean collide,
+	public Camera(Float mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass.floatValue(), c, collide);
+		super(mass, c, collide);
 		cameraInit(defFocus);
 	}
 

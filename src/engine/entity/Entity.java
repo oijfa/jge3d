@@ -227,7 +227,8 @@ public class Entity {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
 		if (shouldDraw && this.getObjectType() == ObjectType.rigidbody) {
-			model.draw(collision_object);
+			if(model != null)
+				model.draw(collision_object);
 		} else {
 			// System.out.println("Method [draw] not supported for ghost object");
 		}

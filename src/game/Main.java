@@ -31,8 +31,7 @@ public class Main {
 		player1.setProperty("name", "player1");
 		engine.addEntity(player1);
 
-		Camera camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)),
-			false, player1);
+		Camera camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)),false, player1);
 		camera.setProperty("name", "camera");
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.setDistance(20f);
