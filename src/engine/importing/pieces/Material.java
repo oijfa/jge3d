@@ -240,12 +240,9 @@ public class Material {
 	public ArrayList<Float> getFloatColor() {
 		ArrayList<Float> color = new ArrayList<Float>();
 
-		color
-			.add(average(ambientReflect.x, diffuseReflect.x, specularReflect.x));
-		color
-			.add(average(ambientReflect.y, diffuseReflect.y, specularReflect.y));
-		color
-			.add(average(ambientReflect.z, diffuseReflect.z, specularReflect.z));
+		color.add(average(ambientReflect.x, diffuseReflect.x, specularReflect.x));
+		color.add(average(ambientReflect.y, diffuseReflect.y, specularReflect.y));
+		color.add(average(ambientReflect.z, diffuseReflect.z, specularReflect.z));
 
 		return color;
 	}

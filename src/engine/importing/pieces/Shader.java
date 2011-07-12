@@ -125,7 +125,7 @@ public class Shader {
     * If the shader was setup successfully, we use the shader. Otherwise
     * we run normal drawing code.
     */
-    public void startShader(int vbo_id, CollisionObject collision_object){
+    public void startShader(int vbo_id, CollisionObject collision_object, Mesh mesh){
     	if(useShader) {            
      		//Adjust the position and rotation of the object from physics
     		Transform transform_matrix = new Transform();
@@ -140,6 +140,17 @@ public class Shader {
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
+    		int color = ARBShaderObjects.glGetUniformLocationARB(shader, "color");
+    		ARBShaderObjects.glUniform4ARB(color, mesh.getMaterial().getAmbientAsBuffer());
+    		
+    		/*
+    		FloatBuffer dicks = mesh.getMaterial().getAmbientAsBuffer();
+    		System.out.println("###"+vbo_id+"###");
+    		for(int i=0; i<dicks.limit()-1 ;i++) {
+    			System.out.println(dicks.get(i));
+    		}
+    		System.out.println("###");
+    		*/
     		
 	    	buf.clear();
         }

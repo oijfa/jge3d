@@ -28,8 +28,7 @@ public class Block<E extends Number> extends Button {
 	}
 
 	public Color getColor() {
-		if (base_color == null) return new Color((byte) 0xFF, (byte) 0xFF,
-			(byte) 0xFF, (byte) 0xFF);
+		if (base_color == null) return new Color((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF);
 		else return new Color(base_color.toARGB());
 	}
 

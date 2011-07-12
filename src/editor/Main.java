@@ -54,7 +54,7 @@ public class Main implements ActionListener {
 
 		camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)), false, model);
 		camera.setProperty(Entity.NAME, "camera");
-		camera.setPosition(new Vector3f(0, 0, 0));
+		camera.setPosition(new Vector3f(0,0,0));
 		camera.setDistance(10.0f);
 
 		engine.addEntity(model);
@@ -75,11 +75,9 @@ public class Main implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == palette_window) {
-			grid_window.setCurrentColor(((PaletteWindow) ae.getSource())
-				.getPrimaryColor());
+			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
 		} else if (ae.getSource() == grid_window) {
-			model.setModel(grid_window.getGrid().getModel(
-				"resources/models/misc/box.xgl"));
+			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 			engine.updateEntity(model);
 		} else if (ae.getSource() == layer_menu) {
 			if (combobox_hack == true) {

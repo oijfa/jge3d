@@ -379,10 +379,10 @@ public class Model {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 
-		shader.startShader(modelVBOID, collision_object);
+		shader.startShader(modelVBOID, collision_object, meshes.get(0));
 			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
 		shader.stopShader();
-			
+		
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
