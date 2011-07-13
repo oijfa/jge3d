@@ -5,9 +5,7 @@
  */
 package engine.importing;
 
-import engine.importing.pieces.Face;
-import engine.importing.pieces.Material;
-import engine.importing.pieces.Mesh;
+import engine.render.model_pieces.*;
 import engine.render.Model;
 
 import java.io.BufferedReader;

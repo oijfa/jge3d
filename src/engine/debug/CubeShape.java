@@ -1,6 +1,6 @@
 package engine.debug;
 
-import engine.importing.pieces.Material;
+import engine.render.model_pieces.Material;
 
 import org.lwjgl.opengl.GL11;
 

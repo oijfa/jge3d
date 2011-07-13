@@ -16,7 +16,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-import engine.importing.pieces.Mesh;
+import engine.render.model_pieces.Mesh;
 
 public class Shader {
 	/*
@@ -36,6 +36,12 @@ public class Shader {
     
     private FloatBuffer buf;
 
+    private static final String default_path = "newtest";
+    
+    public Shader(){
+    	this(default_path);
+    }
+    
     public Shader(String path){
         /*
         * create the shader program. If OK, create vertex
@@ -197,13 +203,13 @@ public class Shader {
 		String vertexCode="";
         String line;
         try{
-        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream(filename));
+        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream("shaders/" + filename));
         	BufferedReader reader = new BufferedReader(is);
            	while((line=reader.readLine())!=null){
            		vertexCode+=line + "\n";
            	}
         }catch(Exception e){
-            System.out.println("Failed to read vertex shading code: " + "src/engine/importing/pieces/" + filename);
+            System.out.println("Failed to read vertex shading code: " + "src/engine/render/shaders/" + filename);
             return "";
         }
         

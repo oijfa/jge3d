@@ -12,7 +12,7 @@ import de.matthiasmann.twl.ResizableFrame;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.importing.FileLoader;
-import engine.input.components.KeyMap;
+import engine.input.KeyMap;
 import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
@@ -67,6 +67,8 @@ public class Engine {
 		entity_list = new EntityList(physics);
 		renderer = new Renderer(entity_list);
 		renderer.initGL();
+		
+		addKeyMap("default.xml");
 	}
 
 	public void run() {

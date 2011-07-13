@@ -23,8 +23,9 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-import engine.importing.pieces.Face;
-import engine.importing.pieces.Mesh;
+
+import engine.render.model_pieces.Face;
+import engine.render.model_pieces.Mesh;
 
 public class Model {
 	private ArrayList<Mesh> meshes;
@@ -321,7 +322,7 @@ public class Model {
 			hasVBO = true;
 			// buf = BufferUtils.createFloatBuffer(16);
 			
-			shader = new Shader("newtest");
+			shader = new Shader();
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
