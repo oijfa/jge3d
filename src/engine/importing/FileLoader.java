@@ -8,7 +8,7 @@
  */
 package engine.importing;
 
-import engine.importing.pieces.Model;
+import engine.render.Model;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;

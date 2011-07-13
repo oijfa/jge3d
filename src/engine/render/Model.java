@@ -1,5 +1,5 @@
 //TODO: Maybe add transforms?
-package engine.importing.pieces;
+package engine.render;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,6 +22,9 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+
+import engine.importing.pieces.Face;
+import engine.importing.pieces.Mesh;
 
 public class Model {
 	private ArrayList<Mesh> meshes;

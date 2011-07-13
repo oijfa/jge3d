@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,6 +15,8 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+
+import engine.importing.pieces.Mesh;
 
 public class Shader {
 	/*
