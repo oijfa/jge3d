@@ -5,6 +5,7 @@
  */
 package engine.importing;
 
+import engine.render.Model;
 import engine.render.model_pieces.*;
 
 import java.io.BufferedReader;

@@ -1,5 +1,5 @@
 //TODO: Maybe add transforms?
-package engine.render.model_pieces;
+package engine.render;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -24,7 +24,8 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
 
-import engine.render.Shader;
+import engine.render.model_pieces.Face;
+import engine.render.model_pieces.Mesh;
 
 public class Model {
 	private ArrayList<Mesh> meshes;

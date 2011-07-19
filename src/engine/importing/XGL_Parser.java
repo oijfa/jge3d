@@ -5,10 +5,10 @@
 
 package engine.importing;
 
+import engine.render.Model;
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
-import engine.render.model_pieces.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

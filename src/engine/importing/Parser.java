@@ -6,7 +6,7 @@
 
 package engine.importing;
 
-import engine.render.model_pieces.Model;
+import engine.render.Model;
 
 public abstract class Parser {
 	protected Model model;
