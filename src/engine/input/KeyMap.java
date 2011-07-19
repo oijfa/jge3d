@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -128,7 +127,7 @@ public class KeyMap {
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
 	}
 	public void moveCameraForward(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();
+		//((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();
 	}
 	public void moveCameraBack(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);

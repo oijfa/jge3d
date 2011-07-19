@@ -127,9 +127,9 @@ public class Camera extends Entity {
 	}
 	
 	public synchronized void incrementPosition(float toward_focus, float strafe, float up_down) {
-		float a = 0;
+		//float a = 0;
 		Vector3f position = new Vector3f();
-		Vector3f focPos = getFocusPosition();
+		//Vector3f focPos = getFocusPosition();
 
 		double xrotrad, yrotrad;
 	    yrotrad = declination / 180 * 3.141592654f;
