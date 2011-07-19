@@ -6,7 +6,6 @@
 package engine.importing;
 
 import engine.render.model_pieces.*;
-import engine.render.Model;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

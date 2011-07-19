@@ -9,7 +9,7 @@
  */
 package engine.entity;
 
-import engine.render.Model;
+import engine.render.model_pieces.Model;
 
 import java.util.HashMap;
 import java.util.Set;

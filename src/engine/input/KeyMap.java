@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -114,18 +115,43 @@ public class KeyMap {
 		return list;
 	}
   	
-	public void moveCameraLeft(){
+	public void rotateCamLeft(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.05d);
 	}
-	public void moveCameraRight(){
+	public void rotateCamRight(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.05d);
 	}
-	public void moveCameraUp(){
+	public void rotateCamUp(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.05d);
+	}
+	public void rotateCamDown(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
+	}
+	public void moveCameraForward(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();
+	}
+	public void moveCameraBack(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
+	}
+	public void moveCameraLeft(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
+	}
+	public void moveCameraRight(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
+	}
+	public void moveCameraUp(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
 	}
 	public void moveCameraDown(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
 	}
+	public void zoomCameraIn(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.05d);
+	}
+	public void zoomCameraOut(){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.05d);
+	}
+	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
   		

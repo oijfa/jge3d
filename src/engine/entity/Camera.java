@@ -91,6 +91,12 @@ public class Camera extends Entity {
 		}
 		return focus;
 	}
+	
+	public void freeRoam() {
+		default_focus = new Entity("def_focus", 0f, new BoxShape(
+				new Vector3f(0, 0, 0)), false);
+		focus = default_focus;
+	}
 
 	/* Mutators */
 	private void setUpVector(Vector3f newUp) {
@@ -119,7 +125,21 @@ public class Camera extends Entity {
 			distance = temp;
 		}
 	}
+	
+	public synchronized void incrementPosition(float toward_focus, float strafe, float up_down) {
+		float a = 0;
+		Vector3f position = new Vector3f();
+		Vector3f focPos = getFocusPosition();
 
+		double xrotrad, yrotrad;
+	    yrotrad = declination / 180 * 3.141592654f;
+	    xrotrad = rotation / 180 * 3.141592654f;
+	    position.x += Math.sin(yrotrad);
+	    position.z -= Math.cos(yrotrad);
+	    position.y -= Math.sin(xrotrad);
+	    setPosition(position);
+	}
+		
 	public double getDistance() {
 		return distance;
 	}
