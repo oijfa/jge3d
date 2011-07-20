@@ -18,6 +18,8 @@ import engine.entity.EntityList;
 import engine.physics.Physics;
 import engine.render.Renderer;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 
 public class Engine {
@@ -125,11 +127,11 @@ public class Engine {
 			public void run() {
 				entity_list.parsePhysicsQueue();
 				while (!finished.get()) {
-					if (entity_list != null
-						&& entity_list.physicsQueueSize() > 0) entity_list
-						.parsePhysicsQueue();
+					if (entity_list != null && entity_list.physicsQueueSize() > 0) 
+						entity_list.parsePhysicsQueue();
 					else {
 						physics.clientUpdate();
+						handleGhostCollisions();
 					}
 				}
 			}
@@ -180,6 +182,17 @@ public class Engine {
 			// TODO Do something if fails?
 			System.out.println("Setting KeyMap failed");
 			e.printStackTrace();
+		}
+	}
+	
+	private void handleGhostCollisions() {
+		for(Entity entity : entity_list.getEntities()){
+			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
+				GhostObject ghost = (GhostObject) entity.getCollisionObject();
+				for( CollisionObject col_obj : ghost.getOverlappingPairs()){
+					entity.collidedWith(entity_list.getItem(col_obj));
+				}
+			}
 		}
 	}
 }

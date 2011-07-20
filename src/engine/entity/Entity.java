@@ -30,6 +30,8 @@ import com.bulletphysics.linearmath.Transform;
 
 
 public class Entity {
+	
+	
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
@@ -45,10 +47,12 @@ public class Entity {
 	private ObjectType object_type;
 
 	/* Properties the engine uses a lot */
-	public static String NAME = "name";
+	public static final String NAME = "name";
+	public static final String COLLIDABLE = "collidable";
+	public static final String TIME_TO_LIVE = "TTL";
 
 	// Required keys
-	private String[] reqKeys = { "name", "collidable", "TTL" };
+	private String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
