@@ -143,8 +143,7 @@ public class Physics {
 		}
 
 		// Declare the shitty ass directly allocated buffer
-		ByteBuffer vertexbuffer = ByteBuffer
-			.allocateDirect(3 * vertexcount * 4);
+		ByteBuffer vertexbuffer = ByteBuffer.allocateDirect(3 * vertexcount * 4);
 		vertexbuffer.order(ByteOrder.nativeOrder());
 		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3 * vertexcount * 4);
 		indexbuffer.order(ByteOrder.nativeOrder());
@@ -201,8 +200,10 @@ public class Physics {
 
 		// Create an optimized Bvh to reduce the vertex set of the original mesh
 		OptimizedBvh optimizedmesh = new OptimizedBvh();
-		optimizedmesh.build(meshshape.getMeshInterface(),
-			useQuantizedAabbCompression, worldAabbMin, worldAabbMax);
+		optimizedmesh.build(
+			meshshape.getMeshInterface(),
+			useQuantizedAabbCompression, worldAabbMin, worldAabbMax
+		);
 
 		// Set the reduced set back to the mesh
 		meshshape.setOptimizedBvh(optimizedmesh);
@@ -214,34 +215,29 @@ public class Physics {
 	public void drag(Camera camera, int state, Vector3f rayTo) {
 		if (state == 0) {
 			if (dynamicsWorld != null) {
-				CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(
-					camera.getPosition(), rayTo);
+				CollisionWorld.ClosestRayResultCallback rayCallback = 
+					new CollisionWorld.ClosestRayResultCallback(
+						camera.getPosition(), rayTo
+					);
 				dynamicsWorld.rayTest(camera.getPosition(), rayTo, rayCallback);
 				if (rayCallback.hasHit()) {
-					RigidBody hitBody = RigidBody
-						.upcast(rayCallback.collisionObject);
+					RigidBody hitBody = RigidBody.upcast(rayCallback.collisionObject);
 					if (hitBody != null) {
 						// other exclusions?
-						if (!(hitBody.isStaticObject() || hitBody
-							.isKinematicObject())) {
-							;
+						if (!(hitBody.isStaticObject() || hitBody.isKinematicObject())) {
 							pickedEntity = hitBody;
-							pickedEntity
-								.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+							pickedEntity.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 
-							Vector3f pickPos = new Vector3f(
-								rayCallback.hitPointWorld);
+							Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
 
-							Transform tmpTrans = hitBody
-								.getCenterOfMassTransform(new Transform());
+							Transform tmpTrans = hitBody.getCenterOfMassTransform(new Transform());
 							tmpTrans.inverse();
 
 							hitBody.getCenterOfMassPosition(pickPos);
 							Vector3f localPivot = new Vector3f(pickPos);
 							tmpTrans.transform(localPivot);
 
-							Point2PointConstraint p2p = new Point2PointConstraint(
-								hitBody, localPivot);
+							Point2PointConstraint p2p = new Point2PointConstraint(hitBody, localPivot);
 							// SliderConstraint p2p = new SliderConstraint();
 							p2p.setting.impulseClamp = 1f;
 
