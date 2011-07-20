@@ -195,9 +195,11 @@ public class DynamicMatrix {
 			+ table.size() + "\n===============");
 		for (int i = 0; i < (columns * rows); i++) {
 			System.out.print(table.get(i));
-			if ((i < (rows - 1)) || ((i + 1) % rows != 0)) System.out
-				.print(",");
-			else System.out.println();
+			if ((i < (rows - 1)) || ((i + 1) % rows != 0)) {
+				System.out.print(",");
+			} else {
+				System.out.println();
+			}
 		}
 	}
 }

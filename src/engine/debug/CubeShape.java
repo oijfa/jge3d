@@ -10,16 +10,31 @@ public class CubeShape {
 	// This is for debugging hitbox positions (should be deleted later)
 	public static void drawTestCube(float half_extent) {
 		Material mat = new Material();
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT,
-			mat.getAmbientAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE,
-			mat.getDiffuseAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR,
-			mat.getSpecularAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION,
-			mat.getEmissionAsBuffer());
-		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS,
-			mat.getShine());
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_AMBIENT,
+			mat.getAmbientAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_DIFFUSE,
+			mat.getDiffuseAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_SPECULAR,
+			mat.getSpecularAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_EMISSION,
+			mat.getEmissionAsBuffer()
+		);
+		GL11.glMaterialf(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_SHININESS,
+			mat.getShine()
+		);
 		GL11.glBegin(GL11.GL_QUADS);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

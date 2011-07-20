@@ -25,7 +25,8 @@ public class Player extends Entity {
 	public void initPlayer(float step_height) {
 		player = new KinematicCharacterController(
 			(PairCachingGhostObject) ((GhostObject) collision_object),
-			(ConvexShape) collision_object.getCollisionShape(), step_height);
+			(ConvexShape) collision_object.getCollisionShape(), step_height
+		);
 		player.setJumpSpeed(1.0f);
 	}
 

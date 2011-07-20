@@ -43,8 +43,9 @@ public class Camera extends Entity {
 	}
 
 	private void cameraInit(Entity defFocus) {
-		if (defFocus == null) { throw new Error(
-			"Can't initialize camera's default focus to null"); }
+		if (defFocus == null) { 
+			throw new Error("Can't initialize camera's default focus to null"); 
+		}
 
 		default_focus = defFocus;
 		focus = default_focus;
@@ -203,12 +204,18 @@ public class Camera extends Entity {
 		position = this.getPosition();
 
 		Vector3f focpos = this.getFocusPosition();
-		System.out.print("Camera = X:	" + position.x + "	Y:	" + position.y
-			+ "	Z:	" + position.z + "\n");
-		System.out.print("Focus  = X:	" + focpos.x + "	Y:	" + focpos.y + "	Z:	"
-			+ focpos.z + "\n");
-		System.out.print("Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y
-			+ "	Z:	" + up_vector.z + "\n\n");
+		System.out.print(
+			"Camera = X:	" + position.x + "	Y:	" + position.y
+			+ "	Z:	" + position.z + "\n"
+		);
+		System.out.print(
+			"Focus  = X:	" + focpos.x + "	Y:	" + focpos.y + "	Z:	"
+			+ focpos.z + "\n"
+		);
+		System.out.print(
+			"Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y
+			+ "	Z:	" + up_vector.z + "\n\n"
+		);
 	}
 
 	// TODO: This needs cleaned up and commented real bad
@@ -233,15 +240,17 @@ public class Camera extends Entity {
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
 		// Find the depth to
-		GL11.glReadPixels(x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT,
-			winZ);
+		GL11.glReadPixels(
+			x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT,	winZ
+		);
 
 		// get the position in 3d space by casting a ray from the mouse
 		// coords to the first contacted point in space
 		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
 		// viewport, position);
-		GLU.gluUnProject(x, y, winZ.get(), modelview, projection, viewport,
-			position);
+		GLU.gluUnProject(
+			x, y, winZ.get(), modelview, projection, viewport, position
+		);
 
 		// Make a vector out of the silly float buffer LWJGL forces us to use
 		pos.set(position.get(0), position.get(1), position.get(2));

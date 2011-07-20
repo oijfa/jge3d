@@ -36,10 +36,11 @@ public class EntityList {
 	public void parsePhysicsQueue() {
 		Object[] itemArray = physicsQueue.toArray();
 		for (Object item : itemArray) {
-			if (QueueItem.ADD == ((QueueItem) item).getAction()) addPhysicsItem(((QueueItem) item)
-				.getEnt());
-			else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) removePhysicsItem(((QueueItem) item)
-				.getEnt());
+			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
+				addPhysicsItem(((QueueItem) item).getEnt());
+			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
+				removePhysicsItem(((QueueItem) item).getEnt());
+			}
 			physicsQueue.remove(item);
 		}
 	}
@@ -47,10 +48,11 @@ public class EntityList {
 	public void parseRenderQueue() {
 		Object[] itemArray = renderQueue.toArray();
 		for (Object item : itemArray) {
-			if (QueueItem.ADD == ((QueueItem) item).getAction()) addRenderItem(((QueueItem) item)
-				.getEnt());
-			else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) removeRenderItem(((QueueItem) item)
-				.getEnt());
+			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
+				addRenderItem(((QueueItem) item).getEnt());
+			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
+				removeRenderItem(((QueueItem) item).getEnt());
+			}
 
 			renderQueue.remove(item);
 		}
@@ -96,8 +98,7 @@ public class EntityList {
 
 		if (e.keyExists("name")) {
 			if (e.getCollisionObject() != null) {
-				physics.getDynamicsWorld().addCollisionObject(
-					e.getCollisionObject());
+				physics.getDynamicsWorld().addCollisionObject(e.getCollisionObject());
 			}
 			ret = true;
 		}

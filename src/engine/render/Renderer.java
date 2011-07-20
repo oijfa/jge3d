@@ -165,8 +165,10 @@ public class Renderer {
 
 		// Enable color materials (hopefully will speedup since we don't call
 		// glMaterial anymore this way)
-		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
-			GL11.GL_AMBIENT_AND_DIFFUSE);
+		GL11.glColorMaterial(
+			GL11.GL_FRONT_AND_BACK,
+			GL11.GL_AMBIENT_AND_DIFFUSE
+		);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
@@ -183,17 +185,29 @@ public class Renderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		// Create some debug lights
 		// Setup The Ambient Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, (FloatBuffer) temp
-			.asFloatBuffer().put(lightAmbient).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_AMBIENT, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightAmbient).flip()
+		);
 		// Setup The Diffuse Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, (FloatBuffer) temp
-			.asFloatBuffer().put(lightDiffuse).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_DIFFUSE, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightDiffuse).flip()
+		);
 		// Setup The Specular Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPECULAR, (FloatBuffer) temp
-			.asFloatBuffer().put(lightSpecular).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_SPECULAR, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightSpecular).flip()
+		);
 		// Position The Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, (FloatBuffer) temp
-			.asFloatBuffer().put(lightPosition).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_POSITION, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightPosition).flip()
+		);
 		GL11.glEnable(GL11.GL_LIGHT1);
 	}
 
@@ -215,9 +229,12 @@ public class Renderer {
 		// Calculate the shape of the screen and notify OpenGL
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GLU.gluPerspective(45.0f / zoom, (float) Display.getDisplayMode()
-			.getWidth() / Display.getDisplayMode().getHeight(), nearClipping,
-			farClipping);
+		GLU.gluPerspective(
+			45.0f / zoom, 
+			(float) Display.getDisplayMode().getWidth() / Display.getDisplayMode().getHeight(), 
+			nearClipping,
+			farClipping
+		);
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();

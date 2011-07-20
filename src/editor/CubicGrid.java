@@ -53,16 +53,31 @@ public class CubicGrid<E> {
 							mesh.transform(new Vector3f(x, -y, z),
 								new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
 							mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
-							mesh.setMaterial(new Material(
-								new Vector3f(mat_color.getRedFloat(), mat_color
-									.getGreenFloat(), mat_color.getBlueFloat()),
-								new Vector3f(mat_color.getRedFloat(), mat_color
-									.getGreenFloat(), mat_color.getBlueFloat()),
-								new Vector3f(mat_color.getRedFloat(), mat_color
-									.getGreenFloat(), mat_color.getBlueFloat()),
-								new Vector3f(mat_color.getRedFloat(), mat_color
-									.getGreenFloat(), mat_color.getBlueFloat()),
-								1f));
+							mesh.setMaterial(
+								new Material(
+									new Vector3f(
+										mat_color.getRedFloat(), 
+										mat_color.getGreenFloat(), 
+										mat_color.getBlueFloat()
+									),
+									new Vector3f(
+										mat_color.getRedFloat(), 
+										mat_color.getGreenFloat(), 
+										mat_color.getBlueFloat()
+									),
+									new Vector3f(
+										mat_color.getRedFloat(), 
+										mat_color.getGreenFloat(), 
+										mat_color.getBlueFloat()
+									),
+									new Vector3f(
+										mat_color.getRedFloat(), 
+										mat_color.getGreenFloat(), 
+										mat_color.getBlueFloat()
+									),
+									1f
+								)
+							);
 							mesh.calcNormals();
 							full_model.addMesh(mesh);
 						}

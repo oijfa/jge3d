@@ -34,14 +34,22 @@ public class Obj_Parser extends Parser {
 
 	@Override
 	public void readFile(String fileName) throws Exception {
-		parseObj(new BufferedReader(new InputStreamReader(this.getClass()
-			.getClassLoader().getResourceAsStream(fileName))));
+		parseObj(
+			new BufferedReader(
+				new InputStreamReader(
+					this.getClass().getClassLoader().getResourceAsStream(fileName)
+				)
+			)
+		);
 	}
 
 	@Override
 	public void readUrl(String url) throws Exception {
-		BufferedReader file = new BufferedReader(new InputStreamReader(this
-			.getClass().getClassLoader().getResourceAsStream(url)));
+		BufferedReader file = new BufferedReader(
+			new InputStreamReader(
+				this.getClass().getClassLoader().getResourceAsStream(url)
+			)
+		);
 		parseObj(file);
 	}
 
@@ -78,8 +86,7 @@ public class Obj_Parser extends Parser {
 		}
 
 		// Read faces
-		while (currentLine != null
-			&& currentLine.subSequence(0, 2).equals("f ")) {
+		while (currentLine != null && currentLine.subSequence(0, 2).equals("f ")) {
 			mesh.addFace(readFace(currentLine));
 			currentLine = file.readLine();
 			if (currentLine == null) {
@@ -117,8 +124,9 @@ public class Obj_Parser extends Parser {
 	private Vector3f parseVector(String string) throws Exception {
 		String[] line = string.trim().split("\\s+");
 
-		return new Vector3f(Float.parseFloat(line[1]),
-			Float.parseFloat(line[2]), Float.parseFloat(line[3]));
+		return new Vector3f(
+			Float.parseFloat(line[1]), Float.parseFloat(line[2]), Float.parseFloat(line[3])
+		);
 	}
 
 	@Override
