@@ -1,4 +1,5 @@
 uniform mat4 transform;
+varying vec4 color;
 
 void main() {
 	/*
@@ -11,4 +12,5 @@ void main() {
 	*/
 	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex;
 	//gl_Position = gl_ModelViewProjectionMatrix * identity * gl_Vertex;
+	color = gl_Color;
 }

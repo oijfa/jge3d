@@ -10,7 +10,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
-import org.lwjgl.opengl.GL11;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.dynamics.RigidBody;
@@ -146,17 +145,17 @@ public class Shader {
     		buf.flip();
 
         	//*****Shader drawing*****//
-    		GL11.glLoadIdentity();
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
     		
+    		/*
     		System.out.println("###"+vbo_id+"###");
     		for(int i=0; i<buf.limit()-1 ;i++) {
     			System.out.println(buf.get(i));
     		}
     		System.out.println("###");
-    		    		
+    		*/  		
 	    	buf.clear();
         }
     }

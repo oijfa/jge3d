@@ -31,19 +31,19 @@ public class Main {
 		model.setModel(FileLoader.loadFile("resources/models/misc/test.xgl"));
 		model.setProperty(Entity.NAME, "model1");
 		model.setPosition(new Vector3f(0, 0, 0));
-		//model.applyImpulse(new Vector3f(2,0,0), new Vector3f(-2,0,0));
+		model.applyImpulse(new Vector3f(2,0,0), new Vector3f(-2,0,0));
 
 		model2 = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
 		model2.setModel(FileLoader.loadFile("resources/models/misc/box2.xgl"));
 		model2.setProperty(Entity.NAME, "model2");
 		model2.setPosition(new Vector3f(-4, 0, 0));
-		//model2.applyImpulse(new Vector3f(0,2,0), new Vector3f(0,1,0));
+		model2.applyImpulse(new Vector3f(0,2,0), new Vector3f(0,1,0));
 		
 		model3 = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
 		model3.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model3.setProperty(Entity.NAME, "model3");
-		model3.setPosition(new Vector3f(200, 0, 0));
-		//model3.applyImpulse(new Vector3f(-2,-2,0), new Vector3f(-2,0,0));
+		model3.setPosition(new Vector3f(4, 0, 0));
+		model3.applyImpulse(new Vector3f(-2,-2,0), new Vector3f(-2,0,0));
 	
 		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), true, model);
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
