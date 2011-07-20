@@ -11,6 +11,9 @@ package engine.entity;
 
 import engine.render.Model;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -24,6 +27,8 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
+
+
 public class Entity {
 	// Properties
 	protected CollisionObject collision_object;
@@ -31,6 +36,8 @@ public class Entity {
 	private Model model;
 	private boolean shouldDraw = true;
 
+	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
+	
 	public static enum ObjectType {
 		ghost, rigidbody
 	};
@@ -323,6 +330,44 @@ public class Entity {
 	}
 	
 	public void collidedWith(Entity collided_with){
-		//System.out.println(this.getProperty(Entity.NAME) + " collided with " + collided_with.getProperty(Entity.NAME));
+		for(Method method : collision_functions){
+			try {
+				method.invoke(EntityCallbackFunctions.class, this, collided_with);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addCollisionFunctions(String... names){
+		for(String method_name : names){
+			try {
+				collision_functions.add(
+					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class)
+				);
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public void removeCollisionFunctions(String... names){
+		for(String method_name : names){
+			boolean found = false;
+			for(Method method : collision_functions){
+				if(method.getName().equals(method_name)){
+					collision_functions.remove(method);
+					found = true;
+				}
+			}
+			if(found){ break; }
+		}
 	}
 }
