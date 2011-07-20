@@ -36,7 +36,7 @@ public class Shader {
     
     private FloatBuffer buf;
 
-    private static final String default_path = "newtest";
+    private static final String default_path = "default";
     
     public Shader(){
     	this(default_path);
@@ -150,14 +150,12 @@ public class Shader {
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
     		
     		/*
-    		FloatBuffer dicks = mesh.getMaterial().getAmbientAsBuffer();
     		System.out.println("###"+vbo_id+"###");
-    		for(int i=0; i<dicks.limit()-1 ;i++) {
-    			System.out.println(dicks.get(i));
+    		for(int i=0; i<buf.limit()-1 ;i++) {
+    			System.out.println(buf.get(i));
     		}
     		System.out.println("###");
-    		*/
-    		
+    		*/  		
 	    	buf.clear();
         }
     }

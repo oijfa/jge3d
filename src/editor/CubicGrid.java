@@ -50,7 +50,7 @@ public class CubicGrid<E> {
 						current_block = ((Block<Integer>) this.get(x, y, z));
 						if (current_block.getActive()) {
 							mesh = new Mesh(base_model.getMesh(0));
-							mesh.transform(new Vector3f(x, y, z),
+							mesh.transform(new Vector3f(x, -y, z),
 								new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
 							mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
 							mesh.setMaterial(new Material(
