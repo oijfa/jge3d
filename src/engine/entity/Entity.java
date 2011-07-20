@@ -19,8 +19,10 @@ import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -30,8 +32,6 @@ import com.bulletphysics.linearmath.Transform;
 
 
 public class Entity {
-	
-	
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
@@ -61,19 +61,36 @@ public class Entity {
 	private EntityList subEntities;
 
 	/* Constructors */
-	public Entity(float mass, CollisionShape shape, boolean collide) {
-		initialSetup(mass, shape, collide);
+	public Entity(float mass, boolean collide) {
+		initialSetup(mass, collide);
 	}
 
-	public Entity(String name, float mass, CollisionShape shape, boolean collide) {
-		if (collide) {
+	public Entity(String name, float mass, boolean collide) {
+		initialSetup(name, mass, collide);
+	}
+	
+	// Sets the initial name of the body in the list
+	// Also sets some default options to the ent
+	private void initialSetup(float mass, boolean c) {
+		initialSetup("ent" + String.valueOf(num_entities), mass, c);
+	}
+
+	private void initialSetup(String name, float mass, boolean c) {
+		//TODO: Generate this based on model instead
+		CollisionShape shape = new BoxShape(new Vector3f(1,1,1));
+		if(c){
 			createRigidBody(mass, shape);
 			object_type = ObjectType.rigidbody;
-		} else {
+		}else{
 			createGhostBody(mass, shape);
 			object_type = ObjectType.ghost;
 		}
-		initialSetup(name, mass, shape, collide);
+		
+		num_entities++;
+		data = new HashMap<String, Object>();
+		data.put("name", name);
+		data.put("collidable", c);
+		data.put("TTL", 0);
 	}
 
 	/* Initializing segments */
@@ -114,26 +131,12 @@ public class Entity {
 		}
 
 		ghost.setCollisionShape(shape);
+		
 		// This is extremely important; if you forget this
 		// then nothing will rotate
 		// ghost.setMassProps(mass, localInertia);
 		// ghost.updateInertiaTensor();
-
 		collision_object = ghost;
-	}
-
-	// Sets the initial name of the body in the list
-	// Also sets some default options to the ent
-	private void initialSetup(float mass, CollisionShape shape, boolean c) {
-		initialSetup("ent" + String.valueOf(num_entities), mass, shape, c);
-	}
-
-	private void initialSetup(String name, float mass, CollisionShape shape, boolean c) {
-		num_entities++;
-		data = new HashMap<String, Object>();
-		data.put("name", name);
-		data.put("collidable", c);
-		data.put("TTL", 0);
 	}
 
 	/*

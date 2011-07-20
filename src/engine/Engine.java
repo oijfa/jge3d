@@ -2,8 +2,6 @@ package engine;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.vecmath.Vector3f;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -20,7 +18,6 @@ import engine.render.Renderer;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;
-import com.bulletphysics.collision.shapes.BoxShape;
 
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
@@ -80,7 +77,7 @@ public class Engine {
 
 	/* Entity API */
 	public void addEntity(String name, String model_location) {
-		Entity ent = new Entity(1, new BoxShape(new Vector3f(1f, 1f, 1f)), true);
+		Entity ent = new Entity(1, true);
 		ent.setProperty(Entity.NAME, name);
 		ent.setModel(FileLoader.loadFile(model_location));
 		this.addEntity(ent);

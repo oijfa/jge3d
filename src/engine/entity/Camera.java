@@ -9,7 +9,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
 public class Camera extends Entity {
@@ -33,13 +32,13 @@ public class Camera extends Entity {
 	/* Constructors */
 	public Camera(Float mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass, c, collide);
+		super(mass, collide);
 		cameraInit(defFocus);
 	}
 
 	public Camera(String _name, Double mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass.floatValue(), c, collide);
+		super(mass.floatValue(), collide);
 		cameraInit(defFocus);
 	}
 
@@ -84,8 +83,7 @@ public class Camera extends Entity {
 	public Entity getFocus() {
 		if (focus == null) {
 			if (default_focus == null) {
-				default_focus = new Entity("def_focus", 0f, new BoxShape(
-					new Vector3f(0, 0, 0)), false);
+				default_focus = new Entity("def_focus", 0f, false);
 			}
 			focus = default_focus;
 		}
@@ -93,8 +91,7 @@ public class Camera extends Entity {
 	}
 	
 	public void freeRoam() {
-		default_focus = new Entity("def_focus", 0f, new BoxShape(
-				new Vector3f(0, 0, 0)), false);
+		default_focus = new Entity("def_focus", 0f, false);
 		focus = default_focus;
 	}
 

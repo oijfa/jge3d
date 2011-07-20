@@ -13,12 +13,12 @@ public class Player extends Entity {
 
 	public Player(String name, float mass, CollisionShape shape,
 		float step_height) {
-		super(name, mass, shape, false);
+		super(name, mass, false);
 		initPlayer(step_height);
 	}
 
 	public Player(float mass, CollisionShape shape, float step_height) {
-		super(mass, shape, false);
+		super(mass, false);
 		initPlayer(step_height);
 	}
 

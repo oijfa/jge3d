@@ -111,18 +111,19 @@ public class Physics {
 	}
 
 	public void addEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody) dynamicsWorld
-			.addRigidBody((RigidBody) e.getCollisionObject());
-		else System.out
-			.println("Method [addEntity] not supported for ghost object");
+		if (e.getObjectType() == ObjectType.rigidbody) {
+			dynamicsWorld.addRigidBody((RigidBody) e.getCollisionObject());
+		}else {
+			System.out.println("Method [addEntity] not supported for ghost object");
+		}
 	}
 
 	public void removeEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody) dynamicsWorld
-			.removeRigidBody((RigidBody) e.getCollisionObject());
-		else System.out
-			.println("Method [removeEntity] not supported for ghost object");
-
+		if (e.getObjectType() == ObjectType.rigidbody){
+			dynamicsWorld.removeRigidBody((RigidBody) e.getCollisionObject());
+		} else {
+			System.out.println("Method [removeEntity] not supported for ghost object");
+		}
 	}
 
 	public void reduceHull(Entity e) {
