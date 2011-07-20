@@ -152,15 +152,15 @@ public class Entity {
 		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
-			Transform trans = collision_object
-				.getWorldTransform(new Transform());
+			Transform trans = collision_object.getWorldTransform(new Transform());
 			trans.origin.set(pos);
 			collision_object.setWorldTransform(trans);
 
 		} catch (Exception e) {
-			System.out
-				.print(p.toString()
-					+ "<< Possible Incorrect data type for position, must be Vector3f\n");
+			System.out.print(
+				p.toString()
+				+ "<< Possible Incorrect data type for position, must be Vector3f\n"
+			);
 			e.printStackTrace();
 		}
 	}
@@ -246,17 +246,19 @@ public class Entity {
 	}
 
 	public void setGravity(Vector3f gravity) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.setGravity(gravity);
-		else System.out
-			.println("Method [setGravity] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).setGravity(gravity);
+		}else {
+			System.out.println("Method [setGravity] not supported for ghost object");
+		}
 	}
 
 	public void applyImpulse(Vector3f impulse, Vector3f position) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.applyImpulse(impulse, position);
-		else System.out
-			.println("Method [applyImpulse] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).applyImpulse(impulse, position);
+		} else {
+			System.out.println("Method [applyImpulse] not supported for ghost object");
+		}
 	}
 
 	public CollisionObject getCollisionObject() {
@@ -264,10 +266,11 @@ public class Entity {
 	}
 
 	public void setMotionState(DefaultMotionState defaultMotionState) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.setMotionState(defaultMotionState);
-		else System.out
-			.println("Method [setActivation] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).setMotionState(defaultMotionState);
+		} else { 
+			System.out.println("Method [setActivation] not supported for ghost object");
+		}
 	}
 
 	public ObjectType getObjectType() {
@@ -300,8 +303,9 @@ public class Entity {
 		if (object_type == ObjectType.rigidbody) {
 			((RigidBody) collision_object).setAngularFactor(factor);
 			((RigidBody) collision_object).setAngularVelocity(velocity);
-		} else System.out
-			.println("Method [setAngularFactor] not supported for ghost object");
+		} else {
+			System.out.println("Method [setAngularFactor] not supported for ghost object");
+		}
 	}
 
 	public void setDamping(float linear_damping, float angular_damping) {
@@ -311,8 +315,9 @@ public class Entity {
 			((RigidBody) collision_object).setDamping(linear_damping,
 				angular_damping);
 			// ((RigidBody) collision_object).applyDamping(0);
-		} else System.out
-			.println("Method [setVelocity] not supported for ghost object");
+		} else {
+			System.out.println("Method [setVelocity] not supported for ghost object");
+		}
 	}
 
 	public void setAngularIdentity() {
@@ -325,8 +330,9 @@ public class Entity {
 			motionState.setWorldTransform(t);
 			((RigidBody) collision_object).setMotionState(motionState);
 			// ((RigidBody) collision_object).applyDamping(0);
-		} else System.out
-			.println("Method [setVelocity] not supported for ghost object");
+		} else {
+			System.out.println("Method [setVelocity] not supported for ghost object");
+		}
 	}
 	
 	public void collidedWith(Entity collided_with){

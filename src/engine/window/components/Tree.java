@@ -88,8 +88,7 @@ public class Tree extends ScrollPane implements Observer {
 		Node entityNode;
 		for (Entity ent : objectList.getEntities()) {
 			try {
-				entityNode = treeModel.insert(ent.getProperty("name"), ent
-					.getPosition().toString());
+				entityNode = treeModel.insert(ent.getProperty("name"), ent.getPosition().toString());
 
 				this.createEntityNode(ent, entityNode);
 			} catch (Exception e) {
