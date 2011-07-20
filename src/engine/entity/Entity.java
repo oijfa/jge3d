@@ -62,14 +62,7 @@ public class Entity {
 
 	/* Constructors */
 	public Entity(float mass, CollisionShape shape, boolean collide) {
-		if (collide) {
-			createRigidBody(mass, shape);
-			object_type = ObjectType.rigidbody;
-		} else {
-			createGhostBody(mass, shape);
-			object_type = ObjectType.ghost;
-		}
-		initialSetup(collide);
+		initialSetup(mass, shape, collide);
 	}
 
 	public Entity(String name, float mass, CollisionShape shape, boolean collide) {
@@ -80,7 +73,7 @@ public class Entity {
 			createGhostBody(mass, shape);
 			object_type = ObjectType.ghost;
 		}
-		initialSetup(name, collide);
+		initialSetup(name, mass, shape, collide);
 	}
 
 	/* Initializing segments */
@@ -131,11 +124,11 @@ public class Entity {
 
 	// Sets the initial name of the body in the list
 	// Also sets some default options to the ent
-	private void initialSetup(boolean c) {
-		initialSetup("ent" + String.valueOf(num_entities), c);
+	private void initialSetup(float mass, CollisionShape shape, boolean c) {
+		initialSetup("ent" + String.valueOf(num_entities), mass, shape, c);
 	}
 
-	private void initialSetup(String name, boolean c) {
+	private void initialSetup(String name, float mass, CollisionShape shape, boolean c) {
 		num_entities++;
 		data = new HashMap<String, Object>();
 		data.put("name", name);
