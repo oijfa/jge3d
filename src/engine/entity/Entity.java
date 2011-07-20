@@ -321,7 +321,7 @@ public class Entity {
 			.println("Method [setVelocity] not supported for ghost object");
 	}
 	
-	public void collisionCallback(Entity collided_with){
+	public void collidedWith(Entity collided_with){
 		//System.out.println(this.getProperty(Entity.NAME) + " collided with " + collided_with.getProperty(Entity.NAME));
 	}
 }
