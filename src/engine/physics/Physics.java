@@ -6,11 +6,13 @@ import java.nio.ByteOrder;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletStats;
-import com.bulletphysics.collision.broadphase.DbvtBroadphase;
+import com.bulletphysics.collision.broadphase.AxisSweep3;
+import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.dispatch.GhostPairCallback;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
 import com.bulletphysics.collision.shapes.OptimizedBvh;
@@ -34,8 +36,8 @@ public class Physics {
 	private CollisionDispatcher dispatcher;
 	private Vector3f worldAabbMin;
 	private Vector3f worldAabbMax;
-	// private BroadphaseInterface overlappingPairCache;
-	private DbvtBroadphase broadphase;
+	private BroadphaseInterface overlappingPairCache;
+	//private DbvtBroadphase broadphase;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
 
@@ -64,16 +66,16 @@ public class Physics {
 		worldAabbMax = new Vector3f(1000, 1000, 1000);
 
 		// algorithm for finding collision proximity (there are better ones)
-		// overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
-		broadphase = new DbvtBroadphase();
+		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+		overlappingPairCache.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
+		//broadphase = new DbvtBroadphase();
 
 		// Type of solver to be used for solving physics (look into threading
 		// for parallel)
 		solver = new SequentialImpulseConstraintSolver();
 
 		// Create the dynamics world and set default options
-		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase,
-			solver, collisionConfiguration);
+		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
 		dynamicsWorld.setGravity(new Vector3f(0, 0, 0));
 
@@ -291,4 +293,11 @@ public class Physics {
 	public void setGravity(Vector3f gravity) {
 		dynamicsWorld.setGravity(gravity);
 	}
+
+	//public void updateOverlappingPairs() {
+		//Overlapping pair calculations for handling ghost objects
+		//broadphase.calculateOverlappingPairs(dispatcher);
+		//broadphase.getOverlappingPairCache();
+		//registerPairCacheAndDispatcher
+	//}
 }

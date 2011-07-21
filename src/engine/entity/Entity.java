@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -128,7 +129,7 @@ public class Entity {
 		}
 
 		ghost.setCollisionShape(shape);
-		
+		ghost.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		// This is extremely important; if you forget this
 		// then nothing will rotate
 		// ghost.setMassProps(mass, localInertia);
@@ -231,10 +232,13 @@ public class Entity {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
 		if (shouldDraw && this.getObjectType() == ObjectType.rigidbody) {
-			if(model != null)
+			if(model != null) {
 				model.draw(collision_object);
+			}
 		} else {
-			// System.out.println("Method [draw] not supported for ghost object");
+			if(model != null){				
+				//System.out.println("Method [draw] not supported for ghost object");
+			}
 		}
 	}
 

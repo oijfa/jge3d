@@ -16,7 +16,6 @@ import engine.entity.EntityList;
 import engine.physics.Physics;
 import engine.render.Renderer;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;
 
 public class Engine {
@@ -186,8 +185,9 @@ public class Engine {
 		for(Entity entity : entity_list.getEntities()){
 			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
 				GhostObject ghost = (GhostObject) entity.getCollisionObject();
-				for( CollisionObject col_obj : ghost.getOverlappingPairs()){
-					entity.collidedWith(entity_list.getItem(col_obj));
+				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
+					entity.collidedWith(entity_list.getItem(ghost.getOverlappingObject(i)));
+					System.out.println("COLLIDED");
 				}
 			}
 		}
