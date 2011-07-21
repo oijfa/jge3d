@@ -144,14 +144,15 @@ public class Shader {
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
-    		
-    		//if(vbo_id==7) {
+    		/*
+    		if(vbo_id==7) {
 	    		System.out.println("###"+vbo_id+"###");
 	    		for(int i=0; i<buf.limit()-1 ;i++) {
 	    			System.out.println(buf.get(i));
 	    		}
 	    		System.out.println("###");
-    		//}
+    		}
+	    	*/
     		buf.clear();
         }
     }
