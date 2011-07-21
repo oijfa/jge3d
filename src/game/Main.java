@@ -26,8 +26,7 @@ public class Main {
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(75);
 
-		Player player1 = new Player(1.0f, new BoxShape(new Vector3f(1, 1, 1)),
-			0.5f);
+		Player player1 = new Player(1.0f, 0.5f);
 		player1.setProperty("name", "player1");
 		engine.addEntity(player1);
 

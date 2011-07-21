@@ -2,7 +2,6 @@ package test;
 
 import javax.vecmath.Vector3f;
 
-//import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
 import engine.importing.FileLoader;
@@ -13,7 +12,7 @@ public class Main {
 
 	private Engine engine;
 
-
+	private Player player;
 	private Entity model;
 	private Entity model2;
 	private Entity model3;
@@ -27,6 +26,11 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 
+		player = new Player(1.0f, 0.5f);
+		player.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
+		player.setProperty(Entity.NAME, "player");
+		player.setPosition(new Vector3f(0, 0, 2));
+		
 		model = new Entity(1f, true);
 		model.setModel(FileLoader.loadFile("resources/models/misc/test.xgl"));
 		model.setProperty(Entity.NAME, "model1");
@@ -45,7 +49,7 @@ public class Main {
 		model3.setPosition(new Vector3f(0, 0, 0));
 		//model3.applyImpulse(new Vector3f(-2,0,0), new Vector3f(-2,0,0));
 	
-		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), false, model3);
+		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), false, player);
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
 		camera.setDistance(20f);
 		camera.setPosition(new Vector3f(0, 0, 5));
@@ -53,9 +57,10 @@ public class Main {
 		engine.addEntity(model);
 		engine.addEntity(model2);
 		engine.addEntity(model3);
-		
 		engine.addEntity(camera);
-		camera.focusOn(model3);
+		engine.addEntity(player);
+		
+		camera.focusOn(player);
 	}
 
 	public void run() {

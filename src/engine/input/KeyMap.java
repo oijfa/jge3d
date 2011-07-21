@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,6 +20,7 @@ import org.xml.sax.SAXException;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
+import engine.entity.Player;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.Event;
 
@@ -37,7 +39,7 @@ public class KeyMap {
     enums_to_function = new HashMap<Integer,String>();
     
     entity_list = ent_list;
-    
+
     for(Field f : Keyboard.class.getFields()){
     	if(f.getName().contains("KEY_")){
     		try {
@@ -81,8 +83,6 @@ public class KeyMap {
 							throwKeyMapException();
 						} catch (NoSuchMethodException e) {
 							throwKeyMapException();
-						} finally {
-							System.out.println("Method Name: " + n.getTextContent());
 						}
   					}
   				}else{
@@ -150,7 +150,21 @@ public class KeyMap {
 	public void zoomCameraOut(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.05d);
 	}
-	
+	public void playerForward(){
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,10));
+	}
+	public void playerBack(){
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-10));
+	}
+	public void playerLeft(){
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-10,0,0));
+	}
+	public void playerRight(){
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(10,0,0));
+	}
+	public void playerJump(){
+		((Player)entity_list.getItem("player")).jump();
+	}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
   		
