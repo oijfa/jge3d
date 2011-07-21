@@ -136,8 +136,7 @@ public class Model {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
 		Transform transform_matrix = new Transform();
-		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object)
-			.getMotionState();
+		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
 
 		transform_matrix.set(motion_state.graphicsWorldTrans);
 
@@ -153,8 +152,11 @@ public class Model {
 		// Scaling code (testing)
 		Vector3f halfExtent = new Vector3f();
 		collision_object.getCollisionShape().getLocalScaling(halfExtent);
-		GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y,
-			1.0f * halfExtent.z);
+		GL11.glScalef(
+			1.0f * halfExtent.x, 
+			1.0f * halfExtent.y,
+			1.0f * halfExtent.z
+		);
 	}
 
 	/* Verify */
@@ -383,7 +385,7 @@ public class Model {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 
-		shader.startShader(modelVBOID, collision_object, meshes.get(0));
+		shader.startShader(modelVBOID, collision_object);
 			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
 		shader.stopShader();
 		

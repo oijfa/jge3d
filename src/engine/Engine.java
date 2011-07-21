@@ -2,8 +2,6 @@ package engine;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.vecmath.Vector3f;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -18,7 +16,7 @@ import engine.entity.EntityList;
 import engine.physics.Physics;
 import engine.render.Renderer;
 
-import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.dispatch.GhostObject;
 
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
@@ -78,7 +76,7 @@ public class Engine {
 
 	/* Entity API */
 	public void addEntity(String name, String model_location) {
-		Entity ent = new Entity(1, new BoxShape(new Vector3f(1f, 1f, 1f)), true);
+		Entity ent = new Entity(1, true);
 		ent.setProperty(Entity.NAME, name);
 		ent.setModel(FileLoader.loadFile(model_location));
 		this.addEntity(ent);
@@ -125,11 +123,11 @@ public class Engine {
 			public void run() {
 				entity_list.parsePhysicsQueue();
 				while (!finished.get()) {
-					if (entity_list != null
-						&& entity_list.physicsQueueSize() > 0) entity_list
-						.parsePhysicsQueue();
+					if (entity_list != null && entity_list.physicsQueueSize() > 0) 
+						entity_list.parsePhysicsQueue();
 					else {
 						physics.clientUpdate();
+						handleGhostCollisions();
 					}
 				}
 			}
@@ -180,6 +178,17 @@ public class Engine {
 			// TODO Do something if fails?
 			System.out.println("Setting KeyMap failed");
 			e.printStackTrace();
+		}
+	}
+	
+	private void handleGhostCollisions() {
+		for(Entity entity : entity_list.getEntities()){
+			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
+				GhostObject ghost = (GhostObject) entity.getCollisionObject();
+				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
+					entity.collidedWith(entity_list.getItem(ghost.getOverlappingObject(i)));
+				}
+			}
 		}
 	}
 }

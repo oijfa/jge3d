@@ -6,11 +6,13 @@ import java.nio.ByteOrder;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletStats;
-import com.bulletphysics.collision.broadphase.DbvtBroadphase;
+import com.bulletphysics.collision.broadphase.AxisSweep3;
+import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.dispatch.GhostPairCallback;
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
 import com.bulletphysics.collision.shapes.OptimizedBvh;
@@ -34,8 +36,8 @@ public class Physics {
 	private CollisionDispatcher dispatcher;
 	private Vector3f worldAabbMin;
 	private Vector3f worldAabbMax;
-	// private BroadphaseInterface overlappingPairCache;
-	private DbvtBroadphase broadphase;
+	private BroadphaseInterface overlappingPairCache;
+	//private DbvtBroadphase broadphase;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
 
@@ -64,16 +66,16 @@ public class Physics {
 		worldAabbMax = new Vector3f(1000, 1000, 1000);
 
 		// algorithm for finding collision proximity (there are better ones)
-		// overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
-		broadphase = new DbvtBroadphase();
+		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+		overlappingPairCache.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
+		//broadphase = new DbvtBroadphase();
 
 		// Type of solver to be used for solving physics (look into threading
 		// for parallel)
 		solver = new SequentialImpulseConstraintSolver();
 
 		// Create the dynamics world and set default options
-		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase,
-			solver, collisionConfiguration);
+		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
 		dynamicsWorld.setGravity(new Vector3f(0, 0, 0));
 
@@ -111,18 +113,19 @@ public class Physics {
 	}
 
 	public void addEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody) dynamicsWorld
-			.addRigidBody((RigidBody) e.getCollisionObject());
-		else System.out
-			.println("Method [addEntity] not supported for ghost object");
+		if (e.getObjectType() == ObjectType.rigidbody) {
+			dynamicsWorld.addRigidBody((RigidBody) e.getCollisionObject());
+		}else {
+			System.out.println("Method [addEntity] not supported for ghost object");
+		}
 	}
 
 	public void removeEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody) dynamicsWorld
-			.removeRigidBody((RigidBody) e.getCollisionObject());
-		else System.out
-			.println("Method [removeEntity] not supported for ghost object");
-
+		if (e.getObjectType() == ObjectType.rigidbody){
+			dynamicsWorld.removeRigidBody((RigidBody) e.getCollisionObject());
+		} else {
+			System.out.println("Method [removeEntity] not supported for ghost object");
+		}
 	}
 
 	public void reduceHull(Entity e) {
@@ -142,8 +145,7 @@ public class Physics {
 		}
 
 		// Declare the shitty ass directly allocated buffer
-		ByteBuffer vertexbuffer = ByteBuffer
-			.allocateDirect(3 * vertexcount * 4);
+		ByteBuffer vertexbuffer = ByteBuffer.allocateDirect(3 * vertexcount * 4);
 		vertexbuffer.order(ByteOrder.nativeOrder());
 		ByteBuffer indexbuffer = ByteBuffer.allocateDirect(3 * vertexcount * 4);
 		indexbuffer.order(ByteOrder.nativeOrder());
@@ -200,8 +202,10 @@ public class Physics {
 
 		// Create an optimized Bvh to reduce the vertex set of the original mesh
 		OptimizedBvh optimizedmesh = new OptimizedBvh();
-		optimizedmesh.build(meshshape.getMeshInterface(),
-			useQuantizedAabbCompression, worldAabbMin, worldAabbMax);
+		optimizedmesh.build(
+			meshshape.getMeshInterface(),
+			useQuantizedAabbCompression, worldAabbMin, worldAabbMax
+		);
 
 		// Set the reduced set back to the mesh
 		meshshape.setOptimizedBvh(optimizedmesh);
@@ -213,34 +217,29 @@ public class Physics {
 	public void drag(Camera camera, int state, Vector3f rayTo) {
 		if (state == 0) {
 			if (dynamicsWorld != null) {
-				CollisionWorld.ClosestRayResultCallback rayCallback = new CollisionWorld.ClosestRayResultCallback(
-					camera.getPosition(), rayTo);
+				CollisionWorld.ClosestRayResultCallback rayCallback = 
+					new CollisionWorld.ClosestRayResultCallback(
+						camera.getPosition(), rayTo
+					);
 				dynamicsWorld.rayTest(camera.getPosition(), rayTo, rayCallback);
 				if (rayCallback.hasHit()) {
-					RigidBody hitBody = RigidBody
-						.upcast(rayCallback.collisionObject);
+					RigidBody hitBody = RigidBody.upcast(rayCallback.collisionObject);
 					if (hitBody != null) {
 						// other exclusions?
-						if (!(hitBody.isStaticObject() || hitBody
-							.isKinematicObject())) {
-							;
+						if (!(hitBody.isStaticObject() || hitBody.isKinematicObject())) {
 							pickedEntity = hitBody;
-							pickedEntity
-								.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+							pickedEntity.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 
-							Vector3f pickPos = new Vector3f(
-								rayCallback.hitPointWorld);
+							Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
 
-							Transform tmpTrans = hitBody
-								.getCenterOfMassTransform(new Transform());
+							Transform tmpTrans = hitBody.getCenterOfMassTransform(new Transform());
 							tmpTrans.inverse();
 
 							hitBody.getCenterOfMassPosition(pickPos);
 							Vector3f localPivot = new Vector3f(pickPos);
 							tmpTrans.transform(localPivot);
 
-							Point2PointConstraint p2p = new Point2PointConstraint(
-								hitBody, localPivot);
+							Point2PointConstraint p2p = new Point2PointConstraint(hitBody, localPivot);
 							// SliderConstraint p2p = new SliderConstraint();
 							p2p.setting.impulseClamp = 1f;
 
@@ -294,4 +293,11 @@ public class Physics {
 	public void setGravity(Vector3f gravity) {
 		dynamicsWorld.setGravity(gravity);
 	}
+
+	//public void updateOverlappingPairs() {
+		//Overlapping pair calculations for handling ghost objects
+		//broadphase.calculateOverlappingPairs(dispatcher);
+		//broadphase.getOverlappingPairCache();
+		//registerPairCacheAndDispatcher
+	//}
 }

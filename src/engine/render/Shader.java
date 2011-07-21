@@ -12,11 +12,7 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
-
-import engine.render.model_pieces.Mesh;
 
 public class Shader {
 	/*
@@ -133,12 +129,12 @@ public class Shader {
     * If the shader was setup successfully, we use the shader. Otherwise
     * we run normal drawing code.
     */
-    public void startShader(int vbo_id, CollisionObject collision_object, Mesh mesh){
+    public void startShader(int vbo_id, CollisionObject collision_object){
     	if(useShader) {            
      		//Adjust the position and rotation of the object from physics
     		Transform transform_matrix = new Transform();
-    		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
-    		transform_matrix.set(motion_state.graphicsWorldTrans);
+    		transform_matrix = collision_object.getWorldTransform(new Transform());
+
     		float[] body_matrix = new float[16];
     		transform_matrix.getOpenGLMatrix(body_matrix);
     		buf.put(body_matrix);
@@ -149,14 +145,14 @@ public class Shader {
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
     		
-    		/*
-    		System.out.println("###"+vbo_id+"###");
-    		for(int i=0; i<buf.limit()-1 ;i++) {
-    			System.out.println(buf.get(i));
-    		}
-    		System.out.println("###");
-    		*/  		
-	    	buf.clear();
+    		//if(vbo_id==7) {
+	    		System.out.println("###"+vbo_id+"###");
+	    		for(int i=0; i<buf.limit()-1 ;i++) {
+	    			System.out.println(buf.get(i));
+	    		}
+	    		System.out.println("###");
+    		//}
+    		buf.clear();
         }
     }
     
