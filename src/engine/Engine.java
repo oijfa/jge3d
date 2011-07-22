@@ -104,6 +104,10 @@ public class Engine {
 	public void removeEntity(String name) {
 		entity_list.removeEntity(name);
 	}
+	
+	public EntityList getEntityList() {
+		return entity_list;
+	}
 
 	/* Private Methods */
 	private void startRendering() {
