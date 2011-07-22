@@ -113,6 +113,9 @@ public class KeyMap {
 		}
 		return list;
 	}
+  	public void complainAlot(){
+  		System.out.println("I HATE EVERYTHING");
+  	}
   	
 	public void rotateCamLeft(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.05d);
@@ -169,8 +172,9 @@ public class KeyMap {
   	public boolean handleEvent(Event e) throws KeyMapException{
   		
   		if(e.hasKeyChar()){
+  			
   			String function_name = enums_to_function.get(e.getKeyCode());
-
+  			System.out.println("Key " + e.getKeyCode() + " Pressed. Function: " + function_name);
   			if( function_name != null){
   				try {
 					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);

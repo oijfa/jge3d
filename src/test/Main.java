@@ -21,7 +21,7 @@ public class Main {
 
 	public static void main(String args[]) {
 		Main m = new Main();
-		m.run();
+		//m.run();
 	}
 
 	public Main() {
@@ -71,6 +71,11 @@ public class Main {
 		camera.focusOn(player);
 		
 		engine.removeEntity("model");
+		
+		while(true){
+			engine.renderOnce();
+			engine.physicsOnce();
+		}
 
 	}
 

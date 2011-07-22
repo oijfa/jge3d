@@ -68,11 +68,13 @@ public class Window extends DesktopArea {
 
 	protected boolean handleEvent(Event evt) {
 		// Our event handling
+		System.out.println(key_map == null);
 		try {
 			if (key_map != null && key_map.handleEvent(evt)) { return true; }
 		} catch (KeyMapException e) {
 			// TODO 
-			System.out.println("Failed to handle event for whatever reason." + e.getStackTrace());
+			System.out.println("Failed to handle event for whatever reason.");
+			e.printStackTrace();
 		}
 
 		return false;
