@@ -191,7 +191,6 @@ public class Engine {
 				GhostObject ghost = (GhostObject) entity.getCollisionObject();
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
 					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
-					System.out.println("COLLIDED");
 				}
 			}
 		}

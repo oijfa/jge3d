@@ -75,7 +75,7 @@ public class Entity {
 
 	private void initialSetup(String name, float mass, boolean c) {
 		//TODO: Generate this based on model instead
-		CollisionShape shape = new BoxShape(new Vector3f(1,1,1));
+		CollisionShape shape = new BoxShape(new Vector3f(1.0f,1.0f,1.0f));
 		if(c){
 			createRigidBody(mass, shape);
 			object_type = ObjectType.rigidbody;
@@ -113,6 +113,9 @@ public class Entity {
 
 		// This is extremely important; if you forget this
 		// then nothing will rotate
+		Transform identity = new Transform();
+		identity.setIdentity();
+		((RigidBody) collision_object).setWorldTransform(identity);
 		((RigidBody) collision_object).setMassProps(mass, localInertia);
 		((RigidBody) collision_object).updateInertiaTensor();
 	}
