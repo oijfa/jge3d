@@ -113,9 +113,6 @@ public class KeyMap {
 		}
 		return list;
 	}
-  	public void complainAlot(){
-  		System.out.println("I HATE EVERYTHING");
-  	}
   	
 	public void rotateCamLeft(){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.05d);
@@ -154,10 +151,10 @@ public class KeyMap {
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);
 	}
 	public void playerForward(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
 	}
 	public void playerBack(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
 	}
 	public void playerLeft(){
 		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));
@@ -170,29 +167,24 @@ public class KeyMap {
 	}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
-  		
-  		if(e.hasKeyChar()){
-  			
-  			String function_name = enums_to_function.get(e.getKeyCode());
-  			System.out.println("Key " + e.getKeyCode() + " Pressed. Function: " + function_name);
-  			if( function_name != null){
-  				try {
-					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
-					
-					//TODO Throw warnings or something
-				} catch (IllegalArgumentException e1) {
-					throwKeyMapException();
-				} catch (SecurityException e1) {
-					throwKeyMapException();
-				} catch (IllegalAccessException e1) {
-					throwKeyMapException();
-				} catch (InvocationTargetException e1) {
-					throwKeyMapException();
-				} catch (NoSuchMethodException e1) {
-					throwKeyMapException();
-				}
-  			}
-  		}
+		String function_name = enums_to_function.get(e.getKeyCode());
+		if( function_name != null){
+			try {
+				KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
+				
+			//TODO Throw warnings or something
+			} catch (IllegalArgumentException e1) {
+				throwKeyMapException();
+			} catch (SecurityException e1) {
+				throwKeyMapException();
+			} catch (IllegalAccessException e1) {
+				throwKeyMapException();
+			} catch (InvocationTargetException e1) {
+				throwKeyMapException();
+			} catch (NoSuchMethodException e1) {
+				throwKeyMapException();
+			}
+		}
 		
 		return true;
 	}
