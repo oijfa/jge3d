@@ -134,7 +134,11 @@ public class Entity {
 		// then nothing will rotate
 		// ghost.setMassProps(mass, localInertia);
 		// ghost.updateInertiaTensor();
+		Transform identity = new Transform();
+		identity.setIdentity();
+		collision_object = new CollisionObject();
 		collision_object = ghost;
+		collision_object.setWorldTransform(identity);
 	}
 
 	/*
@@ -231,13 +235,9 @@ public class Entity {
 	public void draw() {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
-		if (shouldDraw && this.getObjectType() == ObjectType.rigidbody) {
+		if (shouldDraw) {
 			if(model != null) {
 				model.draw(collision_object);
-			}
-		} else {
-			if(model != null){				
-				//System.out.println("Method [draw] not supported for ghost object");
 			}
 		}
 	}

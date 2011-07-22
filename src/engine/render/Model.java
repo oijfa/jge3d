@@ -385,7 +385,7 @@ public class Model {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 
-		shader.startShader(modelVBOID, collision_object, meshes.get(0));
+		shader.startShader(modelVBOID, collision_object);
 			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
 		shader.stopShader();
 		
