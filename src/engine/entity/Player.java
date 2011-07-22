@@ -2,6 +2,7 @@ package engine.entity;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.ConvexShape;
@@ -26,6 +27,7 @@ public class Player extends Entity {
 			(ConvexShape) collision_object.getCollisionShape(), step_height
 		);
 		player.setJumpSpeed(1.0f);
+		collision_object.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
 	}
 
 	public void movePlayer(Vector3f walk_direction) {
@@ -39,5 +41,4 @@ public class Player extends Entity {
 	public void jump() {
 		if (player.canJump()) player.jump();
 	}
-
 }

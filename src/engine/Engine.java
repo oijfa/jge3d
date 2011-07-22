@@ -186,7 +186,7 @@ public class Engine {
 			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
 				GhostObject ghost = (GhostObject) entity.getCollisionObject();
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
-					entity.collidedWith(entity_list.getItem(ghost.getOverlappingObject(i)));
+					entity.collidedWith(entity_list.getItem(ghost.getOverlappingObject(i)),entity_list);
 				}
 			}
 		}

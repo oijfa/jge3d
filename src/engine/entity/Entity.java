@@ -75,7 +75,7 @@ public class Entity {
 
 	private void initialSetup(String name, float mass, boolean c) {
 		//TODO: Generate this based on model instead
-		CollisionShape shape = new BoxShape(new Vector3f(1,1,1));
+		CollisionShape shape = new BoxShape(new Vector3f(1.0f,1.0f,1.0f));
 		if(c){
 			createRigidBody(mass, shape);
 			object_type = ObjectType.rigidbody;
@@ -113,6 +113,9 @@ public class Entity {
 
 		// This is extremely important; if you forget this
 		// then nothing will rotate
+		Transform identity = new Transform();
+		identity.setIdentity();
+		((RigidBody) collision_object).setWorldTransform(identity);
 		((RigidBody) collision_object).setMassProps(mass, localInertia);
 		((RigidBody) collision_object).updateInertiaTensor();
 	}
@@ -336,10 +339,10 @@ public class Entity {
 		}
 	}
 	
-	public void collidedWith(Entity collided_with){
+	public void collidedWith(Entity collided_with, EntityList ent_list){
 		for(Method method : collision_functions){
 			try {
-				method.invoke(EntityCallbackFunctions.class, this, collided_with);
+				method.invoke(EntityCallbackFunctions.class, this, collided_with, ent_list);
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -354,7 +357,7 @@ public class Entity {
 		for(String method_name : names){
 			try {
 				collision_functions.add(
-					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class)
+					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class, EntityList.class)
 				);
 			} catch (SecurityException e) {
 				e.printStackTrace();
