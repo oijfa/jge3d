@@ -1,5 +1,8 @@
 package engine;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
@@ -9,6 +12,7 @@ import de.matthiasmann.twl.ResizableFrame;
 
 import engine.entity.Camera;
 import engine.entity.Entity;
+import engine.entity.EntityCallbackFunctions;
 import engine.importing.FileLoader;
 import engine.input.KeyMap;
 import engine.input.components.KeyMapException;
@@ -186,9 +190,24 @@ public class Engine {
 			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
 				GhostObject ghost = (GhostObject) entity.getCollisionObject();
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
-					entity.collidedWith(entity_list.getItem(ghost.getOverlappingObject(i)));
+					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
 					System.out.println("COLLIDED");
 				}
+			}
+		}
+	}
+	
+	private void entCollidedWith(Entity source, Entity collided_with){
+		ArrayList<Method> methods = source.getCollisionFunctions();
+		for(Method method : methods){
+			try {
+				method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 	}

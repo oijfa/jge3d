@@ -11,7 +11,6 @@ package engine.entity;
 
 import engine.render.Model;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -336,20 +335,6 @@ public class Entity {
 		}
 	}
 	
-	public void collidedWith(Entity collided_with){
-		for(Method method : collision_functions){
-			try {
-				method.invoke(EntityCallbackFunctions.class, this, collided_with);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public void addCollisionFunctions(String... names){
 		for(String method_name : names){
 			try {
@@ -376,5 +361,9 @@ public class Entity {
 			}
 			if(found){ break; }
 		}
+	}
+
+	public ArrayList<Method> getCollisionFunctions() {
+		return collision_functions;
 	}
 }
