@@ -9,6 +9,7 @@
  */
 package engine.entity;
 
+import engine.Engine;
 import engine.render.Model;
 
 import java.lang.reflect.Method;
@@ -339,7 +340,7 @@ public class Entity {
 		for(String method_name : names){
 			try {
 				collision_functions.add(
-					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class)
+					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class, Engine.class)
 				);
 			} catch (SecurityException e) {
 				e.printStackTrace();
