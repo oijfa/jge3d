@@ -167,29 +167,25 @@ public class KeyMap {
 	}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
-  		
-  		if(e.hasKeyChar()){
-  			String function_name = enums_to_function.get(e.getKeyCode());
+		String function_name = enums_to_function.get(e.getKeyCode());
 
-  			if( function_name != null){
-  				try {
-					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
-					
-					//TODO Throw warnings or something
-				} catch (IllegalArgumentException e1) {
-					throwKeyMapException();
-				} catch (SecurityException e1) {
-					throwKeyMapException();
-				} catch (IllegalAccessException e1) {
-					throwKeyMapException();
-				} catch (InvocationTargetException e1) {
-					throwKeyMapException();
-				} catch (NoSuchMethodException e1) {
-					throwKeyMapException();
-				}
-  			}
-  		}
-		
+		if( function_name != null){
+			try {
+				KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
+				
+				//TODO Throw warnings or something
+			} catch (IllegalArgumentException e1) {
+				throwKeyMapException();
+			} catch (SecurityException e1) {
+				throwKeyMapException();
+			} catch (IllegalAccessException e1) {
+				throwKeyMapException();
+			} catch (InvocationTargetException e1) {
+				throwKeyMapException();
+			} catch (NoSuchMethodException e1) {
+				throwKeyMapException();
+			}
+		}
 		return true;
 	}
   	
