@@ -151,16 +151,16 @@ public class KeyMap {
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);
 	}
 	public void playerForward(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,10));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
 	}
 	public void playerBack(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-10));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
 	}
 	public void playerLeft(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-10,0,0));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));
 	}
 	public void playerRight(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(10,0,0));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));
 	}
 	public void playerJump(){
 		((Player)entity_list.getItem("player")).jump();
@@ -192,6 +192,12 @@ public class KeyMap {
 		
 		return true;
 	}
+  	
+  	public void debug() {
+  		System.out.println(lwjgl_key_enums.toString());
+  		System.out.println("###");
+  		System.out.println(key_map.toString());
+  	}
   	
   	private void throwException(String message) throws KeyMapException{
   	    KeyMapException e = new KeyMapException();

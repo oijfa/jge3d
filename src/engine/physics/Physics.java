@@ -28,6 +28,7 @@ import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Camera;
 import engine.entity.Entity;
+import engine.entity.Player;
 import engine.entity.Entity.ObjectType;
 
 public class Physics {
@@ -112,19 +113,30 @@ public class Physics {
 		return deltaT;
 	}
 
-	public void addEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody) {
-			dynamicsWorld.addRigidBody((RigidBody) e.getCollisionObject());
-		}else {
-			System.out.println("Method [addEntity] not supported for ghost object");
+	public boolean addEntity(Entity e) {
+		boolean ret = false;
+
+		if (e.keyExists("name")) {
+			if (e.getCollisionObject() != null) {
+				dynamicsWorld.addCollisionObject(e.getCollisionObject());
+				if(e.getObjectType() == ObjectType.actor) {
+					//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
+					dynamicsWorld.addAction(((Player)e).getActor());
+				}
+			}
+			ret = true;
 		}
+		return ret;
 	}
 
 	public void removeEntity(Entity e) {
 		if (e.getObjectType() == ObjectType.rigidbody){
 			dynamicsWorld.removeRigidBody((RigidBody) e.getCollisionObject());
 		} else {
-			System.out.println("Method [removeEntity] not supported for ghost object");
+			dynamicsWorld.removeCollisionObject(e.getCollisionObject());
+		}
+		if(e.getObjectType() == ObjectType.actor) {
+			dynamicsWorld.removeAction(((Player)e).getActor());
 		}
 	}
 

@@ -1,13 +1,13 @@
 <keymap>
-  <key ID="Key_A">rotateCamLeft</key>
-  <key ID="Key_D">rotateCamRight</key>
-  <key ID="Key_W">rotateCamUp</key>
-  <key ID="Key_S">rotateCamDown</key>
-  <key ID="Key_E">zoomCameraIn</key>
-  <key ID="Key_Q">zoomCameraOut</key>
-  <key ID="Key_UP">playerForward</key>
-  <key ID="Key_DOWN">playerBack</key>
-  <key ID="Key_LEFT">playerLeft</key>
-  <key ID="Key_RIGHT">playerRight</key>
+  <key ID="Key_LEFT">rotateCamLeft</key>
+  <key ID="Key_RIGHT">rotateCamRight</key>
+  <key ID="Key_UP">rotateCamUp</key>
+  <key ID="Key_DOWN">rotateCamDown</key>
+  <key ID="Key_PGUP">zoomCameraIn</key>
+  <key ID="Key_PGDN">zoomCameraOut</key>
+  <key ID="Key_W">playerForward</key>
+  <key ID="Key_S">playerBack</key>
+  <key ID="Key_A">playerLeft</key>
+  <key ID="Key_D">playerRight</key>
   <key ID="Key_SPACE">playerJump</key>
 </keymap>

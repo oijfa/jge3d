@@ -26,8 +26,9 @@ public class Player extends Entity {
 			(PairCachingGhostObject) ((GhostObject) collision_object),
 			(ConvexShape) collision_object.getCollisionShape(), step_height
 		);
-		player.setJumpSpeed(1.0f);
+		player.setJumpSpeed(10.0f);
 		collision_object.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
+		object_type = ObjectType.actor;
 	}
 
 	public void movePlayer(Vector3f walk_direction) {
@@ -40,5 +41,9 @@ public class Player extends Entity {
 
 	public void jump() {
 		if (player.canJump()) player.jump();
+	}
+	
+	public KinematicCharacterController getActor() {
+		return player;
 	}
 }
