@@ -20,8 +20,13 @@ public class Main {
 	private Camera camera;
 
 	public static void main(String args[]) {
+		boolean multiThreaded = false;
+		
 		Main m = new Main();
-		m.run();
+		if(multiThreaded == true)
+			m.runMultiThread();
+		else
+			m.runSingleThread();
 	}
 
 	public Main() {
@@ -71,10 +76,16 @@ public class Main {
 		camera.focusOn(player);
 		
 		engine.removeEntity("model");
-
 	}
 
-	public void run() {
+	public void runMultiThread() {
 		engine.run();
+	}
+	
+	public void runSingleThread() {
+		while(true){
+			engine.renderOnce();
+			engine.physicsOnce();
+		}
 	}
 }

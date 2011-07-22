@@ -151,10 +151,10 @@ public class KeyMap {
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);
 	}
 	public void playerForward(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
 	}
 	public void playerBack(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
+		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
 	}
 	public void playerLeft(){
 		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));
@@ -172,8 +172,8 @@ public class KeyMap {
 		if( function_name != null){
 			try {
 				KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
-				
-				//TODO Throw warnings or something
+
+			//TODO Throw warnings or something
 			} catch (IllegalArgumentException e1) {
 				throwKeyMapException();
 			} catch (SecurityException e1) {
@@ -186,6 +186,7 @@ public class KeyMap {
 				throwKeyMapException();
 			}
 		}
+
 		return true;
 	}
   	

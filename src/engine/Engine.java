@@ -131,12 +131,7 @@ public class Engine {
 			public void run() {
 				entity_list.parsePhysicsQueue();
 				while (!finished.get()) {
-					if (entity_list != null && entity_list.physicsQueueSize() > 0) 
-						entity_list.parsePhysicsQueue();
-					else {
-						physics.clientUpdate();
-						handleGhostCollisions();
-					}
+					physicsOnce();
 				}
 			}
 		};
@@ -149,30 +144,7 @@ public class Engine {
 			entity_list.parseRenderQueue();
 
 			while (!finished.get()) {
-				// Check for close requests
-				if (Display.isCloseRequested()) {
-					finished.set(true);
-				} else if (entity_list != null
-					&& entity_list.renderQueueSize() > 0) {
-					entity_list.parseRenderQueue();
-				} else if (Display.isActive()) {
-					// The window is in the foreground, so we should play the
-					// game
-					renderer.draw();
-					// Display.sync(FRAMERATE);
-				} else {
-					// The window is not in the foreground, so we can allow
-					// other stuff to run and
-					// infrequently update
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-					// Only bother rendering if the window is visible or dirty
-					if (Display.isVisible() || Display.isDirty()) {
-						renderer.draw();
-					}
-				}
+				renderOnce();
 			}
 		} catch (LWJGLException e1) {
 			e1.printStackTrace();
@@ -212,6 +184,43 @@ public class Engine {
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void renderOnce(){
+		// Check for close requests
+		if (Display.isCloseRequested()) {
+			finished.set(true);
+		} else if (entity_list != null
+			&& entity_list.renderQueueSize() > 0) {
+			entity_list.parseRenderQueue();
+		} else if (Display.isActive()) {
+			// The window is in the foreground, so we should play the
+			// game
+			renderer.draw();
+			// Display.sync(FRAMERATE);
+		} else {
+			// The window is not in the foreground, so we can allow
+			// other stuff to run and
+			// infrequently update
+			/*
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+			}
+			*/
+			// Only bother rendering if the window is visible or dirty
+			if (Display.isVisible() || Display.isDirty()) {
+				renderer.draw();
+			}
+		}
+	}
+	public void physicsOnce(){
+		if (entity_list != null && entity_list.physicsQueueSize() > 0) 
+			entity_list.parsePhysicsQueue();
+		else {
+			physics.clientUpdate();
+			handleGhostCollisions();
 		}
 	}
 }
