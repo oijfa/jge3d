@@ -25,14 +25,7 @@ public class EntityList {
 		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
 	}
 
-	public void drawList() {
-		// Have to change keySet into array so that a clone will be made
-		// Avoids concurrency issues
-		for (Entity ent : this.getEntities()){
-			ent.draw();
-		}
-	}
-
+	/*************** QUEUE METHODS ***************/
 	public void parsePhysicsQueue() {
 		Object[] itemArray = physicsQueue.toArray();
 		for (Object item : itemArray) {
@@ -44,7 +37,6 @@ public class EntityList {
 			physicsQueue.remove(item);
 		}
 	}
-
 	public void parseRenderQueue() {
 		Object[] itemArray = renderQueue.toArray();
 		for (Object item : itemArray) {
@@ -57,8 +49,37 @@ public class EntityList {
 			renderQueue.remove(item);
 		}
 	}
+	
+	public void addEntity(Entity ent) {
+		entities.put(ent.getProperty("name"), ent);
+		entities.put(ent.collision_object, ent);
+		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
+		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
+	}
+	public void removeEntity(Object key) {
+		if (entities.containsKey(key)) {
+			Entity ent = (entities.get(key));
 
-	/* ACCESSORS */
+			entities.remove(ent.getProperty(Entity.NAME));
+			entities.remove(ent.collision_object);
+			physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
+			renderQueue.add(new QueueItem(ent, QueueItem.REMOVE));
+		}
+	}
+	
+	public void updateEntity(Entity ent) {
+		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
+	}
+	
+	public int physicsQueueSize() {
+		return physicsQueue.size();
+	}
+	public int renderQueueSize() {
+		return renderQueue.size();
+	}
+	/**********************************************/
+	
+	/*************** ACCESSORS ***************/
 	public Entity getItem(Object key) {
 		return entities.get(key);
 	}
@@ -78,33 +99,14 @@ public class EntityList {
 		}
 		return new ArrayList<Entity>(ents);
 	}
-
+	
 	public Physics getPhysics() {
 		return physics;
 	}
+	/******************************************/	
 
-	public int physicsQueueSize() {
-		return physicsQueue.size();
-	}
-
-	public int renderQueueSize() {
-		return renderQueue.size();
-	}
-
-	/* MUTATORS */
+	/*************** MUTATORS ***************/
 	// Add an item to the entity List
-	private boolean addPhysicsItem(Entity e) {
-		boolean ret = false;
-
-		if (e.keyExists("name")) {
-			if (e.getCollisionObject() != null) {
-				physics.getDynamicsWorld().addCollisionObject(e.getCollisionObject());
-			}
-			ret = true;
-		}
-		return ret;
-	}
-
 	private void addRenderItem(Entity e) {
 		if (e.keyExists("name")) {
 			if (e.getModel() != null) {
@@ -112,7 +114,6 @@ public class EntityList {
 			}
 		}
 	}
-
 	private void removeRenderItem(Entity e) {
 		if (e.keyExists("name")) {
 			if (e.getModel() != null) {
@@ -120,44 +121,32 @@ public class EntityList {
 			}
 		}
 	}
-
+	
+	private void addPhysicsItem(Entity entity) {
+		physics.addEntity(entity);
+	}
 	private void removePhysicsItem(Entity entity) {
-		entities.remove(entity);
 		physics.removeEntity(entity);
 	}
+	/*****************************************/
 
-	public void addEntity(Entity ent) {
-		entities.put(ent.getProperty("name"), ent);
-		entities.put(ent.collision_object, ent);
-		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
-		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
-	}
-
-	public void updateEntity(Entity ent) {
-		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
-	}
-
-	public void removeEntity(Object key) {
-		if (entities.containsKey(key)) {
-			removeEntity(entities.get(key));
+	/*************** DRAWING ***************/
+	public void drawList() {
+		// Have to change keySet into array so that a clone will be made
+		// Avoids concurrency issues
+		for (Entity ent : this.getEntities()){
+			ent.draw();
 		}
 	}
-
-	public void removeEntity(Entity ent) {
-		entities.remove(ent.getProperty(Entity.NAME));
-		entities.remove(ent.collision_object);
-		physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
-		renderQueue.add(new QueueItem(ent, QueueItem.REMOVE));
-	}
-
+	/***************************************/
 	/* Physics Constraints */
 	/*
 	 * public void addBallJoint(String name, Entity object1, Vector3f point1,
 	 * Entity object2, Vector3f point2){ //Setup a Ball joint between the two
 	 * objects, at the point given Point2PointConstraint ballJoint = new Point2P
 	 */
-	/*
-	 * ointConstraint( object1, object2, point1, point2 );
+	 /*
+	 * pointConstraint( object1, object2, point1, point2 );
 	 * physics.getDynamicsWorld().addConstraint(ballJoint); } public void
 	 * removeJoint(String constraint_name){ if(
 	 * constraints.containsKey(constraint_name) ){

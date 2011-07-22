@@ -30,7 +30,7 @@ public class Main {
 		player = new Player(1.0f, 0.5f);
 		player.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
 		player.setProperty(Entity.NAME, "player");
-		player.setPosition(new Vector3f(0, 3, 0));
+		player.setPosition(new Vector3f(5, 3, 0));
 		
 		model = new Entity(1f, true);
 		model.setModel(FileLoader.loadFile("resources/models/misc/test.xgl"));
@@ -54,12 +54,12 @@ public class Main {
 		model4 = new Entity(1f, true);
 		model4.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model4.setProperty(Entity.NAME, "model4");
-		model4.setPosition(new Vector3f(0, 0, -5));
+		model4.setPosition(new Vector3f(0, 0, -6));
 				
 		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), false, player);
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
-		camera.setDistance(20f);
-		camera.setPosition(new Vector3f(0, 0, 5));
+		camera.setDistance(25f);
+		camera.setPosition(new Vector3f(0, 0, 6));
 
 		engine.addEntity(model);
 		engine.addEntity(model2);
@@ -69,6 +69,9 @@ public class Main {
 		engine.addEntity(player);
 		
 		camera.focusOn(player);
+		
+		engine.removeEntity("model");
+
 	}
 
 	public void run() {

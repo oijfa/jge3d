@@ -39,10 +39,10 @@ public class Entity {
 	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
 	
 	public static enum ObjectType {
-		ghost, rigidbody
+		ghost, rigidbody, actor
 	};
 
-	private ObjectType object_type;
+	protected ObjectType object_type;
 
 	/* Properties the engine uses a lot */
 	public static final String NAME = "name";
