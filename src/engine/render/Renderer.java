@@ -154,8 +154,8 @@ public class Renderer {
 		}
 
 		// Blending functions so we can have transparency
-		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		// GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glEnable(GL11.GL_BLEND);
 
 		// ???
 		// GL11.glEnable(GL11.GL_CULL_FACE);
@@ -169,7 +169,7 @@ public class Renderer {
 			GL11.GL_FRONT_AND_BACK,
 			GL11.GL_AMBIENT_AND_DIFFUSE
 		);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
 		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);

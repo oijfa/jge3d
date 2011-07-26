@@ -32,32 +32,27 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 
-		player = new Player(1.0f, 0.5f);
-		player.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
+		player = new Player(1.0f, 0.5f,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		player.setProperty(Entity.NAME, "player");
 		player.setPosition(new Vector3f(5, 3, 0));
 		
-		model = new Entity(1f, true);
-		model.setModel(FileLoader.loadFile("resources/models/misc/test.xgl"));
+		model = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/test.xgl"));
 		model.setProperty(Entity.NAME, "model1");
 		model.setPosition(new Vector3f(6, 0, 0));
 		//model.applyImpulse(new Vector3f(-2,0,0), new Vector3f(0,0,0));
 
-		model2 = new Entity(1f, true);
-		model2.setModel(FileLoader.loadFile("resources/models/misc/box2.xgl"));
+		model2 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box2.xgl"));
 		model2.setProperty(Entity.NAME, "model2");
 		model2.setPosition(new Vector3f(-6, 0, 0));
 		model2.applyImpulse(new Vector3f(2,0,0), new Vector3f(0,0,0));
 		
-		model3 = new Entity(1f, false);
-		model3.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
+		model3 = new Entity(1f, false,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model3.setProperty(Entity.NAME, "model3");
 		model3.setPosition(new Vector3f(0, 0, 0));
 		model3.addCollisionFunctions("explode");
 		//model3.applyImpulse(new Vector3f(-2,0,0), new Vector3f(-2,0,0));
 	
-		model4 = new Entity(1f, true);
-		model4.setModel(FileLoader.loadFile("resources/models/misc/box.xgl"));
+		model4 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model4.setProperty(Entity.NAME, "model4");
 		model4.setPosition(new Vector3f(0, 0, -6));
 				
@@ -73,7 +68,7 @@ public class Main {
 		engine.addEntity(camera);
 		engine.addEntity(player);
 		
-		camera.focusOn(player);
+		camera.focusOn(model);
 		
 		engine.removeEntity("model");
 	}

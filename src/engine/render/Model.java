@@ -19,9 +19,11 @@ import org.lwjgl.opengl.GL12;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.ConvexHullShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
 
 
 import engine.render.model_pieces.Face;
@@ -38,6 +40,7 @@ public class Model {
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
 	private Shader shader;
+	private CollisionShape shape;
 
 	private Boolean immediate_scale_rotate = false;
 
@@ -71,6 +74,7 @@ public class Model {
 		}
 		modelVBOID = model.getVBOID();
 		modelVBOindexID = model.getVBOindexID();
+		shape = model.getCollisionShape();
 		// verify();
 	}
 
@@ -95,6 +99,10 @@ public class Model {
 		return center;
 	}
 
+	private ArrayList<Mesh> getMeshes() {
+		return this.meshes;
+	}
+	
 	public int getMeshCount() {
 		return meshes.size();
 	}
@@ -405,4 +413,34 @@ public class Model {
 		hasVBO = false;
 	}
 	// *****************END VBO METHODS***********************
+	
+	public void reduceHull() {
+		ObjectArrayList<Vector3f> vertices = new ObjectArrayList<Vector3f>();
+		
+		for(Mesh m : this.getMeshes()){
+			for(Face f : m.getFaces()){
+				for(Vector3f v : f.getVertices()){
+					vertices.add(v);
+				}
+			}
+		}
+
+		ConvexHullShape cvs = new ConvexHullShape(vertices);
+		shape = cvs;
+	}
+	
+	public CollisionShape getCollisionShape() {
+		if(null == shape){
+			this.reduceHull();
+		}
+		return shape;
+	}
+	
+	public void setTransparent(){
+		//Vector3f zero = new Vector3f(0,0,0);
+		for(Mesh m : this.getMeshes()){
+			//m.setMaterial(new Material(zero,zero,zero,zero,0f,0f));
+			m.getMaterial().setAlpha(0.0f);
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package engine.terrain;
 
 import engine.Engine;
+import engine.importing.FileLoader;
 import engine.importing.Parser;
 import engine.importing.XGL_Parser;
 
@@ -32,7 +33,7 @@ public class Terrain {
 			terrain.expand();
 
 		for (int i = 0; i < terrain.getSize(); i++) {
-			ent = new Entity(0.0f, true);
+			ent = new Entity(0.0f, true, FileLoader.loadFile("resources/models/misc/box.xgl"));
 			ent.setModel(p.createModel());
 			ent.setPosition(terrain.get(i));
 			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);

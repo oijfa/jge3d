@@ -11,6 +11,8 @@ import org.lwjgl.util.glu.GLU;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 
+import engine.importing.FileLoader;
+
 public class Camera extends Entity {
 	/* Static class variables */
 	// Don't flip over, its confusing.
@@ -32,13 +34,13 @@ public class Camera extends Entity {
 	/* Constructors */
 	public Camera(Float mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass, collide);
+		super(mass, collide, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		cameraInit(defFocus);
 	}
 
 	public Camera(String _name, Double mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass.floatValue(), collide);
+		super(mass.floatValue(), collide, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		cameraInit(defFocus);
 	}
 
@@ -56,6 +58,8 @@ public class Camera extends Entity {
 		distance = 20.0f;
 		setUpVector(new Vector3f(0, 1, 0));
 		updatePosition();
+		
+		getModel().setTransparent();
 	}
 
 	public void focusOn(Entity newFocus) {
@@ -84,7 +88,7 @@ public class Camera extends Entity {
 	public Entity getFocus() {
 		if (focus == null) {
 			if (default_focus == null) {
-				default_focus = new Entity("def_focus", 0f, false);
+				default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
 			}
 			focus = default_focus;
 		}
@@ -92,7 +96,7 @@ public class Camera extends Entity {
 	}
 	
 	public void freeRoam() {
-		default_focus = new Entity("def_focus", 0f, false);
+		default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		focus = default_focus;
 	}
 

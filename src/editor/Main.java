@@ -10,6 +10,7 @@ import editor.window.PaletteWindow;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
+import engine.importing.FileLoader;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
@@ -47,8 +48,7 @@ public class Main implements ActionListener {
 		engine.addWindow(layer_menu, 200, 30);
 		// engine.addWindow(tool_box, 200, 300);
 
-		model = new Entity(1f, true);
-		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
+		model = new Entity(1f, true,  FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
 		model.setPosition(new Vector3f(0,0,0));
 		model.setGravity(new Vector3f(0,0,0));

@@ -7,7 +7,7 @@ void main() {
 		vec4(1.0,0.0,0.0,0.0),
 		vec4(0.0,1.0,0.0,0.0),
 		vec4(0.0,0.0,1.0,0.0),
-		vec4(0.0,4.0,0.0,1.0)
+		vec4(p.x,p.y,p.z,1.0)
 	);
 	*/
 	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex;

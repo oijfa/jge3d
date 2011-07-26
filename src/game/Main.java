@@ -7,6 +7,7 @@ import com.bulletphysics.collision.shapes.BoxShape;
 import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Player;
+import engine.importing.FileLoader;
 import engine.terrain.Terrain;
 
 import game.gui.RotationMenu;
@@ -26,7 +27,7 @@ public class Main {
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(75);
 
-		Player player1 = new Player(1.0f, 0.5f);
+		Player player1 = new Player(1.0f, 0.5f, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		player1.setProperty("name", "player1");
 		engine.addEntity(player1);
 

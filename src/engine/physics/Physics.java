@@ -1,32 +1,19 @@
 package engine.physics;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.BulletStats;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.dispatch.GhostPairCallback;
-import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 
-import com.bulletphysics.collision.shapes.OptimizedBvh;
-import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
-import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
-import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
-import com.bulletphysics.linearmath.Transform;
 
-import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.Player;
 import engine.entity.Entity.ObjectType;
@@ -43,8 +30,8 @@ public class Physics {
 	private DynamicsWorld dynamicsWorld;
 
 	// Used for mouse movement
-	private TypedConstraint pickedConstraint = null;
-	private CollisionObject pickedEntity = null;
+	//private TypedConstraint pickedConstraint = null;
+	//private CollisionObject pickedEntity = null;
 
 	// private List<CollisionShape> collisionShapes = new
 	// ArrayList<CollisionShape>();
@@ -113,6 +100,10 @@ public class Physics {
 		return deltaT;
 	}
 
+	public void setGravity(Vector3f gravity) {
+		dynamicsWorld.setGravity(gravity);
+	}
+	
 	public boolean addEntity(Entity e) {
 		boolean ret = false;
 
@@ -139,7 +130,8 @@ public class Physics {
 			dynamicsWorld.removeAction(((Player)e).getActor());
 		}
 	}
-
+	
+	/*
 	public void reduceHull(Entity e) {
 		int vertexcount = 0;
 		int trianglecount = 0;
@@ -151,8 +143,7 @@ public class Physics {
 		for (int i = 0; i < e.getModel().getMeshCount(); i++) {
 			trianglecount += e.getModel().getMesh(i).getFaceCount();
 			for (int j = 0; j < e.getModel().getMesh(i).getFaceCount(); j++) {
-				vertexcount += e.getModel().getMesh(i).getFace(j)
-					.getVertexCount();
+				vertexcount += e.getModel().getMesh(i).getFace(j).getVertexCount();
 			}
 		}
 
@@ -223,9 +214,9 @@ public class Physics {
 		meshshape.setOptimizedBvh(optimizedmesh);
 
 		// Override the original shape with the new one
-		e.getCollisionObject().setCollisionShape(meshshape);
+		e.getCollisionObject().setCollisionShape(meshshape); 
 	}
-
+	
 	public void drag(Camera camera, int state, Vector3f rayTo) {
 		if (state == 0) {
 			if (dynamicsWorld != null) {
@@ -281,7 +272,7 @@ public class Physics {
 			}
 		}
 	}
-
+	 
 	public void motionFunc(Camera camera, int x, int y) {
 		if (pickedConstraint != null) {
 			// move the constraint pivot
@@ -301,15 +292,5 @@ public class Physics {
 			}
 		}
 	}
-
-	public void setGravity(Vector3f gravity) {
-		dynamicsWorld.setGravity(gravity);
-	}
-
-	//public void updateOverlappingPairs() {
-		//Overlapping pair calculations for handling ghost objects
-		//broadphase.calculateOverlappingPairs(dispatcher);
-		//broadphase.getOverlappingPairCache();
-		//registerPairCacheAndDispatcher
-	//}
+ */
 }

@@ -22,7 +22,6 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
-import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -59,23 +58,24 @@ public class Entity {
 	private EntityList subEntities;
 
 	/* Constructors */
-	public Entity(float mass, boolean collide) {
-		initialSetup(mass, collide);
+	public Entity(float mass, boolean collide, Model model) {
+		initialSetup(mass, collide, model);
 	}
 
-	public Entity(String name, float mass, boolean collide) {
-		initialSetup(name, mass, collide);
+	public Entity(String name, float mass, boolean collide, Model model) {
+		initialSetup(name, mass, collide, model);
 	}
 	
 	// Sets the initial name of the body in the list
 	// Also sets some default options to the ent
-	private void initialSetup(float mass, boolean c) {
-		initialSetup("ent" + String.valueOf(num_entities), mass, c);
+	private void initialSetup(float mass, boolean c, Model model) {
+		initialSetup("ent" + String.valueOf(num_entities), mass, c, model);
 	}
 
-	private void initialSetup(String name, float mass, boolean c) {
+	private void initialSetup(String name, float mass, boolean c, Model model) {
 		//TODO: Generate this based on model instead
-		CollisionShape shape = new BoxShape(new Vector3f(1.0f,1.0f,1.0f));
+		this.model = model;
+		CollisionShape shape = model.getCollisionShape();
 		if(c){
 			createRigidBody(mass, shape);
 			object_type = ObjectType.rigidbody;

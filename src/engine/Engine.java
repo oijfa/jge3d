@@ -80,9 +80,8 @@ public class Engine {
 
 	/* Entity API */
 	public void addEntity(String name, String model_location) {
-		Entity ent = new Entity(1, true);
+		Entity ent = new Entity(1, true, FileLoader.loadFile(model_location));
 		ent.setProperty(Entity.NAME, name);
-		ent.setModel(FileLoader.loadFile(model_location));
 		this.addEntity(ent);
 	}
 
@@ -191,8 +190,7 @@ public class Engine {
 		// Check for close requests
 		if (Display.isCloseRequested()) {
 			finished.set(true);
-		} else if (entity_list != null
-			&& entity_list.renderQueueSize() > 0) {
+		} else if (entity_list != null && entity_list.renderQueueSize() > 0) {
 			entity_list.parseRenderQueue();
 		} else if (Display.isActive()) {
 			// The window is in the foreground, so we should play the

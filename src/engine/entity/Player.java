@@ -8,16 +8,18 @@ import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 
+import engine.render.Model;
+
 public class Player extends Entity {
 	private KinematicCharacterController player;
 
-	public Player(String name, float mass, float step_height) {
-		super(name, mass, false);
+	public Player(String name, float mass, float step_height, Model model) {
+		super(name, mass, false, model);
 		initPlayer(step_height);
 	}
 
-	public Player(float mass, float step_height) {
-		super(mass, false);
+	public Player(float mass, float step_height, Model model) {
+		super(mass, false, model);
 		initPlayer(step_height);
 	}
 
