@@ -12,7 +12,8 @@ public class EntityCallbackFunctions {
 	private static Boolean hasFired = false;
 	public static void explode(Entity source, Entity collided_with, Engine engine){
 		if(!hasFired) {
-			engine.getEntityList().getItem("model4").applyImpulse(new Vector3f(0,5,0), new Vector3f(0,0,0));
+			engine.getEntity("model4").applyImpulse(new Vector3f(0,15,0), new Vector3f(0, 0, 0));
+			engine.getEntity("model4").activate();
 			hasFired=true;
 		}
 	}

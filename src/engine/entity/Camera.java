@@ -12,6 +12,7 @@ import org.lwjgl.util.glu.GLU;
 import com.bulletphysics.collision.shapes.CollisionShape;
 
 import engine.importing.FileLoader;
+import engine.render.Model;
 
 public class Camera extends Entity {
 	/* Static class variables */
@@ -32,9 +33,8 @@ public class Camera extends Entity {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Float mass, CollisionShape c, boolean collide,
-		Entity defFocus) {
-		super(mass, collide, FileLoader.loadFile("resources/models/misc/box.xgl"));
+	public Camera(Float mass, boolean collide, Model model, Entity defFocus) {
+		super(mass, collide, model);
 		cameraInit(defFocus);
 	}
 

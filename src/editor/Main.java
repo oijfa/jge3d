@@ -12,8 +12,6 @@ import engine.Engine;
 import engine.entity.*;
 import engine.importing.FileLoader;
 
-import com.bulletphysics.collision.shapes.BoxShape;
-
 public class Main implements ActionListener {
 	// A filthy hack to get around the combobox sending to events on select
 	private Boolean combobox_hack = true;
@@ -53,7 +51,7 @@ public class Main implements ActionListener {
 		model.setPosition(new Vector3f(0,0,0));
 		model.setGravity(new Vector3f(0,0,0));
 
-		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), true, model);
+		camera = new Camera(1f,true, FileLoader.loadFile("resources/models/misc/box.xgl"), model);
 		camera.setProperty(Entity.NAME, "camera");
 		camera.setPosition(new Vector3f(0,0,0));
 		camera.setDistance(5.0f);

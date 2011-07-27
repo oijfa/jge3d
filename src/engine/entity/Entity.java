@@ -158,6 +158,7 @@ public class Entity {
 		try {
 			Vector3f pos = ((Vector3f) p);
 			Transform trans = collision_object.getWorldTransform(new Transform());
+			trans.setIdentity();
 			trans.origin.set(pos);
 			collision_object.setWorldTransform(trans);
 

@@ -6,8 +6,6 @@ import engine.Engine;
 import engine.entity.*;
 import engine.importing.FileLoader;
 
-import com.bulletphysics.collision.shapes.BoxShape;
-
 public class Main {
 
 	private Engine engine;
@@ -31,32 +29,36 @@ public class Main {
 
 	public Main() {
 		engine = new Engine();
-
+		
+		/*
+		Terrain terrain = new Terrain(engine);
+		terrain.createTerrain(20);
+		terrain.lower(5);
+		*/
 		player = new Player(1.0f, 0.5f,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		player.setProperty(Entity.NAME, "player");
 		player.setPosition(new Vector3f(5, 3, 0));
 		
-		model = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/test.xgl"));
+		model = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model1");
 		model.setPosition(new Vector3f(6, 0, 0));
-		//model.applyImpulse(new Vector3f(-2,0,0), new Vector3f(0,0,0));
 
-		model2 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box2.xgl"));
+		model2 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/export.xgl"));
 		model2.setProperty(Entity.NAME, "model2");
 		model2.setPosition(new Vector3f(-6, 0, 0));
 		model2.applyImpulse(new Vector3f(2,0,0), new Vector3f(0,0,0));
 		
-		model3 = new Entity(1f, false,FileLoader.loadFile("resources/models/misc/box.xgl"));
+		model3 = new Entity(1f, false,FileLoader.loadFile("resources/models/misc/singlebox.xgl"));
 		model3.setProperty(Entity.NAME, "model3");
 		model3.setPosition(new Vector3f(0, 0, 0));
 		model3.addCollisionFunctions("explode");
-		//model3.applyImpulse(new Vector3f(-2,0,0), new Vector3f(-2,0,0));
-	
-		model4 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box.xgl"));
+		//model.getModel().setTransparent();
+
+		model4 = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/test.xgl"));
 		model4.setProperty(Entity.NAME, "model4");
 		model4.setPosition(new Vector3f(0, 0, -6));
 				
-		camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)), false, player);
+		camera = new Camera(1f, false, FileLoader.loadFile("resources/models/misc/box.xgl"), model);
 		camera.setProperty(Entity.NAME, Camera.CAMERA_NAME);
 		camera.setDistance(25f);
 		camera.setPosition(new Vector3f(0, 0, 6));
@@ -69,8 +71,6 @@ public class Main {
 		engine.addEntity(player);
 		
 		camera.focusOn(model);
-		
-		engine.removeEntity("model");
 	}
 
 	public void runMultiThread() {

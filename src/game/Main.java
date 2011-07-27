@@ -2,8 +2,6 @@ package game;
 
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.collision.shapes.BoxShape;
-
 import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Player;
@@ -31,7 +29,7 @@ public class Main {
 		player1.setProperty("name", "player1");
 		engine.addEntity(player1);
 
-		Camera camera = new Camera(1f, new BoxShape(new Vector3f(1, 1, 1)),false, player1);
+		Camera camera = new Camera(1f, false, FileLoader.loadFile("resources/models/misc/box.xgl"), player1);
 		camera.setProperty("name", "camera");
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.setDistance(20f);

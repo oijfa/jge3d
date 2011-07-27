@@ -443,4 +443,8 @@ public class Model {
 			m.getMaterial().setAlpha(0.0f);
 		}
 	}
+	
+	public void setCollisionShape(CollisionShape shape) {
+		this.shape = shape;		
+	}
 }

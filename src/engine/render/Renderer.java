@@ -138,7 +138,7 @@ public class Renderer {
 
 		// Set default openGL for drawing
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -165,10 +165,10 @@ public class Renderer {
 
 		// Enable color materials (hopefully will speedup since we don't call
 		// glMaterial anymore this way)
-		GL11.glColorMaterial(
-			GL11.GL_FRONT_AND_BACK,
-			GL11.GL_AMBIENT_AND_DIFFUSE
-		);
+		//GL11.glColorMaterial(
+		//	GL11.GL_FRONT_AND_BACK,
+		//	GL11.GL_AMBIENT_AND_DIFFUSE
+		//);
 		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
