@@ -2,11 +2,13 @@ varying vec4 color;
 varying float diffuse;
 
 void main(){
-  // Setting Each Pixel To Red
-  //gl_FragColor.rbga = vec4(1, 1, 0, 1.0);
-  if(color.a == 0.0) {
-  	discard;
-  }
-  //gl_FragColor = color;   // Set the output color of our current pixel
-  gl_FragColor = gl_Color * diffuse;
+	//if the object is transparent then don't bother rendering
+	if(color.a == 0.0) {
+  		discard;
+  	}
+  	
+  	//multiply through by diffuse to set the dark portions of the object
+  	gl_FragColor = gl_Color * color * diffuse;
+  	//set alpha back to its original value or you will have the alpha channel set to the diffuse value
+  	gl_FragColor.a = color.a;
 }

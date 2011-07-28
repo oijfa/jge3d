@@ -37,16 +37,11 @@ public class Renderer {
 								// are zoomed in.
 
 	// Default light (needs turning into an entity
-	private float lightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f }; // Ambient Light
-																// Values ( NEW
-																// )
-	private float lightDiffuse[] = { 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f,
-														// 1.0f }; // Diffuse
-														// Light Values ( NEW )
+	private float lightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	private float lightDiffuse[] = { 1f, 1f, 1f, 1f };
 	private float lightSpecular[] = { 1f, 1f, 1f, 1.0f };
-	private float lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f }; // Light
-																// Position (
-																// NEW )
+	private float lightPosition[] = { 0.0f, 5.0f, 0.0f, 1.0f };
+	
 	private Canvas display_parent;
 
 	public Renderer(EntityList objectList) {
@@ -68,14 +63,6 @@ public class Renderer {
 		Vector3f up;
 
 		if (camera != null) {
-			/*
-			System.out.println("Before: " + camera.getPosition().toString());
-			System.out.println("Before Focus: " + camera.getFocusPosition().toString());
-			
-
-			System.out.println("After: " + camera.getPosition().toString());
-			System.out.println("After Focus: " + camera.getFocusPosition().toString());
-			*/
 			camera.updatePosition();
 			
 			// Get its new position
