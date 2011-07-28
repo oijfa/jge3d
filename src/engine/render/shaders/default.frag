@@ -1,4 +1,5 @@
 varying vec4 color;
+varying float diffuse;
 
 void main(){
   // Setting Each Pixel To Red
@@ -6,5 +7,6 @@ void main(){
   if(color.a == 0.0) {
   	discard;
   }
-  gl_FragColor = color;
+  //gl_FragColor = color;   // Set the output color of our current pixel
+  gl_FragColor = gl_Color * diffuse;
 }

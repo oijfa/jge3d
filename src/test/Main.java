@@ -5,6 +5,7 @@ import javax.vecmath.Vector3f;
 import engine.Engine;
 import engine.entity.*;
 import engine.importing.FileLoader;
+import engine.terrain.Terrain;
 
 public class Main {
 
@@ -30,14 +31,15 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 		
-		/*
+		
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(20);
-		terrain.lower(5);
-		*/
+		terrain.lower(10);
+		
 		player = new Player(1.0f, 0.5f,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		player.setProperty(Entity.NAME, "player");
 		player.setPosition(new Vector3f(5, 3, 0));
+		player.setDamping(0.5f, 0.2f);
 		
 		model = new Entity(1f, true,FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model1");
@@ -70,7 +72,7 @@ public class Main {
 		engine.addEntity(camera);
 		engine.addEntity(player);
 		
-		camera.focusOn(model);
+		camera.focusOn(player);
 	}
 
 	public void runMultiThread() {
