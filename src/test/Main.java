@@ -15,6 +15,7 @@ public class Main {
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
+	private Entity model5;
 	private Camera camera;
 
 	public static void main(String args[]) {
@@ -35,40 +36,39 @@ public class Main {
 		engine.addModel("test", "resources/models/misc/test.xgl");
 		engine.addModel("export", "resources/models/misc/export.xgl");
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
+		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 		
 		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(25);
-		terrain.lower(10);
+		terrain.createTerrain(20);
+		terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");
 		player.setPosition(new Vector3f(5, 3, 0));
-		player.setDamping(0.5f, 0.2f);
 		
-		engine.addEntity("model1", 1.0f, true, "box", "default");
-		model = engine.getEntity("model1");
+		model = engine.addEntity("model1", 1.0f, true, "box", "default");
 		model.setProperty(Entity.NAME, "model1");
 		model.setPosition(new Vector3f(6, 0, 0));
 
-		engine.addEntity("model2", 1f, true, "export", "default");
-		model2 = engine.getEntity("model2");
+		model2 = engine.addEntity("model2", 1f, true, "export", "default");
 		model2.setPosition(new Vector3f(-6, 0, 0));
 		model2.applyImpulse(new Vector3f(2,0,0), new Vector3f(0,0,0));
 		
-		engine.addEntity("model3", 1f, false, "singlebox", "default");
-		model3 = engine.getEntity("model3");
+		model3 = engine.addEntity("model3", 1f, false, "singlebox", "default");
 		model3.setPosition(new Vector3f(0, 0, 0));
 		model3.addCollisionFunctions("explode");
 		//model3.getModel().setTransparent();
 
-		engine.addEntity("model4", 1f, true, "test", "default");
-		model4 = engine.getEntity("model4");
+		model4 = engine.addEntity("model4", 1f, true, "test", "default");
 		model4.setProperty(Entity.NAME, "model4");
 		model4.setPosition(new Vector3f(0, 0, -6));
+		
+		model5 = engine.addEntity("model5", 1f, true, "legoman", "default");
+		model5.setProperty(Entity.NAME, "model5");
+		model5.setPosition(new Vector3f(0, -10, -15));
 				
-		engine.addCamera(1f, false, "box2");
-		camera = engine.getCamera();
-		camera.setDistance(25f);
+		camera = engine.addCamera(1f, false, "box2");
+		camera.setDistance(40f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(player);
 	}

@@ -94,10 +94,12 @@ public class Engine {
 	}
 
 	/* Entity API */
-	public void addEntity(String name, float mass, boolean collidable, String model_name, String shader_name) {
+	public Entity addEntity(String name, float mass, boolean collidable, String model_name, String shader_name) {
 		Entity ent = new Entity(mass, collidable, models.get(model_name), shaders.get(shader_name));
 		ent.setProperty(Entity.NAME, name);
 		this.addEntity(ent);
+		
+		return ent;
 	}
 
 	public void addEntity(Entity ent) {
@@ -245,16 +247,17 @@ public class Engine {
 		}
 	}
 
-  public boolean addCamera(float mass, boolean collidable, String model_name) {
-    addEntity(new Camera(mass, collidable, models.get(model_name)));
-    return true;
+  public Camera addCamera(float mass, boolean collidable, String model_name) {
+	Camera camera = new Camera(mass, collidable, models.get(model_name));
+	addEntity(camera);
+    return camera;
   }
 
-  public boolean addPlayer(String name, float mass, float step_height, String model_name, String shader_name) {
+  public Player addPlayer(String name, float mass, float step_height, String model_name, String shader_name) {
     Player player = new Player(mass, step_height, models.get(model_name), shaders.get(shader_name));
     player.setProperty(Entity.NAME, name);
     addEntity(player);
-    return true;
+    return player;
   }
   
   public boolean addModel(String name, String location){

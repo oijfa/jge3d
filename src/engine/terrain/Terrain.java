@@ -1,5 +1,7 @@
 package engine.terrain;
 
+import javax.vecmath.Vector3f;
+
 import engine.Engine;
 
 public class Terrain {
@@ -23,9 +25,10 @@ public class Terrain {
 		}
 	}
 	
-	public void lower(int down) {
+	public void setPosition(Vector3f pos) {
 		for (int i = 0; i < terrain.getSize(); i++) {
-			terrain.get(i).z -= down;
+			terrain.get(i).add(pos);
+			engine.getEntity("terrain"+i).setPosition(terrain.get(i));
 		}
 	}
 
