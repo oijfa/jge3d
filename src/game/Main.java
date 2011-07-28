@@ -25,9 +25,8 @@ public class Main {
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(75);
 
-		Player player1 = new Player(1.0f, 0.5f, FileLoader.loadFile("resources/models/misc/box.xgl"));
-		player1.setProperty("name", "player1");
-		engine.addEntity(player1);
+		engine.addPlayer("player1", 1.0f, 0.5f, "resources/models/misc/box.xgl", "default");
+		Player player1 = (Player) engine.getEntity("player1");
 
 		Camera camera = new Camera(1f, false, FileLoader.loadFile("resources/models/misc/box.xgl"), player1);
 		camera.setProperty("name", "camera");

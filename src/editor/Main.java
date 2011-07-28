@@ -10,7 +10,6 @@ import editor.window.PaletteWindow;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
-import engine.importing.FileLoader;
 
 public class Main implements ActionListener {
 	// A filthy hack to get around the combobox sending to events on select
@@ -46,19 +45,17 @@ public class Main implements ActionListener {
 		engine.addWindow(layer_menu, 200, 30);
 		// engine.addWindow(tool_box, 200, 300);
 
-		model = new Entity(1f, true,  FileLoader.loadFile("resources/models/misc/box.xgl"));
-		model.setProperty(Entity.NAME, "model");
+		engine.addEntity("model", 1f, true, "resources/models/misc/box.xgl", "default");
+		model = engine.getEntity("model");
 		model.setPosition(new Vector3f(0,0,0));
 		model.setGravity(new Vector3f(0,0,0));
 
-		camera = new Camera(1f,true, FileLoader.loadFile("resources/models/misc/box.xgl"), model);
-		camera.setProperty(Entity.NAME, "camera");
+		engine.addCamera(1f,true, "resources/models/misc/box.xgl");
+		camera = engine.getCamera();
+		camera.focusOn(model);
 		camera.setPosition(new Vector3f(0,0,0));
 		camera.setDistance(5.0f);
 		camera.setGravity(new Vector3f(0,0,0));
-
-		engine.addEntity(model);
-		engine.addEntity(camera);
 	}
 
 	public void run() {
