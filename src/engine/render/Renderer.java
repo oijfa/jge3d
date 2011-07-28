@@ -18,6 +18,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
+import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
@@ -37,10 +38,10 @@ public class Renderer {
 								// are zoomed in.
 
 	// Default light (needs turning into an entity
-	private float lightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	private float lightDiffuse[] = { 1f, 1f, 1f, 1f };
-	private float lightSpecular[] = { 1f, 1f, 1f, 1.0f };
-	private float lightPosition[] = { 0.0f, 5.0f, 0.0f, 1.0f };
+	private float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	private float lightDiffuse[] = { 0.3f, 0.3f, 0.3f, 1f };
+	private float lightSpecular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	private float lightPosition[] = { 0.0f, 10.0f, 0.0f, 1.0f };
 	
 	private Canvas display_parent;
 
@@ -96,14 +97,13 @@ public class Renderer {
 	}
 
 	public void initGL() {
-
 		// Setup Display
 		try {
 			if (display_parent != null) {
 				Display.setParent(display_parent);
 			}
 			Display.setDisplayMode(new DisplayMode(900, 900));
-			Display.create();
+			Display.create(new PixelFormat(24,8,24,0,0));
 			Display.setTitle("JGE3d");
 
 			// Create a fullscreen window with 1:1 orthographic 2D projection
@@ -173,29 +173,31 @@ public class Renderer {
 		// Create some debug lights
 		// Setup The Ambient Light
 		GL11.glLight(
-			GL11.GL_LIGHT1, 
+			GL11.GL_LIGHT0, 
 			GL11.GL_AMBIENT, 
 			(FloatBuffer) temp.asFloatBuffer().put(lightAmbient).flip()
 		);
 		// Setup The Diffuse Light
 		GL11.glLight(
-			GL11.GL_LIGHT1, 
+			GL11.GL_LIGHT0, 
 			GL11.GL_DIFFUSE, 
 			(FloatBuffer) temp.asFloatBuffer().put(lightDiffuse).flip()
 		);
 		// Setup The Specular Light
 		GL11.glLight(
-			GL11.GL_LIGHT1, 
+			GL11.GL_LIGHT0, 
 			GL11.GL_SPECULAR, 
 			(FloatBuffer) temp.asFloatBuffer().put(lightSpecular).flip()
 		);
 		// Position The Light
 		GL11.glLight(
-			GL11.GL_LIGHT1, 
+			GL11.GL_LIGHT0, 
 			GL11.GL_POSITION, 
 			(FloatBuffer) temp.asFloatBuffer().put(lightPosition).flip()
 		);
-		GL11.glEnable(GL11.GL_LIGHT1);
+		GL11.glEnable(GL11.GL_LIGHT0);
+		
+		GL11.glEnable(GL11.GL_NORMALIZE);
 	}
 
 	public void setPerspective() {

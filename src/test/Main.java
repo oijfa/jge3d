@@ -33,7 +33,7 @@ public class Main {
 		
 		
 		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(20);
+		terrain.createTerrain(15);
 		terrain.lower(10);
 		
 		player = new Player(1.0f, 0.5f,FileLoader.loadFile("resources/models/misc/box.xgl"));

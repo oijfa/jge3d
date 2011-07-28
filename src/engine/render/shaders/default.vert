@@ -1,6 +1,7 @@
 uniform mat4 transform;
 varying vec4 color;
-varying float diffuse;
+varying vec3 normal;
+varying vec3 vertex;
 
 void main() {
 	/*
@@ -11,19 +12,16 @@ void main() {
 		vec4(p.x,p.y,p.z,1.0)
 	);
 	*/
-	 // Calculate the normal value for this vertex, in world coordinates
-    vec3 vertex_normal = normalize(gl_NormalMatrix * gl_Normal);
-    
-    // Calculate the light position for this vertex
-    vec3 vertex_light_position = gl_LightSource[0].position.xyz;
-    
-    // Set the diffuse value (darkness). 
-    //This is done with a dot product between the normal and the light
-    diffuse = max(dot(vertex_normal, vertex_light_position), 0.0);
+	
+	//Calculate vertex position
+	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex;
+	vertex = vec3(gl_ModelViewMatrix * transform * gl_Vertex);
+	
+	// Calculate the normal value for this vertex, in world coordinates
+    normal = normalize(gl_NormalMatrix * gl_Normal);
 
     // Set the front color to the color passed through with glColor
-    gl_FrontColor = gl_Color;
-    
-	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex;
+    //gl_FrontColor = gl_Color;
+	
 	color = gl_Color;
 }
