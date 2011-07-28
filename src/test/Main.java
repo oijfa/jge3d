@@ -31,12 +31,13 @@ public class Main {
 		engine = new Engine();
 		
 		engine.addModel("box", "resources/models/misc/box.xgl");
+		engine.addModel("box2", "resources/models/misc/box2.xgl");
 		engine.addModel("test", "resources/models/misc/test.xgl");
 		engine.addModel("export", "resources/models/misc/export.xgl");
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
 		
 		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(15);
+		terrain.createTerrain(25);
 		terrain.lower(10);
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
@@ -58,14 +59,14 @@ public class Main {
 		model3 = engine.getEntity("model3");
 		model3.setPosition(new Vector3f(0, 0, 0));
 		model3.addCollisionFunctions("explode");
-		//model.getModel().setTransparent();
+		//model3.getModel().setTransparent();
 
 		engine.addEntity("model4", 1f, true, "test", "default");
 		model4 = engine.getEntity("model4");
 		model4.setProperty(Entity.NAME, "model4");
 		model4.setPosition(new Vector3f(0, 0, -6));
 				
-		engine.addCamera(1f, false, "box");
+		engine.addCamera(1f, false, "box2");
 		camera = engine.getCamera();
 		camera.setDistance(25f);
 		camera.setPosition(new Vector3f(0, 0, 6));
