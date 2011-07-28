@@ -88,7 +88,6 @@ public class Shader {
          * associate the vertex code String with the created vertex shader
          * and compile
          */
-         vertexCode = "void main(){gl_Position=gl_ModelViewProjectionMatrix*gl_Vertex;}";
          ARBShaderObjects.glShaderSourceARB(vertShader, vertexCode);
          ARBShaderObjects.glCompileShaderARB(vertShader);
 
