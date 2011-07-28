@@ -9,17 +9,18 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 
 import engine.render.Model;
+import engine.render.Shader;
 
 public class Player extends Entity {
 	private KinematicCharacterController player;
 
-	public Player(String name, float mass, float step_height, Model model) {
-		super(name, mass, false, model);
+	public Player(String name, float mass, float step_height, Model model, Shader shader) {
+		super(name, mass, false, model, shader);
 		initPlayer(step_height);
 	}
 
-	public Player(float mass, float step_height, Model model) {
-		super(mass, false, model);
+	public Player(float mass, float step_height, Model model, Shader shader) {
+		super(mass, false, model, shader);
 		initPlayer(step_height);
 	}
 

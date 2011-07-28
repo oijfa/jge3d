@@ -3,6 +3,7 @@ package engine;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
@@ -13,18 +14,24 @@ import de.matthiasmann.twl.ResizableFrame;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
+import engine.entity.Player;
 import engine.importing.FileLoader;
 import engine.input.KeyMap;
 import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
+import engine.render.Model;
 import engine.render.Renderer;
+import engine.render.Shader;
 
 import com.bulletphysics.collision.dispatch.GhostObject;
 
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
 	AtomicBoolean finished;
+	
+	private final HashMap<String,Shader> shaders;
+	private final HashMap<String,Model> models;
 
 	private final Physics physics;
 	private final Renderer renderer;
@@ -70,6 +77,14 @@ public class Engine {
 		renderer = new Renderer(entity_list);
 		renderer.initGL();
 		
+		models = new HashMap<String,Model>();
+		shaders = new HashMap<String,Shader>();
+		
+		shaders.put(
+		    "default",
+		    new Shader()
+		);
+		
 		addKeyMap("default.xml");
 	}
 
@@ -79,8 +94,8 @@ public class Engine {
 	}
 
 	/* Entity API */
-	public void addEntity(String name, String model_location) {
-		Entity ent = new Entity(1, true, FileLoader.loadFile(model_location));
+	public void addEntity(String name, float mass, boolean collidable, String model_name, String shader_name) {
+		Entity ent = new Entity(mass, collidable, models.get(model_name), shaders.get(shader_name));
 		ent.setProperty(Entity.NAME, name);
 		this.addEntity(ent);
 	}
@@ -99,6 +114,11 @@ public class Engine {
 	public Entity getEntity(String name) {
 		return entity_list.getItem(name);
 	}
+	
+	public Camera getCamera() {
+    // TODO Auto-generated method stub
+    return (Camera) getEntity(Camera.CAMERA_NAME);
+  }
 
 	public void removeEntity(String name) {
 		entity_list.removeEntity(name);
@@ -150,14 +170,17 @@ public class Engine {
 		}
 	}
 	
-	public void addKeyMap(String filename){
+	public boolean addKeyMap(String filename){
+	  boolean ret = false;
 		try {
 			renderer.getWindow().setKeyMap(new KeyMap(filename,entity_list));
+			ret = true;
 		} catch (KeyMapException e) {
 			// TODO Do something if fails?
 			System.out.println("Setting KeyMap failed");
 			e.printStackTrace();
 		}
+		return ret;
 	}
 	
 	private void handleGhostCollisions() {
@@ -221,4 +244,34 @@ public class Engine {
 			handleGhostCollisions();
 		}
 	}
+
+  public boolean addCamera(float mass, boolean collidable, String model_name) {
+    addEntity(new Camera(mass, collidable, models.get(model_name)));
+    return true;
+  }
+
+  public boolean addPlayer(String name, float mass, float step_height, String model_name, String shader_name) {
+    Player player = new Player(mass, step_height, models.get(model_name), shaders.get(shader_name));
+    player.setProperty(Entity.NAME, name);
+    addEntity(player);
+    return true;
+  }
+  
+  public boolean addModel(String name, String location){
+    boolean ret = false;
+    if(!models.keySet().contains(name)){
+      models.put(name, FileLoader.loadFile(location));
+      ret = true;
+    }
+    return ret;
+  }
+  
+  public boolean addShader(String name, String location){
+    boolean ret = false;
+    if(!shaders.keySet().contains(name)){
+      shaders.put(name, new Shader(location));
+      ret = true;
+    }
+    return ret;
+  }
 }

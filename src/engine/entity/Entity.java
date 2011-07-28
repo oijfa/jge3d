@@ -11,6 +11,7 @@ package engine.entity;
 
 import engine.Engine;
 import engine.render.Model;
+import engine.render.Shader;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -58,21 +59,21 @@ public class Entity {
 	private EntityList subEntities;
 
 	/* Constructors */
-	public Entity(float mass, boolean collide, Model model) {
-		initialSetup(mass, collide, model);
+	public Entity(float mass, boolean collide, Model model, Shader shader) {
+		initialSetup(mass, collide, model, shader);
 	}
 
-	public Entity(String name, float mass, boolean collide, Model model) {
-		initialSetup(name, mass, collide, model);
+	public Entity(String name, float mass, boolean collide, Model model, Shader shader) {
+		initialSetup(name, mass, collide, model, shader);
 	}
 	
 	// Sets the initial name of the body in the list
 	// Also sets some default options to the ent
-	private void initialSetup(float mass, boolean c, Model model) {
-		initialSetup("ent" + String.valueOf(num_entities), mass, c, model);
+	private void initialSetup(float mass, boolean c, Model model, Shader shader) {
+		initialSetup("ent" + String.valueOf(num_entities), mass, c, model, shader);
 	}
 
-	private void initialSetup(String name, float mass, boolean c, Model model) {
+	private void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
 		//TODO: Generate this based on model instead
 		this.model = model;
 		CollisionShape shape = model.getCollisionShape();

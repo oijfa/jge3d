@@ -9,9 +9,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.bulletphysics.collision.shapes.CollisionShape;
-
-import engine.importing.FileLoader;
 import engine.render.Model;
 
 public class Camera extends Entity {
@@ -33,22 +30,16 @@ public class Camera extends Entity {
 	private volatile Entity default_focus;
 
 	/* Constructors */
+	public Camera(float mass, boolean collidable, Model model) {
+    this(mass, collidable, model, null);
+  }
+	
 	public Camera(Float mass, boolean collide, Model model, Entity defFocus) {
-		super(mass, collide, model);
+		super(mass, collide, model, null);
 		cameraInit(defFocus);
 	}
 
-	public Camera(String _name, Double mass, CollisionShape c, boolean collide,
-		Entity defFocus) {
-		super(mass.floatValue(), collide, FileLoader.loadFile("resources/models/misc/box.xgl"));
-		cameraInit(defFocus);
-	}
-
-	private void cameraInit(Entity defFocus) {
-		if (defFocus == null) { 
-			throw new Error("Can't initialize camera's default focus to null"); 
-		}
-
+  private void cameraInit(Entity defFocus) {
 		default_focus = defFocus;
 		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
@@ -86,19 +77,15 @@ public class Camera extends Entity {
 	}
 
 	public Entity getFocus() {
-		if (focus == null) {
-			if (default_focus == null) {
-				default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
-			}
-			focus = default_focus;
-		}
 		return focus;
 	}
 	
+	/*
 	public void freeRoam() {
 		default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		focus = default_focus;
 	}
+	*/
 
 	/* Mutators */
 	private void setUpVector(Vector3f newUp) {
