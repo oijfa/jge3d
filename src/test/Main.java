@@ -30,6 +30,8 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 		
+		engine.addShader("default", "engine/render/shaders/default");
+		
 		engine.addModel("box", "resources/models/misc/box.xgl");
 		engine.addModel("test", "resources/models/misc/test.xgl");
 		engine.addModel("export", "resources/models/misc/export.xgl");
