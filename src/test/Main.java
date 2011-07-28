@@ -4,6 +4,7 @@ import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.*;
+import engine.stars.Stars;
 import engine.terrain.Terrain;
 
 public class Main {
@@ -39,8 +40,11 @@ public class Main {
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 		
 		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(20);
+		terrain.createTerrain(10);
 		terrain.setPosition(new Vector3f(0,-10, 0));
+		
+		//Make some parallax stars
+		new Stars(engine,1000,10000,200,5,400);
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");
@@ -71,6 +75,8 @@ public class Main {
 		camera.setDistance(40f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(player);
+		
+		System.out.print(engine.getEntityList().getEntities().size());
 	}
 
 	public void runMultiThread() {
