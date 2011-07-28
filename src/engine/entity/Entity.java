@@ -9,13 +9,17 @@
  */
 package engine.entity;
 
-import engine.importing.pieces.Model;
+import engine.Engine;
+import engine.render.Model;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -31,17 +35,21 @@ public class Entity {
 	private Model model;
 	private boolean shouldDraw = true;
 
+	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
+	
 	public static enum ObjectType {
-		ghost, rigidbody
+		ghost, rigidbody, actor
 	};
 
-	private ObjectType object_type;
+	protected ObjectType object_type;
 
 	/* Properties the engine uses a lot */
-	public static String NAME = "name";
+	public static final String NAME = "name";
+	public static final String COLLIDABLE = "collidable";
+	public static final String TIME_TO_LIVE = "TTL";
 
 	// Required keys
-	private String[] reqKeys = { "name", "collidable", "TTL" };
+	private String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -50,26 +58,37 @@ public class Entity {
 	private EntityList subEntities;
 
 	/* Constructors */
-	public Entity(float mass, CollisionShape shape, boolean collide) {
-		if (collide) {
-			createRigidBody(mass, shape);
-			object_type = ObjectType.rigidbody;
-		} else {
-			createGhostBody(mass, shape);
-			object_type = ObjectType.ghost;
-		}
-		initialSetup(collide);
+	public Entity(float mass, boolean collide, Model model) {
+		initialSetup(mass, collide, model);
 	}
 
-	public Entity(String name, float mass, CollisionShape shape, boolean collide) {
-		if (collide) {
+	public Entity(String name, float mass, boolean collide, Model model) {
+		initialSetup(name, mass, collide, model);
+	}
+	
+	// Sets the initial name of the body in the list
+	// Also sets some default options to the ent
+	private void initialSetup(float mass, boolean c, Model model) {
+		initialSetup("ent" + String.valueOf(num_entities), mass, c, model);
+	}
+
+	private void initialSetup(String name, float mass, boolean c, Model model) {
+		//TODO: Generate this based on model instead
+		this.model = model;
+		CollisionShape shape = model.getCollisionShape();
+		if(c){
 			createRigidBody(mass, shape);
 			object_type = ObjectType.rigidbody;
-		} else {
+		}else{
 			createGhostBody(mass, shape);
 			object_type = ObjectType.ghost;
 		}
-		initialSetup(name, collide);
+		
+		num_entities++;
+		data = new HashMap<String, Object>();
+		data.put("name", name);
+		data.put("collidable", c);
+		data.put("TTL", 0);
 	}
 
 	/* Initializing segments */
@@ -94,6 +113,9 @@ public class Entity {
 
 		// This is extremely important; if you forget this
 		// then nothing will rotate
+		Transform identity = new Transform();
+		identity.setIdentity();
+		((RigidBody) collision_object).setWorldTransform(identity);
 		((RigidBody) collision_object).setMassProps(mass, localInertia);
 		((RigidBody) collision_object).updateInertiaTensor();
 	}
@@ -110,26 +132,16 @@ public class Entity {
 		}
 
 		ghost.setCollisionShape(shape);
+		ghost.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);
 		// This is extremely important; if you forget this
 		// then nothing will rotate
 		// ghost.setMassProps(mass, localInertia);
 		// ghost.updateInertiaTensor();
-
+		Transform identity = new Transform();
+		identity.setIdentity();
+		collision_object = new CollisionObject();
 		collision_object = ghost;
-	}
-
-	// Sets the initial name of the body in the list
-	// Also sets some default options to the ent
-	private void initialSetup(boolean c) {
-		initialSetup("ent" + String.valueOf(num_entities), c);
-	}
-
-	private void initialSetup(String name, boolean c) {
-		num_entities++;
-		data = new HashMap<String, Object>();
-		data.put("name", name);
-		data.put("collidable", c);
-		data.put("TTL", 0);
+		collision_object.setWorldTransform(identity);
 	}
 
 	/*
@@ -145,15 +157,16 @@ public class Entity {
 		 */
 		try {
 			Vector3f pos = ((Vector3f) p);
-			Transform trans = collision_object
-				.getWorldTransform(new Transform());
+			Transform trans = collision_object.getWorldTransform(new Transform());
+			trans.setIdentity();
 			trans.origin.set(pos);
 			collision_object.setWorldTransform(trans);
 
 		} catch (Exception e) {
-			System.out
-				.print(p.toString()
-					+ "<< Possible Incorrect data type for position, must be Vector3f\n");
+			System.out.print(
+				p.toString()
+				+ "<< Possible Incorrect data type for position, must be Vector3f\n"
+			);
 			e.printStackTrace();
 		}
 	}
@@ -226,10 +239,10 @@ public class Entity {
 	public void draw() {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
-		if (shouldDraw && this.getObjectType() == ObjectType.rigidbody) {
-			model.draw(collision_object);
-		} else {
-			// System.out.println("Method [draw] not supported for ghost object");
+		if (shouldDraw) {
+			if(model != null) {
+				model.draw(collision_object);
+			}
 		}
 	}
 
@@ -238,17 +251,19 @@ public class Entity {
 	}
 
 	public void setGravity(Vector3f gravity) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.setGravity(gravity);
-		else System.out
-			.println("Method [setGravity] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).setGravity(gravity);
+		}else {
+			System.out.println("Method [setGravity] not supported for ghost object");
+		}
 	}
 
 	public void applyImpulse(Vector3f impulse, Vector3f position) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.applyImpulse(impulse, position);
-		else System.out
-			.println("Method [applyImpulse] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).applyImpulse(impulse, position);
+		} else {
+			System.out.println("Method [applyImpulse] not supported for ghost object");
+		}
 	}
 
 	public CollisionObject getCollisionObject() {
@@ -256,10 +271,11 @@ public class Entity {
 	}
 
 	public void setMotionState(DefaultMotionState defaultMotionState) {
-		if (object_type == ObjectType.rigidbody) ((RigidBody) collision_object)
-			.setMotionState(defaultMotionState);
-		else System.out
-			.println("Method [setActivation] not supported for ghost object");
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).setMotionState(defaultMotionState);
+		} else { 
+			System.out.println("Method [setActivation] not supported for ghost object");
+		}
 	}
 
 	public ObjectType getObjectType() {
@@ -292,8 +308,9 @@ public class Entity {
 		if (object_type == ObjectType.rigidbody) {
 			((RigidBody) collision_object).setAngularFactor(factor);
 			((RigidBody) collision_object).setAngularVelocity(velocity);
-		} else System.out
-			.println("Method [setAngularFactor] not supported for ghost object");
+		} else {
+			System.out.println("Method [setAngularFactor] not supported for ghost object");
+		}
 	}
 
 	public void setDamping(float linear_damping, float angular_damping) {
@@ -303,8 +320,9 @@ public class Entity {
 			((RigidBody) collision_object).setDamping(linear_damping,
 				angular_damping);
 			// ((RigidBody) collision_object).applyDamping(0);
-		} else System.out
-			.println("Method [setVelocity] not supported for ghost object");
+		} else {
+			System.out.println("Method [setVelocity] not supported for ghost object");
+		}
 	}
 
 	public void setAngularIdentity() {
@@ -317,7 +335,40 @@ public class Entity {
 			motionState.setWorldTransform(t);
 			((RigidBody) collision_object).setMotionState(motionState);
 			// ((RigidBody) collision_object).applyDamping(0);
-		} else System.out
-			.println("Method [setVelocity] not supported for ghost object");
+		} else {
+			System.out.println("Method [setVelocity] not supported for ghost object");
+		}
+	}
+	
+	public void addCollisionFunctions(String... names){
+		for(String method_name : names){
+			try {
+				collision_functions.add(
+					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class, Engine.class)
+				);
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public void removeCollisionFunctions(String... names){
+		for(String method_name : names){
+			boolean found = false;
+			for(Method method : collision_functions){
+				if(method.getName().equals(method_name)){
+					collision_functions.remove(method);
+					found = true;
+				}
+			}
+			if(found){ break; }
+		}
+	}
+
+	public ArrayList<Method> getCollisionFunctions() {
+		return collision_functions;
 	}
 }

@@ -9,8 +9,10 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+
+import engine.importing.FileLoader;
+import engine.render.Model;
 
 public class Camera extends Entity {
 	/* Static class variables */
@@ -31,21 +33,21 @@ public class Camera extends Entity {
 	private volatile Entity default_focus;
 
 	/* Constructors */
-	public Camera(Double mass, CollisionShape c, boolean collide,
-		Entity defFocus) {
-		super(mass.floatValue(), c, collide);
+	public Camera(Float mass, boolean collide, Model model, Entity defFocus) {
+		super(mass, collide, model);
 		cameraInit(defFocus);
 	}
 
 	public Camera(String _name, Double mass, CollisionShape c, boolean collide,
 		Entity defFocus) {
-		super(mass.floatValue(), c, collide);
+		super(mass.floatValue(), collide, FileLoader.loadFile("resources/models/misc/box.xgl"));
 		cameraInit(defFocus);
 	}
 
 	private void cameraInit(Entity defFocus) {
-		if (defFocus == null) { throw new Error(
-			"Can't initialize camera's default focus to null"); }
+		if (defFocus == null) { 
+			throw new Error("Can't initialize camera's default focus to null"); 
+		}
 
 		default_focus = defFocus;
 		focus = default_focus;
@@ -56,6 +58,8 @@ public class Camera extends Entity {
 		distance = 20.0f;
 		setUpVector(new Vector3f(0, 1, 0));
 		updatePosition();
+		
+		getModel().setTransparent();
 	}
 
 	public void focusOn(Entity newFocus) {
@@ -84,12 +88,16 @@ public class Camera extends Entity {
 	public Entity getFocus() {
 		if (focus == null) {
 			if (default_focus == null) {
-				default_focus = new Entity("def_focus", 0f, new BoxShape(
-					new Vector3f(0, 0, 0)), false);
+				default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
 			}
 			focus = default_focus;
 		}
 		return focus;
+	}
+	
+	public void freeRoam() {
+		default_focus = new Entity("def_focus", 0f, false, FileLoader.loadFile("resources/models/misc/box.xgl"));
+		focus = default_focus;
 	}
 
 	/* Mutators */
@@ -119,7 +127,21 @@ public class Camera extends Entity {
 			distance = temp;
 		}
 	}
+	
+	public synchronized void incrementPosition(float toward_focus, float strafe, float up_down) {
+		//float a = 0;
+		Vector3f position = new Vector3f();
+		//Vector3f focPos = getFocusPosition();
 
+		double xrotrad, yrotrad;
+	    yrotrad = declination / 180 * 3.141592654f;
+	    xrotrad = rotation / 180 * 3.141592654f;
+	    position.x += Math.sin(yrotrad);
+	    position.z -= Math.cos(yrotrad);
+	    position.y -= Math.sin(xrotrad);
+	    setPosition(position);
+	}
+		
 	public double getDistance() {
 		return distance;
 	}
@@ -186,12 +208,18 @@ public class Camera extends Entity {
 		position = this.getPosition();
 
 		Vector3f focpos = this.getFocusPosition();
-		System.out.print("Camera = X:	" + position.x + "	Y:	" + position.y
-			+ "	Z:	" + position.z + "\n");
-		System.out.print("Focus  = X:	" + focpos.x + "	Y:	" + focpos.y + "	Z:	"
-			+ focpos.z + "\n");
-		System.out.print("Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y
-			+ "	Z:	" + up_vector.z + "\n\n");
+		System.out.print(
+			"Camera = X:	" + position.x + "	Y:	" + position.y
+			+ "	Z:	" + position.z + "\n"
+		);
+		System.out.print(
+			"Focus  = X:	" + focpos.x + "	Y:	" + focpos.y + "	Z:	"
+			+ focpos.z + "\n"
+		);
+		System.out.print(
+			"Up     = X:	" + up_vector.x + "	Y:	" + up_vector.y
+			+ "	Z:	" + up_vector.z + "\n\n"
+		);
 	}
 
 	// TODO: This needs cleaned up and commented real bad
@@ -216,15 +244,17 @@ public class Camera extends Entity {
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
 		// Find the depth to
-		GL11.glReadPixels(x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT,
-			winZ);
+		GL11.glReadPixels(
+			x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT,	winZ
+		);
 
 		// get the position in 3d space by casting a ray from the mouse
 		// coords to the first contacted point in space
 		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
 		// viewport, position);
-		GLU.gluUnProject(x, y, winZ.get(), modelview, projection, viewport,
-			position);
+		GLU.gluUnProject(
+			x, y, winZ.get(), modelview, projection, viewport, position
+		);
 
 		// Make a vector out of the silly float buffer LWJGL forces us to use
 		pos.set(position.get(0), position.get(1), position.get(2));

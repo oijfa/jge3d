@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render.model_pieces;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -66,14 +66,34 @@ public class Material {
 	// Deep Copy Constructor
 	public Material(Material mat) {
 		matInit();
-		if (mat.ambientReflect != null) this.ambientReflect = new Vector3f(
-			mat.ambientReflect.x, mat.ambientReflect.y, mat.ambientReflect.z);
-		if (mat.diffuseReflect != null) this.diffuseReflect = new Vector3f(
-			mat.diffuseReflect.x, mat.diffuseReflect.y, mat.diffuseReflect.z);
-		if (mat.specularReflect != null) this.specularReflect = new Vector3f(
-			mat.specularReflect.x, mat.specularReflect.y, mat.specularReflect.z);
-		if (mat.emission != null) this.emission = new Vector3f(mat.emission.x,
-			mat.emission.y, mat.emission.z);
+		if (mat.ambientReflect != null) {
+			this.ambientReflect = new Vector3f(
+				mat.ambientReflect.x, 
+				mat.ambientReflect.y, 
+				mat.ambientReflect.z
+			);
+		}
+		if (mat.diffuseReflect != null) {
+			this.diffuseReflect = new Vector3f(
+				mat.diffuseReflect.x, 
+				mat.diffuseReflect.y, 
+				mat.diffuseReflect.z
+			);
+		}
+		if (mat.specularReflect != null) {
+			this.specularReflect = new Vector3f(
+				mat.specularReflect.x, 
+				mat.specularReflect.y, 
+				mat.specularReflect.z
+			);
+		}
+		if (mat.emission != null) {
+			this.emission = new Vector3f(
+				mat.emission.x,
+				mat.emission.y, 
+				mat.emission.z
+			);
+		}
 		this.alpha = mat.alpha;
 		this.shine = mat.shine;
 	}
@@ -206,18 +226,26 @@ public class Material {
 	public StringBuffer toXGLString(int ref) {
 		StringBuffer data = new StringBuffer();
 		data.append("<MAT ID=\"" + ref + "\">\n");
-		data.append("<AMB>" + String.valueOf(ambientReflect.x) + ", "
+		data.append(
+			"<AMB>" + String.valueOf(ambientReflect.x) + ", "
 			+ String.valueOf(ambientReflect.y) + ", "
-			+ String.valueOf(ambientReflect.z) + "</AMB>\n");
-		data.append("<DIFF>" + String.valueOf(diffuseReflect.x) + ", "
+			+ String.valueOf(ambientReflect.z) + "</AMB>\n"
+		);
+		data.append(
+			"<DIFF>" + String.valueOf(diffuseReflect.x) + ", "
 			+ String.valueOf(diffuseReflect.y) + ", "
-			+ String.valueOf(diffuseReflect.z) + "</DIFF>\n");
-		data.append("<SPEC>" + String.valueOf(specularReflect.x) + ", "
+			+ String.valueOf(diffuseReflect.z) + "</DIFF>\n"
+		);
+		data.append(
+			"<SPEC>" + String.valueOf(specularReflect.x) + ", "
 			+ String.valueOf(specularReflect.y) + ", "
-			+ String.valueOf(specularReflect.z) + "</SPEC>\n");
-		data.append("<EMISS>" + String.valueOf(emission.x) + ", "
+			+ String.valueOf(specularReflect.z) + "</SPEC>\n"
+		);
+		data.append(
+			"<EMISS>" + String.valueOf(emission.x) + ", "
 			+ String.valueOf(emission.y) + ", " + String.valueOf(emission.z)
-			+ "</EMISS>\n");
+			+ "</EMISS>\n"
+		);
 		data.append("<ALPHA>" + String.valueOf(alpha) + "</ALPHA>\n");
 		data.append("<SHINE>" + String.valueOf(shine) + "</SHINE>\n");
 		data.append("</MAT>\n");
@@ -227,12 +255,15 @@ public class Material {
 	public ArrayList<Byte> getColor() {
 		ArrayList<Byte> color = new ArrayList<Byte>();
 
-		color.add(byteAverage(ambientReflect.x, diffuseReflect.x,
-			specularReflect.x));
-		color.add(byteAverage(ambientReflect.y, diffuseReflect.y,
-			specularReflect.y));
-		color.add(byteAverage(ambientReflect.z, diffuseReflect.z,
-			specularReflect.z));
+		color.add(
+			byteAverage(ambientReflect.x, diffuseReflect.x,specularReflect.x)
+		);
+		color.add(
+			byteAverage(ambientReflect.y, diffuseReflect.y,specularReflect.y)
+		);
+		color.add(
+			byteAverage(ambientReflect.z, diffuseReflect.z,specularReflect.z)
+		);
 
 		return color;
 	}
@@ -240,12 +271,9 @@ public class Material {
 	public ArrayList<Float> getFloatColor() {
 		ArrayList<Float> color = new ArrayList<Float>();
 
-		color
-			.add(average(ambientReflect.x, diffuseReflect.x, specularReflect.x));
-		color
-			.add(average(ambientReflect.y, diffuseReflect.y, specularReflect.y));
-		color
-			.add(average(ambientReflect.z, diffuseReflect.z, specularReflect.z));
+		color.add(average(ambientReflect.x, diffuseReflect.x, specularReflect.x));
+		color.add(average(ambientReflect.y, diffuseReflect.y, specularReflect.y));
+		color.add(average(ambientReflect.z, diffuseReflect.z, specularReflect.z));
 
 		return color;
 	}

@@ -3,7 +3,6 @@ package game;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import de.matthiasmann.twl.Event;
 import engine.entity.EntityList;
@@ -96,8 +95,8 @@ public class GameInput extends Input {
 			}
 			break;
 		case 0:// Left Button
-			physics.drag(camera, Mouse.getEventButtonState() ? 0 : 1,
-				camera.getRayTo(Mouse.getEventX(), Mouse.getEventY()));
+			//physics.drag(camera, Mouse.getEventButtonState() ? 0 : 1,
+			//	camera.getRayTo(Mouse.getEventX(), Mouse.getEventY()));
 			break;
 		case -1:
 
@@ -122,7 +121,7 @@ public class GameInput extends Input {
 				break;
 			}
 		}
-		physics.motionFunc(camera, Mouse.getEventX(), Mouse.getEventY());
+		//physics.motionFunc(camera, Mouse.getEventX(), Mouse.getEventY());
 		return event_caught;
 	}
 }

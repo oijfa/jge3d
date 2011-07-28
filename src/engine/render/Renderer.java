@@ -37,16 +37,11 @@ public class Renderer {
 								// are zoomed in.
 
 	// Default light (needs turning into an entity
-	private float lightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f }; // Ambient Light
-																// Values ( NEW
-																// )
-	private float lightDiffuse[] = { 1f, 1f, 1f, 1f }; // { 0.8f, 0.8f, 0.8f,
-														// 1.0f }; // Diffuse
-														// Light Values ( NEW )
+	private float lightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	private float lightDiffuse[] = { 1f, 1f, 1f, 1f };
 	private float lightSpecular[] = { 1f, 1f, 1f, 1.0f };
-	private float lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f }; // Light
-																// Position (
-																// NEW )
+	private float lightPosition[] = { 0.0f, 5.0f, 0.0f, 1.0f };
+	
 	private Canvas display_parent;
 
 	public Renderer(EntityList objectList) {
@@ -69,14 +64,14 @@ public class Renderer {
 
 		if (camera != null) {
 			camera.updatePosition();
-
+			
 			// Get its new position
 			camPos = camera.getPosition();
 			focusPos = camera.getFocusPosition();
 			up = camera.getUp();
 		} else {
 			camera = (Camera) objectList.getItem(Camera.NAME);
-			camPos = new Vector3f(0, 0, 5);
+			camPos = new Vector3f(0, 0, 20);
 			focusPos = new Vector3f(0, 0, 0);
 			up = new Vector3f(0, 1, 0);
 		}
@@ -130,7 +125,7 @@ public class Renderer {
 
 		// Set default openGL for drawing
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -146,8 +141,8 @@ public class Renderer {
 		}
 
 		// Blending functions so we can have transparency
-		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		// GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glEnable(GL11.GL_BLEND);
 
 		// ???
 		// GL11.glEnable(GL11.GL_CULL_FACE);
@@ -157,9 +152,11 @@ public class Renderer {
 
 		// Enable color materials (hopefully will speedup since we don't call
 		// glMaterial anymore this way)
-		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
-			GL11.GL_AMBIENT_AND_DIFFUSE);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		//GL11.glColorMaterial(
+		//	GL11.GL_FRONT_AND_BACK,
+		//	GL11.GL_AMBIENT_AND_DIFFUSE
+		//);
+		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
 		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
@@ -175,17 +172,29 @@ public class Renderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		// Create some debug lights
 		// Setup The Ambient Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, (FloatBuffer) temp
-			.asFloatBuffer().put(lightAmbient).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_AMBIENT, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightAmbient).flip()
+		);
 		// Setup The Diffuse Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, (FloatBuffer) temp
-			.asFloatBuffer().put(lightDiffuse).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_DIFFUSE, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightDiffuse).flip()
+		);
 		// Setup The Specular Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPECULAR, (FloatBuffer) temp
-			.asFloatBuffer().put(lightSpecular).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_SPECULAR, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightSpecular).flip()
+		);
 		// Position The Light
-		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, (FloatBuffer) temp
-			.asFloatBuffer().put(lightPosition).flip());
+		GL11.glLight(
+			GL11.GL_LIGHT1, 
+			GL11.GL_POSITION, 
+			(FloatBuffer) temp.asFloatBuffer().put(lightPosition).flip()
+		);
 		GL11.glEnable(GL11.GL_LIGHT1);
 	}
 
@@ -207,9 +216,12 @@ public class Renderer {
 		// Calculate the shape of the screen and notify OpenGL
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GLU.gluPerspective(45.0f / zoom, (float) Display.getDisplayMode()
-			.getWidth() / Display.getDisplayMode().getHeight(), nearClipping,
-			farClipping);
+		GLU.gluPerspective(
+			45.0f / zoom, 
+			(float) Display.getDisplayMode().getWidth() / Display.getDisplayMode().getHeight(), 
+			nearClipping,
+			farClipping
+		);
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();

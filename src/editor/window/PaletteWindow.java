@@ -30,10 +30,8 @@ public class PaletteWindow extends ResizableFrame implements ActionListener {
 		preview_layout = new DialogLayout();
 		grid_layout = new DialogLayout();
 
-		Group h_frame = frame_layout.createParallelGroup()
-			.addWidget(preview_layout).addWidget(grid_layout);
-		Group v_frame = frame_layout.createSequentialGroup()
-			.addWidget(preview_layout).addWidget(grid_layout);
+		Group h_frame = frame_layout.createParallelGroup().addWidget(preview_layout).addWidget(grid_layout);
+		Group v_frame = frame_layout.createSequentialGroup().addWidget(preview_layout).addWidget(grid_layout);
 
 		frame_layout.setHorizontalGroup(h_frame);
 		frame_layout.setVerticalGroup(v_frame);
@@ -41,10 +39,8 @@ public class PaletteWindow extends ResizableFrame implements ActionListener {
 		primary_color = new ColorCell();
 		alt_color = new ColorCell();
 
-		Group h_preview = preview_layout.createParallelGroup()
-			.addWidget(primary_color).addWidget(alt_color);
-		Group v_preview = preview_layout.createSequentialGroup()
-			.addWidget(primary_color).addWidget(alt_color);
+		Group h_preview = preview_layout.createParallelGroup().addWidget(primary_color).addWidget(alt_color);
+		Group v_preview = preview_layout.createSequentialGroup().addWidget(primary_color).addWidget(alt_color);
 
 		// Add preview colors
 		preview_layout.setHorizontalGroup(h_preview);
@@ -58,10 +54,13 @@ public class PaletteWindow extends ResizableFrame implements ActionListener {
 			for (int g = 0; g < num_colors; g++) {
 				for (int r = 0; r < num_colors; r++) {
 					grid.add(r + b + g, new ColorCell(
-						new Color(new Byte((byte) (r * (256 / num_colors))),
+						new Color(
+							new Byte((byte) (r * (256 / num_colors))),
 							new Byte((byte) (g * (256 / num_colors))),
 							new Byte((byte) (b * (256 / num_colors))),
-							new Byte((byte) 0xFF))));
+							new Byte((byte) 0xFF))
+						)
+					);
 				}
 			}
 		}

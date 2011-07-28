@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render.model_pieces;
 
 import java.util.ArrayList;
 
@@ -141,16 +141,31 @@ public class Mesh implements Cloneable {
 	public void draw() {
 		// Set Material
 
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT,
-			mat.getAmbientAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE,
-			mat.getDiffuseAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR,
-			mat.getSpecularAsBuffer());
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION,
-			mat.getEmissionAsBuffer());
-		GL11.glMaterialf(GL11.GL_FRONT_AND_BACK, GL11.GL_SHININESS,
-			mat.getShine());
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_AMBIENT,
+			mat.getAmbientAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_DIFFUSE,
+			mat.getDiffuseAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_SPECULAR,
+			mat.getSpecularAsBuffer()
+		);
+		GL11.glMaterial(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_EMISSION,
+			mat.getEmissionAsBuffer()
+		);
+		GL11.glMaterialf(
+			GL11.GL_FRONT_AND_BACK, 
+			GL11.GL_SHININESS,
+			mat.getShine()
+		);
 
 		// Transform
 		GL11.glTranslatef(location.x, location.y, location.z);
@@ -197,11 +212,15 @@ public class Mesh implements Cloneable {
 		data.append("</MESH>");
 		data.append("<OBJECT>\n");
 		data.append("<TRANSFORM>\n");
-		data.append("<FORWARD>" + forward.x + ", " + forward.y + ", "
-			+ forward.z + "</FORWARD>\n");
+		data.append(
+			"<FORWARD>" + forward.x + ", " + forward.y + ", "
+			+ forward.z + "</FORWARD>\n"
+		);
 		data.append("<UP>" + up.x + ", " + up.y + ", " + up.z + "</UP>\n");
-		data.append("<POSITION>" + location.x + ", " + location.y + ", "
-			+ location.z + "</POSITION>\n");
+		data.append(
+			"<POSITION>" + location.x + ", " + location.y + ", "
+			+ location.z + "</POSITION>\n"
+		);
 		data.append("</TRANSFORM>\n");
 		data.append("<MESHREF>" + ref + "</MESHREF>");
 		data.append("</OBJECT>\n");
@@ -255,7 +274,12 @@ public class Mesh implements Cloneable {
 		for (Face f : faces) {
 			if (f.getNormals().size() <= 0) {
 				ArrayList<Vector3f> normal_set = new ArrayList<Vector3f>();
-				Vector3f vertex0 = new Vector3f(), vertex1 = new Vector3f(), vertex2 = new Vector3f(), line1 = new Vector3f(), line2 = new Vector3f(), normal_vert = new Vector3f();
+				Vector3f vertex0 = new Vector3f(), 
+					vertex1 = new Vector3f(), 
+					vertex2 = new Vector3f(), 
+					line1 = new Vector3f(), 
+					line2 = new Vector3f(), 
+					normal_vert = new Vector3f();
 
 				// Copy the verts so we don't scrub the originals
 				// with our math

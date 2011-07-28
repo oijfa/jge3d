@@ -5,10 +5,10 @@
 
 package engine.importing;
 
-import engine.importing.pieces.Face;
-import engine.importing.pieces.Material;
-import engine.importing.pieces.Mesh;
-import engine.importing.pieces.Model;
+import engine.render.Model;
+import engine.render.model_pieces.Face;
+import engine.render.model_pieces.Material;
+import engine.render.model_pieces.Mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +36,10 @@ public class XGL_Parser extends Parser {
 
 		// Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		dom = db.parse(this.getClass().getClassLoader()
-			.getResourceAsStream(url));
+		dom = db.parse(
+			this.getClass().getClassLoader()
+			.getResourceAsStream(url)
+		);
 		parseXGL(dom);
 		model.verify();
 	}
@@ -143,8 +145,9 @@ public class XGL_Parser extends Parser {
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				// Get ID;
-				int ID = Integer.parseInt((((Element) tagList.get(i))
-					.getAttribute("ID")));
+				int ID = Integer.parseInt(
+					(((Element) tagList.get(i)).getAttribute("ID"))
+				);
 
 				// Create material
 				Material m = readMaterial((Element) tagList.get(i));
@@ -162,8 +165,9 @@ public class XGL_Parser extends Parser {
 				int ID;
 				if (tagList.get(i).hasAttributes()) {
 					// Get ID;
-					ID = Integer.parseInt(((Element) tagList.get(i))
-						.getAttribute("ID"));
+					ID = Integer.parseInt(
+						((Element) tagList.get(i)).getAttribute("ID")
+					);
 
 					// System.out.println("Reading Mesh ID: " +
 					// String.valueOf(ID));
@@ -194,8 +198,7 @@ public class XGL_Parser extends Parser {
 			.clone();
 		@SuppressWarnings("unchecked")
 		// Not sure what check its wanting, but I ain't doin' it
-		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes
-			.clone();
+		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 
 		HashMap<Integer, Vector3f> normals = makeCopy(_normals);
 		HashMap<Integer, Vector3f> points = makeCopy(_points);
@@ -223,8 +226,9 @@ public class XGL_Parser extends Parser {
 		for (int i = 0; i < tagList.size(); i++) {
 			int ID;
 			if (tagList.get(i).hasAttributes()) {
-				ID = Integer.parseInt((((Element) tagList.get(i))
-					.getAttribute("ID")));
+				ID = Integer.parseInt(
+					(((Element) tagList.get(i)).getAttribute("ID"))
+				);
 			} else {
 				ID = backup;
 				backup++;
@@ -279,12 +283,10 @@ public class XGL_Parser extends Parser {
 		// Create clones so we don't overwrite the parent's references
 		@SuppressWarnings("unchecked")
 		// Not sure what check its wanting, but I ain't doin' it
-		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats
-			.clone();
+		HashMap<Integer, Material> mats = (HashMap<Integer, Material>) _mats.clone();
 		@SuppressWarnings("unchecked")
 		// Not sure what check its wanting, but I ain't doin' it
-		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes
-			.clone();
+		HashMap<Integer, ArrayList<Mesh>> meshes = (HashMap<Integer, ArrayList<Mesh>>) _meshes.clone();
 
 		HashMap<Integer, Vector3f> points = makeCopy(_points);
 		HashMap<Integer, Vector3f> normals = makeCopy(_normals);
@@ -310,8 +312,9 @@ public class XGL_Parser extends Parser {
 			 * System.out.println("Reading PATCH ID: " + String.valueOf(ID));
 			 */
 
-			ArrayList<Mesh> mtemp = readMeshes((Element) tagList.get(i), mats,
-				meshes, points, normals);
+			ArrayList<Mesh> mtemp = readMeshes(
+				(Element) tagList.get(i), mats,	meshes, points, normals
+			);
 
 			for (Mesh m : mtemp) {
 				// Add to list being returned
@@ -350,12 +353,14 @@ public class XGL_Parser extends Parser {
 				ArrayList<Node> vertexList = findChildrenByName(ele, temp);
 				for (int j = 0; j < vertexList.size(); j++) {
 					int temp2 = (int) readScalarTag(
-						(Element) vertexList.get(j), "PREF", true);
+						(Element) vertexList.get(j), "PREF", true
+					);
 					Vector3f temp1 = _points.get(temp2);
 					f.addVertex(temp1);
 
-					temp1 = _normals.get((int) readScalarTag(
-						(Element) vertexList.get(j), "NREF", false));
+					temp1 = _normals.get(
+						(int) readScalarTag((Element) vertexList.get(j), "NREF", false)
+					);
 					if (temp1 != null) {
 						f.addVertexNorm(temp1);
 					}
@@ -388,12 +393,18 @@ public class XGL_Parser extends Parser {
 		ArrayList<Node> tagList;
 		tagList = findChildrenByName(ele, "TRANSFORM");
 		if (tagList.size() == 1) {
-			Vector3f local_location = readVectorTag((Element) tagList.get(0),
-				"POSITION", true);
-			Vector3f local_forward = readVectorTag((Element) tagList.get(0),
-				"FORWARD", true);
-			Vector3f local_up = readVectorTag((Element) tagList.get(0), "UP",
-				true);
+			Vector3f local_location = readVectorTag(
+				(Element) tagList.get(0),
+				"POSITION", true
+			);
+			Vector3f local_forward = readVectorTag(
+				(Element) tagList.get(0),
+				"FORWARD", true
+			);
+			Vector3f local_up = readVectorTag(
+				(Element) tagList.get(0), "UP",
+				true
+			);
 
 			location.add(local_location);
 			forward.add(local_forward);
@@ -463,12 +474,14 @@ public class XGL_Parser extends Parser {
 			return Float.parseFloat(e.getTextContent());
 		} else if (tagList.size() == 0) {
 			if (required) {
-				throwException(root.getNodeName() + " Tag with no " + childName
-					+ " Tag");
+				throwException(
+					root.getNodeName() + " Tag with no " + childName + " Tag"
+				);
 			}
 		} else if (tagList.size() > 1) {
-			throwException(root.getNodeName() + " Tag with redundant "
-				+ childName + " Tag");
+			throwException(
+				root.getNodeName() + " Tag with redundant "	+ childName + " Tag"
+			);
 		}
 
 		return -500;// ? TODO

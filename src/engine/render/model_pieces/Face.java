@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render.model_pieces;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -257,8 +257,10 @@ public class Face {
 				faceVNT[11 + i] = mesh.getMaterial().getAlpha();
 			}
 		} else {
-			System.out.println("Tried to parse face, but it has only "
-				+ vertices.size() + " verts");
+			System.out.println(
+				"Tried to parse face, but it has only "
+				+ vertices.size() + " verts"
+			);
 			return null;
 		}
 
@@ -274,8 +276,10 @@ public class Face {
 				pointIndex++;
 			}
 		} else {
-			System.out.println("Tried to parse face, but it has only "
-				+ vertices.size() + " verts");
+			System.out.println(
+				"Tried to parse face, but it has only "
+				+ vertices.size() + " verts"
+			);
 			return null;
 		}
 

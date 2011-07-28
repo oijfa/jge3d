@@ -1,5 +1,5 @@
 //TODO: Maybe add transforms?
-package engine.importing.pieces;
+package engine.render;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -19,9 +19,15 @@ import org.lwjgl.opengl.GL12;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.ConvexHullShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
+
+
+import engine.render.model_pieces.Face;
+import engine.render.model_pieces.Mesh;
 
 public class Model {
 	private ArrayList<Mesh> meshes;
@@ -34,6 +40,7 @@ public class Model {
 	private Integer pointIndex = 0;
 	private FloatBuffer buf;
 	private Shader shader;
+	private CollisionShape shape;
 
 	private Boolean immediate_scale_rotate = false;
 
@@ -67,6 +74,7 @@ public class Model {
 		}
 		modelVBOID = model.getVBOID();
 		modelVBOindexID = model.getVBOindexID();
+		shape = model.getCollisionShape();
 		// verify();
 	}
 
@@ -91,6 +99,10 @@ public class Model {
 		return center;
 	}
 
+	private ArrayList<Mesh> getMeshes() {
+		return this.meshes;
+	}
+	
 	public int getMeshCount() {
 		return meshes.size();
 	}
@@ -132,8 +144,7 @@ public class Model {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
 		Transform transform_matrix = new Transform();
-		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object)
-			.getMotionState();
+		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
 
 		transform_matrix.set(motion_state.graphicsWorldTrans);
 
@@ -149,8 +160,11 @@ public class Model {
 		// Scaling code (testing)
 		Vector3f halfExtent = new Vector3f();
 		collision_object.getCollisionShape().getLocalScaling(halfExtent);
-		GL11.glScalef(1.0f * halfExtent.x, 1.0f * halfExtent.y,
-			1.0f * halfExtent.z);
+		GL11.glScalef(
+			1.0f * halfExtent.x, 
+			1.0f * halfExtent.y,
+			1.0f * halfExtent.z
+		);
 	}
 
 	/* Verify */
@@ -318,7 +332,7 @@ public class Model {
 			hasVBO = true;
 			// buf = BufferUtils.createFloatBuffer(16);
 			
-			shader = new Shader("newtest");
+			shader = new Shader();
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
@@ -382,7 +396,7 @@ public class Model {
 		shader.startShader(modelVBOID, collision_object);
 			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
 		shader.stopShader();
-			
+		
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -399,4 +413,38 @@ public class Model {
 		hasVBO = false;
 	}
 	// *****************END VBO METHODS***********************
+	
+	public void reduceHull() {
+		ObjectArrayList<Vector3f> vertices = new ObjectArrayList<Vector3f>();
+		
+		for(Mesh m : this.getMeshes()){
+			for(Face f : m.getFaces()){
+				for(Vector3f v : f.getVertices()){
+					vertices.add(v);
+				}
+			}
+		}
+
+		ConvexHullShape cvs = new ConvexHullShape(vertices);
+		shape = cvs;
+	}
+	
+	public CollisionShape getCollisionShape() {
+		if(null == shape){
+			this.reduceHull();
+		}
+		return shape;
+	}
+	
+	public void setTransparent(){
+		//Vector3f zero = new Vector3f(0,0,0);
+		for(Mesh m : this.getMeshes()){
+			//m.setMaterial(new Material(zero,zero,zero,zero,0f,0f));
+			m.getMaterial().setAlpha(0.0f);
+		}
+	}
+	
+	public void setCollisionShape(CollisionShape shape) {
+		this.shape = shape;		
+	}
 }

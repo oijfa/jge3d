@@ -1,4 +1,4 @@
-package engine.importing.pieces;
+package engine.render;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,8 +12,6 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class Shader {
@@ -34,6 +32,12 @@ public class Shader {
     
     private FloatBuffer buf;
 
+    private static final String default_path = "default";
+    
+    public Shader(){
+    	this(default_path);
+    }
+    
     public Shader(String path){
         /*
         * create the shader program. If OK, create vertex
@@ -131,8 +135,8 @@ public class Shader {
     	if(useShader) {            
      		//Adjust the position and rotation of the object from physics
     		Transform transform_matrix = new Transform();
-    		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
-    		transform_matrix.set(motion_state.graphicsWorldTrans);
+    		transform_matrix = collision_object.getWorldTransform(new Transform());
+
     		float[] body_matrix = new float[16];
     		transform_matrix.getOpenGLMatrix(body_matrix);
     		buf.put(body_matrix);
@@ -142,8 +146,16 @@ public class Shader {
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
-    		
-	    	buf.clear();
+    		/*
+    		if(vbo_id==7) {
+	    		System.out.println("###"+vbo_id+"###");
+	    		for(int i=0; i<buf.limit()-1 ;i++) {
+	    			System.out.println(buf.get(i));
+	    		}
+	    		System.out.println("###");
+    		}
+	    	*/
+    		buf.clear();
         }
     }
     
@@ -188,13 +200,13 @@ public class Shader {
 		String vertexCode="";
         String line;
         try{
-        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream(filename));
+        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream("shaders/" + filename));
         	BufferedReader reader = new BufferedReader(is);
            	while((line=reader.readLine())!=null){
            		vertexCode+=line + "\n";
            	}
         }catch(Exception e){
-            System.out.println("Failed to read vertex shading code: " + "src/engine/importing/pieces/" + filename);
+            System.out.println("Failed to read vertex shading code: " + "src/engine/render/shaders/" + filename);
             return "";
         }
         

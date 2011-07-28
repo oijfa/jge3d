@@ -1,13 +1,9 @@
 package engine.terrain;
 
 import engine.Engine;
-import engine.importing.Parser;
-import engine.importing.XGL_Parser;
+import engine.importing.FileLoader;
 
-import javax.vecmath.Vector3f;
-
-import com.bulletphysics.collision.dispatch.CollisionFlags;
-import com.bulletphysics.collision.shapes.BoxShape;
+import engine.render.Model;
 
 import engine.entity.Entity;
 
@@ -20,28 +16,22 @@ public class Terrain {
 	}
 
 	public void createTerrain(int land_size) {
-		Parser p = new XGL_Parser();
-		try {
-			p.readFile("resources/models/misc/singlebox.xgl");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Model box = p.createModel();
-		BoxShape boxShape = new BoxShape(new Vector3f(0.5f, 0.5f, 0.5f));
-		Entity ent;
+		Model model = FileLoader.loadFile("resources/models/misc/singlebox.xgl");
 
 		terrain = new DynamicMatrix();
 		for (int i = 0; i < land_size; i++)
 			terrain.expand();
-
+		
 		for (int i = 0; i < terrain.getSize(); i++) {
-			ent = new Entity(0.0f, boxShape, true);
-			ent.setModel(p.createModel());
+			Entity ent = new Entity(0.0f, true, new Model(model));
 			ent.setPosition(terrain.get(i));
-			ent.setCollisionFlags(CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
-
 			engine.addEntity(ent);
+		}
+	}
+	
+	public void lower(int down) {
+		for (int i = 0; i < terrain.getSize(); i++) {
+			terrain.get(i).z -= down;
 		}
 	}
 

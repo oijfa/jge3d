@@ -10,8 +10,7 @@ import editor.window.PaletteWindow;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
-
-import com.bulletphysics.collision.shapes.BoxShape;
+import engine.importing.FileLoader;
 
 public class Main implements ActionListener {
 	// A filthy hack to get around the combobox sending to events on select
@@ -47,20 +46,19 @@ public class Main implements ActionListener {
 		engine.addWindow(layer_menu, 200, 30);
 		// engine.addWindow(tool_box, 200, 300);
 
-		model = new Entity(1f, new BoxShape(new Vector3f(1, 1, 1)), true);
-		model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
+		model = new Entity(1f, true,  FileLoader.loadFile("resources/models/misc/box.xgl"));
 		model.setProperty(Entity.NAME, "model");
 		model.setPosition(new Vector3f(0,0,0));
+		model.setGravity(new Vector3f(0,0,0));
 
-		camera = new Camera(1d, new BoxShape(new Vector3f(1, 1, 1)), false, model);
+		camera = new Camera(1f,true, FileLoader.loadFile("resources/models/misc/box.xgl"), model);
 		camera.setProperty(Entity.NAME, "camera");
-		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.setDistance(10.0f);
+		camera.setPosition(new Vector3f(0,0,0));
+		camera.setDistance(5.0f);
+		camera.setGravity(new Vector3f(0,0,0));
 
 		engine.addEntity(model);
 		engine.addEntity(camera);
-		
-		engine.addKeyMap("keymap.txt");
 	}
 
 	public void run() {
@@ -75,11 +73,9 @@ public class Main implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == palette_window) {
-			grid_window.setCurrentColor(((PaletteWindow) ae.getSource())
-				.getPrimaryColor());
+			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
 		} else if (ae.getSource() == grid_window) {
-			model.setModel(grid_window.getGrid().getModel(
-				"resources/models/misc/box.xgl"));
+			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
 			engine.updateEntity(model);
 		} else if (ae.getSource() == layer_menu) {
 			if (combobox_hack == true) {

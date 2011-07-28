@@ -1,6 +1,0 @@
-<keymap>
-  <key ID="Key_A">moveCameraLeft</key>
-  <key ID="Key_D">moveCameraRight</key>
-  <key ID="Key_W">moveCameraUp</key>
-  <key ID="Key_S">moveCameraDown</key>
-</keymap>
