@@ -127,6 +127,7 @@ public class Model {
 			draw_vbo(collision_object);
 		} else {
 			draw_immediate(collision_object);
+			System.out.println("DRAWINGIMMEDIATE");
 		}
 	}
 
@@ -297,42 +298,39 @@ public class Model {
 		// that we have normals and the model is fully loaded
 		int num_faces_all_meshes = 0;
 		if (meshes.size() != 0) {
-			if (hasVBO) destroyVBO();
-			else {
+			if (!hasVBO) {
 				modelVBOID = createVBOID(1);
 				modelVBOindexID = createVBOID(1);
-			}
-
-			int num_vertices = meshes.get(0).getFace(0).getVertexCount();
-			for (Mesh m : meshes) {
-				num_faces_all_meshes += m.getFaceCount();
-			}
-			vertex_buffer = BufferUtils.createFloatBuffer(num_faces_all_meshes
-				* num_vertices * 12);
-			index_buffer = BufferUtils.createIntBuffer(num_faces_all_meshes
-				* num_vertices);
-			for (Mesh m : meshes) {
-				for (Face f : m.getFaces()) {
-					vertex_buffer.put(f.createFaceBufferVNTC(m));
-					index_buffer.put(f.createIndexBufferVNTC(pointIndex));
-					pointIndex += 3;
+	
+					int num_vertices = meshes.get(0).getFace(0).getVertexCount();
+				for (Mesh m : meshes) {
+					num_faces_all_meshes += m.getFaceCount();
 				}
+				vertex_buffer = BufferUtils.createFloatBuffer(num_faces_all_meshes
+					* num_vertices * 12);
+				index_buffer = BufferUtils.createIntBuffer(num_faces_all_meshes
+					* num_vertices);
+				for (Mesh m : meshes) {
+					for (Face f : m.getFaces()) {
+						vertex_buffer.put(f.createFaceBufferVNTC(m));
+						index_buffer.put(f.createIndexBufferVNTC(pointIndex));
+						pointIndex += 3;
+					}
+				}
+	
+				// NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN
+				// COMPLETELY NEW DATA
+				vertex_buffer.flip();
+				index_buffer.flip();
+	
+				// Put data in allocated buffers
+				bufferData(modelVBOID, vertex_buffer);
+				bufferElementData(modelVBOindexID, index_buffer);
+	
+				// Set the notifier
+				hasVBO = true;
+				// buf = BufferUtils.createFloatBuffer(16);
 			}
-
-			// NEVER FLIP AGAIN PAST THIS POINT UNLESS YOU'RE LOADING IN
-			// COMPLETELY NEW DATA
-			vertex_buffer.flip();
-			index_buffer.flip();
-
-			// Put data in allocated buffers
-			bufferData(modelVBOID, vertex_buffer);
-			bufferElementData(modelVBOindexID, index_buffer);
-
-			// Set the notifier
-			hasVBO = true;
-			// buf = BufferUtils.createFloatBuffer(16);
-			
-			shader = new Shader();
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
@@ -393,9 +391,11 @@ public class Model {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 
-		shader.startShader(modelVBOID, collision_object);
-			GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
-		shader.stopShader();
+		if(shader != null) {
+			shader.startShader(modelVBOID, collision_object);
+				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
+			shader.stopShader();
+		}
 		
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
@@ -446,5 +446,9 @@ public class Model {
 	
 	public void setCollisionShape(CollisionShape shape) {
 		this.shape = shape;		
+	}
+
+	public void setShader(Shader shader) {
+		this.shader = shader;
 	}
 }

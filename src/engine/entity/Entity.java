@@ -76,6 +76,8 @@ public class Entity {
 	private void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
 		//TODO: Generate this based on model instead
 		this.model = model;
+		this.model.setShader(shader);
+		
 		CollisionShape shape = model.getCollisionShape();
 		if(c){
 			createRigidBody(mass, shape);
@@ -238,8 +240,6 @@ public class Entity {
 
 	/* MISC */
 	public void draw() {
-		// Retrieve the current motionstate to get the transform
-		// versus the world
 		if (shouldDraw) {
 			if(model != null) {
 				model.draw(collision_object);

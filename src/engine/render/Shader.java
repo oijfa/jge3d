@@ -43,6 +43,8 @@ public class Shader {
         * create the shader program. If OK, create vertex
         * and fragment shaders
         */
+    	shader=ARBShaderObjects.glCreateProgramObjectARB();
+    	
         if(shader!=0){
             vertShader=createVertShader(path + ".vert");
             fragShader=createFragShader(path + ".frag");
@@ -50,7 +52,7 @@ public class Shader {
         else 
         	useShader=false;
 
-        shader=ARBShaderObjects.glCreateProgramObjectARB();
+        
         /*
         * if the vertex and fragment shaders setup sucessfully,
         * attach them to the shader program, link the shader program
