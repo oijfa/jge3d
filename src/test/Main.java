@@ -49,6 +49,8 @@ public class Main {
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");
 		player.setPosition(new Vector3f(5, 3, 0));
+		player.setFallSpeed(0);
+		player.setGravity(0);
 		
 		model = engine.addEntity("model1", 1.0f, true, "box", "default");
 		model.setProperty(Entity.NAME, "model1");
@@ -70,6 +72,7 @@ public class Main {
 		model5 = engine.addEntity("model5", 1f, true, "legoman", "default");
 		model5.setProperty(Entity.NAME, "model5");
 		model5.setPosition(new Vector3f(0, -10, -15));
+		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 				
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(40f);

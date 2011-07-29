@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -147,6 +149,19 @@ public class Shader {
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
+    		
+    		buf.clear();
+    		Vector3f scalevec = collision_object.getCollisionShape().getLocalScaling(new Vector3f());
+    		buf.put(scalevec.x);
+    		buf.put(scalevec.y);
+    		buf.put(scalevec.z);
+    		buf.put(1);
+    		buf.flip();
+
+        	//*****Shader drawing*****//
+    		ARBShaderObjects.glUseProgramObjectARB(shader);
+    		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
+    		ARBShaderObjects.glUniform4ARB(scale, buf);
     		/*
     		if(vbo_id==7) {
 	    		System.out.println("###"+vbo_id+"###");

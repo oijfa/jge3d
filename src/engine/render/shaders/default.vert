@@ -1,4 +1,6 @@
 uniform mat4 transform;
+uniform vec4 scale;
+
 varying vec4 color;
 varying vec3 normal;
 varying vec3 vertex;
@@ -14,8 +16,8 @@ void main() {
 	*/
 	
 	//Calculate vertex position
-	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex;
-	vertex = vec3(gl_ModelViewMatrix * transform * gl_Vertex);
+	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex * scale;
+	vertex = vec3(gl_ModelViewMatrix * transform * gl_Vertex * scale);
 	
 	// Calculate the normal value for this vertex, in world coordinates
     normal = normalize(gl_NormalMatrix * gl_Normal);

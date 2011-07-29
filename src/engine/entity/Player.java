@@ -38,6 +38,14 @@ public class Player extends Entity {
 		player.setWalkDirection(walk_direction);
 	}
 
+	public void setFallSpeed(float fall_speed) {
+		player.setFallSpeed(fall_speed);
+	}
+	
+	public void setGravity(float gravity) {
+		player.setGravity(gravity);
+	}
+	
 	public void setJumpSpeed(float jump_speed) {
 		player.setJumpSpeed(jump_speed);
 	}

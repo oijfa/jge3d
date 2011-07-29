@@ -372,4 +372,12 @@ public class Entity {
 	public ArrayList<Method> getCollisionFunctions() {
 		return collision_functions;
 	}
+	
+	public void setScale(Vector3f scale) {
+		collision_object.getCollisionShape().setLocalScaling(scale);
+	}
+	
+	public Vector3f getScale() {
+		return collision_object.getCollisionShape().getLocalScaling(new Vector3f());
+	}
 }
