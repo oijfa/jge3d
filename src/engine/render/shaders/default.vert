@@ -14,10 +14,16 @@ void main() {
 		vec4(p.x,p.y,p.z,1.0)
 	);
 	*/
+	vec4 vertex;
+	vertex.x = gl_Vertex.x * scale.x;
+	vertex.y = gl_Vertex.y * scale.y;
+	vertex.z = gl_Vertex.z * scale.z;
+	vertex.w = 1.0;
 	
 	//Calculate vertex position
-	gl_Position = gl_ModelViewProjectionMatrix * transform * gl_Vertex * scale;
-	vertex = vec3(gl_ModelViewMatrix * transform * gl_Vertex * scale);
+	gl_Position = gl_ModelViewProjectionMatrix * transform * vertex;
+	vertex = vec4(gl_ModelViewMatrix * transform * vertex);
+	gl_Position = gl_Position;
 	
 	// Calculate the normal value for this vertex, in world coordinates
     normal = normalize(gl_NormalMatrix * gl_Normal);

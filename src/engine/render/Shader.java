@@ -155,7 +155,7 @@ public class Shader {
     		buf.put(scalevec.x);
     		buf.put(scalevec.y);
     		buf.put(scalevec.z);
-    		buf.put(1);
+    		buf.put(1.0f);
     		buf.flip();
 
         	//*****Shader drawing*****//
