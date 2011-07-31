@@ -30,5 +30,5 @@ void main(){
   	//multiply through by diffuse to set the dark portions of the object
   	//gl_FragColor = gl_Color * color * diffuse;
   	//set alpha back to its original value or you will have the alpha channel set to the diffuse value
-  	//gl_FragColor.a = color.a;
+  	gl_FragColor.a = color.a;
 }

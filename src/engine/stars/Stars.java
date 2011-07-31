@@ -18,6 +18,21 @@ public class Stars {
 						Entity star = engine.addEntity("star"+count++,1.0f,true,"box","default");
 						star.setPosition(new Vector3f(j-starting_distance,k-starting_distance,i*-space_between_levels-starting_distance));
 						star.applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+						/*Color setting (Needs model cloning to work)
+						Float r = (float) Math.random();
+						Float g = (float) Math.random();
+						Float b = (float) Math.random();
+						System.out.println(r+";"+g+";"+b);
+						star.getModel().getMesh(0).setMaterial(
+							new Material(
+								new Vector3f(r,g,b),
+								new Vector3f(r,g,b),
+								new Vector3f(r,g,b),
+								new Vector3f(r,g,b),
+								1.0f
+							)
+						);
+						*/
 					}
 				}
 			}
