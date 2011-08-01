@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.vecmath.Vector3f;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -44,29 +42,6 @@ public class Engine {
 	@SuppressWarnings("unused")
 	private Camera camera;
 	private EntityList entity_list;
-
-	/*
-	 * public static void main(String args[]) throws LWJGLException{ Engine r =
-	 * new Engine(); r.run();
-	 * 
-	 * r.addEntity("BLAH", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH").setPosition(new Vector3f(0,0,-5));
-	 * 
-	 * r.addEntity("BLAH1", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH1").setPosition(new Vector3f(0,0,5));
-	 * 
-	 * r.addEntity("BLAH2", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH2").setPosition(new Vector3f(0,-5,0));
-	 * 
-	 * r.addEntity("BLAH3", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH3").setPosition(new Vector3f(0,5,0));
-	 * 
-	 * r.addEntity("BLAH4", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH4").setPosition(new Vector3f(-5,0,0));
-	 * 
-	 * r.addEntity("BLAH5", "resources/models/misc/box2.xgl");
-	 * r.getEntity("BLAH5").setPosition(new Vector3f(5,0,0)); }
-	 */
 
 	public void addWindow(ResizableFrame window, int width, int height) {
 		renderer.getWindow().addWindow(window, width, height);

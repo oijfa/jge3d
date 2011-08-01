@@ -39,9 +39,9 @@ public class Main {
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 		
-		//Terrain terrain = new Terrain(engine);
-		//terrain.createTerrain(10);
-		//terrain.setPosition(new Vector3f(0,-10, 0));
+		Terrain terrain = new Terrain(engine);
+		terrain.createTerrain(10);
+		terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		//Make some parallax stars
 		new Stars(engine,1000,10000,200,5,400);
@@ -50,8 +50,9 @@ public class Main {
 		player = (Player) engine.getEntity("player");
 		player.setPosition(new Vector3f(0, 6, 0));
 		player.setScale(new Vector3f(1,1,1));
-		player.setFallSpeed(0);
-		player.setGravity(0);
+		//player.setFallSpeed(1);
+		//player.set
+		player.setGravity(10);
 		
 		model = engine.addEntity("model1", 1.0f, true, "box", "default");
 		model.setProperty(Entity.NAME, "model1");

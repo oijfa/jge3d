@@ -29,7 +29,7 @@ public class Player extends Entity {
 			(PairCachingGhostObject) ((GhostObject) collision_object),
 			(ConvexShape) collision_object.getCollisionShape(), step_height
 		);
-		player.setJumpSpeed(0.0f);
+		player.setJumpSpeed(10.0f);
 		collision_object.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
 		object_type = ObjectType.actor;
 	}
