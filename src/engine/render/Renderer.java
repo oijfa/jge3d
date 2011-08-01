@@ -164,9 +164,9 @@ public class Renderer {
 		GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		// Anti-aliasing stuff (probably isn't working)
-		GL11.glEnable(GL11.GL_POINT_SMOOTH);
-		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+		//GL11.glEnable(GL11.GL_POINT_SMOOTH);
+		//GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		//GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
 
 		// Enable lighting
 		GL11.glEnable(GL11.GL_LIGHTING);

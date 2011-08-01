@@ -80,7 +80,7 @@ public class Main {
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(player);
 		
-		System.out.print(engine.getEntityList().getEntities().size());
+		System.out.println("Num Entities: " + engine.getEntityList().getEntities().size());
 	}
 
 	public void runMultiThread() {
