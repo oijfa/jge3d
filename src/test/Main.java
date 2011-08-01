@@ -39,16 +39,17 @@ public class Main {
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 		
-		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(10);
-		terrain.setPosition(new Vector3f(0,-10, 0));
+		//Terrain terrain = new Terrain(engine);
+		//terrain.createTerrain(10);
+		//terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		//Make some parallax stars
 		new Stars(engine,1000,10000,200,5,400);
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");
-		player.setPosition(new Vector3f(5, 3, 0));
+		player.setPosition(new Vector3f(0, 6, 0));
+		player.setScale(new Vector3f(1,1,1));
 		player.setFallSpeed(0);
 		player.setGravity(0);
 		
@@ -61,7 +62,7 @@ public class Main {
 		model2.applyImpulse(new Vector3f(2,0,0), new Vector3f(0,0,0));
 		
 		model3 = engine.addEntity("model3", 1f, false, "singlebox", "default");
-		model3.setPosition(new Vector3f(0, 0, 0));
+		model3.setPosition(new Vector3f(0, 0, -5));
 		model3.addCollisionFunctions("explode");
 		//model3.getModel().setTransparent();
 
@@ -71,7 +72,7 @@ public class Main {
 		
 		model5 = engine.addEntity("model5", 1f, true, "legoman", "default");
 		model5.setProperty(Entity.NAME, "model5");
-		model5.setPosition(new Vector3f(0, -10, -15));
+		model5.setPosition(new Vector3f(0, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 				
 		camera = engine.addCamera(1f, false, "box2");
