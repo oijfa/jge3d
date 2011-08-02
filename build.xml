@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="jge3d" default="Engine" basedir="."><!-- This where to be export to the local dir --> 
+<description>Ant targets for Engine into jar</description>
+
+<target name="Engine" description="Make the engine">
+   <!-- Export File for jar --> 
+   <jar jarfile="jge3d.jar" basedir=".">
+       <manifest>
+         <attribute name="Class-Path" value="lwjgl.jar lwjgl_util.jar jbullet.jar slick.jar TWL.jar vecmath.jar xpp3-1.1.4c.jar"/>
+         <!-- Main Class to Run Program -->
+         <attribute name="Main-Class" value="bin.Launcher"/>
+       </manifest>
+    </jar>
+</target> 
+</project>

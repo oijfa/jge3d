@@ -62,7 +62,7 @@ public class KeyMap {
   			db = dbf.newDocumentBuilder();
   			
   			try {
-  				dom = db.parse(KeyMap.class.getResource("keymaps/" + filePath).getPath());
+  				dom = db.parse(KeyMap.class.getResourceAsStream("keymaps/" + filePath));
   				Element root_element = dom.getDocumentElement();
   				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
   					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
