@@ -366,8 +366,7 @@ public class Model {
 			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, modelVBOID);
 
 		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB,
-			modelVBOindexID);
+			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, modelVBOindexID);
 
 		// vertices
 		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
