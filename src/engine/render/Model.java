@@ -392,7 +392,8 @@ public class Model {
 
 		if(shader != null) {
 			shader.startShader(modelVBOID, collision_object);
-				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
+				//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
+				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, this.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
 		}
 		
@@ -404,6 +405,14 @@ public class Model {
 		// Pop the matrix if we are in immediate mode
 		if (immediate_scale_rotate) 
 			GL11.glPopMatrix();
+	}
+
+	private int getVertexCount() {
+		int count = 0;
+		for(Mesh m : this.getMeshes())
+			for(Face f : m.getFaces())
+				count += f.getVertexCount();
+		return count;
 	}
 
 	public void destroyVBO() {
