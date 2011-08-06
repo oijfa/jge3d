@@ -50,8 +50,8 @@ public class Physics {
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 
 		// Min and Max collision boundaries for world (needs changing)
-		worldAabbMin = new Vector3f(-1000, -1000, -1000);
-		worldAabbMax = new Vector3f(1000, 1000, 1000);
+		worldAabbMin = new Vector3f(-10000, -10000, -10000);
+		worldAabbMax = new Vector3f(10000, 10000, 10000);
 
 		// algorithm for finding collision proximity (there are better ones)
 		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
@@ -66,8 +66,8 @@ public class Physics {
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
 		dynamicsWorld.setGravity(new Vector3f(0, 0, 0));
+		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0.1f;
 
-		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0f;
 
 		// Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();

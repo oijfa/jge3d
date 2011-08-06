@@ -37,7 +37,7 @@
 			<attribute name="javadoc_location" value="http://download.java.net/media/java3d/javadoc/1.5.2-latest/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jar/lwjgl-debug.jar" sourcepath="lib/jar_src/lwjgl.zip">
+	<classpathentry kind="lib" path="lib/jar/lwjgl.jar" sourcepath="lib/jar_src/lwjgl.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://www.lwjgl.org/javadoc/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jge3d/lib/native"/>

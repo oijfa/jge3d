@@ -41,6 +41,7 @@ public class Model {
 	private FloatBuffer buf;
 	private Shader shader;
 	private CollisionShape shape;
+	//private int num_vertices=0;
 
 	private Boolean immediate_scale_rotate = false;
 
@@ -330,6 +331,7 @@ public class Model {
 				// Set the notifier
 				hasVBO = true;
 				// buf = BufferUtils.createFloatBuffer(16);
+				num_vertices = getVertexCount();
 			}
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
@@ -393,7 +395,7 @@ public class Model {
 		if(shader != null) {
 			shader.startShader(modelVBOID, collision_object);
 				//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
-				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, this.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
 		}
 		
@@ -458,5 +460,14 @@ public class Model {
 
 	public void setShader(Shader shader) {
 		this.shader = shader;
+	}
+	
+	public void combineModels(Model model) {
+		for(Mesh mesh: model.getMeshes()) {
+			meshes.add(mesh);
+		}
+		//num_vertices=getVertexCount();
+		destroyVBO();
+		createVBO();
 	}
 }

@@ -254,4 +254,8 @@ public class Engine {
     }
     return ret;
   }
+  
+  public Model getModelByName(String name)  {
+	  return models.get(name);	  
+  }
 }

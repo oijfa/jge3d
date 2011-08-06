@@ -4,13 +4,15 @@ import javax.vecmath.Vector3f;
 
 import de.matthiasmann.twl.Color;
 
-import engine.importing.FileLoader;
+import engine.render.Model;
 import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
 
 public class CubicGrid<E> {
 	private E items[];
 	private Integer size;
+	private Model base_model;
+	private Model full_model;
 
 	@SuppressWarnings("unchecked")
 	public CubicGrid(int dim) {
@@ -36,9 +38,13 @@ public class CubicGrid<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public engine.render.Model getModel(String path_to_shape) {
-		engine.render.Model base_model = FileLoader.loadFile(path_to_shape);
-		engine.render.Model full_model = new engine.render.Model();
+	public Model getModel(Model model) {
+		base_model = model;
+		
+		if(full_model != null)
+			full_model.destroyVBO();
+		
+		full_model = new Model();
 		Mesh mesh;
 
 		try {
@@ -88,6 +94,8 @@ public class CubicGrid<E> {
 			e.printStackTrace();
 		}
 
+		full_model.createVBO();
+		
 		return full_model;
 	}
 

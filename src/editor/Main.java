@@ -2,6 +2,8 @@ package editor;
 
 import javax.vecmath.Vector3f;
 
+import editor.Main;
+
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import editor.window.GridWindow;
@@ -22,8 +24,10 @@ public class Main implements ActionListener {
 	private LayerMenu layer_menu;
 	// private ToolBox tool_box;
 
-	private Entity model;
+	private Entity edit_model;
 	private Camera camera;
+	
+	private boolean multiThreaded = false;
 
 	public static void main(String args[]) {
 		Main m = new Main();
@@ -33,6 +37,8 @@ public class Main implements ActionListener {
 	public Main() {
 		engine = new Engine();
 
+		engine.addModel("box", "resources/models/misc/box.xgl");
+		
 		int num_layers = 8;
 		grid_window = new GridWindow(num_layers);
 		layer_menu = new LayerMenu();
@@ -44,18 +50,16 @@ public class Main implements ActionListener {
 		engine.addWindow(palette_window, 300, 300);
 		engine.addWindow(layer_menu, 200, 30);
 		// engine.addWindow(tool_box, 200, 300);
+		
+		edit_model = engine.addEntity("model", 1f, true, "box", "default");
+		edit_model.setProperty(Entity.NAME, "model");
+		edit_model.setPosition(new Vector3f(0,0,0));
+		//edit_model.setGravity(new Vector3f(0,0,0));
 
-		engine.addEntity("model", 1f, true, "resources/models/misc/box.xgl", "default");
-		model = engine.getEntity("model");
-		model.setPosition(new Vector3f(0,0,0));
-		model.setGravity(new Vector3f(0,0,0));
-
-		engine.addCamera(1f,true, "resources/models/misc/box.xgl");
-		camera = engine.getCamera();
-		camera.focusOn(model);
-		camera.setPosition(new Vector3f(0,0,0));
-		camera.setDistance(5.0f);
-		camera.setGravity(new Vector3f(0,0,0));
+		camera = engine.addCamera(1f,false, "box");
+		camera.setDistance(5.0f);		
+		camera.setPosition(new Vector3f(0, 0, 5));
+		camera.focusOn(edit_model);
 	}
 
 	public void run() {
@@ -63,17 +67,32 @@ public class Main implements ActionListener {
 		palette_window.addActionListener(this);
 		layer_menu.addActionListener(this);
 		// tool_box.addActionListener(this);
+		
+		if(multiThreaded == true)
+			runMultiThread();
+		else
+			runSingleThread();
 
-		engine.run();
 	}
 
+	public void runMultiThread() {
+		engine.run();
+	}
+	
+	public void runSingleThread() {
+		while(true){
+			engine.renderOnce();
+			engine.physicsOnce();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == palette_window) {
 			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
 		} else if (ae.getSource() == grid_window) {
-			model.setModel(grid_window.getGrid().getModel("resources/models/misc/box.xgl"));
-			engine.updateEntity(model);
+			edit_model.setModel(grid_window.getGrid().getModel(engine.getModelByName("box")));
+			engine.updateEntity(edit_model);
 		} else if (ae.getSource() == layer_menu) {
 			if (combobox_hack == true) {
 				grid_window.loadLayer(layer_menu.getSelection());
