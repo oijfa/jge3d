@@ -339,18 +339,6 @@ public class Model {
 	}
 
 	public void draw_vbo(CollisionObject collision_object) {
-		// TODO: HHHHHAAAAAAAAAATTTTTTTTTTTEEEEEEEEEEEEEEEE
-		// If we're going to be using VBO's we need to switch
-		// off the immediate pipeline modularly;
-		// meaning that right here we need to have an if
-		// statement that controls whether we are drawing to
-		// the corespec or to the old shitty mode.
-		// This is different than all-or-nothing since we still get the speed
-		// increase of the VBO on older hardware and embedded systems
-		// but we also want to take advantage of the shaders
-		// and optimizations in new hardware if they exist
-		// I don't have time to port it yet since we need to write
-		// the correct shaders, but here is a helpful link:
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		if (immediate_scale_rotate) {
 			GL11.glPushMatrix();
@@ -391,7 +379,11 @@ public class Model {
 
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
-
+		
+		if(!immediate_scale_rotate)
+			for(Mesh mesh: meshes)
+				mesh.drawMaterial();
+					
 		if(shader != null) {
 			shader.startShader(modelVBOID, collision_object);
 				//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);

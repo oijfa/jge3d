@@ -138,9 +138,7 @@ public class Mesh implements Cloneable {
 		return faces;
 	}
 
-	public void draw() {
-		// Set Material
-
+	public void drawMaterial() {
 		GL11.glMaterial(
 			GL11.GL_FRONT_AND_BACK, 
 			GL11.GL_AMBIENT,
@@ -166,6 +164,11 @@ public class Mesh implements Cloneable {
 			GL11.GL_SHININESS,
 			mat.getShine()
 		);
+	}
+	
+	public void draw() {
+		// Set Material
+		drawMaterial();
 
 		// Transform
 		GL11.glTranslatef(location.x, location.y, location.z);
