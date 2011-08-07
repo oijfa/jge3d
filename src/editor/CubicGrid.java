@@ -52,37 +52,42 @@ public class CubicGrid<E> {
 					for (int x = 0; x < size; x++) {
 						current_block = ((Block<Integer>) this.get(x, y, z));
 						if (current_block.getActive()) {
-							mesh = new Mesh(model.getMesh(0));
-							mesh.transform(new Vector3f(x, y, z),
-								new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
-							mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
-							mesh.setMaterial(
-								new Material(
-									new Vector3f(
-										mat_color.getRedFloat(), 
-										mat_color.getGreenFloat(), 
-										mat_color.getBlueFloat()
-									),
-									new Vector3f(
-										mat_color.getRedFloat(), 
-										mat_color.getGreenFloat(), 
-										mat_color.getBlueFloat()
-									),
-									new Vector3f(
-										mat_color.getRedFloat(), 
-										mat_color.getGreenFloat(), 
-										mat_color.getBlueFloat()
-									),
-									new Vector3f(
-										mat_color.getRedFloat(), 
-										mat_color.getGreenFloat(), 
-										mat_color.getBlueFloat()
-									),
-									1f
-								)
-							);
-							mesh.calcNormals();
-							full_model.addMesh(mesh);
+							for(Mesh copymesh: model.getMeshes()) {
+								mesh = new Mesh(copymesh);
+								mesh.transform(
+									new Vector3f(x, y, z),
+									new Vector3f(0, 0, 1), 
+									new Vector3f(0, 1, 0)
+								);
+								mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
+								mesh.setMaterial(
+									new Material(
+										new Vector3f(
+											mat_color.getRedFloat(), 
+											mat_color.getGreenFloat(), 
+											mat_color.getBlueFloat()
+										),
+										new Vector3f(
+											mat_color.getRedFloat(), 
+											mat_color.getGreenFloat(), 
+											mat_color.getBlueFloat()
+										),
+										new Vector3f(
+											mat_color.getRedFloat(), 
+											mat_color.getGreenFloat(), 
+											mat_color.getBlueFloat()
+										),
+										new Vector3f(
+											mat_color.getRedFloat(), 
+											mat_color.getGreenFloat(), 
+											mat_color.getBlueFloat()
+										),
+										1f
+									)
+								);
+								mesh.calcNormals();
+								full_model.addMesh(mesh);
+							}
 						}
 					}
 				}

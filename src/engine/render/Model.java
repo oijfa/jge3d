@@ -76,6 +76,7 @@ public class Model {
 		modelVBOID = model.getVBOID();
 		modelVBOindexID = model.getVBOindexID();
 		shape = model.getCollisionShape();
+		shader = model.shader;
 		// verify();
 	}
 
@@ -100,7 +101,7 @@ public class Model {
 		return center;
 	}
 
-	private ArrayList<Mesh> getMeshes() {
+	public ArrayList<Mesh> getMeshes() {
 		return this.meshes;
 	}
 	

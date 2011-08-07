@@ -78,7 +78,7 @@ public class Main implements ActionListener {
 
 	public void runMultiThread() {
 		engine.run();
-	}
+	}	
 	
 	public void runSingleThread() {
 		while(true){

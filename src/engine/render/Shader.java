@@ -73,6 +73,13 @@ public class Shader {
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
         }        
     }
+    
+    public Shader(Shader shader) {
+    	this.vertShader = shader.vertShader;
+    	this.fragShader = shader.fragShader;
+    	this.shader = shader.shader;
+    	this.useShader = shader.useShader;
+    }
     /*
      * With the exception of syntax, setting up vertex and fragment shaders
      * is the same.

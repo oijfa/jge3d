@@ -101,8 +101,8 @@ public class Material {
 	private void matInit() {
 		ambientReflect = new Vector3f(0.216f, 0.263f, 0.333f);
 		diffuseReflect = new Vector3f(0.502f, 0.502f, 0.502f);
-		specularReflect = new Vector3f(0.0f, 0.0f, 0.0f);
-		emission = new Vector3f(0.0f, 0.0f, 0.0f);
+		specularReflect = new Vector3f(0.7f, 0.7f, 0.7f);
+		emission = new Vector3f(0.1f, 0.1f, 0.1f);
 
 		alpha = 1.0f;
 		shine = 0.5f;

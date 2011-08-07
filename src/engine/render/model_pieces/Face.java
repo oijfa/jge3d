@@ -57,26 +57,14 @@ public class Face {
 	public Face(Face f) {
 		this.vertices = new ArrayList<Vector3f>();
 		vertexNormals = new ArrayList<Vector3f>();
-		this.normal = new Vector3f();
 
-		for (@SuppressWarnings("unused")
-		Vector3f fa : f.vertices) {
-			this.vertices.add(new Vector3f());
+		for (Vector3f fa : f.vertices) {
+			this.vertices.add(new Vector3f(fa));
 		}
-		for (@SuppressWarnings("unused")
-		Vector3f fa : f.vertexNormals) {
-			this.vertexNormals.add(new Vector3f());
+		for (Vector3f fa : f.vertexNormals) {
+			this.vertexNormals.add(fa);
 		}
 
-		this.normal = new Vector3f(f.normal.x, f.normal.y, f.normal.z);
-		for (int j = 0; j < f.vertices.size(); j++) {
-			Vector3f temp = f.vertices.get(j);
-			this.vertices.set(j, new Vector3f(temp.x, temp.y, temp.z));
-		}
-		for (int j = 0; j < f.vertexNormals.size(); j++) {
-			Vector3f temp = f.vertexNormals.get(j);
-			this.vertexNormals.set(j, new Vector3f(temp.x, temp.y, temp.z));
-		}
 		init();
 	}
 
