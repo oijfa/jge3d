@@ -11,7 +11,6 @@ import engine.render.model_pieces.Mesh;
 public class CubicGrid<E> {
 	private E items[];
 	private Integer size;
-	private Model base_model;
 	private Model full_model;
 
 	@SuppressWarnings("unchecked")
@@ -39,8 +38,6 @@ public class CubicGrid<E> {
 
 	@SuppressWarnings("unchecked")
 	public Model getModel(Model model) {
-		base_model = model;
-		
 		if(full_model != null)
 			full_model.destroyVBO();
 		
@@ -55,8 +52,8 @@ public class CubicGrid<E> {
 					for (int x = 0; x < size; x++) {
 						current_block = ((Block<Integer>) this.get(x, y, z));
 						if (current_block.getActive()) {
-							mesh = new Mesh(base_model.getMesh(0));
-							mesh.transform(new Vector3f(x, -y, z),
+							mesh = new Mesh(model.getMesh(0));
+							mesh.transform(new Vector3f(x, y, z),
 								new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
 							mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
 							mesh.setMaterial(
@@ -94,8 +91,6 @@ public class CubicGrid<E> {
 			e.printStackTrace();
 		}
 
-		full_model.createVBO();
-		
 		return full_model;
 	}
 

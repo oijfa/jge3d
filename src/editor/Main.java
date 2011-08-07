@@ -38,6 +38,7 @@ public class Main implements ActionListener {
 		engine = new Engine();
 
 		engine.addModel("box", "resources/models/misc/box.xgl");
+		engine.addModel("box2", "resources/models/misc/box2.xgl");
 		
 		int num_layers = 8;
 		grid_window = new GridWindow(num_layers);
@@ -56,9 +57,9 @@ public class Main implements ActionListener {
 		edit_model.setPosition(new Vector3f(0,0,0));
 		//edit_model.setGravity(new Vector3f(0,0,0));
 
-		camera = engine.addCamera(1f,false, "box");
-		camera.setDistance(5.0f);		
-		camera.setPosition(new Vector3f(0, 0, 5));
+		camera = engine.addCamera(1f, false, "box2");
+		camera.setDistance(10.0f);
+		camera.setPosition(new Vector3f(0, 0, -5));
 		camera.focusOn(edit_model);
 	}
 
