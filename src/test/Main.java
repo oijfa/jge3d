@@ -44,7 +44,7 @@ public class Main {
 		terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		//Make some parallax stars
-		new Stars(engine,1000,10000,200,5,400);
+		//new Stars(engine,1000,10000,200,5,400);
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");

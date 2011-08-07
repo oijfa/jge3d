@@ -2,9 +2,9 @@ package engine.input;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.input.Keyboard;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,7 +27,7 @@ public class KeyMap {
   HashMap<String,String> key_map;
   
   final HashMap<String, Integer> lwjgl_key_enums;
-  final HashMap<Integer, String> enums_to_function; 
+  final HashMap<String, String> enums_to_function; 
   
   EntityList entity_list;
   
@@ -36,20 +35,25 @@ public class KeyMap {
     key_map = new HashMap<String,String>();
     
     lwjgl_key_enums = new HashMap<String,Integer>();
-    enums_to_function = new HashMap<Integer,String>();
+    enums_to_function = new HashMap<String,String>();
     
     entity_list = ent_list;
 
     for(Field f : Keyboard.class.getFields()){
     	if(f.getName().contains("KEY_")){
     		try {
-				lwjgl_key_enums.put(f.getName(), (Integer)f.get(null));
+    			lwjgl_key_enums.put(f.getName(), (Integer)f.get(null));
 			} catch (IllegalArgumentException e) {
 			} catch (IllegalAccessException e) {}
     	}
     }
 
     parseXml(filename);
+    /*
+    System.out.println("Outputting read key map: ");
+    for( Entry e : enums_to_function.entrySet()){
+    	System.out.println("	;" + e.getKey() + "; == ;" + e.getValue() + ";");
+    }*/
   }
   
   	private void parseXml(String filePath) throws KeyMapException{
@@ -68,21 +72,17 @@ public class KeyMap {
   					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
   					for(Node n : key_settings){
   						String id = ((Element) n).getAttribute("ID");
-	
+  						String event = ((Element) n).getAttribute("EVENT");
+  						
   						try {
   							if(this.getClass().getMethod(n.getTextContent()) != null){
   								enums_to_function.put(
-  									lwjgl_key_enums.get(id.toUpperCase()),
+  									String.valueOf(lwjgl_key_enums.get(id.toUpperCase())) + event.toUpperCase(),
   									n.getTextContent()
   								);
   							}
-  						
-						} catch (SecurityException e) {
-							throwKeyMapException();
-						} catch (DOMException e) {
-							throwKeyMapException();
-						} catch (NoSuchMethodException e) {
-							throwKeyMapException();
+						} catch (Exception e) {
+							throwKeyMapException(e);
 						}
   					}
   				}else{
@@ -167,26 +167,27 @@ public class KeyMap {
 	}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
-		String function_name = enums_to_function.get(e.getKeyCode());
-
-		if( function_name != null){
-			try {
-				KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
-
-			//TODO Throw warnings or something
-			} catch (IllegalArgumentException e1) {
-				throwKeyMapException();
-			} catch (SecurityException e1) {
-				throwKeyMapException();
-			} catch (IllegalAccessException e1) {
-				throwKeyMapException();
-			} catch (InvocationTargetException e1) {
-				throwKeyMapException();
-			} catch (NoSuchMethodException e1) {
-				throwKeyMapException();
+		String[] function_names = {
+		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
+		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType())
+  		};
+		
+		for(String function_name : function_names){
+			/*
+			System.out.println(
+				function_name + " == " +
+				String.valueOf(e.getKeyCode()) + " == " +
+				e.getType()
+			);
+			*/
+			if( function_name != null){
+				try {
+					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
+				} catch (Exception ex) {
+					throwKeyMapException(ex);
+				}
 			}
 		}
-
 		return true;
 	}
   	
@@ -197,10 +198,10 @@ public class KeyMap {
   	}
   	
   	private void throwException(String message) throws KeyMapException{
-  	    KeyMapException e = new KeyMapException();
-  	    e.initCause(new Throwable(message));
-  	    throw e;
-  	  }
+	    KeyMapException e = new KeyMapException();
+	    e.initCause(new Throwable(message));
+	    throw e;
+  	}
   	
-  	private void throwKeyMapException() throws KeyMapException{ throw new KeyMapException(); }
+  	private void throwKeyMapException(Exception ex) throws KeyMapException{ throw new KeyMapException(ex); }
 }
