@@ -191,8 +191,8 @@ public class Face {
 				+ vertexNormals.get(i).x + "," + vertexNormals.get(i).y + ","
 				+ vertexNormals.get(i).z + ")\n";
 		}
-		ret += "			normal: (" + normal.x + "," + normal.y + "," + normal.z
-			+ ")\n";
+		if(normal != null)
+			ret += "			normal: (" + normal.x + "," + normal.y + "," + normal.z	+ ")\n";
 		return ret;
 	}
 

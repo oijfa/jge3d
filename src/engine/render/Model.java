@@ -20,8 +20,6 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexHullShape;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 
@@ -41,7 +39,7 @@ public class Model {
 	private FloatBuffer buf;
 	private Shader shader;
 	private CollisionShape shape;
-	//private int num_vertices=0;
+	private int total_vertices=0;
 
 	private Boolean immediate_scale_rotate = false;
 
@@ -96,6 +94,7 @@ public class Model {
 	/* Setters */
 	public void addMesh(Mesh m) {
 		meshes.add(m);
+		reduceHull();
 	}
 
 	/* Getters */
@@ -153,9 +152,8 @@ public class Model {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
 		Transform transform_matrix = new Transform();
-		DefaultMotionState motion_state = (DefaultMotionState) ((RigidBody) collision_object).getMotionState();
-
-		transform_matrix.set(motion_state.graphicsWorldTrans);
+		
+		transform_matrix.set(collision_object.getWorldTransform(new Transform()));
 
 		// Adjust the position and rotation of the object from physics
 		float[] body_matrix = new float[16];
@@ -310,9 +308,14 @@ public class Model {
 				modelVBOID = createVBOID(1);
 				modelVBOindexID = createVBOID(1);
 	
-				int num_vertices = meshes.get(0).getFace(0).getVertexCount();
+				int num_vertices = 0;
 				for (Mesh m : meshes) {
 					num_faces_all_meshes += m.getFaceCount();
+					for(Face face: m.getFaces()) {
+						if(face.getVertexCount() > num_vertices) {
+							num_vertices = face.getVertexCount();
+						}
+					}
 				}
 				vertex_buffer = BufferUtils.createFloatBuffer(num_faces_all_meshes
 					* num_vertices * 12);
@@ -338,7 +341,7 @@ public class Model {
 				// Set the notifier
 				hasVBO = true;
 				// buf = BufferUtils.createFloatBuffer(16);
-				num_vertices = getVertexCount();
+				total_vertices = getVertexCount();
 			}
 		} else {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
@@ -393,8 +396,7 @@ public class Model {
 					
 		if(shader != null) {
 			shader.startShader(modelVBOID, collision_object);
-				//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, index_buffer);
-				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
 		}
 		

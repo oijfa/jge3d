@@ -58,8 +58,8 @@ public class Main implements ActionListener {
 		//edit_model.setGravity(new Vector3f(0,0,0));
 
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(10.0f);
-		camera.setPosition(new Vector3f(0, 0, -5));
+		camera.setDistance(40.0f);
+		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(edit_model);
 	}
 
