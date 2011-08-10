@@ -4,7 +4,6 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;

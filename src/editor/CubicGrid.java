@@ -41,7 +41,7 @@ public class CubicGrid<E> {
 		if(full_model != null)
 			full_model.destroyVBO();
 		
-		full_model = new Model();
+		full_model = new Model(model.getShader());
 		Mesh mesh;
 
 		try {

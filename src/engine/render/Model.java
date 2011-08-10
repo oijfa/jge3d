@@ -49,6 +49,12 @@ public class Model {
 		meshes = new ArrayList<Mesh>();
 		init();
 	}
+	
+	public Model(Shader shader) {
+		meshes = new ArrayList<Mesh>();
+		init();
+		this.shader = shader;
+	}
 
 	public Model(Mesh[] mesh_array) {
 		meshes = new ArrayList<Mesh>();
@@ -304,7 +310,7 @@ public class Model {
 				modelVBOID = createVBOID(1);
 				modelVBOindexID = createVBOID(1);
 	
-					int num_vertices = meshes.get(0).getFace(0).getVertexCount();
+				int num_vertices = meshes.get(0).getFace(0).getVertexCount();
 				for (Mesh m : meshes) {
 					num_faces_all_meshes += m.getFaceCount();
 				}
@@ -451,6 +457,10 @@ public class Model {
 		this.shape = shape;		
 	}
 
+	public Shader getShader() {
+		return shader;
+	}
+	
 	public void setShader(Shader shader) {
 		this.shader = shader;
 	}
