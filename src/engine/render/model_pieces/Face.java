@@ -191,8 +191,8 @@ public class Face {
 				+ vertexNormals.get(i).x + "," + vertexNormals.get(i).y + ","
 				+ vertexNormals.get(i).z + ")\n";
 		}
-		ret += "			normal: (" + normal.x + "," + normal.y + "," + normal.z
-			+ ")\n";
+		if(normal != null)
+			ret += "			normal: (" + normal.x + "," + normal.y + "," + normal.z	+ ")\n";
 		return ret;
 	}
 
@@ -232,9 +232,9 @@ public class Face {
 				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.location.y;
 				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.location.z;
 
-				faceVNT[3 + i] = vertexNormals.get(i / 12).x + mesh.location.x;
-				faceVNT[4 + i] = vertexNormals.get(i / 12).y + mesh.location.y;
-				faceVNT[5 + i] = vertexNormals.get(i / 12).z + mesh.location.z;
+				faceVNT[3 + i] = vertexNormals.get(i / 12).x;
+				faceVNT[4 + i] = vertexNormals.get(i / 12).y;
+				faceVNT[5 + i] = vertexNormals.get(i / 12).z;
 
 				faceVNT[6 + i] = 0.0f;
 				faceVNT[7 + i] = 1.0f;

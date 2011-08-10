@@ -98,10 +98,6 @@ public class Mesh implements Cloneable {
 	}
 
 	private void meshInit() {
-		location = new Vector3f();
-		forward = new Vector3f();
-		up = new Vector3f();
-
 		faces = new ArrayList<Face>();
 		mat = new Material();
 		location = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -184,10 +180,8 @@ public class Mesh implements Cloneable {
 	/* Debug */
 	public String toString() {
 		String ret = "";
-		ret += "		location: (" + location.x + "," + location.y + ","
-			+ location.z + ")\n";
-		ret += "		forward: (" + forward.x + "," + forward.y + "," + forward.z
-			+ ")\n";
+		ret += "		location: (" + location.x + "," + location.y + ","	+ location.z + ")\n";
+		ret += "		forward: (" + forward.x + "," + forward.y + "," + forward.z	+ ")\n";
 		ret += "		up: (" + up.x + "," + up.y + "," + up.z + ")\n";
 		ret += "		Material{\n";
 		ret += mat.toString();

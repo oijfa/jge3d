@@ -90,6 +90,7 @@ public class Model {
 	/* Setters */
 	public void addMesh(Mesh m) {
 		meshes.add(m);
+		reduceHull();
 	}
 
 	/* Getters */

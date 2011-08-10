@@ -3,8 +3,8 @@
 	<key ID="Key_RIGHT" EVENT="KEY_RELEASED">rotateCamRight</key>
 	<key ID="Key_UP" EVENT="KEY_RELEASED">rotateCamUp</key> 	
 	<key ID="Key_DOWN" EVENT="KEY_RELEASED">rotateCamDown</key>
-	<key ID="Key_PGUP" EVENT="KEY_RELEASED">zoomCameraIn</key>
-	<key ID="Key_PGDN" EVENT="KEY_RELEASED">zoomCameraOut</key>
+	<key ID="Key_PRIOR" EVENT="KEY_RELEASED">zoomCameraIn</key>
+	<key ID="Key_NEXT" EVENT="KEY_RELEASED">zoomCameraOut</key>
 	<key ID="Key_W" EVENT="KEY_RELEASED">playerForward</key>
 	<key ID="Key_S" EVENT="KEY_RELEASED">playerBack</key>
 	<key ID="Key_A" EVENT="KEY_RELEASED">playerLeft</key>
