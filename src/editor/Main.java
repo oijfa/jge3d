@@ -6,6 +6,7 @@ import editor.Main;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import editor.window.FileMenu;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
 import editor.window.PaletteWindow;
@@ -22,6 +23,7 @@ public class Main implements ActionListener {
 	private GridWindow grid_window;
 	private PaletteWindow palette_window;
 	private LayerMenu layer_menu;
+	private FileMenu file_menu;
 	// private ToolBox tool_box;
 
 	private Entity edit_model;
@@ -45,11 +47,13 @@ public class Main implements ActionListener {
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(num_layers);
 		palette_window = new PaletteWindow(216);
+		file_menu = new FileMenu();
 		// tool_box = new ToolBox();
 
 		engine.addWindow(grid_window, 400, 400);
 		engine.addWindow(palette_window, 300, 300);
 		engine.addWindow(layer_menu, 200, 30);
+		engine.addWindow(file_menu, 300, 150);
 		// engine.addWindow(tool_box, 200, 300);
 		
 		edit_model = engine.addEntity("model", 1f, true, "box", "default");

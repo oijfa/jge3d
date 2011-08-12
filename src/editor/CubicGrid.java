@@ -55,7 +55,7 @@ public class CubicGrid<E> {
 							for(Mesh copymesh: model.getMeshes()) {
 								mesh = new Mesh(copymesh);
 								mesh.transform(
-									new Vector3f(x, y, z),
+									new Vector3f(x, -y, z),
 									new Vector3f(0, 0, 1), 
 									new Vector3f(0, 1, 0)
 								);
