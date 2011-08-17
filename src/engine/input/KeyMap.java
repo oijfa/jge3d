@@ -97,7 +97,7 @@ public class KeyMap {
 		}catch (ParserConfigurationException e) {
 			throwException("ParserConfigurationException");
 		}
-}
+  	}
   
   	private ArrayList<Node> findChildrenByName(Node root, String... names) {
 		ArrayList<Node> list = new ArrayList<Node>();
@@ -113,57 +113,32 @@ public class KeyMap {
 		return list;
 	}
   	
-	public void rotateCamLeft(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.05d);
-	}
-	public void rotateCamRight(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.05d);
-	}
-	public void rotateCamUp(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.05d);
-	}
-	public void rotateCamDown(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void moveCameraForward(){
-		//((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();
-	}
-	public void moveCameraBack(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void moveCameraLeft(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void moveCameraRight(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void moveCameraUp(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void moveCameraDown(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);
-	}
-	public void zoomCameraIn(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);
-	}
-	public void zoomCameraOut(){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);
-	}
-	public void playerForward(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));
-	}
-	public void playerBack(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));
-	}
-	public void playerLeft(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));
-	}
-	public void playerRight(){
-		((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));
-	}
-	public void playerJump(){
-		((Player)entity_list.getItem("player")).jump();
-	}	
+	public void rotateCamLeft(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(-0.05d);}
+	public void rotateCamRight(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementRotation(0.05d);}
+	public void rotateCamUp(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(0.05d);}
+	public void rotateCamDown(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
+	
+	/*public void moveCameraForward(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();}
+	public void moveCameraBack(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
+	public void moveCameraLeft(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
+	public void moveCameraRight(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
+	public void moveCameraUp(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
+	public void moveCameraDown(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}*/
+	
+	public void zoomCameraIn(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
+	public void zoomCameraOut(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
+	
+	public void playerForward(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));}
+	public void playerBack(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));}
+	public void playerLeft(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));}
+	public void playerRight(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));}
+
+	public void playerStopForward(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));}
+	public void playerStopBack(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));}
+	public void playerStopLeft(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));}
+	public void playerStopRight(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));}
+	
+	public void playerJump(){((Player)entity_list.getItem("player")).jump();}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
 		String[] function_names = {

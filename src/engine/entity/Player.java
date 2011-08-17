@@ -13,6 +13,7 @@ import engine.render.Shader;
 
 public class Player extends Entity {
 	private KinematicCharacterController player;
+	private Vector3f walk_direction;
 
 	public Player(String name, float mass, float step_height, Model model, Shader shader) {
 		super(name, mass, false, model, shader);
@@ -32,9 +33,11 @@ public class Player extends Entity {
 		player.setJumpSpeed(10.0f);
 		collision_object.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
 		object_type = ObjectType.actor;
+		walk_direction = new Vector3f();
 	}
 
-	public void movePlayer(Vector3f walk_direction) {
+	public void movePlayer(Vector3f walk_correction) {
+		walk_direction.add(walk_correction);
 		player.setWalkDirection(walk_direction);
 	}
 

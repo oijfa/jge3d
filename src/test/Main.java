@@ -4,7 +4,6 @@ import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.*;
-import engine.stars.Stars;
 import engine.terrain.Terrain;
 
 public class Main {
