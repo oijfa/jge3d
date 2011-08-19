@@ -19,7 +19,7 @@ public class Main {
 	private Camera camera;
 
 	public static void main(String args[]) {
-		boolean multiThreaded = false;
+		boolean multiThreaded = true;
 		
 		Main m = new Main();
 		if(multiThreaded == true)
@@ -39,7 +39,7 @@ public class Main {
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 		
 		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(10);
+		terrain.createTerrain(20);
 		terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		//Make some parallax stars

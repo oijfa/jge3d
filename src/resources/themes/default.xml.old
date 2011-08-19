@@ -69,12 +69,6 @@
         </select>
         <cursor name="cursor.horiz_resize" hotSpotX="0" hotSpotY="0" xywh="175,34,32,15"/>
     </images>
-    <images file="images/bomb.png" format="RGBA">
-    	<area name="bomb" xywh="*"/>
-   	</images>
-   	<images file="images/align.png" format="RGBA">
-    	<area name="align" xywh="*"/>
-   	</images>
     <images file="images/arrows.png">
         <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
         <area name="down" xywh="28,0,26,32" inset="10" center="true"/>
@@ -82,10 +76,10 @@
         <area name="left" xywh="92,0,31,32" inset="10" center="true"/>
     </images>
     <images file="images/symbols.png">
-        <area name="zoomout" xywh="6,12,28,7"/>
-        <area name="zoomin" xywh="46,1,28,29"/>
-        <area name="center" xywh="85,1,29,30"/>
-        <area name="explode" xywh="118,0,31,31"/>
+        <area name="zoomout" xywh="6,12,28,7" center="true"/>
+        <area name="zoomin" xywh="46,1,28,29" center="true"/>
+        <area name="center" xywh="85,1,29,30" center="true"/>
+        <area name="explode" xywh="118,0,31,31" center="true"/>
     </images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
@@ -122,6 +116,28 @@
 		<param name="namedGaps">
 		    <map>
 				<param name="reggap"><gap>10</gap></param>
+    		</map>
+		</param>
+    </theme>
+    <theme name="-no-gaps" ref="-defaults">
+    	<param name="smallGap"><dimension>0,0</dimension></param>
+		<param name="mediumGap"><dimension>00,0</dimension></param>
+		<param name="largeGap"><dimension>0,0</dimension></param>
+		<param name="defaultGap"><dimension>0,0</dimension></param>
+		<param name="namedGaps">
+		    <map>
+				<param name="reggap"><gap>0</gap></param>
+    		</map>
+		</param>
+    </theme>
+    <theme name="-small-gaps" ref="-defaults">
+    	<param name="smallGap"><dimension>1,1</dimension></param>
+		<param name="mediumGap"><dimension>1,1</dimension></param>
+		<param name="largeGap"><dimension>1,1</dimension></param>
+		<param name="defaultGap"><dimension>1,1</dimension></param>
+		<param name="namedGaps">
+		    <map>
+				<param name="reggap"><gap>1</gap></param>
     		</map>
 		</param>
     </theme>
@@ -168,19 +184,27 @@
     </theme>
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <param name="border"><border>5,5,5,5</border></param>
-=======
         <param name="border"><border>5</border></param>
->>>>>>> master
-=======
-        <param name="border"><border>5</border></param>
->>>>>>> master
         <param name="maxWidth"><int>75</int></param>
         <param name="maxHeight"><int>75</int></param>
         <param name="minWidth"><int>75</int></param>
         <param name="minHeight"><int>75</int></param>
+    </theme>
+    <theme name="medbutton" allowWildcard="true" ref="-defaults">
+        <param name="background"><image>white</image></param>
+        <param name="border"><border>20</border></param>
+        <param name="maxWidth"><int>50</int></param>
+        <param name="maxHeight"><int>50</int></param>
+        <param name="minWidth"><int>20</int></param>
+        <param name="minHeight"><int>20</int></param>
+    </theme>
+    <theme name="smallbutton" allowWildcard="true" ref="-defaults">
+        <param name="background"><image>white</image></param>
+        <param name="border"><border>10</border></param>
+        <param name="maxWidth"><int>20</int></param>
+        <param name="maxHeight"><int>20</int></param>
+        <param name="minWidth"><int>20</int></param>
+        <param name="minHeight"><int>20</int></param>
     </theme>
     <theme name="vscrollbar" allowWildcard="true" ref="-defaults">
         <theme name="upbutton" ref="-defaults">
@@ -256,14 +280,20 @@
         <param name="fixedCellHeight"><bool>false</bool></param>
         <param name="rowMajor"><bool>true</bool></param>
     </theme>
-    <theme name="combobox" ref="label">
+    <theme name="combobox" ref="widget">
         <theme name="display" ref="-defaults">
         </theme>
         <param name="background"><image>border_round</image></param>
-        <param name="minWidth"><int>140</int></param>
-        <param name="minHeight"><int>40</int></param>
-        <param name="maxHeight"><int>40</int></param>
-        <theme name="button" ref="button"/>
+        <param name="minWidth"><int>100</int></param>
+        <param name="minHeight"><int>30</int></param>
+        <param name="maxHeight"><int>50</int></param>
+        <param name="maxWidth"><int>1000</int></param>
+        <theme name="button" ref="button">
+            <param name="minWidth"><int>30</int></param>
+	        <param name="minHeight"><int>30</int></param>
+	        <param name="maxHeight"><int>30</int></param>
+	        <param name="maxWidth"><int>30</int></param>
+        </theme>
     </theme>
     <theme name="comboboxPopup" ref="-defaults">
         <theme name="listbox" ref="listbox">
@@ -339,95 +369,59 @@
     </theme>
     -->
     <theme name="window" ref="-defaults">
-        <theme name="mainmenu" ref="resizableframe">
-        	<param name="minWidth"><int>300</int></param>
-            <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>225</int></param>
-        	<param name="maxHeight"><int>225</int></param>
-            <theme name="dialoglayout" ref="-default-gaps">
-                <theme name="new_game" ref="button"/>
-                <theme name="load_game" ref="button"/>
-                <theme name="options" ref="button"/>
-                <theme name="quit" ref="button"/>
-            </theme>
-        </theme>
-        <theme name="texturemenu" ref="resizableframe">
-        	<param name="minWidth"><int>300</int></param>
-            <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>500</int></param>
-        	<param name="maxHeight"><int>500</int></param>
-            <theme name="dialoglayout" ref="-default-gaps">
-  				<theme name="" ref="*"/>
-                <theme name="preview" ref="widget">
-                    <param name="minWidth"><int>300</int></param>
-            		<param name="maxWidth"><int>300</int></param>
-       				<param name="minHeight"><int>225</int></param>
-        			<param name="maxHeight"><int>225</int></param>
-                </theme>
-				<theme name="textree" ref="tree">
-                    <param name="minWidth"><int>300</int></param>
-            		<param name="maxWidth"><int>300</int></param>
-       				<param name="minHeight"><int>225</int></param>
-        			<param name="maxHeight"><int>225</int></param>
-        		</theme>				
-                <theme name="add" ref="button"/>
-                <theme name="remove" ref="button"/>
-            </theme>
-        </theme>
-        <theme name="entitymenu" ref="resizableframe">
-        	<param name="resizableAxis"><string>VERTICAL</string></param>
-        	<param name="minWidth"><int>300</int></param>
-            <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>300</int></param>
-        	<param name="maxHeight"><int>1000</int></param>
-        	<theme name="dialoglayout" ref="-default-gaps">
-  				<theme name="" ref="*"/>
-				<theme name="textree" ref="tree">
-					<param name="minWidth"><int>300</int></param>
-            		<param name="maxWidth"><int>300</int></param>
-       				<param name="minHeight"><int>300</int></param>
-        			<param name="maxHeight"><int>1000</int></param>
-        		</theme>		
-            </theme>
-        </theme>
-        <theme name="rotationmenu" ref="resizableframe">
-<<<<<<< HEAD
-<<<<<<< HEAD
+        <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
-=======
-	       	<param name="minWidth"><int>100</int></param>
->>>>>>> master
-=======
-	       	<param name="minWidth"><int>100</int></param>
->>>>>>> master
+            <param name="maxWidth"><int>1000</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>1000</int></param>
+        	<theme name="dialoglayout" ref="-small-gaps">
+        	    <theme name="" ref="*"/>
+  				<theme name="block" ref="medbutton" />	
+            </theme>
+        </theme>
+        <theme name="palettewindow" ref="resizableframe">
+        	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>
         	<param name="maxHeight"><int>400</int></param>
-        	<theme name="dialoglayout" ref="-default-gaps">
-  				<theme name="" ref="*"/>
-				<theme name="up" ref="button">
-					<param name="overlay"><image>up</image></param>
-                    <param name="border"><border>10</border></param>
-				</theme>
-				<theme name="down" ref="button">
-					<param name="overlay"><image>down</image></param>
-				</theme>
-				<theme name="right" ref="button">
-					<param name="overlay"><image>right</image></param>
-				</theme>
-				<theme name="left" ref="button">
-					<param name="overlay"><image>left</image></param>
-				</theme>	
-				<theme name="center" ref="button"/>
-				<theme name="zoomin" ref="button"/>	
-				<theme name="zoomout" ref="button"/>
-				<theme name="explode" ref="button">
-					<param name="overlay"><image>bomb</image></param>
-				</theme>
-				<theme name="align" ref="button">
-					<param name="overlay"><image>align</image></param>
-				</theme>
-            </theme>
-        </theme>
+        	<theme name="frame_layout" ref="-no-gaps">
+        		<theme name="dialoglayout" ref="-no-gaps">
+	        	    <theme name="" ref="*"/>
+  					<theme name="colorcell" ref="smallbutton" />
+  					<theme name="primary_color" ref="button" />
+  					<theme name="alt_color" ref="button" />		
+            	</theme>
+        	</theme>
+    	</theme>
+    	<theme name="toolbox" ref="resizableframe">
+    		<theme name="layermenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="layer_cb" ref="combobox" />
+    		</theme>
+    		<theme name="mirrormenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="mirror_cb" ref="combobox" />
+    		</theme>
+    		<theme name="persepectivemenu" ref="resizableframe">
+    			<param name="minWidth"><int>100</int></param>
+            	<param name="maxWidth"><int>400</int></param>
+       			<param name="minHeight"><int>30</int></param>
+        		<param name="maxHeight"><int>50</int></param>
+        		<theme name="perspective_cb" ref="combobox" />
+    		</theme>
+    	</theme>
+    	<theme name="layermenu" ref="resizableframe">
+    		<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>30</int></param>
+        	<param name="maxHeight"><int>50</int></param>
+        	<theme name="layer_cb" ref="combobox" />
+    	</theme>
     </theme>
 </themes>
