@@ -68,8 +68,9 @@ public class Window extends DesktopArea {
 
 	protected boolean handleEvent(Event evt) {
 		// Our event handling
+		//gui.handleKeyRepeat();
 		try {
-			if (key_map != null && key_map.handleEvent(evt)) { return true; }
+			if (key_map != null && !evt.isKeyRepeated() && key_map.handleEvent(evt)) { return true; }
 		} catch (KeyMapException e) {
 			// TODO 
 			System.out.println("Failed to handle event for whatever reason.");
