@@ -113,7 +113,7 @@ public class Mesh implements Cloneable {
 	public void addFace(Face f) {
 		faces.add(f);
 	}
-
+	
 	public void transform(Vector3f loc, Vector3f forw, Vector3f up)
 		throws Exception {
 		this.location = new Vector3f(loc.x, loc.y, loc.z);
@@ -134,6 +134,10 @@ public class Mesh implements Cloneable {
 		return faces;
 	}
 
+	public Vector3f getTransform() {
+		return location;
+	}
+	
 	public void drawMaterial() {
 		GL11.glMaterial(
 			GL11.GL_FRONT_AND_BACK, 

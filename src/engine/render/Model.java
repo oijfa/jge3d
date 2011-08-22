@@ -428,15 +428,20 @@ public class Model {
 	public void reduceHull() {
 		ObjectArrayList<Vector3f> vertices = new ObjectArrayList<Vector3f>();
 		
+		//System.out.println("\n\n\nHURR");
 		for(Mesh m : this.getMeshes()){
 			for(Face f : m.getFaces()){
 				for(Vector3f v : f.getVertices()){
-					vertices.add(v);
+					Vector3f translated_verts = new Vector3f();
+					translated_verts.add(v, m.getTransform());
+					vertices.add(translated_verts);
+					//System.out.println(translated_verts);
 				}
 			}
 		}
-
+		//System.out.println("###HURR\n\n\n");
 		ConvexHullShape cvs = new ConvexHullShape(vertices);
+		System.out.println(cvs.getNumVertices());
 		shape = cvs;
 	}
 	
