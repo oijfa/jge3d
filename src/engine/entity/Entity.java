@@ -191,6 +191,7 @@ public class Entity {
 
 	public void setModel(Model model) {
 		this.model = model;
+		setCollisionShape(model.getCollisionShape());
 	}
 
 	public void setShouldDraw(boolean shouldDraw) {

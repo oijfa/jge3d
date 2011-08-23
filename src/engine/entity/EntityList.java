@@ -111,6 +111,7 @@ public class EntityList {
 		if (e.keyExists("name")) {
 			if (e.getModel() != null) {
 				e.getModel().createVBO();
+				e.getModel().reduceHull();
 			}
 		}
 	}

@@ -80,11 +80,7 @@ public class Main {
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(player);
 		
-		
 		engine.updateEntity(terrain.getEntity());
-		terrain.getEntity().getModel().reduceHull();
-		
-		System.out.println("Num Entities: " + engine.getEntityList().getEntities().size());
 	}
 
 	public void runMultiThread() {

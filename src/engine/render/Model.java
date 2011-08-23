@@ -94,7 +94,7 @@ public class Model {
 	/* Setters */
 	public void addMesh(Mesh m) {
 		meshes.add(m);
-		reduceHull();
+		//reduceHull();
 	}
 
 	/* Getters */
@@ -441,7 +441,6 @@ public class Model {
 		}
 		//System.out.println("###HURR\n\n\n");
 		ConvexHullShape cvs = new ConvexHullShape(vertices);
-		System.out.println(cvs.getNumVertices());
 		shape = cvs;
 	}
 	
