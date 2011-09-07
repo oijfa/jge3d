@@ -54,6 +54,7 @@ public class Main implements ActionListener {
 		engine.addWindow(palette_window, 300, 300);
 		engine.addWindow(layer_menu, 200, 30);
 		engine.addWindow(file_menu, 300, 150);
+		//engine.addWindow(new FileMenu(), 300, 300);
 		// engine.addWindow(tool_box, 200, 300);
 		
 		edit_model = engine.addEntity("model", 1f, true, "box", "default");

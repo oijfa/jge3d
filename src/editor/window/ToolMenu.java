@@ -12,13 +12,19 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.LoadFileSelector;
 
-public class FileMenu  extends ResizableFrame implements ActionListener {
+public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 	
 	private LoadFileSelector load_file;
-	private Button new_file;
-	private Button open_file;
-	private Button save_file;
+	
+	private Button file_window;
+	private Button palette_window;
+	private Button grid_window;
+	private Button perspective_window;
+	private Button layer_window;
+	private Button mirror_window;
+	private Button color_window;
+	
 	LoadFileSelector.Callback callback = new LoadFileSelector.Callback() {
 		@Override
 		public void fileSelected(File file) {/* TODO Auto-generated method stub*/}
@@ -27,17 +33,12 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 	};
 	
 
-	public FileMenu() {
-		new_file = new Button();
-		open_file = new Button();
-		save_file = new Button();
-		
-		action_listeners = new ArrayList<ActionListener>();
-		setTitle("File Menu");
+	public ToolMenu() {
 
-		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "what", "fucking dumb", callback, "cockass");
-		//save_file = 
-		
+				
+		action_listeners = new ArrayList<ActionListener>();
+		setTitle("Tool Menu");
+
 		createMenu();
 		createButtonCallbacks();		
 		
@@ -48,15 +49,28 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 		// Create the layout and button instances
 		DialogLayout layout = new DialogLayout();
 
-		new_file = new Button("New");
-		new_file.setTheme("new_file");
-		open_file = new Button("Open");
-		open_file.setTheme("open_file");
-		save_file = new Button("Save");
-		save_file.setTheme("save_file");
-		new_file.setSize(200, 30);
-		open_file.setSize(200, 30);
-		save_file.setSize(200, 30);
+		file_window = new Button("File");
+		file_window.setTheme("file_window");
+		palette_window = new Button("Colors");
+		palette_window.setTheme("palette_window");
+		grid_window = new Button("DrawSpace");
+		grid_window.setTheme("grid_window");
+		perspective_window = new Button("Perspective");
+		perspective_window.setTheme("perspective_window");
+		layer_window = new Button("Layer");
+		layer_window.setTheme("file_window");
+		mirror_window = new Button("Mirror");
+		mirror_window.setTheme("mirror_window");
+		color_window = new Button("Color");
+		color_window.setTheme("color_window");
+		
+		file_window.setSize(200, 30);
+		palette_window.setSize(200, 30);
+		grid_window.setSize(200, 30);
+		perspective_window.setSize(200, 30);
+		layer_window.setSize(200, 30);
+		mirror_window.setSize(200, 30);
+		color_window.setSize(200, 30);
 		
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
@@ -70,7 +84,15 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 			// Keeps all the buttons in a single vertical line as opposed to
 			// staggering
 			// left to right per row
-			.addGroup(layout.createParallelGroup(new_file, open_file, save_file))
+			.addGroup(layout.createParallelGroup(
+				file_window,
+				palette_window,
+				grid_window,
+				perspective_window,
+				layer_window,
+				mirror_window,
+				color_window)
+			)
 			.addGap();
 
 		// Group for holding the Vertical alignment of the buttons
@@ -78,7 +100,13 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 			.addGap()
 			// Add each widget without forming a group so that they rest one
 			// under the other
-			.addWidget(new_file).addWidget(open_file).addWidget(save_file);
+			.addWidget(file_window)
+			.addWidget(palette_window)
+			.addWidget(grid_window)
+			.addWidget(perspective_window)
+			.addWidget(layer_window)
+			.addWidget(mirror_window)
+			.addWidget(color_window);
 
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup
@@ -91,15 +119,31 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 	}
 	
 	private void createButtonCallbacks() {
-		new_file.addCallback(new Runnable() {			
+		file_window.addCallback(new Runnable() {			
 			@Override
 			public void run() { /* create a new file somehow? */}
 		});
-		open_file.addCallback(new Runnable() {			
+		palette_window.addCallback(new Runnable() {			
 			@Override
 			public void run() { load_file.openPopup(); }
 		});
-		save_file.addCallback(new Runnable() {			
+		grid_window.addCallback(new Runnable() {			
+			@Override
+			public void run() { /* save_file.openPopup */}
+		});
+		perspective_window.addCallback(new Runnable() {			
+			@Override
+			public void run() { /* create a new file somehow? */}
+		});
+		layer_window.addCallback(new Runnable() {			
+			@Override
+			public void run() { load_file.openPopup(); }
+		});
+		mirror_window.addCallback(new Runnable() {			
+			@Override
+			public void run() { /* save_file.openPopup */}
+		});
+		color_window.addCallback(new Runnable() {			
 			@Override
 			public void run() { /* save_file.openPopup */}
 		});

@@ -10,6 +10,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import de.matthiasmann.twl.ResizableFrame;
+import de.matthiasmann.twl.Widget;
 
 import engine.entity.Camera;
 import engine.entity.Entity;
@@ -257,5 +258,11 @@ public class Engine {
   
   public Model getModelByName(String name)  {
 	  return models.get(name);	  
+  }
+  
+  //TODO: We don't want to expose the main window frame this way
+  //rethink this asap
+  public Widget getWindow() {
+	  return renderer.getWindow();
   }
 }

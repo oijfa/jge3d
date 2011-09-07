@@ -10,7 +10,7 @@ import engine.window.tree.Model;
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
-import de.matthiasmann.twl.ResizableFrame;
+import de.matthiasmann.twl.Widget;
 import engine.input.KeyMap;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
@@ -21,7 +21,7 @@ public class Window extends DesktopArea {
 	private GUI gui;
 	private ThemeManager theme;
 	private KeyMap key_map;
-	private ArrayList<ResizableFrame> windows;
+	private ArrayList<Widget> windows;
 	private Integer layers;
 
 	public Window() {
@@ -54,7 +54,7 @@ public class Window extends DesktopArea {
 		// subwindows
 		gui.update();
 
-		windows = new ArrayList<ResizableFrame>();
+		windows = new ArrayList<Widget>();
 	}
 
 	public void draw() {
@@ -80,13 +80,13 @@ public class Window extends DesktopArea {
 		return false;
 	}
 
-	public void addWindow(ResizableFrame window, int width, int height) {
+	public void addWindow(Widget window, int width, int height) {
 		window.setSize(width, height);
 
 		gui.update();
 
 		if (windows.size() > 0) {
-			ResizableFrame last_window = windows.get(windows.size() - 1);
+			Widget last_window = windows.get(windows.size() - 1);
 			if (window.getHeight() + last_window.getBottom() < this.getHeight()) {
 				window.setPosition(0, last_window.getBottom());
 			} else if (window.getHeight() + last_window.getBottom() > this
@@ -99,7 +99,7 @@ public class Window extends DesktopArea {
 			// System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
 		}
 		windows.add(window);
-		ResizableFrame current_window = windows.get(windows.indexOf(window));
+		Widget current_window = windows.get(windows.indexOf(window));
 		add(current_window);
 	}
 

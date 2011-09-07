@@ -83,7 +83,103 @@
         <area name="refresh" xywh="152,0,31,32" center="true"/>
         <area name="home" xywh="185,0,30,32" center="true"/>
         <area name="folder" xywh="217,6,26,24" center="true"/>
-    </images>
+    
+
+        
+        
+	    <!-- fileselector bullshit -->
+        <composed name="fileselector.buttonOneLevelUp.background">
+			<alias ref="border_round_state"/>
+			<select center="true">
+				<alias ref="scrollbar.up_arrow" unless="armed"/>
+				<alias ref="scrollbar.up_arrow" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonHome.background">
+			<alias ref="border_round_state"/>
+			<select center="true">
+				<alias ref="home" unless="armed"/>
+				<alias ref="home" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonRefresh.background">
+			<alias ref="border_round_state"/>
+			<select center="true">
+				<alias ref="refresh" unless="armed"/>
+				<alias ref="refresh" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonMRU.background">
+			<alias ref="border_round_toggle"/>
+			<select center="true">
+				<alias ref="explode" unless="armed"/>
+				<alias ref="explode" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<select name="-fileselector.showbutton">
+			<alias ref="scrollbar.up_arrow" if="armed"/>
+			<alias ref="scrollbar.down_arrow" if="selected"/>
+			<alias ref="scrollbar.thumb" if="hover"/>
+		</select>
+		<composed name="fileselector.buttonShowFolders.background">
+			<alias ref="border_round_toggle"/>
+			<alias ref="folder" center="true"/>
+		</composed>
+		<composed name="fileselector.buttonShowHidden.background">
+			<alias ref="border_round_toggle"/>
+			<alias ref="refresh" center="true"/>
+		</composed>
+		<!-- /fileselector bullshit  -->
+		
+
+
+	<!-- backup fileselector bullshit 
+        <composed name="fileselector.buttonOneLevelUp.background">
+			<alias ref="button.background"/>
+			<select center="true">
+				<alias ref="-fileselector.onelevelup" unless="armed"/>
+				<alias ref="-fileselector.onelevelup" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonHome.background">
+			<alias ref="button.background"/>
+			<select center="true">
+				<alias ref="-fileselector.home" unless="armed"/>
+				<alias ref="-fileselector.home" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonRefresh.background">
+			<alias ref="button.background"/>
+			<select center="true">
+				<alias ref="-fileselector.refresh" unless="armed"/>
+				<alias ref="-fileselector.refresh" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<composed name="fileselector.buttonMRU.background">
+			<alias ref="button.background"/>
+			<select center="true">
+				<alias ref="-fileselector.history" unless="armed"/>
+				<alias ref="-fileselector.history" inset="1,1,-1,-1"/>
+			</select>
+		</composed>
+		<select name="-fileselector.showbutton">
+			<alias ref="-area6X" if="armed"/>
+			<alias ref="-area4X" if="selected"/>
+			<alias ref="-area2X" if="hover"/>
+		</select>
+		<composed name="fileselector.buttonShowFolders.background">
+			<alias ref="-fileselector.showbutton"/>
+			<alias ref="-fileselector.folder" center="true"/>
+		</composed>
+		<composed name="fileselector.buttonShowHidden.background">
+			<alias ref="-fileselector.showbutton"/>
+			<alias ref="-fileselector.hiddenfiles" center="true"/>
+		</composed>
+	-->
+		
+        
+        
+	</images>
     <fontDef name="normal" filename="font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
@@ -144,6 +240,19 @@
     		</map>
 		</param>
     </theme>
+	<theme name="dialoglayout" ref="-defaults" allowWildcard="true">
+		<param name="defaultGap"><dimension>5,5</dimension></param>
+		<param name="smallGap"><dimension>8,8</dimension></param>
+		<param name="mediumGap"><dimension>10,10</dimension></param>
+		<param name="largeGap"><dimension>15,15</dimension></param>
+		<param name="namedGaps">
+			<map>
+				<param name="radiobutton"><gap>0</gap></param>
+				<param name="adjuster"><gap>0</gap></param>
+				<param name="vbutton"><gap>0</gap></param>
+			</map>
+		</param>
+	</theme>
     <theme name="resizableframe" ref="-defaults" allowWildcard="true">
         <param name="background"><image>border_round</image></param>
         <param name="border"><border>15,15,15,15</border></param>
@@ -184,6 +293,7 @@
         <param name="background"><image>border_round</image></param>
         <param name="border"><border>5</border></param>
         <param name="fadeInTime"><int>0</int></param>
+        <theme name="label" ref="label"/>
     </theme>
     <theme name="button" allowWildcard="true" ref="-defaults">
         <param name="background"><image>border_round_state</image></param>
@@ -206,6 +316,14 @@
         <param name="border"><border>10</border></param>
         <param name="maxWidth"><int>20</int></param>
         <param name="maxHeight"><int>20</int></param>
+        <param name="minWidth"><int>20</int></param>
+        <param name="minHeight"><int>20</int></param>
+    </theme>
+    <theme name="fittedbutton" allowWildcard="true" ref="-defaults">
+        <param name="background"><image>border_round_state</image></param>
+        <param name="border"><border>5</border></param>
+        <param name="maxWidth"><int>200</int></param>
+        <param name="maxHeight"><int>200</int></param>
         <param name="minWidth"><int>20</int></param>
         <param name="minHeight"><int>20</int></param>
     </theme>
@@ -317,28 +435,55 @@
         <theme name="stringcellrenderer" ref="-defaults"/>
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
+		<theme name="PropertyEditorCellRender" ref="-treecellrenderer"/>
+		<theme name="PropertyListCellRenderer" ref="-treecellrenderer">
+			<theme name="label" ref="label" />
+		</theme>
         <theme name="spanrenderer" ref="-defaults"/>
         <theme name="coloredtextrenderer" ref="-defaults"/>
         <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button">
         	<param name="text"><string>20</string></param>
         </theme>
-        <param name="columnHeaderWidth"><int>300</int></param>
+        <param name="columnHeaderWidth"><int>256</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
-        <param name="columnDividerDragableDistance"><int>1</int></param>
+        <param name="columnDividerDragableDistance"><int>3</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
         <param name="columnDivider"><image>white</image></param>
         <param name="columnWidths">
+        	<map />
+        	<!--
         	<map>
                 <param name="maxWidth"><int>300</int></param>
                 <param name="maxHeight"><int>1000</int></param>
                 <param name="minWidth"><int>300</int></param>
                 <param name="minHeight"><int>400</int></param>
             </map>
+            -->
         </param>
     	<param name="inputMap">
     		<inputMapDef ref="-defaultInputMap">
-        		<action name="toggleSelectionOnLeadRow">ctrl SPACE</action>
+				<action name="toggleSelectionOnLeadRow">ctrl SPACE</action>
+  				<action name="selectNextRow">DOWN</action>
+				<action name="selectPreviousRow">UP</action>
+  				<action name="selectNextPage">NEXT</action>
+				<action name="selectPreviousPage">PRIOR</action>
+  				<action name="selectFirstRow">HOME</action>
+  				<action name="selectLastRow">END</action>
+  				<action name="extendSelectionToNextRow">shift DOWN</action>
+  				<action name="extendSelectionToPreviousRow">shift UP</action>
+  				<action name="extendSelectionToNextPage">shift NEXT</action>
+  				<action name="extendSelectionToPreviousPage">shift PRIOR</action>
+  				<action name="extendSelectionToFirstRow">shift HOME</action>
+  				<action name="extendSelectionToLastRow">shift END</action>
+  				<action name="moveLeadToNextRow">ctrl DOWN</action>
+  				<action name="moveLeadToPreviousRow">ctrl UP</action>
+  				<action name="moveLeadToNextPage">ctrl NEXT</action>
+  				<action name="moveLeadToPreviousPage">ctrl PRIOR</action>
+  				<action name="moveLeadToFirstRow">ctrl HOME</action>
+  				<action name="moveLeadToLastRow">ctrl END</action>
+  				<action name="expandLeadRow">ADD</action>
+  				<action name="collapseLeadRow">SUBTRACT</action>
     		</inputMapDef>
         </param>
         <theme name="ComboBoxCellRenderer">
@@ -349,6 +494,18 @@
         </theme>
         <theme name="editfield" ref="editfield"/>
     </theme>
+	<theme name="tablesearchwindow" ref="-defaults">
+		<param name="background"><image>border_round</image></param>
+		<param name="border"><border>20</border></param>
+		<theme name="dialoglayout" ref="dialoglayout">
+			<theme name="label" ref="label">
+				<param name="font"><font>normal</font></param>
+			</theme>
+			<theme name="editfield" ref="editfield">
+				<param name="columns"><int>20</int></param>
+			</theme>
+		</theme>
+	</theme>
     <theme name="tree" allowWildcard="true" ref="table">
     	<param name="hasDragButton"><bool>true</bool></param>
     	<theme name="dragButton" ref="-defaults"/>
@@ -357,6 +514,52 @@
 		<param name="scrollbarsAlwaysVisible"><bool>false</bool></param>
     </theme>  
     <theme name="tableScrollPane" ref="scrollpane"/>
+	
+	<theme name="treepathdisplay" ref="-defaults" allowWildcard="true">
+    	<theme name="pathbox" ref="-defaults">
+			<param name="spacing"><int>0</int></param>
+			<theme name="node" ref="label">
+				<param name=""><image>treepathdisplay.node.*</image></param>
+			</theme>
+			<theme name="separator" ref="label">
+				<param name="mouseCursor"><cursor>cursor.horiz_resize</cursor></param>
+				<param name="border"><border>2,0</border></param>
+			</theme>
+			<param name="minHeight"><int>node.font.lineHeight + 4</int></param>
+			<param name="alignment"><enum type="alignment">center</enum></param>
+			<param name="mouseCursor"><cursor>cursor.horiz_resize</cursor></param>
+		</theme>
+        <theme name="patheditfield" ref="editfield"/>
+	</theme>
+	<theme name="treecombobox" ref="-defaults" allowWildcard="true">
+		<param name="background"><image>border_round</image></param>
+		<param name="popupThemeName"><string>treecomboboxPopup</string></param>
+		<theme name="display" ref="treepathdisplay">
+			<param name=""><image>combobox.display.*</image></param>
+			<param name="minWidth"><int>50</int></param>
+			<theme name="pathbox" merge="true">
+				<param name="border"><border>3</border></param>
+			</theme>
+		</theme>
+		<theme name="button" ref="-defaults">
+			<param name=""><image>combobox.button.*</image></param>
+			<param name="minWidth"><int>18</int></param>
+		</theme>
+	</theme>
+	<theme name="treecomboboxPopup" ref="-defaults">
+		<param name="background"><image>border_round</image></param>
+		<param name="border"><border>2</border></param>
+		<theme name="scrollpane" ref="scrollpane">
+			<theme name="treetable" ref="table">
+				<param name="background"><image>border_round</image></param>
+				<param name="border"><border>0</border></param>
+				<param name="columnHeaderHeight"><int>0</int></param>
+			</theme>
+		</theme>
+		<param name="minHeight"><int>300</int></param>
+	</theme>  
+
+    
     <!--
     <theme name="menumanager" ref="-defaults">
         <theme name="menupopup" ref="dialoglayout">
@@ -371,7 +574,222 @@
         </theme>
     </theme>
     -->
+
+    
+    
+    
+    <!-- file selector -->
+    <theme name="fileselector" ref="dialoglayout" allowWildcard="true">
+		<theme name="label" ref="label">
+			<param name="font">
+				<font>normal</font>
+			</param>
+		</theme>
+		<theme name="currentFolder" ref="treecombobox">
+			<param name="maxWidth">
+				<int>32767</int>
+			</param>
+		</theme>
+		<theme name="buttonUp" ref="button">
+			<param name="">
+				<image>fileselector.buttonOneLevelUp.*</image>
+			</param>
+			<param name="minWidth">
+				<int>21</int>
+			</param>
+		</theme>
+		<theme name="buttonHome" ref="button">
+			<param name="">
+				<image>fileselector.buttonHome.*</image>
+			</param>
+			<param name="minWidth">
+				<int>21</int>
+			</param>
+		</theme>
+		<theme name="buttonFoldersMRU" ref="button">
+			<param name="">
+				<image>fileselector.buttonMRU.*</image>
+			</param>
+			<param name="minWidth">
+				<int>20</int>
+			</param>
+			<param name="tooltip">
+				<string>Shows recently used folders</string>
+			</param>
+		</theme>
+		<theme name="buttonFilesMRU" ref="button">
+			<param name="">
+				<image>fileselector.buttonMRU.*</image>
+			</param>
+			<param name="minWidth">
+				<int>20</int>
+			</param>
+			<param name="tooltip">
+				<string>Shows recently opened files</string>
+			</param>
+		</theme>
+		<theme name="buttonOk" ref="button">
+			<param name="text">
+				<string>OK</string>
+			</param>
+			<param name="minWidth">
+				<int>80</int>
+			</param>
+		</theme>
+		<theme name="buttonCancel" ref="button">
+			<param name="text">
+				<string>Cancel</string>
+			</param>
+			<param name="minWidth">
+				<int>80</int>
+			</param>
+		</theme>
+		<theme name="buttonShowFolders" ref="button">
+			<param name="">
+				<image>fileselector.buttonShowFolders.*</image>
+			</param>
+			<param name="tooltip">
+				<string>Shows folders in the file table</string>
+			</param>
+			<param name="minWidth">
+				<int>20</int>
+			</param>
+			<param name="minHeight">
+				<int>20</int>
+			</param>
+		</theme>
+		<theme name="buttonShowHidden" ref="button">
+			<param name="">
+				<image>fileselector.buttonShowHidden.*</image>
+			</param>
+			<param name="tooltip">
+				<string>Shows hidden or system files</string>
+			</param>
+			<param name="minWidth">
+				<int>20</int>
+			</param>
+			<param name="minHeight">
+				<int>20</int>
+			</param>
+		</theme>
+		<theme name="buttonRefresh" ref="button">
+			<param name="">
+				<image>fileselector.buttonRefresh.*</image>
+			</param>
+			<param name="tooltip">
+				<string>Refreshes the file table</string>
+			</param>
+			<param name="minWidth">
+				<int>20</int>
+			</param>
+			<param name="minHeight">
+				<int>20</int>
+			</param>
+		</theme>
+		<theme name="scrollpane" ref="scrollpane">
+			<param name="autoScrollArea">
+				<int>0</int>
+			</param>
+			<param name="autoScrollSpeed">
+				<int>0</int>
+			</param>
+			<param name="scrollbarsAlwaysVisible">
+				<bool>false</bool>
+			</param>
+			<param name="border">
+				<border>0</border>
+			</param>
+			<theme name="fileTable" ref="table">
+				<param name="columnWidths">
+					<map>
+						<param name="1"><int>70</int></param>
+						<param name="2"><int>80</int></param>
+						<param name="3"><int>140</int></param>
+					</map>
+				</param>
+				<param name="background"><image>border_round</image></param>
+			</theme>
+		</theme>
+		<theme name="fileFiltersBox" ref="combobox"/>
+		<param name="inputMap">
+			<inputMapDef ref="-defaultInputMap">
+				<action name="goOneLevelUp">BACK</action>
+				<action name="acceptSelection">RETURN</action>
+			</inputMapDef>
+		</param>
+		<param name="namedGaps">
+			<map>
+				<param name="buttonBarLeft"><gap/></param>
+				<param name="buttonBarSpacer"><gap>20</gap></param>
+				<param name="buttonBarRight"><gap>0</gap></param>
+			</map>
+		</param>
+	</theme>
+	<theme name="fileselector-folderMRUpopup" ref="-defaults">
+		<param name="background">
+			<image>border_round</image>
+		</param>
+		<param name="border">
+			<border>2</border>
+		</param>
+		<theme name="listbox" ref="listbox">
+			<theme name="display" ref="button"/>
+			<param name="background">
+				<image>none</image>
+			</param>
+			<param name="border">
+				<border>0</border>
+			</param>
+		</theme>
+	</theme>
+	<theme name="fileselector-filesMRUpopup" ref="-defaults">
+		<param name="background">
+			<image>border_round</image>
+		</param>
+		<param name="border">
+			<border>2</border>
+		</param>
+		<theme name="dialoglayout" ref="dialoglayout">
+			<theme name="listbox" ref="listbox">
+				<theme name="display" ref="button"/>
+				<param name="background">
+					<image>none</image>
+				</param>
+				<param name="border">
+					<border>0</border>
+				</param>
+			</theme>
+			<theme name="buttonOk" ref="button">
+				<param name="text">
+					<string>OK</string>
+				</param>
+				<param name="minWidth">
+					<int>80</int>
+				</param>
+			</theme>
+			<theme name="buttonCancel" ref="button">
+				<param name="text">
+					<string>Cancel</string>
+				</param>
+				<param name="minWidth">
+					<int>80</int>
+				</param>
+			</theme>
+		</theme>
+	</theme>
+  	<theme name="fileselector-popup" ref="-defaults">
+		<param name="background"><image>border_round</image></param>
+		<param name="border"><border>20</border></param>
+		<theme name="fileselector" ref="fileselector">
+			<theme name="editfield" ref="editfield"/>
+		</theme>
+	</theme>
+	<!-- /file selector -->
+	
+	
+	
     <theme name="window" ref="-defaults">
+    	<theme name="resizableframe" ref="resizableframe" />
         <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>1000</int></param>
@@ -425,6 +843,17 @@
        		<param name="minHeight"><int>30</int></param>
         	<param name="maxHeight"><int>50</int></param>
         	<theme name="layer_cb" ref="combobox"/>
-    	</theme>
-    </theme>
+		</theme>
+		<theme name="filemenu" ref="resizableframe">
+    		<param name="minWidth"><int>100</int></param>
+            <param name="maxWidth"><int>400</int></param>
+       		<param name="minHeight"><int>100</int></param>
+        	<param name="maxHeight"><int>400</int></param>
+        	<theme name="dialoglayout" ref="dialoglayout">
+	        	<theme name="new_file" ref="fittedbutton"/>
+	        	<theme name="open_file" ref="fittedbutton"/>
+	        	<theme name="save_file" ref="fittedbutton"/>
+	        </theme>
+		</theme>
+	</theme>
 </themes>

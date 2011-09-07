@@ -17,9 +17,9 @@ public class Main {
 	private Entity model4;
 	private Entity model5;
 	private Camera camera;
-
+	
 	public static void main(String args[]) {
-		boolean multiThreaded = true;
+		boolean multiThreaded = false;
 		
 		Main m = new Main();
 		if(multiThreaded == true)
@@ -37,17 +37,17 @@ public class Main {
 		engine.addModel("export", "resources/models/misc/export.xgl");
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
-		
+	
 		Terrain terrain = new Terrain(engine);
 		terrain.createTerrain(20);
 		terrain.setPosition(new Vector3f(0,-10, 0));
 		
 		//Make some parallax stars
-		//new Stars(engine,1000,10000,200,5,400);
+		//Stars stars = new Stars(engine,1000,10000,200,5,400);
 		
 		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
 		player = (Player) engine.getEntity("player");
-		player.setPosition(new Vector3f(0, 6, 0));
+		player.setPosition(new Vector3f(0, 30, 0));
 		player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		//player.set
@@ -81,6 +81,7 @@ public class Main {
 		camera.focusOn(player);
 		
 		engine.updateEntity(terrain.getEntity());
+		//engine.updateEntity(stars.getEntity());
 	}
 
 	public void runMultiThread() {
