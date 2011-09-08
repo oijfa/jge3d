@@ -10,7 +10,6 @@
 	<key ID="Key_A" EVENT="KEY_PRESSED">playerLeft</key>
 	<key ID="Key_D" EVENT="KEY_PRESSED">playerRight</key>
 	<key ID="Key_SPACE" EVENT="KEY_PRESSED">playerJump</key>
-	
 	<key ID="Key_W" EVENT="KEY_RELEASED">playerStopForward</key>
 	<key ID="Key_S" EVENT="KEY_RELEASED">playerStopBack</key>
 	<key ID="Key_A" EVENT="KEY_RELEASED">playerStopLeft</key>

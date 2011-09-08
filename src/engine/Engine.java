@@ -17,7 +17,7 @@ import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
 import engine.entity.Player;
 import engine.importing.FileLoader;
-import engine.input.KeyMap;
+import engine.input.InputMap;
 import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
@@ -153,7 +153,7 @@ public class Engine {
 	public boolean addKeyMap(String filename){
 	  boolean ret = false;
 		try {
-			renderer.getWindow().setKeyMap(new KeyMap(filename,entity_list));
+			renderer.getWindow().setKeyMap(new InputMap(filename,entity_list));
 			ret = true;
 		} catch (KeyMapException e) {
 			// TODO Do something if fails?
