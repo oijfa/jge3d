@@ -855,5 +855,14 @@
 	        	<theme name="save_file" ref="fittedbutton"/>
 	        </theme>
 		</theme>
+		<theme name="toolmenu" ref="resizableframe">
+			<theme name="file_window" ref="fittedbutton"/>
+			<theme name="palette_window" ref="fittedbutton"/>
+			<theme name="grid_window" ref="fittedbutton"/>
+			<theme name="perspective_window" ref="fittedbutton"/>
+			<theme name="layer_window" ref="fittedbutton"/>
+			<theme name="mirror_window" ref="fittedbutton"/>
+			<theme name="color_window" ref="fittedbutton"/>
+		</theme>
 	</theme>
 </themes>

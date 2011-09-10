@@ -1,8 +1,6 @@
 package editor.window;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
@@ -10,13 +8,10 @@ import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
-import engine.window.components.LoadFileSelector;
 
 public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
-	
-	private LoadFileSelector load_file;
-	
+
 	private Button file_window;
 	private Button palette_window;
 	private Button grid_window;
@@ -24,14 +19,6 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private Button layer_window;
 	private Button mirror_window;
 	private Button color_window;
-	
-	LoadFileSelector.Callback callback = new LoadFileSelector.Callback() {
-		@Override
-		public void fileSelected(File file) {/* TODO Auto-generated method stub*/}
-		@Override
-		public void canceled() {/* TODO Auto-generated method stub*/}
-	};
-	
 
 	public ToolMenu() {
 
@@ -121,31 +108,31 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private void createButtonCallbacks() {
 		file_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { /* create a new file somehow? */}
+			public void run() { file_window.setVisible(true); }
 		});
 		palette_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { load_file.openPopup(); }
+			public void run() { palette_window.setVisible(true); }
 		});
 		grid_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { /* save_file.openPopup */}
+			public void run() { grid_window.setVisible(true); }
 		});
 		perspective_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { /* create a new file somehow? */}
+			public void run() { perspective_window.setVisible(true); }
 		});
 		layer_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { load_file.openPopup(); }
+			public void run() { layer_window.setVisible(true); }
 		});
 		mirror_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { /* save_file.openPopup */}
+			public void run() { mirror_window.setVisible(true); }
 		});
 		color_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { /* save_file.openPopup */}
+			public void run() { color_window.setVisible(true); }
 		});
 	}
 	
