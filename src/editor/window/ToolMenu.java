@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.ResizableFrame;
+
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import engine.window.components.Window;
+import engine.window.components.WindowList;
 
-public class ToolMenu  extends ResizableFrame implements ActionListener {
+public class ToolMenu  extends Window implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 
 	private Button file_window;
@@ -19,10 +21,12 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private Button layer_window;
 	private Button mirror_window;
 	private Button color_window;
+	
+	private WindowList windows;
 
-	public ToolMenu() {
-
-				
+	public ToolMenu(WindowList windows) {	
+		this.windows = windows;
+		
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Tool Menu");
 
@@ -108,31 +112,31 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private void createButtonCallbacks() {
 		file_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { file_window.setVisible(true); }
+			public void run() { windows.getByName("file_window").setVisible(true); }
 		});
 		palette_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { palette_window.setVisible(true); }
+			public void run() { windows.getByName("palette_window").setVisible(true); }
 		});
 		grid_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { grid_window.setVisible(true); }
+			public void run() { windows.getByName("grid_window").setVisible(true); }
 		});
 		perspective_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { perspective_window.setVisible(true); }
+			public void run() { windows.getByName("perspective_window").setVisible(true); }
 		});
 		layer_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { layer_window.setVisible(true); }
+			public void run() { windows.getByName("layer_window").setVisible(true); }
 		});
 		mirror_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { mirror_window.setVisible(true); }
+			public void run() { windows.getByName("mirror_window").setVisible(true); }
 		});
 		color_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { color_window.setVisible(true); }
+			public void run() { windows.getByName("color_window").setVisible(true); }
 		});
 	}
 	

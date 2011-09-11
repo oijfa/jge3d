@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
-import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.Widget;
 
 import engine.entity.Camera;
@@ -24,6 +23,8 @@ import engine.physics.Physics;
 import engine.render.Model;
 import engine.render.Renderer;
 import engine.render.Shader;
+import engine.window.components.Window;
+import engine.window.components.WindowList;
 
 import com.bulletphysics.collision.dispatch.GhostObject;
 
@@ -44,7 +45,7 @@ public class Engine {
 	private Camera camera;
 	private EntityList entity_list;
 
-	public void addWindow(ResizableFrame window, int width, int height) {
+	public void addWindow(Window window, int width, int height) {
 		renderer.getWindow().addWindow(window, width, height);
 	}
 
@@ -264,5 +265,9 @@ public class Engine {
   //rethink this asap
   public Widget getWindow() {
 	  return renderer.getWindow();
+  }
+  
+  public WindowList getWindows() {
+	  return renderer.getWindows();
   }
 }

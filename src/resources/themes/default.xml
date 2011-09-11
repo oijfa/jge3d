@@ -788,7 +788,7 @@
 	
 	
 	
-    <theme name="window" ref="-defaults">
+    <theme name="windowmanager" ref="-defaults">
     	<theme name="resizableframe" ref="resizableframe" />
         <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
@@ -814,7 +814,7 @@
             	</theme>
         	</theme>
     	</theme>
-    	<theme name="toolbox" ref="resizableframe">
+    	<theme name="toolmenu" ref="resizableframe">
     		<theme name="layermenu" ref="resizableframe">
     			<param name="minWidth"><int>100</int></param>
             	<param name="maxWidth"><int>400</int></param>
@@ -856,13 +856,15 @@
 	        </theme>
 		</theme>
 		<theme name="toolmenu" ref="resizableframe">
-			<theme name="file_window" ref="fittedbutton"/>
-			<theme name="palette_window" ref="fittedbutton"/>
-			<theme name="grid_window" ref="fittedbutton"/>
-			<theme name="perspective_window" ref="fittedbutton"/>
-			<theme name="layer_window" ref="fittedbutton"/>
-			<theme name="mirror_window" ref="fittedbutton"/>
-			<theme name="color_window" ref="fittedbutton"/>
+			<theme name="dialoglayout" ref="dialoglayout">
+				<theme name="file_window" ref="fittedbutton"/>
+				<theme name="palette_window" ref="fittedbutton"/>
+				<theme name="grid_window" ref="fittedbutton"/>
+				<theme name="perspective_window" ref="fittedbutton"/>
+				<theme name="layer_window" ref="fittedbutton"/>
+				<theme name="mirror_window" ref="fittedbutton"/>
+				<theme name="color_window" ref="fittedbutton"/>
+			</theme>
 		</theme>
 	</theme>
 </themes>

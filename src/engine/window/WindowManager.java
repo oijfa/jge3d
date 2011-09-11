@@ -1,10 +1,11 @@
 package engine.window;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
 
+import engine.window.components.Window;
+import engine.window.components.WindowList;
 import engine.window.tree.Model;
 
 import de.matthiasmann.twl.DesktopArea;
@@ -16,20 +17,20 @@ import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
-public class Window extends DesktopArea {
+public class WindowManager extends DesktopArea {
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
 	private KeyMap key_map;
-	private ArrayList<Widget> windows;
+	private WindowList windows;
 	private Integer layers;
 
-	public Window() {
+	public WindowManager() {
 		super();
 		windowInit(null);
 	}
 
-	public Window(Model m) {
+	public WindowManager(Model m) {
 		super();
 		windowInit(m);
 	}
@@ -54,7 +55,7 @@ public class Window extends DesktopArea {
 		// subwindows
 		gui.update();
 
-		windows = new ArrayList<Widget>();
+		windows = new WindowList();
 	}
 
 	public void draw() {
@@ -80,13 +81,13 @@ public class Window extends DesktopArea {
 		return false;
 	}
 
-	public void addWindow(Widget window, int width, int height) {
+	public void addWindow(Window window, int width, int height) {
 		window.setSize(width, height);
 
 		gui.update();
 
 		if (windows.size() > 0) {
-			Widget last_window = windows.get(windows.size() - 1);
+			Window last_window = windows.get(windows.size() - 1);
 			if (window.getHeight() + last_window.getBottom() < this.getHeight()) {
 				window.setPosition(0, last_window.getBottom());
 			} else if (window.getHeight() + last_window.getBottom() > this
@@ -109,5 +110,9 @@ public class Window extends DesktopArea {
 
 	public void setKeyMap(KeyMap i) {
 		key_map = i;
+	}
+	
+	public WindowList getWindows() {
+		return windows;
 	}
 }

@@ -10,6 +10,7 @@ import editor.window.FileMenu;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
 import editor.window.PaletteWindow;
+import editor.window.ToolMenu;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
@@ -24,6 +25,7 @@ public class Main implements ActionListener {
 	private PaletteWindow palette_window;
 	private LayerMenu layer_menu;
 	private FileMenu file_menu;
+	private ToolMenu tool_menu;
 	// private ToolBox tool_box;
 
 	private Entity edit_model;
@@ -48,13 +50,20 @@ public class Main implements ActionListener {
 		layer_menu.populateLayers(num_layers);
 		palette_window = new PaletteWindow(216);
 		file_menu = new FileMenu();
+		tool_menu = new ToolMenu(engine.getWindows());
 		// tool_box = new ToolBox();
 
 		engine.addWindow(grid_window, 400, 400);
+		grid_window.setName("grid_window");
 		engine.addWindow(palette_window, 300, 300);
+		palette_window.setName("palette_window");
 		engine.addWindow(layer_menu, 200, 30);
+		layer_menu.setName("layer_menu");
 		engine.addWindow(file_menu, 300, 150);
-		//engine.addWindow(new FileMenu(), 300, 300);
+		file_menu.setName("file_menu");
+		engine.addWindow(tool_menu, 250, 400);
+		tool_menu.setName("tool_menu");
+		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
 		edit_model = engine.addEntity("model", 1f, true, "box", "default");
@@ -66,6 +75,9 @@ public class Main implements ActionListener {
 		camera.setDistance(40.0f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(edit_model);
+		
+		engine.getWindows().hideAll();
+		tool_menu.setVisible(true);
 	}
 
 	public void run() {

@@ -7,12 +7,12 @@ import editor.action_listener.ActionListener;
 
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
 import editor.Block;
 import editor.CubicGrid;
+import engine.window.components.Window;
 
-public class GridWindow extends ResizableFrame implements ActionListener {
+public class GridWindow extends Window implements ActionListener {
 	private CubicGrid<Block<Integer>> grid;
 	private Color current_color = new Color((byte) 0xFF, (byte) 0xFF,
 		(byte) 0xFF, (byte) 0xFF);

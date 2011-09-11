@@ -23,10 +23,11 @@ import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
-import engine.window.Window;
+import engine.window.WindowManager;
+import engine.window.components.WindowList;
 
 public class Renderer {
-	private Window window;
+	private WindowManager window;
 	private EntityList objectList;
 	private Camera camera;
 	private static boolean supportsVBO = false;
@@ -117,7 +118,7 @@ public class Renderer {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		window = new Window();
+		window = new WindowManager();
 
 		// camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 
@@ -233,8 +234,12 @@ public class Renderer {
 		return supportsVBO;
 	}
 
-	public Window getWindow() {
+	public WindowManager getWindow() {
 		return window;
+	}
+	
+	public WindowList getWindows() {
+		return window.getWindows();
 	}
 
 	public void destroy() {
