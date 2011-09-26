@@ -35,7 +35,7 @@ public class FileMenu  extends Window implements ActionListener {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("File Menu");
 
-		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "what", "fucking dumb", callback, "cockass");
+		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "xml", "XML Files", callback, "xml");
 		//save_file = 
 		
 		createMenu();

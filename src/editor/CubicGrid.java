@@ -73,14 +73,14 @@ public class CubicGrid<E> {
 											mat_color.getBlueFloat()
 										),
 										new Vector3f(
-											0, 
-											0, 
-											0
+											1, 
+											1, 
+											1
 										),
 										new Vector3f(
-											0, 
-											0, 
-											0
+											1, 
+											1, 
+											1
 										),
 										1f
 									)

@@ -112,7 +112,7 @@ public class ToolMenu  extends Window implements ActionListener {
 	private void createButtonCallbacks() {
 		file_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { windows.getByName("file_window").setVisible(true); }
+			public void run() { windows.getByName("file_menu").setVisible(true); }
 		});
 		palette_window.addCallback(new Runnable() {			
 			@Override
@@ -128,7 +128,7 @@ public class ToolMenu  extends Window implements ActionListener {
 		});
 		layer_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { windows.getByName("layer_window").setVisible(true); }
+			public void run() { windows.getByName("layer_menu").setVisible(true); }
 		});
 		mirror_window.addCallback(new Runnable() {			
 			@Override
