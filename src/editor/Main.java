@@ -53,6 +53,8 @@ public class Main implements ActionListener {
 		tool_menu = new ToolMenu(engine.getWindows());
 		// tool_box = new ToolBox();
 
+		engine.addWindow(tool_menu, 250, 400);
+		tool_menu.setName("tool_menu");
 		engine.addWindow(grid_window, 400, 400);
 		grid_window.setName("grid_window");
 		engine.addWindow(palette_window, 300, 300);
@@ -61,8 +63,7 @@ public class Main implements ActionListener {
 		layer_menu.setName("layer_menu");
 		engine.addWindow(file_menu, 300, 150);
 		file_menu.setName("file_menu");
-		engine.addWindow(tool_menu, 250, 400);
-		tool_menu.setName("tool_menu");
+		
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
