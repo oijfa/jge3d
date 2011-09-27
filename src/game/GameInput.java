@@ -1,5 +1,5 @@
 package game;
-
+/*
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
@@ -91,7 +91,7 @@ public class GameInput extends Input {
 				 * ent.applyImpulse(impulse, camera.getPosition()); <<<<<<< HEAD
 				 * objectList.addEntity(ent); =======
 				 * objectList.enqueuePhysics(ent, QueueItem.ADD);
-				 */
+				 /
 			}
 			break;
 		case 0:// Left Button
@@ -125,3 +125,4 @@ public class GameInput extends Input {
 		return event_caught;
 	}
 }
+*/

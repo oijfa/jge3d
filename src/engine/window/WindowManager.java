@@ -12,7 +12,7 @@ import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.Widget;
-import engine.input.KeyMap;
+import engine.input.InputMap;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
@@ -21,8 +21,10 @@ public class WindowManager extends DesktopArea {
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
-	private KeyMap key_map;
+
 	private WindowList windows;
+	private InputMap key_map;
+
 	private Integer layers;
 
 	public WindowManager() {
@@ -108,7 +110,7 @@ public class WindowManager extends DesktopArea {
 		return layers;
 	}
 
-	public void setKeyMap(KeyMap i) {
+	public void setKeyMap(InputMap i) {
 		key_map = i;
 	}
 	

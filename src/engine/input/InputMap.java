@@ -22,7 +22,7 @@ import engine.entity.Player;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.Event;
 
-public class KeyMap {
+public class InputMap {
   HashMap<String,String> key_map;
   
   final HashMap<String, Integer> lwjgl_key_enums;
@@ -30,7 +30,7 @@ public class KeyMap {
   
   EntityList entity_list;
   
-  public KeyMap(String filename, EntityList ent_list) throws KeyMapException{
+  public InputMap(String filename, EntityList ent_list) throws KeyMapException{
     key_map = new HashMap<String,String>();
     
     lwjgl_key_enums = new HashMap<String,Integer>();
@@ -65,7 +65,7 @@ public class KeyMap {
   			db = dbf.newDocumentBuilder();
   			
   			try {
-  				dom = db.parse(KeyMap.class.getResourceAsStream("keymaps/" + filePath));
+  				dom = db.parse(InputMap.class.getResourceAsStream("keymaps/" + filePath));
   				Element root_element = dom.getDocumentElement();
   				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
   					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
@@ -145,7 +145,7 @@ public class KeyMap {
 		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType())
   		};
-		
+		Keyboard.getEventKey();
 		for(String function_name : function_names){
 			/*
 			System.out.println(
@@ -156,7 +156,7 @@ public class KeyMap {
 			*/
 			if( function_name != null){
 				try {
-					KeyMap.class.getMethod(function_name).invoke(this,(Object[])null);
+					InputMap.class.getMethod(function_name).invoke(this,(Object[])null);
 				} catch (Exception ex) {
 					throwKeyMapException(ex);
 				}
