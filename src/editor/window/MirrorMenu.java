@@ -16,13 +16,14 @@ public class MirrorMenu extends Window implements ActionListener {
 		setTitle("Axis Mirror Menu");
 
 		mirror_cb = new ComboBox<Integer>();
-		mirror_cb.setTheme("perspective_cb");
+		mirror_cb.setTheme("mirror_cb");
 		mirror_cb.addActionListener(this);
+		populateCB();
 
 		add(mirror_cb);
 	}
 
-	public void populateLayers(Integer num_layers) {
+	public void populateCB() {
 		mirror_cb.addItem("X");
 		mirror_cb.addItem("Y");
 		mirror_cb.addItem("Z");

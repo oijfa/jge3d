@@ -19,10 +19,12 @@ public class PerspectiveMenu extends Window implements ActionListener {
 		perspective_cb.setTheme("perspective_cb");
 		perspective_cb.addActionListener(this);
 
+		populateCM();
+		
 		add(perspective_cb);
 	}
 
-	public void populateLayers(Integer num_layers) {
+	public void populateCM() {
 		perspective_cb.addItem("XY");
 		perspective_cb.addItem("XZ");
 		perspective_cb.addItem("YZ");
