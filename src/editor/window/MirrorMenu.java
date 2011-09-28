@@ -2,12 +2,12 @@ package editor.window;
 
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.ComboBox;
+import engine.window.components.Window;
 
-public class MirrorMenu extends ResizableFrame implements ActionListener {
+public class MirrorMenu extends Window implements ActionListener {
 	private ComboBox<Integer> mirror_cb;
 	private ArrayList<ActionListener> action_listeners;
 

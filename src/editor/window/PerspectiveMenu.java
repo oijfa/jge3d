@@ -2,12 +2,12 @@ package editor.window;
 
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.ComboBox;
+import engine.window.components.Window;
 
-public class PerspectiveMenu extends ResizableFrame implements ActionListener {
+public class PerspectiveMenu extends Window implements ActionListener {
 	private ComboBox<Integer> perspective_cb;
 	private ArrayList<ActionListener> action_listeners;
 

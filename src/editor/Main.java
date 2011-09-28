@@ -9,7 +9,9 @@ import editor.action_listener.ActionListener;
 import editor.window.FileMenu;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
+import editor.window.MirrorMenu;
 import editor.window.PaletteWindow;
+import editor.window.PerspectiveMenu;
 import editor.window.ToolMenu;
 //import editor.window.ToolBox;
 import engine.Engine;
@@ -26,6 +28,8 @@ public class Main implements ActionListener {
 	private LayerMenu layer_menu;
 	private FileMenu file_menu;
 	private ToolMenu tool_menu;
+	private MirrorMenu mirror_menu;
+	private PerspectiveMenu perspective_menu;
 	// private ToolBox tool_box;
 
 	private Entity edit_model;
@@ -50,7 +54,10 @@ public class Main implements ActionListener {
 		layer_menu.populateLayers(num_layers);
 		palette_window = new PaletteWindow(216);
 		file_menu = new FileMenu();
-		tool_menu = new ToolMenu(engine.getWindows());
+		perspective_menu = new PerspectiveMenu();
+		mirror_menu = new MirrorMenu();
+		
+		tool_menu = new ToolMenu(engine.getWindowManager());
 		// tool_box = new ToolBox();
 
 		engine.addWindow(tool_menu, 250, 400);
@@ -63,6 +70,10 @@ public class Main implements ActionListener {
 		layer_menu.setName("layer_menu");
 		engine.addWindow(file_menu, 300, 150);
 		file_menu.setName("file_menu");
+		engine.addWindow(mirror_menu, 200, 30);
+		mirror_menu.setName("mirror_menu");
+		engine.addWindow(perspective_menu, 200, 30);
+		perspective_menu.setName("perspective_menu");
 		
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
@@ -77,7 +88,7 @@ public class Main implements ActionListener {
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(edit_model);
 		
-		engine.getWindows().hideAll();
+		engine.getWindowManager().getWindows().hideAll();
 		tool_menu.setVisible(true);
 	}
 

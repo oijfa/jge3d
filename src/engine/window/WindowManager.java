@@ -88,8 +88,22 @@ public class WindowManager extends DesktopArea {
 
 		gui.update();
 
+		setPosition(window);
+		
+		windows.add(window);
+		Widget current_window = windows.get(windows.indexOf(window));
+		add(current_window);
+	}
+
+	public void setPosition(Window window) {
 		if (windows.size() > 0) {
-			Window last_window = windows.get(windows.size() - 1);
+			Window last_window = windows.get(0);
+			
+			for(Window test_window: windows) {
+				if(test_window.isVisible() && test_window.getX() >= last_window.getX() && test_window.getY() > last_window.getY())
+					last_window = test_window;
+			}
+			
 			if (window.getHeight() + last_window.getBottom() < this.getHeight()) {
 				window.setPosition(0, last_window.getBottom());
 			} else if (window.getHeight() + last_window.getBottom() > this
@@ -101,11 +115,8 @@ public class WindowManager extends DesktopArea {
 			}
 			// System.out.println("NewPos:"+window.getX()+":"+window.getY()+" ###last:"+last_window.getWidth()+":"+last_window.getHeight()+"###");
 		}
-		windows.add(window);
-		Widget current_window = windows.get(windows.indexOf(window));
-		add(current_window);
 	}
-
+	
 	public Integer getNumLayers() {
 		return layers;
 	}
