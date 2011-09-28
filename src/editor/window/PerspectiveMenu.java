@@ -8,18 +8,16 @@ import engine.window.components.ComboBox;
 import engine.window.components.Window;
 
 public class PerspectiveMenu extends Window implements ActionListener {
-	private ComboBox<Integer> perspective_cb;
+	private ComboBox<String> perspective_cb;
 	private ArrayList<ActionListener> action_listeners;
 
 	public PerspectiveMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Perspective Menu");
 
-		perspective_cb = new ComboBox<Integer>();
+		perspective_cb = new ComboBox<String>();
 		perspective_cb.setTheme("perspective_cb");
 		perspective_cb.addActionListener(this);
-
-		populateCM();
 		
 		add(perspective_cb);
 	}

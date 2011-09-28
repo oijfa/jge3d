@@ -8,17 +8,16 @@ import engine.window.components.ComboBox;
 import engine.window.components.Window;
 
 public class MirrorMenu extends Window implements ActionListener {
-	private ComboBox<Integer> mirror_cb;
+	private ComboBox<String> mirror_cb;
 	private ArrayList<ActionListener> action_listeners;
 
 	public MirrorMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Axis Mirror Menu");
 
-		mirror_cb = new ComboBox<Integer>();
+		mirror_cb = new ComboBox<String>();
 		mirror_cb.setTheme("mirror_cb");
 		mirror_cb.addActionListener(this);
-		populateCB();
 
 		add(mirror_cb);
 	}

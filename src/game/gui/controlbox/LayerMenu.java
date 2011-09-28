@@ -15,7 +15,7 @@ public class LayerMenu extends ResizableFrame {
 
 	public void populateLayers() {
 		for (int i = 1; i <= parent.getNumLayers(); i++) {
-			layer_cb.addItem(i);
+			layer_cb.addItem(String.valueOf(i));
 		}
 	}
 }
