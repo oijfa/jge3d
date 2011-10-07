@@ -94,6 +94,10 @@ public class Engine {
 		return entity_list.getItem(name);
 	}
 	
+	public Shader getShaderByName(String name) {
+		return shaders.get(name);
+	}
+	
 	public Camera getCamera() {
     // TODO Auto-generated method stub
     return (Camera) getEntity(Camera.CAMERA_NAME);
@@ -237,10 +241,23 @@ public class Engine {
     return player;
   }
   
+  public boolean addModel(String name, String location, Shader shader){
+    boolean ret = false;
+    if(!models.keySet().contains(name)){
+      models.put(name, FileLoader.loadFile(location));
+      models.get(name).setShader(shader);
+      models.get(name).createVBO();
+      ret = true;
+    }
+    return ret;
+  }
+  
   public boolean addModel(String name, String location){
     boolean ret = false;
     if(!models.keySet().contains(name)){
       models.put(name, FileLoader.loadFile(location));
+      models.get(name).setShader(shaders.get("default"));
+      models.get(name).createVBO();
       ret = true;
     }
     return ret;

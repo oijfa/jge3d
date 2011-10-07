@@ -85,4 +85,17 @@ public class Block<E extends Number> extends Button {
 	public Boolean getActive() {
 		return active;
 	}
+	
+	public String toString() {
+		String converted_string = new String();
+		
+		if(base_color != null) {
+		converted_string = "\n\t\t<red>" + (base_color.getR() & 0xff) + "</red>" +
+				"\n\t\t<green>" + (base_color.getG() & 0xff) + "</green>" +
+				"\n\t\t<blue>" + (base_color.getB() & 0xff) + "</blue>\n";
+		} else {
+			converted_string = "\n\t\tNot set.\n";
+		}
+		return converted_string;
+	}
 }

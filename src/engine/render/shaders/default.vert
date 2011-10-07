@@ -28,7 +28,7 @@ void main() {
     normal = normalize(gl_NormalMatrix * gl_Normal);
 
     // Set the front color to the color passed through with glColor
-    gl_FrontColor = gl_Color;
+    //gl_FrontColor = gl_Color;
 	
 	color = gl_Color;
 }
