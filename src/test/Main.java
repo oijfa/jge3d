@@ -31,21 +31,20 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 		
-		engine.addModel("box", "resources/models/misc/box.xgl", engine.getShaderByName("default"));
-		engine.addModel("box2", "resources/models/misc/box2.xgl", engine.getShaderByName("default"));
-		//engine.addModel("test", "resources/models/misc/test.xgl", engine.getShaderByName("default"));
-		//engine.addModel("export", "resources/models/misc/export.xgl", engine.getShaderByName("default"));
-		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl", engine.getShaderByName("default"));
-		//engine.addModel("legoman", "resources/models/misc/legoman.xgl", engine.getShaderByName("default"));
+		engine.addModel("box", "resources/models/misc/box.xgl");
+		engine.addModel("box2", "resources/models/misc/box2.xgl");
+		engine.addModel("test", "resources/models/misc/test.xgl");
+		engine.addModel("export", "resources/models/misc/export.xgl");
+		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
+		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 	
 		Terrain terrain = new Terrain(0,true,engine.getModelByName("singlebox"),engine.getShaderByName("default"));
 		terrain.setProperty(Entity.NAME, "terrain");
-		terrain.createTerrain(20);
+		terrain.createTerrain(5);
 		terrain.setPosition(new Vector3f(0,-10, 0));
 		engine.addEntity(terrain);
-		//engine.updateEntity(terrain);
-		//terrain.createTerrain(20);
-		//engine.updateEntity(terrain);
+		terrain.createTerrain(20);
+		engine.updateEntity(terrain);
 		
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
@@ -57,7 +56,7 @@ public class Main {
 		//player.setFallSpeed(1);
 		//player.set
 		player.setGravity(10);
-		/*
+		
 		model = engine.addEntity("model1", 1.0f, true, "box", "default");
 		model.setProperty(Entity.NAME, "model1");
 		model.setPosition(new Vector3f(6, 0, 0));
@@ -79,7 +78,7 @@ public class Main {
 		model5.setProperty(Entity.NAME, "model5");
 		model5.setPosition(new Vector3f(0, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
-			*/	
+		
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(40f);
 		camera.setPosition(new Vector3f(0, 0, 6));

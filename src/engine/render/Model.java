@@ -95,6 +95,10 @@ public class Model {
 		meshes.add(m);
 		//reduceHull();
 	}
+	
+	public void deleteMeshes() {
+		meshes.clear();
+	}
 
 	/* Getters */
 	public Mesh getMesh(int i) {
@@ -419,7 +423,7 @@ public class Model {
 			GL11.glPopMatrix();
 	}
 
-	private int getVertexCount() {
+	public int getVertexCount() {
 		int count = 0;
 		for(Mesh m : this.getMeshes())
 			for(Face f : m.getFaces())

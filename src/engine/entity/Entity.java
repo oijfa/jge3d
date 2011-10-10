@@ -33,7 +33,7 @@ public class Entity {
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
-	private Model model;
+	protected Model model;
 	private boolean shouldDraw = true;
 
 	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
@@ -191,7 +191,6 @@ public class Entity {
 
 	public void setModel(Model model) {
 		this.model = model;
-		setCollisionShape(model.getCollisionShape());
 	}
 
 	public void setShouldDraw(boolean shouldDraw) {

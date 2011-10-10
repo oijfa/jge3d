@@ -18,9 +18,18 @@ public class Terrain extends Entity {
 		this.base_model.setShader(shader);
 		this.full_model = new Model(shader);
 	}
+	
+	public Terrain(float mass, boolean collide, Model base_model) {
+		super(mass, collide, base_model, base_model.getShader());
+		this.base_model = base_model;
+		this.full_model = new Model(base_model.getShader());
+	}
 
 	public void createTerrain(int land_size) {
 		terrain = new DynamicMatrix();
+		
+		full_model.deleteMeshes();
+		
 		//Create the base matrix for the terrain
 		for (int i = 0; i < land_size; i++)
 			terrain.expand();
@@ -42,8 +51,8 @@ public class Terrain extends Entity {
 				full_model.addMesh(new_mesh);		
 			}
 		}
-		
 		this.setModel(full_model);
+		this.getModel().reduceHull();
 	}
 
 	public String toString() {
