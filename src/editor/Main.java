@@ -45,12 +45,12 @@ public class Main implements ActionListener {
 	public Main() {
 		engine = new Engine();
 
-		engine.addModel("box", "resources/models/misc/box.xgl", engine.getShaderByName("default"));
-		engine.addModel("box2", "resources/models/misc/box2.xgl", engine.getShaderByName("default"));
-		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl", engine.getShaderByName("default"));
+		engine.addModel("box", "resources/models/misc/box.xgl");
+		engine.addModel("box2", "resources/models/misc/box2.xgl");
+		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
 		
 		int num_layers = 8;
-		grid_window = new GridWindow(num_layers, engine.getModelByName("singlebox"));
+		grid_window = new GridWindow(num_layers, engine.getModelByName("box"));
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(num_layers);
 		palette_window = new PaletteWindow(216);
@@ -79,7 +79,7 @@ public class Main implements ActionListener {
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
-		edit_model = engine.addEntity("edit_model", 0f, true, "singlebox", "default");
+		edit_model = engine.addEntity("edit_model", 0f, true, "box", "default");
 		edit_model.setProperty(Entity.NAME, "edit_model");
 		edit_model.setPosition(new Vector3f(0,0,0));
 		//edit_model.setGravity(new Vector3f(0,0,0));
