@@ -52,7 +52,6 @@ public class Terrain extends Entity {
 			}
 		}
 		this.setModel(full_model);
-		this.getModel().reduceHull();
 	}
 
 	public String toString() {

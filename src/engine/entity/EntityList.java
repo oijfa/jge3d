@@ -112,6 +112,7 @@ public class EntityList {
 			if (e.getModel() != null) {
 				e.getModel().createVBO();
 				e.getModel().reduceHull();
+				e.setCollisionShape(e.getModel().getCollisionShape());
 			} else {
 				System.out.println("Trying to add/update render object of NULL model");
 			}

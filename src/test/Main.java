@@ -40,11 +40,9 @@ public class Main {
 	
 		Terrain terrain = new Terrain(0,true,engine.getModelByName("singlebox"),engine.getShaderByName("default"));
 		terrain.setProperty(Entity.NAME, "terrain");
-		terrain.createTerrain(5);
 		terrain.setPosition(new Vector3f(0,-10, 0));
-		engine.addEntity(terrain);
 		terrain.createTerrain(20);
-		engine.updateEntity(terrain);
+		engine.addEntity(terrain);
 		
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);

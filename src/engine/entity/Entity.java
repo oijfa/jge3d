@@ -289,7 +289,9 @@ public class Entity {
 
 	public void setCollisionShape(CollisionShape createCollisionShape) {
 		// Sets the new collision shape
+		Vector3f scalevec = collision_object.getCollisionShape().getLocalScaling(new Vector3f());
 		collision_object.setCollisionShape(createCollisionShape);
+		collision_object.getCollisionShape().setLocalScaling(scalevec);
 
 		// This is to correct for the fact that the center of mass
 		// is not the same as the origin of the model
@@ -298,11 +300,11 @@ public class Entity {
 		// TODO: This has not been tested at all
 		// Someone should see if this actually corrects for the
 		// offset problem
-		Transform offset = new Transform();
-		offset.origin.set(model.getCenter());
-		Transform position = new Transform();
-		position.origin.set(this.getPosition());
-		this.setMotionState(new DefaultMotionState(position, offset));
+		//Transform offset = new Transform();
+		//offset.origin.set(model.getCenter());
+		//Transform position = new Transform();
+		//position.origin.set(this.getPosition());
+		//this.setMotionState(new DefaultMotionState(position, offset));
 	}
 
 	public void setAngularFactor(float factor, Vector3f velocity) {
