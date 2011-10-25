@@ -19,8 +19,8 @@ public class AIManager {
 		for(String script_name : script_names){
 			try {
 				ArrayList<Method> script_list;
-				System.out.println(script_name);
-				Method method = AIFunctions.class.getMethod(script_name, Engine.class, Entity.class);
+				
+				Method method = AIFunctions.class.getMethod(script_name, Engine.class, Actor.class);
 				
 				if(!script_assignments.containsKey(ent_name)){
 					script_list = new ArrayList<Method>();
@@ -62,16 +62,27 @@ public class AIManager {
 		if( methods != null ){
 			for (Method method : methods){
 				try {
-					System.out.println(method.getName() + "(");
-					System.out.println(engine);
-					System.out.println(ent.getProperty(Entity.NAME));
-					System.out.println(")");
-					
 					method.invoke(AIFunctions.class,engine,ent);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+	}
+	
+	public void invokeAllMethodsForAllEnts(Engine engine) {
+		for(String ent_name: script_assignments.keySet()) {
+			Actor actor = engine.getActor(ent_name);
+			ArrayList<Method> methods = getScripts((String)actor.getProperty(Entity.NAME));
+			if( methods != null ){
+				for (Method method : methods){
+					try {
+						method.invoke(AIFunctions.class,engine,actor);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}		
 	}
 }

@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
+import engine.entity.AIManager;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
@@ -42,6 +43,8 @@ public class Engine {
 	@SuppressWarnings("unused")
 	private Camera camera;
 	private EntityList entity_list;
+	
+	private AIManager ai_manager;
 
 	public void addWindow(Window window, int width, int height) {
 		renderer.getWindowManager().addWindow(window, width, height);
@@ -63,6 +66,8 @@ public class Engine {
 		);
 		
 		addKeyMap("default.xml");
+		
+		ai_manager = new AIManager();
 	}
 
 	public void run() {
@@ -95,14 +100,18 @@ public class Engine {
 		return entity_list.getItem(name);
 	}
 	
+	public Actor getActor(String name) {
+		return (Actor)getEntity(name);
+	}
+	
 	public Shader getShaderByName(String name) {
 		return shaders.get(name);
 	}
 	
 	public Camera getCamera() {
-    // TODO Auto-generated method stub
-    return (Camera) getEntity(Camera.CAMERA_NAME);
-  }
+		// TODO Auto-generated method stub
+	    return (Camera) getEntity(Camera.CAMERA_NAME);
+	}
 
 	public void removeEntity(String name) {
 		entity_list.removeEntity(name);
@@ -219,6 +228,7 @@ public class Engine {
 				renderer.draw();
 			}
 		}
+		ai_manager.invokeAllMethodsForAllEnts(this);
 	}
 	public void physicsOnce(){
 		if (entity_list != null && entity_list.physicsQueueSize() > 0) 
@@ -241,6 +251,13 @@ public class Engine {
     addEntity(actor);
     return actor;
   }
+  
+  public Actor addActor(String name, float mass, String model_name, String shader_name) {
+	    Actor actor = new Actor(name, mass, models.get(model_name), shaders.get(shader_name));
+	    actor.setProperty(Entity.NAME, name);
+	    addEntity(actor);
+	    return actor;
+	  }
   
   public boolean addModel(String name, String location, Shader shader){
     boolean ret = false;
@@ -279,5 +296,13 @@ public class Engine {
 
   public WindowManager getWindowManager() {
 	  return renderer.getWindowManager();
+  }
+  
+  public void addAIRoutine(String ent_name, String... script_names) {
+	  ai_manager.assignScript(ent_name, script_names);
+  }
+  
+  public void removeAIRoutine(String ent_name, String script_name) {
+	  ai_manager.unassignScript(ent_name, script_name);
   }
 }

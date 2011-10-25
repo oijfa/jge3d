@@ -16,7 +16,7 @@ public class Main {
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
-	private Entity model5;
+	private Actor model5;
 	private Camera camera;
 	
 	public static void main(String args[]) {
@@ -72,10 +72,11 @@ public class Main {
 		model4.setProperty(Entity.NAME, "model4");
 		model4.setPosition(new Vector3f(0, 0, -6));
 		
-		model5 = engine.addEntity("model5", 1f, true, "legoman", "default");
+		model5 = engine.addActor("model5", 1f, "legoman", "default");
 		model5.setProperty(Entity.NAME, "model5");
 		model5.setPosition(new Vector3f(0, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
+		engine.addAIRoutine("model5", "followPlayer");
 		
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(40f);

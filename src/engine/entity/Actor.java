@@ -15,6 +15,11 @@ public class Actor extends Entity {
 	private KinematicCharacterController actor;
 	private Vector3f walk_direction;
 
+	public Actor(String name, float mass, Model model, Shader shader) {
+		super(name, mass, false, model, shader);
+		initActor(0);
+	}
+	
 	public Actor(String name, float mass, float step_height, Model model, Shader shader) {
 		super(name, mass, false, model, shader);
 		initActor(step_height);

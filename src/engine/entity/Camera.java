@@ -31,8 +31,8 @@ public class Camera extends Entity {
 
 	/* Constructors */
 	public Camera(float mass, boolean collidable, Model model) {
-    this(mass, collidable, model, null);
-  }
+	    this(mass, collidable, model, null);
+	}
 	
 	public Camera(Float mass, boolean collide, Model model, Entity defFocus) {
 		super(mass, collide, model, null);

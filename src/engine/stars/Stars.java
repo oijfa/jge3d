@@ -14,7 +14,7 @@ public class Stars {
 	private Entity ent;
 	
 	public Stars(Engine engine, int rows, int columns, int space_between_levels, int num_levels, int starting_distance) {
-		ent = engine.addEntity("stars", 0f, true, "box", "default");
+		ent = engine.addEntity("stars", 1f, true, "box", "default");
 		
 		Model base_model = engine.getModelByName("singlebox");
 		Model full_model = new Model(base_model.getShader());
@@ -58,6 +58,7 @@ public class Stars {
 		}
 		
 		ent.setModel(full_model);
+		ent.setGravity(new Vector3f(0,0,0));
 		ent.activate();
 	}
 
