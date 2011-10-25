@@ -26,15 +26,15 @@ import de.matthiasmann.twl.Event;
 public class InputMap {
   HashMap<String,String> key_map;
   
-  final HashMap<String, Integer> lwjgl_key_enums;
-  final HashMap<String, String> enums_to_function; 
+  final HashMap<String, Integer> lwjgl_keyboard_enums;
+  final HashMap<String, String> enums_to_function;
   
   EntityList entity_list;
   
   public InputMap(String filename, EntityList ent_list) throws KeyMapException{
     key_map = new HashMap<String,String>();
     
-    lwjgl_key_enums = new HashMap<String,Integer>();
+    lwjgl_keyboard_enums = new HashMap<String,Integer>();
     enums_to_function = new HashMap<String,String>();
     
     entity_list = ent_list;
@@ -42,7 +42,7 @@ public class InputMap {
     for(Field f : Keyboard.class.getFields()){
     	if(f.getName().contains("KEY_")){
     		try {
-    			lwjgl_key_enums.put(f.getName(), (Integer)f.get(null));
+    			lwjgl_keyboard_enums.put(f.getName(), (Integer)f.get(null));
 			} catch (IllegalArgumentException e) {
 			} catch (IllegalAccessException e) {}
     	}
@@ -69,21 +69,24 @@ public class InputMap {
   				dom = db.parse(InputMap.class.getResourceAsStream("keymaps/" + filePath));
   				Element root_element = dom.getDocumentElement();
   				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
-  					ArrayList<Node> key_settings = findChildrenByName(root_element, "key");
-  					for(Node n : key_settings){
-  						String id = ((Element) n).getAttribute("ID");
-  						String event = ((Element) n).getAttribute("EVENT");
-  						
-  						try {
-  							if(this.getClass().getMethod(n.getTextContent()) != null){
-  								enums_to_function.put(
-  									String.valueOf(lwjgl_key_enums.get(id.toUpperCase())) + event.toUpperCase(),
-  									n.getTextContent()
-  								);
-  							}
-						} catch (Exception e) {
-							throwKeyMapException(e);
-						}
+  					ArrayList<Node> keyboards = findChildrenByName(root_element, "keyboard");
+  					for(Node keyboard : keyboards){
+	  					ArrayList<Node> key_settings = findChildrenByName(keyboard, "key");
+	  					for(Node n : key_settings){
+	  						String id = ((Element) n).getAttribute("ID");
+	  						String event = ((Element) n).getAttribute("EVENT");
+	  						
+	  						try {
+	  							if(this.getClass().getMethod(n.getTextContent()) != null){
+	  								enums_to_function.put(
+	  									String.valueOf(lwjgl_keyboard_enums.get("KEY_" + id.toUpperCase())) + "KEY_" + event.toUpperCase(),
+	  									n.getTextContent()
+	  								);
+	  							}
+							} catch (Exception e) {
+								throwKeyMapException(e);
+							}
+	  					}
   					}
   				}else{
   					throwException("KeyMap tag should be root element.");
@@ -167,7 +170,7 @@ public class InputMap {
 	}
   	
   	public void debug() {
-  		System.out.println(lwjgl_key_enums.toString());
+  		System.out.println(lwjgl_keyboard_enums.toString());
   		System.out.println("###");
   		System.out.println(key_map.toString());
   	}
