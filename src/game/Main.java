@@ -4,7 +4,7 @@ import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.Camera;
-import engine.entity.Player;
+import engine.entity.Actor;
 import engine.importing.FileLoader;
 
 import game.gui.RotationMenu;
@@ -24,8 +24,8 @@ public class Main {
 		//Terrain terrain = new Terrain(engine);
 		//terrain.createTerrain(75);
 
-		engine.addPlayer("player1", 1.0f, 0.5f, "resources/models/misc/box.xgl", "default");
-		Player player1 = (Player) engine.getEntity("player1");
+		engine.addActor("player1", 1.0f, 0.5f, "resources/models/misc/box.xgl", "default");
+		Actor player1 = (Actor) engine.getEntity("player1");
 
 		Camera camera = new Camera(1f, false, FileLoader.loadFile("resources/models/misc/box.xgl"), player1);
 		camera.setProperty("name", "camera");

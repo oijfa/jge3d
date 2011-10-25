@@ -300,10 +300,10 @@ public class Entity {
 		// TODO: This has not been tested at all
 		// Someone should see if this actually corrects for the
 		// offset problem
-		//Transform offset = new Transform();
-		//offset.origin.set(model.getCenter());
-		//Transform position = new Transform();
-		//position.origin.set(this.getPosition());
+		Transform offset = new Transform();
+		offset.origin.set(model.getCenter());
+		Transform position = new Transform();
+		position.origin.set(this.getPosition());
 		//this.setMotionState(new DefaultMotionState(position, offset));
 	}
 

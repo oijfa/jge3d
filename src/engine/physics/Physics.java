@@ -15,7 +15,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 
 import engine.entity.Entity;
-import engine.entity.Player;
+import engine.entity.Actor;
 import engine.entity.Entity.ObjectType;
 
 public class Physics {
@@ -112,7 +112,7 @@ public class Physics {
 				dynamicsWorld.addCollisionObject(e.getCollisionObject());
 				if(e.getObjectType() == ObjectType.actor) {
 					//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
-					dynamicsWorld.addAction(((Player)e).getActor());
+					dynamicsWorld.addAction(((Actor)e).getActor());
 				}
 			}
 			ret = true;
@@ -127,7 +127,7 @@ public class Physics {
 			dynamicsWorld.removeCollisionObject(e.getCollisionObject());
 		}
 		if(e.getObjectType() == ObjectType.actor) {
-			dynamicsWorld.removeAction(((Player)e).getActor());
+			dynamicsWorld.removeAction(((Actor)e).getActor());
 		}
 	}
 	

@@ -4,13 +4,14 @@ import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.*;
+import engine.stars.Stars;
 import engine.terrain.Terrain;
 
 public class Main {
 
 	private Engine engine;
 
-	private Player player;
+	private Actor player;
 	private Entity model;
 	private Entity model2;
 	private Entity model3;
@@ -45,14 +46,13 @@ public class Main {
 		engine.addEntity(terrain);
 		
 		//Make some parallax stars
-		//Stars stars = new Stars(engine,1000,10000,200,5,400);
+		Stars stars = new Stars(engine,1000,10000,200,5,400);
+		stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
-		engine.addPlayer("player", 1.0f, 0.5f, "box", "default");
-		player = (Player) engine.getEntity("player");
+		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
 		player.setPosition(new Vector3f(0, 30, 0));
 		player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
-		//player.set
 		player.setGravity(10);
 		
 		model = engine.addEntity("model1", 1.0f, true, "box", "default");
@@ -81,8 +81,6 @@ public class Main {
 		camera.setDistance(40f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(player);
-
-		//engine.updateEntity(stars.getEntity());
 	}
 
 	public void runMultiThread() {

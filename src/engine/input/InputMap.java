@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
-import engine.entity.Player;
+import engine.entity.Actor;
 import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.Event;
 
@@ -128,17 +128,17 @@ public class InputMap {
 	public void zoomCameraIn(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
 	public void zoomCameraOut(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
 	
-	public void playerForward(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));}
-	public void playerBack(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));}
-	public void playerLeft(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));}
-	public void playerRight(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));}
+	public void playerForward(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));}
+	public void playerBack(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));}
+	public void playerLeft(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));}
+	public void playerRight(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));}
 
-	public void playerStopForward(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,0.1f));}
-	public void playerStopBack(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0,0,-0.1f));}
-	public void playerStopLeft(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(0.1f,0,0));}
-	public void playerStopRight(){((Player)entity_list.getItem("player")).movePlayer(new Vector3f(-0.1f,0,0));}
+	public void playerStopForward(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));}
+	public void playerStopBack(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));}
+	public void playerStopLeft(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));}
+	public void playerStopRight(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));}
 	
-	public void playerJump(){((Player)entity_list.getItem("player")).jump();}	
+	public void playerJump(){((Actor)entity_list.getItem("player")).jump();}	
   
   	public boolean handleEvent(Event e) throws KeyMapException{
 		String[] function_names = {

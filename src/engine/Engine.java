@@ -12,7 +12,7 @@ import org.lwjgl.opengl.Display;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
-import engine.entity.Player;
+import engine.entity.Actor;
 import engine.importing.FileLoader;
 import engine.input.InputMap;
 import engine.input.components.KeyMapException;
@@ -235,11 +235,11 @@ public class Engine {
     return camera;
   }
 
-  public Player addPlayer(String name, float mass, float step_height, String model_name, String shader_name) {
-    Player player = new Player(mass, step_height, models.get(model_name), shaders.get(shader_name));
-    player.setProperty(Entity.NAME, name);
-    addEntity(player);
-    return player;
+  public Actor addActor(String name, float mass, float step_height, String model_name, String shader_name) {
+    Actor actor = new Actor(mass, step_height, models.get(model_name), shaders.get(shader_name));
+    actor.setProperty(Entity.NAME, name);
+    addEntity(actor);
+    return actor;
   }
   
   public boolean addModel(String name, String location, Shader shader){

@@ -11,53 +11,53 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import engine.render.Model;
 import engine.render.Shader;
 
-public class Player extends Entity {
-	private KinematicCharacterController player;
+public class Actor extends Entity {
+	private KinematicCharacterController actor;
 	private Vector3f walk_direction;
 
-	public Player(String name, float mass, float step_height, Model model, Shader shader) {
+	public Actor(String name, float mass, float step_height, Model model, Shader shader) {
 		super(name, mass, false, model, shader);
-		initPlayer(step_height);
+		initActor(step_height);
 	}
 
-	public Player(float mass, float step_height, Model model, Shader shader) {
+	public Actor(float mass, float step_height, Model model, Shader shader) {
 		super(mass, false, model, shader);
-		initPlayer(step_height);
+		initActor(step_height);
 	}
 
-	public void initPlayer(float step_height) {
-		player = new KinematicCharacterController(
+	public void initActor(float step_height) {
+		actor = new KinematicCharacterController(
 			(PairCachingGhostObject) ((GhostObject) collision_object),
 			(ConvexShape) collision_object.getCollisionShape(), step_height
 		);
-		player.setJumpSpeed(10.0f);
+		actor.setJumpSpeed(10.0f);
 		collision_object.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
 		object_type = ObjectType.actor;
 		walk_direction = new Vector3f();
 	}
 
-	public void movePlayer(Vector3f walk_correction) {
+	public void moveActor(Vector3f walk_correction) {
 		walk_direction.add(walk_correction);
-		player.setWalkDirection(walk_direction);
+		actor.setWalkDirection(walk_direction);
 	}
 
 	public void setFallSpeed(float fall_speed) {
-		player.setFallSpeed(fall_speed);
+		actor.setFallSpeed(fall_speed);
 	}
 	
 	public void setGravity(float gravity) {
-		player.setGravity(gravity);
+		actor.setGravity(gravity);
 	}
 	
 	public void setJumpSpeed(float jump_speed) {
-		player.setJumpSpeed(jump_speed);
+		actor.setJumpSpeed(jump_speed);
 	}
 
 	public void jump() {
-		if (player.canJump()) player.jump();
+		if (actor.canJump()) actor.jump();
 	}
 	
 	public KinematicCharacterController getActor() {
-		return player;
+		return actor;
 	}
 }

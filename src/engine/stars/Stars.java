@@ -7,13 +7,14 @@ import javax.vecmath.Vector3f;
 import engine.Engine;
 import engine.entity.Entity;
 import engine.render.Model;
+import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
 
 public class Stars {
 	private Entity ent;
 	
 	public Stars(Engine engine, int rows, int columns, int space_between_levels, int num_levels, int starting_distance) {
-		ent = engine.addEntity("stars", 0f, true, "singlebox", "default");
+		ent = engine.addEntity("stars", 0f, true, "box", "default");
 		
 		Model base_model = engine.getModelByName("singlebox");
 		Model full_model = new Model(base_model.getShader());
@@ -31,12 +32,11 @@ public class Stars {
 									new Vector3f(0,0,1),
 									new Vector3f(0,1,0)
 								);
-								/*Color setting (Needs model cloning to work)
+								//Color setting (Needs model cloning to work)
 								Float r = (float) Math.random();
 								Float g = (float) Math.random();
 								Float b = (float) Math.random();
-								System.out.println(r+";"+g+";"+b);
-								star.getModel().getMesh(0).setMaterial(
+								mesh.setMaterial(
 									new Material(
 										new Vector3f(r,g,b),
 										new Vector3f(r,g,b),
@@ -44,7 +44,7 @@ public class Stars {
 										new Vector3f(r,g,b),
 										1.0f
 									)
-								);*/
+								);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -58,7 +58,7 @@ public class Stars {
 		}
 		
 		ent.setModel(full_model);
-		ent.applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+		ent.activate();
 	}
 
 	public Entity getEntity() {
