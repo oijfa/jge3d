@@ -7,12 +7,13 @@ import editor.action_listener.ActionListener;
 
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
 import editor.Block;
 import editor.CubicGrid;
+import engine.render.Model;
+import engine.window.components.Window;
 
-public class GridWindow extends ResizableFrame implements ActionListener {
+public class GridWindow extends Window implements ActionListener {
 	private CubicGrid<Block<Integer>> grid;
 	private Color current_color = new Color((byte) 0xFF, (byte) 0xFF,
 		(byte) 0xFF, (byte) 0xFF);
@@ -20,12 +21,12 @@ public class GridWindow extends ResizableFrame implements ActionListener {
 
 	private ArrayList<ActionListener> action_listeners;
 
-	public GridWindow(Integer grid_size) {
+	public GridWindow(Integer grid_size, Model base_model) {
 		this.setSize(400, 400);
 
 		setTitle("Grid View");
 
-		this.grid = new CubicGrid<Block<Integer>>(grid_size);
+		this.grid = new CubicGrid<Block<Integer>>(grid_size,base_model);
 
 		for (int z = 0; z < grid_size; z++) {
 			for (int y = 0; y < grid_size; y++) {

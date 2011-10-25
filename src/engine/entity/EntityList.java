@@ -112,14 +112,23 @@ public class EntityList {
 			if (e.getModel() != null) {
 				e.getModel().createVBO();
 				e.getModel().reduceHull();
+				e.setCollisionShape(e.getModel().getCollisionShape());
+			} else {
+				System.out.println("Trying to add/update render object of NULL model");
 			}
+		} else {
+			System.out.println("Trying to add/update render object of unnamed entity");
 		}
 	}
 	private void removeRenderItem(Entity e) {
 		if (e.keyExists("name")) {
 			if (e.getModel() != null) {
 				e.getModel().destroyVBO();
+			} else {
+				System.out.println("Trying to delete render object of NULL model");
 			}
+		} else {
+			System.out.println("Trying to delete render object of unnamed entity");
 		}
 	}
 	
@@ -136,7 +145,8 @@ public class EntityList {
 		// Have to change keySet into array so that a clone will be made
 		// Avoids concurrency issues
 		for (Entity ent : this.getEntities()){
-			ent.draw();
+			if(ent.shouldDraw())
+				ent.draw();
 		}
 	}
 	/***************************************/

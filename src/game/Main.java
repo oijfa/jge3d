@@ -6,7 +6,6 @@ import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Player;
 import engine.importing.FileLoader;
-import engine.terrain.Terrain;
 
 import game.gui.RotationMenu;
 
@@ -22,8 +21,8 @@ public class Main {
 		engine = new Engine();
 
 		// Testing the terrain stuff here
-		Terrain terrain = new Terrain(engine);
-		terrain.createTerrain(75);
+		//Terrain terrain = new Terrain(engine);
+		//terrain.createTerrain(75);
 
 		engine.addPlayer("player1", 1.0f, 0.5f, "resources/models/misc/box.xgl", "default");
 		Player player1 = (Player) engine.getEntity("player1");

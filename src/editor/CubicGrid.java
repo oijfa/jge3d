@@ -12,12 +12,15 @@ public class CubicGrid<E> {
 	private E items[];
 	private Integer size;
 	private Model full_model;
+	private Model base_model;
 
 	@SuppressWarnings("unchecked")
-	public CubicGrid(int dim) {
+	public CubicGrid(int dim, Model base_model) {
 		// Can't instantiate array of E, but can do this:
 		items = (E[]) new Object[dim * dim * dim];
 		size = dim;
+		full_model = new Model(base_model.getShader());
+		this.base_model = base_model;
 	}
 
 	public void set(int x, int y, int z, E item) {
@@ -37,29 +40,22 @@ public class CubicGrid<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Model getModel(Model model) {
-		if(full_model != null)
-			full_model.destroyVBO();
-		
-		full_model = new Model(model.getShader());
-		Mesh mesh;
-
+	public Model getModel() {
 		try {
-			Block<Integer> current_block;
 			Color mat_color;
 			for (int z = 0; z < size; z++) {
 				for (int y = 0; y < size; y++) {
 					for (int x = 0; x < size; x++) {
-						current_block = ((Block<Integer>) this.get(x, y, z));
-						if (current_block.getActive()) {
-							for(Mesh copymesh: model.getMeshes()) {
-								mesh = new Mesh(copymesh);
+						if( ((Block<Integer>)get(x,y,z)).getActive()) {
+							for(Mesh copymesh: base_model.getMeshes()) {
+								Mesh mesh = new Mesh(copymesh);
 								mesh.transform(
 									new Vector3f(x, -y, z),
 									new Vector3f(0, 0, 1), 
 									new Vector3f(0, 1, 0)
 								);
 								mat_color = ((Block<Integer>) this.get(x, y, z)).getColor();
+								
 								mesh.setMaterial(
 									new Material(
 										new Vector3f(
@@ -73,19 +69,20 @@ public class CubicGrid<E> {
 											mat_color.getBlueFloat()
 										),
 										new Vector3f(
-											0, 
-											0, 
-											0
+											mat_color.getRedFloat(), 
+											mat_color.getGreenFloat(), 
+											mat_color.getBlueFloat()
 										),
 										new Vector3f(
-											0, 
-											0, 
-											0
+											1, 
+											1, 
+											1
 										),
 										1f
 									)
 								);
-								mesh.calcNormals();
+								
+								//mesh.calcNormals();
 								full_model.addMesh(mesh);
 							}
 						}

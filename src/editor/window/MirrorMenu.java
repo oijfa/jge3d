@@ -2,27 +2,27 @@ package editor.window;
 
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.ComboBox;
+import engine.window.components.Window;
 
-public class MirrorMenu extends ResizableFrame implements ActionListener {
-	private ComboBox<Integer> mirror_cb;
+public class MirrorMenu extends Window implements ActionListener {
+	private ComboBox<String> mirror_cb;
 	private ArrayList<ActionListener> action_listeners;
 
 	public MirrorMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Axis Mirror Menu");
 
-		mirror_cb = new ComboBox<Integer>();
-		mirror_cb.setTheme("perspective_cb");
+		mirror_cb = new ComboBox<String>();
+		mirror_cb.setTheme("mirror_cb");
 		mirror_cb.addActionListener(this);
 
 		add(mirror_cb);
 	}
 
-	public void populateLayers(Integer num_layers) {
+	public void populateCB() {
 		mirror_cb.addItem("X");
 		mirror_cb.addItem("Y");
 		mirror_cb.addItem("Z");

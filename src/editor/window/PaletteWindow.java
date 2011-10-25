@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import engine.window.components.Window;
 
-public class PaletteWindow extends ResizableFrame implements ActionListener {
+public class PaletteWindow extends Window implements ActionListener {
 	private DialogLayout preview_layout;
 	private DialogLayout grid_layout;
 	private DialogLayout frame_layout;

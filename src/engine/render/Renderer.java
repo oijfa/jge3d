@@ -23,10 +23,10 @@ import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
-import engine.window.Window;
+import engine.window.WindowManager;
 
 public class Renderer {
-	private Window window;
+	private WindowManager window_manager;
 	private EntityList objectList;
 	private Camera camera;
 	private static boolean supportsVBO = false;
@@ -87,7 +87,7 @@ public class Renderer {
 		objectList.drawList();
 
 		// Draw the window manager stuff
-		if (window != null) window.draw();
+		if (window_manager != null) window_manager.draw();
 
 		GL11.glFlush();
 		Display.update();
@@ -117,7 +117,7 @@ public class Renderer {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		window = new Window();
+		window_manager = new WindowManager();
 
 		// camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 
@@ -232,13 +232,13 @@ public class Renderer {
 	public static boolean supportsVBO() {
 		return supportsVBO;
 	}
-
-	public Window getWindow() {
-		return window;
+	
+	public WindowManager getWindowManager() {
+		return window_manager;
 	}
 
 	public void destroy() {
-		window.destroy();
+		window_manager.destroy();
 	}
 
 	public void setCamera(Camera camera) {

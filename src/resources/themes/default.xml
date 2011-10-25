@@ -2,10 +2,10 @@
 <!DOCTYPE themes PUBLIC "-//www.matthiasmann.de//TWL-Theme//EN" "http://hg.l33tlabs.org/twl/raw-file/tip/src/de/matthiasmann/twl/theme/theme.dtd">
 <themes>
     <images file="images/widgets.png">
-        <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true"/>
+        <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true" tint="#E0FFFFFF"/>
         <area name="white" xywh="1,36,1,1"/>
         <area name="black" xywh="23,57,1,1"/>
-        <area name="border_round" xywh="2,1,40,34" splitx="L11,B11" splity="L9,B9" nocenter="true"/>
+        <area name="border_round" xywh="2,1,40,34" splitx="L11,B11" splity="L9,B9" nocenter="false" tint="#E0FFFFFF"/>
         <area name="border_round_click" xywh="44,3,38,30" splitx="L11,B11" splity="L9,B9"/>
         <select name="border_round_state">
             <alias ref="border_round" tint="#4A4A4A" if="hover+!pressed"/>
@@ -68,6 +68,17 @@
             <alias ref="none"/>
         </select>
         <cursor name="cursor.horiz_resize" hotSpotX="0" hotSpotY="0" xywh="175,34,32,15"/>
+        <area name="-table.frame.pixel" xywh="1,36,1,1"/>
+        <area name="table.background" xywh="2,1,40,34" splitx="L11,B11" splity="L9,B9" />
+        <grid name="table.frame" weightsX="1" weightsY="0,1,0">
+            <area xywh="50,50,9,3" splitx="L4,B4"/>
+            <grid weightsX="0,1,0" weightsY="1">
+                <alias ref="-table.frame.pixel"/>
+                <alias ref="none"/>
+                <alias ref="-table.frame.pixel"/>
+            </grid>
+            <alias ref="-table.frame.pixel"/>
+        </grid>
     </images>
     <images file="images/arrows.png">
         <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
@@ -362,7 +373,14 @@
     <theme name="scrollpane" allowWildcard="true" ref="-default-gaps">
         <theme name="hscrollbar" ref="hscrollbar"/>
         <theme name="vscrollbar" ref="vscrollbar"/>
-        <param name="hasDragButton"><bool>true</bool></param>
+        <param name="minWidth"><int>100</int></param>
+        <param name="minHeight"><int>100</int></param>
+        <param name="maxWidth"><int>32767</int></param>
+        <param name="maxHeight"><int>32767</int></param>
+        <param name="hasDragButton"><bool>false</bool></param>
+        <param name="autoScrollArea"><int>5</int></param>
+        <param name="autoScrollSpeed"><int>10</int></param>
+        <param name="scrollbarsAlwaysVisible"><bool>false</bool></param>
         <theme name="dragButton" ref="button"/>
     </theme>
     <theme name="togglebutton" ref="-defaults">
@@ -425,13 +443,13 @@
         <param name="treeIndent"><int>13</int></param>
         <param name="treeButtonSize"><dimension>30,30</dimension></param>
     </theme>
+    
     <theme name="table" ref="-defaults" allowWildcard="true">
-    	<theme name="" ref="*"/>
         <param name="row.background"><image>none</image></param>
         <param name="row.overlay"><image>none</image></param>
         <param name="row.dropmarker"><image>none</image></param>
         <param name=""><image>table.*</image></param>
-        <param name="rowHeight"><int>30</int></param> <!-- the font line height is 14 -->
+        <param name="rowHeight"><int>12</int></param> <!-- the font line height is 14 -->
         <theme name="stringcellrenderer" ref="-defaults"/>
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
@@ -441,26 +459,17 @@
 		</theme>
         <theme name="spanrenderer" ref="-defaults"/>
         <theme name="coloredtextrenderer" ref="-defaults"/>
-        <theme name="treeButton" ref="button"/>
-        <theme name="columnHeader" ref="button">
-        	<param name="text"><string>20</string></param>
-        </theme>
+        <theme name="treeButton" ref="-defaults"/>
+        <theme name="columnHeader" ref="button" />
         <param name="columnHeaderWidth"><int>256</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>3</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
-        <param name="columnDivider"><image>white</image></param>
-        <param name="columnWidths">
-        	<map />
-        	<!--
-        	<map>
-                <param name="maxWidth"><int>300</int></param>
-                <param name="maxHeight"><int>1000</int></param>
-                <param name="minWidth"><int>300</int></param>
-                <param name="minHeight"><int>400</int></param>
-            </map>
-            -->
-        </param>
+        <param name="columnDivider"><image>none</image></param>
+        <param name="columnWidths"><map /></param>
+        <param name="ensureColumnHeaderMinWidth"><bool>true</bool></param>
+        <param name="dragNotPossibleCursor"><cursor>cursor.horiz_resize</cursor></param>
+        <param name="row"><image>border_round</image></param>
     	<param name="inputMap">
     		<inputMapDef ref="-defaultInputMap">
 				<action name="toggleSelectionOnLeadRow">ctrl SPACE</action>
@@ -486,13 +495,14 @@
   				<action name="collapseLeadRow">SUBTRACT</action>
     		</inputMapDef>
         </param>
+        <theme name="" ref="*"/>
         <theme name="ComboBoxCellRenderer">
             <param name="comboBoxHeight"><int>20</int></param>
         </theme>
         <theme name="EditFieldCellRenderer">
             <param name="editFieldHeight"><int>20</int></param>
         </theme>
-        <theme name="editfield" ref="editfield"/>
+        <param name="overlay"><image>table.frame</image></param>
     </theme>
 	<theme name="tablesearchwindow" ref="-defaults">
 		<param name="background"><image>border_round</image></param>
@@ -702,12 +712,12 @@
 			<theme name="fileTable" ref="table">
 				<param name="columnWidths">
 					<map>
-						<param name="1"><int>70</int></param>
-						<param name="2"><int>80</int></param>
-						<param name="3"><int>140</int></param>
+						<param name="1"><int>40</int></param>
+						<param name="2"><int>40</int></param>
+						<param name="3"><int>40</int></param>
 					</map>
 				</param>
-				<param name="background"><image>border_round</image></param>
+				<param name="background"><image>table.background</image></param>
 			</theme>
 		</theme>
 		<theme name="fileFiltersBox" ref="combobox"/>
@@ -788,7 +798,7 @@
 	
 	
 	
-    <theme name="window" ref="-defaults">
+    <theme name="windowmanager" ref="-defaults">
     	<theme name="resizableframe" ref="resizableframe" />
         <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
@@ -814,35 +824,26 @@
             	</theme>
         	</theme>
     	</theme>
-    	<theme name="toolbox" ref="resizableframe">
-    		<theme name="layermenu" ref="resizableframe">
-    			<param name="minWidth"><int>100</int></param>
-            	<param name="maxWidth"><int>400</int></param>
-       			<param name="minHeight"><int>30</int></param>
-        		<param name="maxHeight"><int>50</int></param>
-        		<theme name="layer_cb" ref="combobox"/>
-    		</theme>
-    		<theme name="mirrormenu" ref="resizableframe">
-    			<param name="minWidth"><int>100</int></param>
-            	<param name="maxWidth"><int>400</int></param>
-       			<param name="minHeight"><int>30</int></param>
-        		<param name="maxHeight"><int>50</int></param>
-        		<theme name="mirror_cb" ref="combobox"/>
-    		</theme>
-    		<theme name="persepectivemenu" ref="resizableframe">
-    			<param name="minWidth"><int>100</int></param>
-            	<param name="maxWidth"><int>400</int></param>
-       			<param name="minHeight"><int>30</int></param>
-        		<param name="maxHeight"><int>50</int></param>
-        		<theme name="perspective_cb" ref="combobox"/>
-    		</theme>
-    	</theme>
-    	<theme name="layermenu" ref="resizableframe">
-    		<param name="minWidth"><int>100</int></param>
-            <param name="maxWidth"><int>400</int></param>
-       		<param name="minHeight"><int>30</int></param>
-        	<param name="maxHeight"><int>50</int></param>
-        	<theme name="layer_cb" ref="combobox"/>
+   		<theme name="layermenu" ref="resizableframe">
+			<param name="minWidth"><int>100</int></param>
+        	<param name="maxWidth"><int>400</int></param>
+   			<param name="minHeight"><int>30</int></param>
+    		<param name="maxHeight"><int>50</int></param>
+    		<theme name="layer_cb" ref="combobox"/>
+		</theme>
+		<theme name="mirrormenu" ref="resizableframe">
+			<param name="minWidth"><int>100</int></param>
+        	<param name="maxWidth"><int>400</int></param>
+   			<param name="minHeight"><int>30</int></param>
+    		<param name="maxHeight"><int>50</int></param>
+    		<theme name="mirror_cb" ref="combobox"/>
+		</theme>
+		<theme name="perspectivemenu" ref="resizableframe">
+			<param name="minWidth"><int>100</int></param>
+        	<param name="maxWidth"><int>400</int></param>
+   			<param name="minHeight"><int>30</int></param>
+    		<param name="maxHeight"><int>50</int></param>
+    		<theme name="perspective_cb" ref="combobox"/>
 		</theme>
 		<theme name="filemenu" ref="resizableframe">
     		<param name="minWidth"><int>100</int></param>
@@ -856,13 +857,15 @@
 	        </theme>
 		</theme>
 		<theme name="toolmenu" ref="resizableframe">
-			<theme name="file_window" ref="fittedbutton"/>
-			<theme name="palette_window" ref="fittedbutton"/>
-			<theme name="grid_window" ref="fittedbutton"/>
-			<theme name="perspective_window" ref="fittedbutton"/>
-			<theme name="layer_window" ref="fittedbutton"/>
-			<theme name="mirror_window" ref="fittedbutton"/>
-			<theme name="color_window" ref="fittedbutton"/>
+			<theme name="dialoglayout" ref="dialoglayout">
+				<theme name="file_window" ref="fittedbutton"/>
+				<theme name="palette_window" ref="fittedbutton"/>
+				<theme name="grid_window" ref="fittedbutton"/>
+				<theme name="perspective_menu" ref="fittedbutton"/>
+				<theme name="layer_menu" ref="fittedbutton"/>
+				<theme name="mirror_menu" ref="fittedbutton"/>
+				<theme name="color_window" ref="fittedbutton"/>
+			</theme>
 		</theme>
 	</theme>
 </themes>

@@ -7,12 +7,12 @@ import java.util.prefs.Preferences;
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.ResizableFrame;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.window.components.LoadFileSelector;
+import engine.window.components.Window;
 
-public class FileMenu  extends ResizableFrame implements ActionListener {
+public class FileMenu  extends Window implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 	
 	private LoadFileSelector load_file;
@@ -35,7 +35,7 @@ public class FileMenu  extends ResizableFrame implements ActionListener {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("File Menu");
 
-		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "what", "fucking dumb", callback, "cockass");
+		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "xml", "XML Files", callback, "xml");
 		//save_file = 
 		
 		createMenu();

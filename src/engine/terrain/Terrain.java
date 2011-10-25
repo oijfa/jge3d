@@ -2,27 +2,33 @@ package engine.terrain;
 
 import javax.vecmath.Vector3f;
 
-import engine.Engine;
 import engine.entity.Entity;
 import engine.render.Model;
+import engine.render.Shader;
 import engine.render.model_pieces.Mesh;
 
-public class Terrain {
-	private Engine engine;
+public class Terrain extends Entity {
 	private DynamicMatrix terrain;
-	private Entity ent;
+	private	Model base_model;
+	private Model full_model;
 
-	public Terrain(Engine engine) {
-		this.engine = engine;
+	public Terrain(float mass, boolean collide, Model base_model, Shader shader) {
+		super(mass, collide, base_model, shader);
+		this.base_model = base_model;
+		this.base_model.setShader(shader);
+		this.full_model = new Model(shader);
+	}
+	
+	public Terrain(float mass, boolean collide, Model base_model) {
+		super(mass, collide, base_model, base_model.getShader());
+		this.base_model = base_model;
+		this.full_model = new Model(base_model.getShader());
 	}
 
 	public void createTerrain(int land_size) {
-		//New and improved method that doesn't work...
-		ent = engine.addEntity("terrain", 0f, true, "singlebox", "default");
 		terrain = new DynamicMatrix();
 		
-		Model base_model = engine.getModelByName("singlebox");
-		Model full_model = new Model(base_model.getShader());
+		full_model.deleteMeshes();
 		
 		//Create the base matrix for the terrain
 		for (int i = 0; i < land_size; i++)
@@ -45,12 +51,7 @@ public class Terrain {
 				full_model.addMesh(new_mesh);		
 			}
 		}
-		
-		ent.setModel(full_model);
-	}
-	
-	public void setPosition(Vector3f pos) {
-		ent.setPosition(pos);
+		this.setModel(full_model);
 	}
 
 	public String toString() {
@@ -63,9 +64,5 @@ public class Terrain {
 		}
 		return text;
 
-	}
-
-	public Entity getEntity() {
-		return ent;
 	}
 }

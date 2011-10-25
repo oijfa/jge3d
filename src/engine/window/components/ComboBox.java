@@ -22,8 +22,7 @@ public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<Object> {
 
 	public void addItem(Object item) {
 		// ListModel<Object> old_list_model = this.getModel();
-		SimpleChangableListModel<Object> new_list_model = (SimpleChangableListModel<Object>) this
-			.getModel();
+		SimpleChangableListModel<Object> new_list_model = (SimpleChangableListModel<Object>) this.getModel();
 		new_list_model.addElement(item);
 		this.setModel(new_list_model);
 	}

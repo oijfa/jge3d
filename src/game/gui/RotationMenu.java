@@ -1,6 +1,7 @@
 package game.gui;
 
 import engine.input.components.InputRunnable;
+import engine.window.components.Window;
 
 import java.util.HashMap;
 
@@ -8,13 +9,12 @@ import javax.vecmath.Vector3f;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityList;
 
-public class RotationMenu extends ResizableFrame {
+public class RotationMenu extends Window {
 	private final DialogLayout layout;
 	private final Button up;
 	private final Button down;
@@ -67,7 +67,7 @@ public class RotationMenu extends ResizableFrame {
 	}
 
 	public RotationMenu() throws SecurityException, NoSuchMethodException {
-		setTitle("Camera Rotation");
+		setName("Camera Rotation");
 
 		layout = new DialogLayout();
 		up = new Button();

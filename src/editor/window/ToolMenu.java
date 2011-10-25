@@ -2,27 +2,31 @@ package editor.window;
 
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.ResizableFrame;
+import de.matthiasmann.twl.ToggleButton;
+
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import engine.window.WindowManager;
+import engine.window.components.Window;
 
-public class ToolMenu  extends ResizableFrame implements ActionListener {
+public class ToolMenu  extends Window implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 
-	private Button file_window;
-	private Button palette_window;
-	private Button grid_window;
-	private Button perspective_window;
-	private Button layer_window;
-	private Button mirror_window;
-	private Button color_window;
+	private ToggleButton file_window;
+	private ToggleButton palette_window;
+	private ToggleButton grid_window;
+	private ToggleButton perspective_window;
+	private ToggleButton layer_window;
+	private ToggleButton mirror_window;
+	private ToggleButton color_window;
+	
+	private WindowManager window_manager;
 
-	public ToolMenu() {
-
-				
+	public ToolMenu(WindowManager windows) {	
+		this.window_manager = windows;
+		
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Tool Menu");
 
@@ -36,19 +40,19 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 		// Create the layout and button instances
 		DialogLayout layout = new DialogLayout();
 
-		file_window = new Button("File");
+		file_window = new ToggleButton("File");
 		file_window.setTheme("file_window");
-		palette_window = new Button("Colors");
+		palette_window = new ToggleButton("Colors");
 		palette_window.setTheme("palette_window");
-		grid_window = new Button("DrawSpace");
+		grid_window = new ToggleButton("DrawSpace");
 		grid_window.setTheme("grid_window");
-		perspective_window = new Button("Perspective");
-		perspective_window.setTheme("perspective_window");
-		layer_window = new Button("Layer");
-		layer_window.setTheme("file_window");
-		mirror_window = new Button("Mirror");
-		mirror_window.setTheme("mirror_window");
-		color_window = new Button("Color");
+		perspective_window = new ToggleButton("Perspective");
+		perspective_window.setTheme("perspective_menu");
+		layer_window = new ToggleButton("Layer");
+		layer_window.setTheme("layer_menu");
+		mirror_window = new ToggleButton("Mirror");
+		mirror_window.setTheme("mirror_menu");
+		color_window = new ToggleButton("Color");
 		color_window.setTheme("color_window");
 		
 		file_window.setSize(200, 30);
@@ -108,31 +112,73 @@ public class ToolMenu  extends ResizableFrame implements ActionListener {
 	private void createButtonCallbacks() {
 		file_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { file_window.setVisible(true); }
+			public void run() { 
+				if(file_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("file_menu").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("file_menu").setVisible(false);
+				 window_manager.setPosition(window_manager.getWindows().getByName("file_menu"));
+			}
 		});
 		palette_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { palette_window.setVisible(true); }
+			public void run() {
+				if(palette_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("palette_window").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("palette_window").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("palette_window"));
+			}
 		});
 		grid_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { grid_window.setVisible(true); }
+			public void run() {  
+				if(grid_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("grid_window").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("grid_window").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("grid_window"));
+			}
 		});
 		perspective_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { perspective_window.setVisible(true); }
+			public void run() {
+				if(perspective_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("perspective_menu").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("perspective_menu").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("perspective_menu"));
+			}
 		});
 		layer_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { layer_window.setVisible(true); }
+			public void run() {  
+				if(layer_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("layer_menu").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("layer_menu").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("layer_menu"));
+			}
 		});
 		mirror_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { mirror_window.setVisible(true); }
+			public void run() { 
+				if(mirror_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("mirror_menu").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("mirror_menu").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("mirror_menu"));
+			}
 		});
 		color_window.addCallback(new Runnable() {			
 			@Override
-			public void run() { color_window.setVisible(true); }
+			public void run() {  
+				if(color_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("color_window").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("color_window").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("color_window"));
+			}
 		});
 	}
 	

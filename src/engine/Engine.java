@@ -9,9 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
-import de.matthiasmann.twl.ResizableFrame;
-import de.matthiasmann.twl.Widget;
-
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
@@ -24,6 +21,8 @@ import engine.physics.Physics;
 import engine.render.Model;
 import engine.render.Renderer;
 import engine.render.Shader;
+import engine.window.WindowManager;
+import engine.window.components.Window;
 
 import com.bulletphysics.collision.dispatch.GhostObject;
 
@@ -44,8 +43,8 @@ public class Engine {
 	private Camera camera;
 	private EntityList entity_list;
 
-	public void addWindow(ResizableFrame window, int width, int height) {
-		renderer.getWindow().addWindow(window, width, height);
+	public void addWindow(Window window, int width, int height) {
+		renderer.getWindowManager().addWindow(window, width, height);
 	}
 
 	public Engine() {
@@ -83,6 +82,7 @@ public class Engine {
 	public void addEntity(Entity ent) {
 		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
 			renderer.setCamera((Camera)ent);
+			ent.setShouldDraw(false);
 		}
 		entity_list.addEntity(ent);
 	}
@@ -93,6 +93,10 @@ public class Engine {
 
 	public Entity getEntity(String name) {
 		return entity_list.getItem(name);
+	}
+	
+	public Shader getShaderByName(String name) {
+		return shaders.get(name);
 	}
 	
 	public Camera getCamera() {
@@ -153,7 +157,7 @@ public class Engine {
 	public boolean addKeyMap(String filename){
 	  boolean ret = false;
 		try {
-			renderer.getWindow().setKeyMap(new InputMap(filename,entity_list));
+			renderer.getWindowManager().setKeyMap(new InputMap(filename,entity_list));
 			ret = true;
 		} catch (KeyMapException e) {
 			// TODO Do something if fails?
@@ -238,10 +242,23 @@ public class Engine {
     return player;
   }
   
+  public boolean addModel(String name, String location, Shader shader){
+    boolean ret = false;
+    if(!models.keySet().contains(name)){
+      models.put(name, FileLoader.loadFile(location));
+      models.get(name).setShader(shader);
+      models.get(name).createVBO();
+      ret = true;
+    }
+    return ret;
+  }
+  
   public boolean addModel(String name, String location){
     boolean ret = false;
     if(!models.keySet().contains(name)){
       models.put(name, FileLoader.loadFile(location));
+      models.get(name).setShader(shaders.get("default"));
+      models.get(name).createVBO();
       ret = true;
     }
     return ret;
@@ -259,10 +276,8 @@ public class Engine {
   public Model getModelByName(String name)  {
 	  return models.get(name);	  
   }
-  
-  //TODO: We don't want to expose the main window frame this way
-  //rethink this asap
-  public Widget getWindow() {
-	  return renderer.getWindow();
+
+  public WindowManager getWindowManager() {
+	  return renderer.getWindowManager();
   }
 }

@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -151,13 +150,13 @@ public class InputMap {
   		};
 		Keyboard.getEventKey();
 		for(String function_name : function_names){
-			
+			/*
 			System.out.println(
 				function_name + " == " +
 				String.valueOf(e.getKeyCode()) + " == " +
 				e.getType()
 			);
-			
+			*/
 			if( function_name != null){
 				try {
 					InputMap.class.getMethod(function_name).invoke(this,(Object[])null);
