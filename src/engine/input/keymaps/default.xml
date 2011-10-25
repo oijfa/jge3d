@@ -1,17 +1,22 @@
 <keymap>
-	<key ID="Key_LEFT" EVENT="KEY_PRESSED">rotateCamLeft</key>
-	<key ID="Key_RIGHT" EVENT="KEY_PRESSED">rotateCamRight</key>
-	<key ID="Key_UP" EVENT="KEY_PRESSED">rotateCamUp</key> 	
-	<key ID="Key_DOWN" EVENT="KEY_PRESSED">rotateCamDown</key>
-	<key ID="Key_PRIOR" EVENT="KEY_PRESSED">zoomCameraIn</key>
-	<key ID="Key_NEXT" EVENT="KEY_PRESSED">zoomCameraOut</key>
-	<key ID="Key_W" EVENT="KEY_PRESSED">playerForward</key>
-	<key ID="Key_S" EVENT="KEY_PRESSED">playerBack</key>
-	<key ID="Key_A" EVENT="KEY_PRESSED">playerLeft</key>
-	<key ID="Key_D" EVENT="KEY_PRESSED">playerRight</key>
-	<key ID="Key_SPACE" EVENT="KEY_PRESSED">playerJump</key>
-	<key ID="Key_W" EVENT="KEY_RELEASED">playerStopForward</key>
-	<key ID="Key_S" EVENT="KEY_RELEASED">playerStopBack</key>
-	<key ID="Key_A" EVENT="KEY_RELEASED">playerStopLeft</key>
-	<key ID="Key_D" EVENT="KEY_RELEASED">playerStopRight</key>
+	<keyboard>
+		<key ID="LEFT" EVENT="PRESSED">rotateCamLeft</key>
+		<key ID="RIGHT" EVENT="PRESSED">rotateCamRight</key>
+		<key ID="UP" EVENT="PRESSED">rotateCamUp</key>
+		<key ID="DOWN" EVENT="PRESSED">rotateCamDown</key>
+		<key ID="PRIOR" EVENT="PRESSED">zoomCameraIn</key>
+		<key ID="NEXT" EVENT="PRESSED">zoomCameraOut</key>
+		<key ID="W" EVENT="PRESSED">playerForward</key>
+		<key ID="S" EVENT="PRESSED">playerBack</key>
+		<key ID="A" EVENT="PRESSED">playerLeft</key>
+		<key ID="D" EVENT="PRESSED">playerRight</key>
+		<key ID="SPACE" EVENT="PRESSED">playerJump</key>
+		<key ID="W" EVENT="RELEASED">playerStopForward</key>
+		<key ID="S" EVENT="RELEASED">playerStopBack</key>
+		<key ID="A" EVENT="RELEASED">playerStopLeft</key>
+		<key ID="D" EVENT="RELEASED">playerStopRight</key>
+	</keyboard>
+	<mouse>
+		<event ID="" EVENT=""></event>
+	</mouse>
 </keymap>
