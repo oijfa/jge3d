@@ -166,7 +166,7 @@ public class Shader {
     		buf.flip();
 
         	//*****Shader drawing*****//
-    		ARBShaderObjects.glUseProgramObjectARB(shader);
+    		//ARBShaderObjects.glUseProgramObjectARB(shader);
     		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
     		ARBShaderObjects.glUniform4ARB(scale, buf);
     		/*

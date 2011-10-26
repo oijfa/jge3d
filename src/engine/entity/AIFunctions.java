@@ -12,12 +12,15 @@ public class AIFunctions {
 	public static void followPlayer(Engine engine, Actor ent){
 		Actor player = (Actor)engine.getEntity("player");
 		if( player != null ){
+			Vector3f towards_pos = new Vector3f();
 			Vector3f player_pos = player.getPosition();
 			player_pos.sub(ent.getPosition());
 			ent.activate();
 			//ent.applyImpulse(player_pos, new Vector3f(0,0,0));
-			player_pos.scale(0.0001f);
-			ent.moveActor(player_pos);
+			towards_pos.normalize(player_pos);
+			towards_pos.scale(0.005f);
+			
+			ent.moveActor(towards_pos);
 		}
 	}
 }

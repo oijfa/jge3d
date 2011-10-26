@@ -16,8 +16,8 @@ public class Camera extends Entity {
 	// Don't flip over, its confusing.
 	private static final double maximum_declination = (Math.PI / 2.0f) - 0.01f;
 	private static final double minimum_declination = (-1.0f * ((Math.PI / 2.0f) - 0.01f));
-	private static final double minimum_distance = 1.5;
-	private static final double maximum_distance = 25f;
+	private static final double minimum_distance = 1;
+	private static final double maximum_distance = 100f;
 	public static final String CAMERA_NAME = "camera";
 
 	/* Class fields */
