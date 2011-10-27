@@ -45,6 +45,10 @@ public class Actor extends Entity {
 		walk_direction.add(walk_correction);
 		actor.setWalkDirection(walk_direction);
 	}
+	
+	public Vector3f getWalkDirection() {
+		return walk_direction;
+	}
 
 	public void setFallSpeed(float fall_speed) {
 		actor.setFallSpeed(fall_speed);

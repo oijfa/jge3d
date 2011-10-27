@@ -131,15 +131,96 @@ public class InputMap {
 	public void zoomCameraIn(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
 	public void zoomCameraOut(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
 	
-	public void playerForward(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));}
-	public void playerBack(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));}
-	public void playerLeft(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));}
-	public void playerRight(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));}
+	public void playerForward(){
+		Vector3f move_dir = new Vector3f();
+		move_dir.sub(
+			entity_list.getItem("player").getPosition(),
+			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+			
+		);		
+		move_dir.normalize();
+		move_dir.scale(0.1f);
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));
+	}
+	public void playerBack(){
+		Vector3f move_dir = new Vector3f();
+		move_dir.sub(
+			entity_list.getItem("player").getPosition(),
+			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+			
+		);		
+		move_dir.normalize();
+		move_dir.scale(-0.1f);
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));
+	}
+	public void playerLeft(){
+		Vector3f move_dir = new Vector3f();
+		Vector3f cross_dir = new Vector3f();
+		
+		cross_dir.sub(
+			entity_list.getItem("player").getPosition(),
+			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+		);
+		move_dir.cross(
+			cross_dir,
+			((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
+		);		
+				
+		move_dir.normalize();
+		move_dir.scale(-0.1f);
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));
+	}
+	public void playerRight(){
+		Vector3f move_dir = new Vector3f();
+		Vector3f cross_dir = new Vector3f();
+		
+		cross_dir.sub(
+			entity_list.getItem("player").getPosition(),
+			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+		);
+		move_dir.cross(
+			cross_dir,
+			((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
+		);		
+				
+		move_dir.normalize();
+		move_dir.scale(0.1f);
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));
+	}
 
-	public void playerStopForward(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));}
-	public void playerStopBack(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));}
-	public void playerStopLeft(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));}
-	public void playerStopRight(){((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));}
+	//STOP MOVEMENT CODE
+	public void playerStopForward(){
+		Vector3f move_dir = new Vector3f(((Actor)entity_list.getItem("player")).getWalkDirection());
+		move_dir.scale(-1f);
+		
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));
+	}
+	public void playerStopBack(){
+		Vector3f move_dir = new Vector3f(((Actor)entity_list.getItem("player")).getWalkDirection());
+		move_dir.scale(-1f);
+		
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));
+	}
+	public void playerStopLeft(){
+		Vector3f move_dir = new Vector3f(((Actor)entity_list.getItem("player")).getWalkDirection());
+		move_dir.scale(-1f);
+		
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0.1f,0,0));
+	}
+	public void playerStopRight(){
+		Vector3f move_dir = new Vector3f(((Actor)entity_list.getItem("player")).getWalkDirection());
+		move_dir.scale(-1f);
+		
+		((Actor)entity_list.getItem("player")).moveActor(move_dir);
+		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));
+	}
 	
 	public void playerJump(){((Actor)entity_list.getItem("player")).jump();}	
   
