@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -12,15 +11,14 @@ import javax.swing.ImageIcon;
 
 import org.lwjgl.LWJGLException;
 
-import engine.window.components.Tree;
-
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.DialogLayout;
-import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.ResizableFrame;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.DynamicImage;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
+import engine.window.components.Tree;
 
 public class TextureMenu extends ResizableFrame {
 	private final Widget preview;
@@ -99,8 +97,7 @@ public class TextureMenu extends ResizableFrame {
 
 			// Set the label to the image
 			return image;
-		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
+		} catch ( LWJGLException e ) {
 			e.printStackTrace();
 		}
 
