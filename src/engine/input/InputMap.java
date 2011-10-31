@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,37 +24,37 @@ import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.Event;
 
 public class InputMap {
-  HashMap<String,String> key_map;
-  
-  final HashMap<String, Integer> lwjgl_keyboard_enums;
-  final HashMap<String, String> enums_to_function;
-  
-  EntityList entity_list;
-  
-  public InputMap(String filename, EntityList ent_list) throws KeyMapException{
-    key_map = new HashMap<String,String>();
-    
-    lwjgl_keyboard_enums = new HashMap<String,Integer>();
-    enums_to_function = new HashMap<String,String>();
-    
-    entity_list = ent_list;
+	HashMap<String,String> key_map;
 
-    for(Field f : Keyboard.class.getFields()){
-    	if(f.getName().contains("KEY_")){
-    		try {
-    			lwjgl_keyboard_enums.put(f.getName(), (Integer)f.get(null));
-			} catch (IllegalArgumentException e) {
-			} catch (IllegalAccessException e) {}
-    	}
-    }
+	final HashMap<String, Integer> lwjgl_keyboard_enums;
+	final HashMap<String, String> enums_to_function;
 
-    parseXml(filename);
-    /*
-    System.out.println("Outputting read key map: ");
-    for( Entry e : enums_to_function.entrySet()){
-    	System.out.println("	;" + e.getKey() + "; == ;" + e.getValue() + ";");
-    }*/
-  }
+	EntityList entity_list;
+
+	public InputMap(String filename, EntityList ent_list) throws KeyMapException{
+		key_map = new HashMap<String,String>();
+
+		lwjgl_keyboard_enums = new HashMap<String,Integer>();
+		enums_to_function = new HashMap<String,String>();
+
+		entity_list = ent_list;
+
+		for(Field f : Keyboard.class.getFields()){
+			if(f.getName().contains("KEY_")){
+				try {
+					lwjgl_keyboard_enums.put(f.getName(), (Integer)f.get(null));
+				} catch (IllegalArgumentException e) {
+				} catch (IllegalAccessException e) {}
+			}
+		}
+
+		parseXml(filename);
+		/*
+		System.out.println("Outputting read key map: ");
+		for( Entry e : enums_to_function.entrySet()){
+			System.out.println("	;" + e.getKey() + "; == ;" + e.getValue() + ";");
+		}*/
+	}
   
   	private void parseXml(String filePath) throws KeyMapException{
   		Document dom;
@@ -71,22 +72,14 @@ public class InputMap {
   					ArrayList<Node> keyboards = findChildrenByName(root_element, "keyboard");
   					for(Node keyboard : keyboards){
 	  					ArrayList<Node> key_settings = findChildrenByName(keyboard, "key");
-	  					for(Node n : key_settings){
-	  						String id = ((Element) n).getAttribute("ID");
-	  						String event = ((Element) n).getAttribute("EVENT");
-	  						
-	  						try {
-	  							if(this.getClass().getMethod(n.getTextContent()) != null){
-	  								enums_to_function.put(
-	  									String.valueOf(lwjgl_keyboard_enums.get("KEY_" + id.toUpperCase())) + "KEY_" + event.toUpperCase(),
-	  									n.getTextContent()
-	  								);
-	  							}
-							} catch (Exception e) {
-								throwKeyMapException(e);
-							}
-	  					}
+						parseKeyboardSettings(key_settings);
   					}
+
+					ArrayList<Node> mice = findChildrenByName(root_element,"mouse");
+					for(Node mouse : mice){
+						ArrayList<Node> mouse_settings = findChildrenByName(mouse, "event");
+						parseMouseSettings(mouse_settings);
+					}
   				}else{
   					throwException("KeyMap tag should be root element.");
   				}
@@ -101,6 +94,27 @@ public class InputMap {
 			throwException("ParserConfigurationException");
 		}
   	}
+
+	void parseKeyboardSettings(ArrayList<Node> key_settings) throws KeyMapException{
+		for(Node n : key_settings){
+			String id = ((Element) n).getAttribute("ID");
+			String event = ((Element) n).getAttribute("EVENT");
+			
+			try {
+				if(this.getClass().getMethod(n.getTextContent()) != null){
+					enums_to_function.put(
+						String.valueOf(lwjgl_keyboard_enums.get("KEY_" + id.toUpperCase())) + "KEY_" + event.toUpperCase(),
+						n.getTextContent()
+					);
+				}
+			} catch (Exception e) {
+				throwKeyMapException(e);
+			}
+		}
+	}
+
+	void parseMouseSettings(ArrayList<Node> mouse_settings) throws KeyMapException{
+	}
   
   	private ArrayList<Node> findChildrenByName(Node root, String... names) {
 		ArrayList<Node> list = new ArrayList<Node>();
@@ -229,7 +243,7 @@ public class InputMap {
 		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType())
   		};
-		Keyboard.getEventKey();
+		System.out.println(String.valueOf(e.getKeyCode()) + String.valueOf(e.getType()));
 		for(String function_name : function_names){
 			/*
 			System.out.println(
