@@ -845,7 +845,7 @@
     		<param name="maxHeight"><int>50</int></param>
     		<theme name="perspective_cb" ref="combobox"/>
 		</theme>
-		<theme name="filemenu" ref="resizableframe">
+		<theme name="projectwindow" ref="resizableframe">
     		<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>400</int></param>
        		<param name="minHeight"><int>100</int></param>
@@ -856,15 +856,31 @@
 	        	<theme name="save_file" ref="fittedbutton"/>
 	        </theme>
 		</theme>
+		<theme name="resourcewindow" ref="resizableframe">
+        	<param name="resizableAxis"><string>VERTICAL</string></param>
+        	<param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>300</int></param>
+       		<param name="minHeight"><int>300</int></param>
+        	<param name="maxHeight"><int>1000</int></param>
+        	<theme name="dialoglayout" ref="-default-gaps">
+  				<theme name="" ref="*"/>
+				<theme name="textree" ref="tree">
+					<param name="minWidth"><int>300</int></param>
+            		<param name="maxWidth"><int>300</int></param>
+       				<param name="minHeight"><int>300</int></param>
+        			<param name="maxHeight"><int>1000</int></param>
+        		</theme>		
+            </theme>
+        </theme>
 		<theme name="toolmenu" ref="resizableframe">
 			<theme name="dialoglayout" ref="dialoglayout">
-				<theme name="file_window" ref="fittedbutton"/>
+				<theme name="project_window" ref="fittedbutton"/>
 				<theme name="palette_window" ref="fittedbutton"/>
 				<theme name="grid_window" ref="fittedbutton"/>
 				<theme name="perspective_menu" ref="fittedbutton"/>
 				<theme name="layer_menu" ref="fittedbutton"/>
 				<theme name="mirror_menu" ref="fittedbutton"/>
-				<theme name="color_window" ref="fittedbutton"/>
+				<theme name="resource_window" ref="fittedbutton"/>
 			</theme>
 		</theme>
 	</theme>

@@ -14,13 +14,13 @@ import engine.window.components.Window;
 public class ToolMenu  extends Window implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 
-	private ToggleButton file_window;
+	private ToggleButton project_window;
 	private ToggleButton palette_window;
 	private ToggleButton grid_window;
 	private ToggleButton perspective_window;
 	private ToggleButton layer_window;
 	private ToggleButton mirror_window;
-	private ToggleButton color_window;
+	private ToggleButton resource_window;
 	
 	private WindowManager window_manager;
 
@@ -40,8 +40,8 @@ public class ToolMenu  extends Window implements ActionListener {
 		// Create the layout and button instances
 		DialogLayout layout = new DialogLayout();
 
-		file_window = new ToggleButton("File");
-		file_window.setTheme("file_window");
+		project_window = new ToggleButton("Project");
+		project_window.setTheme("project_window");
 		palette_window = new ToggleButton("Colors");
 		palette_window.setTheme("palette_window");
 		grid_window = new ToggleButton("DrawSpace");
@@ -52,16 +52,16 @@ public class ToolMenu  extends Window implements ActionListener {
 		layer_window.setTheme("layer_menu");
 		mirror_window = new ToggleButton("Mirror");
 		mirror_window.setTheme("mirror_menu");
-		color_window = new ToggleButton("Color");
-		color_window.setTheme("color_window");
+		resource_window = new ToggleButton("Resources");
+		resource_window.setTheme("resource_window");
 		
-		file_window.setSize(200, 30);
+		project_window.setSize(200, 30);
 		palette_window.setSize(200, 30);
 		grid_window.setSize(200, 30);
 		perspective_window.setSize(200, 30);
 		layer_window.setSize(200, 30);
 		mirror_window.setSize(200, 30);
-		color_window.setSize(200, 30);
+		resource_window.setSize(200, 30);
 		
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
@@ -76,13 +76,13 @@ public class ToolMenu  extends Window implements ActionListener {
 			// staggering
 			// left to right per row
 			.addGroup(layout.createParallelGroup(
-				file_window,
+				project_window,
 				palette_window,
 				grid_window,
 				perspective_window,
 				layer_window,
 				mirror_window,
-				color_window)
+				resource_window)
 			)
 			.addGap();
 
@@ -91,13 +91,13 @@ public class ToolMenu  extends Window implements ActionListener {
 			.addGap()
 			// Add each widget without forming a group so that they rest one
 			// under the other
-			.addWidget(file_window)
+			.addWidget(project_window)
 			.addWidget(palette_window)
 			.addWidget(grid_window)
 			.addWidget(perspective_window)
 			.addWidget(layer_window)
 			.addWidget(mirror_window)
-			.addWidget(color_window);
+			.addWidget(resource_window);
 
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup
@@ -110,14 +110,14 @@ public class ToolMenu  extends Window implements ActionListener {
 	}
 	
 	private void createButtonCallbacks() {
-		file_window.addCallback(new Runnable() {			
+		project_window.addCallback(new Runnable() {			
 			@Override
 			public void run() { 
-				if(file_window.getModel().isSelected()) 
-					 window_manager.getWindows().getByName("file_menu").setVisible(true);
+				if(project_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("project_window").setVisible(true);
 				else
-					 window_manager.getWindows().getByName("file_menu").setVisible(false);
-				 window_manager.setPosition(window_manager.getWindows().getByName("file_menu"));
+					 window_manager.getWindows().getByName("project_window").setVisible(false);
+				 window_manager.setPosition(window_manager.getWindows().getByName("project_window"));
 			}
 		});
 		palette_window.addCallback(new Runnable() {			
@@ -170,14 +170,14 @@ public class ToolMenu  extends Window implements ActionListener {
 				window_manager.setPosition(window_manager.getWindows().getByName("mirror_menu"));
 			}
 		});
-		color_window.addCallback(new Runnable() {			
+		resource_window.addCallback(new Runnable() {			
 			@Override
 			public void run() {  
-				if(color_window.getModel().isSelected()) 
-					 window_manager.getWindows().getByName("color_window").setVisible(true);
+				if(resource_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("resource_window").setVisible(true);
 				else
-					 window_manager.getWindows().getByName("color_window").setVisible(false);
-				window_manager.setPosition(window_manager.getWindows().getByName("color_window"));
+					 window_manager.getWindows().getByName("resource_window").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("resource_window"));
 			}
 		});
 	}

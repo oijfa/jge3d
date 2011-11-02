@@ -6,12 +6,13 @@ import editor.Main;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
-import editor.window.FileMenu;
+import editor.window.ProjectWindow;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
 import editor.window.MirrorMenu;
 import editor.window.PaletteWindow;
 import editor.window.PerspectiveMenu;
+import editor.window.ResourceWindow;
 import editor.window.ToolMenu;
 //import editor.window.ToolBox;
 import engine.Engine;
@@ -26,10 +27,11 @@ public class Main implements ActionListener {
 	private GridWindow grid_window;
 	private PaletteWindow palette_window;
 	private LayerMenu layer_menu;
-	private FileMenu file_menu;
+	private ProjectWindow project_window;
 	private ToolMenu tool_menu;
 	private MirrorMenu mirror_menu;
 	private PerspectiveMenu perspective_menu;
+	private ResourceWindow resource_window;
 	// private ToolBox tool_box;
 
 	private Entity edit_model;
@@ -54,9 +56,10 @@ public class Main implements ActionListener {
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(num_layers);
 		palette_window = new PaletteWindow(216);
-		file_menu = new FileMenu();
+		project_window = new ProjectWindow();
 		perspective_menu = new PerspectiveMenu();
 		mirror_menu = new MirrorMenu();
+		resource_window = new ResourceWindow();
 		
 		tool_menu = new ToolMenu(engine.getWindowManager());
 		// tool_box = new ToolBox();
@@ -69,12 +72,14 @@ public class Main implements ActionListener {
 		palette_window.setName("palette_window");
 		engine.addWindow(layer_menu, 200, 30);
 		layer_menu.setName("layer_menu");
-		engine.addWindow(file_menu, 300, 150);
-		file_menu.setName("file_menu");
+		engine.addWindow(project_window, 300, 150);
+		project_window.setName("project_window");
 		engine.addWindow(mirror_menu, 200, 30);
 		mirror_menu.setName("mirror_menu");
 		engine.addWindow(perspective_menu, 200, 30);
 		perspective_menu.setName("perspective_menu");
+		engine.addWindow(resource_window, 200, 400);
+		resource_window.setName("resource_window");
 		
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);

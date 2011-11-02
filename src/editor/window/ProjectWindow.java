@@ -12,7 +12,7 @@ import editor.action_listener.ActionListener;
 import engine.window.components.LoadFileSelector;
 import engine.window.components.Window;
 
-public class FileMenu  extends Window implements ActionListener {
+public class ProjectWindow  extends Window implements ActionListener {
 	private ArrayList<ActionListener> action_listeners;
 	
 	private LoadFileSelector load_file;
@@ -27,13 +27,13 @@ public class FileMenu  extends Window implements ActionListener {
 	};
 	
 
-	public FileMenu() {
+	public ProjectWindow() {
 		new_file = new Button();
 		open_file = new Button();
 		save_file = new Button();
 		
 		action_listeners = new ArrayList<ActionListener>();
-		setTitle("File Menu");
+		setTitle("Project Menu");
 
 		load_file = new LoadFileSelector(this, Preferences.userNodeForPackage(LoadFileSelector.class), "xml", "XML Files", callback, "xml");
 		//save_file = 
