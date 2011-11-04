@@ -12,4 +12,8 @@ public class AnimationFrame {
 	public int getDuration() {
 		return duration;
 	}
+	
+	public int getVBOID() {
+		return vboid;
+	}
 }
