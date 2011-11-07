@@ -449,7 +449,7 @@
         <param name="row.overlay"><image>none</image></param>
         <param name="row.dropmarker"><image>none</image></param>
         <param name=""><image>table.*</image></param>
-        <param name="rowHeight"><int>12</int></param> <!-- the font line height is 14 -->
+        <param name="rowHeight"><int>30</int></param> <!-- the font line height is 14 -->
         <theme name="stringcellrenderer" ref="-defaults"/>
         <theme name="TreeLeafCellRenderer" ref="-treecellrenderer"/>
         <theme name="TreeNodeCellRenderer" ref="-treecellrenderer"/>
@@ -459,13 +459,13 @@
 		</theme>
         <theme name="spanrenderer" ref="-defaults"/>
         <theme name="coloredtextrenderer" ref="-defaults"/>
-        <theme name="treeButton" ref="-defaults"/>
+        <theme name="treeButton" ref="button"/>
         <theme name="columnHeader" ref="button" />
         <param name="columnHeaderWidth"><int>256</int></param>
         <param name="columnHeaderHeight"><int>20</int></param>
         <param name="columnDividerDragableDistance"><int>3</int></param>
         <param name="columnResizeCursor"><cursor>cursor.horiz_resize</cursor></param>
-        <param name="columnDivider"><image>none</image></param>
+        <param name="columnDivider"><image>white</image></param>
         <param name="columnWidths"><map /></param>
         <param name="ensureColumnHeaderMinWidth"><bool>true</bool></param>
         <param name="dragNotPossibleCursor"><cursor>cursor.horiz_resize</cursor></param>
@@ -865,9 +865,9 @@
         	<theme name="dialoglayout" ref="-default-gaps">
   				<theme name="" ref="*"/>
 				<theme name="textree" ref="tree">
-					<param name="minWidth"><int>300</int></param>
-            		<param name="maxWidth"><int>300</int></param>
-       				<param name="minHeight"><int>300</int></param>
+					<param name="minWidth"><int>200</int></param>
+            		<param name="maxWidth"><int>1000</int></param>
+       				<param name="minHeight"><int>200</int></param>
         			<param name="maxHeight"><int>1000</int></param>
         		</theme>		
             </theme>

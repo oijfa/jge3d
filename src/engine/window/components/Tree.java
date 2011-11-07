@@ -10,18 +10,19 @@ import engine.window.tree.Model;
 import engine.window.tree.Node;
 import engine.window.tree.SpanRenderer;
 import engine.window.tree.SpanString;
-import engine.monitoring.Observer;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
-import de.matthiasmann.twl.model.TreeTableNode;
 
-public class Tree extends ScrollPane implements Observer {
-	// private MyNode dynamicNode;
-	int state;
-	Model treeModel;
-	TreeTable treeTable;
+public class Tree extends ScrollPane {// implements Observer {
+	private Model treeModel;
+	private TreeTable treeTable;
 
+	public Tree() {
+		super();
+		treeInit();
+	}
+	
 	public Tree(Model m) {
 		super();
 		treeInit();
@@ -38,80 +39,58 @@ public class Tree extends ScrollPane implements Observer {
 		treeTable.registerCellRenderer(ColoredTextString.class,
 			new ColoredTextRenderer());
 
-		/*
-		//TODO: model listener
-		TableSingleSelectionModel selectionModel = new TableSingleSelectionModel();
-		selectionModel.addSelectionChangeListener(
-			new TreeListener(treeTable,	selectionModel, objectList)
-		);
-
-		treeTable.setSelectionManager(
-			new TableRowSelectionManager(
-				selectionModel
-			)
-		);
-		*/
-
 		setContent(treeTable);
 		setTheme("/tableScrollPane");
 	}
 
-	@Override
-	public void update(Object _name) {
-		String name = (String) _name;
-
-		Model model = treeModel;
-		// If the node does not exist, create it
-		try {
-			Node n = searchAllNodes(name, model);
-			if (n == null) {
-				model.insert(name, "");
-				n = searchAllNodes(name, model);
-			}
-
-			// Remove all children
-			n.removeAll();
-
-			// Create new children with updated values
-			//TODO: STUB FOR new JarContents!
-		} catch (Exception e) {
-			System.out.println("Failed to update node");
-			e.printStackTrace();
-		}
-	}
-
 	public void createFromProjectResources() {
 		try {
+			//Query the jar for resource listings
 			JarContents jar = new JarContents();
-			
-			TreeTableNode current_node = treeModel;
-			Node found_node;
-			
+
+			//for each file path in listing
 			for(String file_path: jar.getFiles()) {
+				Node found_node = null;
+				Node previous_node = null;
+				//for each sub dir in file path
 				for(String file: file_path.split("/")) {
-					found_node = searchCurrentLevel(file, current_node);
-					if(found_node == null)
-						createNode(file,"",(Node)current_node);
-					else
-						break;
+					//find the file at the level you are in
+					if(found_node == null) //search the root model
+						found_node = searchCurrentLevel(file, treeModel);
+					else //search the last node visited
+						found_node = searchCurrentLevel(file, found_node);
+					
+					//if it doesn't exist create at this level
+					if(found_node == null) {
+						if(previous_node == null) //create in root 
+							found_node = createNode(file,"",treeModel);
+						else //create in last node visited
+							found_node = createNode(file,"",previous_node);
+					} //else check the next subdir from the subnode
+					
+					previous_node = found_node;
 				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-	public void createNode(String key, String value, Node base_node) {
-		base_node.insert(key, value);
+	public Node createNode(String key, String value, Model base_node) {
+			return base_node.insert(key, value);
+	}
+	
+	public Node createNode(String key, String value, Node base_node) {
+		return base_node.insert(key, value);
 	}
 
-	public void createSubNode(TreeTableNode node, String parent, String name) {
+	public Node createSubNode(Node node, String parent, String name) {
 		Node insertTo = searchAllNodes(parent, node);
 		if (insertTo != null) {
-			insertTo.insert(name, "Value?");
-		}
+			return insertTo.insert(name, "Value?");
+		} 
+		return null;	
 	}
 
 	public void centerScrollPane() {
@@ -120,30 +99,47 @@ public class Tree extends ScrollPane implements Observer {
 		setScrollPositionY(getMaxScrollPosY() / 2);
 	}
 
-	private Node searchCurrentLevel(String nodeName, TreeTableNode findIn) {
+	private Node searchCurrentLevel(String nodeName, Node findIn) {
 		Node child;
 		// Loop through all children
-		for (int i = 0; i < findIn.getNumChildren(); i++) {
-			child = (Node) findIn.getChild(i);
-
-			// If the first column has what we're looking for
-			System.out.println(child.getData(0) + "==" + nodeName);
-			if (child.getData(0).equals(nodeName)) {
-				// return it
-				return child;
+		if(findIn != null) {
+			for (int i = 0; i < findIn.getNumChildren(); i++) {
+				child = (Node)findIn.getChild(i);
+	
+				// If the first column has what we're looking for
+				if (child.getData(0).equals(nodeName)) {
+					// return it
+					return child;
+				}
 			}
 		}
 		return null;
 	}
 	
-	private Node searchAllNodes(String nodeName, TreeTableNode findIn) {
+	private Node searchCurrentLevel(String nodeName, Model findIn) {
+		Node child;
+		// Loop through all children
+		if(findIn != null) {
+			for (int i = 0; i < findIn.getNumChildren(); i++) {
+				child = (Node)findIn.getChild(i);
+	
+				// If the first column has what we're looking for
+				if (child.getData(0).equals(nodeName)) {
+					// return it
+					return child;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private Node searchAllNodes(String nodeName, Node findIn) {
 		Node child;
 		// Loop through all children
 		for (int i = 0; i < findIn.getNumChildren(); i++) {
-			child = (Node) findIn.getChild(i);
+			child = (Node)findIn.getChild(i);
 
 			// If the first column has what we're looking for
-			System.out.println(child.getData(0) + "==" + nodeName);
 			if (child.getData(0).equals(nodeName)) {
 				// return it
 				return child;

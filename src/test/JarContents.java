@@ -13,9 +13,8 @@ public class JarContents{
 		found_file_paths = new ArrayList<String>();
 		readJar();
 		
-		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter jar file name: ");
-		String filename = "/home/adam/Desktop/jge3d.jar"; //in.readLine();
+		String filename = "/home/adam/Desktop/jge3d.jar"; 
+		
 		File file = new File(filename);
 		if(!filename.endsWith(".jar")){
 			System.out.println("File extension does not end in JAR!");
@@ -25,6 +24,8 @@ public class JarContents{
 			System.out.println("JAR does not exist!");
 		}
 		
+		System.out.println("Loading from: " + filename);
+		
 		try{
 			JarFile jarfile = new JarFile(filename);
 			//Enumeration<JarEntry> em = jarfile.entries();
@@ -32,8 +33,9 @@ public class JarContents{
 				//RI
 				String filtered_files = em1.nextElement().toString();
 				if(filtered_files.startsWith("resources")){
-					filtered_files.replace("resources/", "");
+					filtered_files = filtered_files.replace("resources/", "");
 					found_file_paths.add(filtered_files);
+					System.out.println(filtered_files);
 				}
 			}
 		}
@@ -46,12 +48,12 @@ public class JarContents{
 	public File readJar() {
 		try {
 			File moduleFile = new File
-					(JarContents.class.getProtectionDomain()
-					.getCodeSource().getLocation().toURI());
+				(JarContents.class.getProtectionDomain()
+				.getCodeSource().getLocation().toURI()
+			);
 			
-			System.out.println(moduleFile.toURI().toString());
-			
-			System.out.println((new File(".")).getAbsolutePath());
+			System.out.println("Current module " + moduleFile.toURI().toString());
+			System.out.println("Current path: " + (new File(".")).getAbsolutePath());
 			
 			return moduleFile;
 		} catch (URISyntaxException e) {
