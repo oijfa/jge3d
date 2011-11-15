@@ -17,7 +17,7 @@
 		<key ID="D" EVENT="RELEASED">playerStopRight</key>
 	</keyboard>
 	<mouse>
-		<event EVENT="MOVED">debug</event>
-		<event EVENT="CLICKED">debug</event>
+		<event EVENT="MOVED"></event>
+		<event EVENT="CLICKED"></event>
 	</mouse>
 </keymap>

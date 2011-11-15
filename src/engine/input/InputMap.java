@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -114,6 +113,21 @@ public class InputMap {
 	}
 
 	void parseMouseSettings(ArrayList<Node> mouse_settings) throws KeyMapException{
+		for(Node n : mouse_settings){
+			String event = ((Element) n).getAttribute("EVENT");
+			if(n.getTextContent() != ""){
+				try {
+					if(this.getClass().getMethod(n.getTextContent()) != null){
+						enums_to_function.put(
+							"0MOUSE_" + event,  
+							n.getTextContent()
+						);
+					}
+				} catch (Exception e) {
+					throwKeyMapException(e);
+				}
+			}
+		}
 	}
   
   	private ArrayList<Node> findChildrenByName(Node root, String... names) {
@@ -243,7 +257,7 @@ public class InputMap {
 		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType())
   		};
-		System.out.println(String.valueOf(e.getKeyCode()) + String.valueOf(e.getType()));
+		//System.out.println(String.valueOf(e.getKeyCode()) + String.valueOf(e.getType()));
 		for(String function_name : function_names){
 			/*
 			System.out.println(
