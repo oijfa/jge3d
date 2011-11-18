@@ -1,11 +1,11 @@
 package engine.render;
 
 public class AnimationFrame {
-	private int vboid;
+	private Model model;
 	private int duration;
 	
-	public AnimationFrame(int vboid, int duration) {
-		this.vboid = vboid;
+	public AnimationFrame(Model model, int duration) {
+		this.model = model;
 		this.duration = duration;
 	}
 	
@@ -13,7 +13,7 @@ public class AnimationFrame {
 		return duration;
 	}
 	
-	public int getVBOID() {
-		return vboid;
+	public Model getModel() {
+		return model;
 	}
 }

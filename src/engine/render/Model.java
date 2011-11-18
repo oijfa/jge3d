@@ -27,7 +27,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
 
-public class Model {
+public class Model implements RenderObject {
 	private ArrayList<Mesh> meshes;
 	private volatile Vector3f max, min, center;
 	private boolean hasVBO = false;
@@ -251,6 +251,18 @@ public class Model {
 			System.out.println("EXPORT FAILED\n\n");
 		}
 	}
+	
+	public StringBuffer toXGLString() {
+		StringBuffer data = new StringBuffer();
+
+		data.append("<WORLD>\n");
+		for (int i = 0; i < meshes.size(); i++) {
+			data.append(meshes.get(i).toXGLString(i));
+		}
+		data.append("</WORLD>\n");
+
+		return data;
+	}
 
 	/* Debug */
 	public String toString() {
@@ -366,10 +378,10 @@ public class Model {
 		}// else {
 			// do the shader using glUniform etc. here
 
-		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+		GL11.glEnable(GL11.GL_VERTEX_ARRAY);
+		GL11.glEnable(GL11.GL_NORMAL_ARRAY);
+		GL11.glEnable(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glEnable(GL11.GL_COLOR_ARRAY);
 
 		// Bind the index of the object
 		ARBVertexBufferObject.glBindBufferARB(
@@ -413,10 +425,10 @@ public class Model {
 			//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 		}
 		
-		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+		GL11.glDisable(GL11.GL_VERTEX_ARRAY);
+		GL11.glDisable(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisable(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisable(GL11.GL_COLOR_ARRAY);
 
 		// Pop the matrix if we are in immediate mode
 		if (immediate_scale_rotate) 

@@ -159,10 +159,10 @@ public class Renderer {
 		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
-		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
-		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-		GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		//GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
+		//GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+		//GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
+		//GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		// Anti-aliasing stuff (probably isn't working)
 		//GL11.glEnable(GL11.GL_POINT_SMOOTH);
 		//GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -197,7 +197,7 @@ public class Renderer {
 		);
 		GL11.glEnable(GL11.GL_LIGHT0);
 		
-		GL11.glEnable(GL11.GL_NORMALIZE);
+		//GL11.glEnable(GL11.GL_NORMALIZE);
 	}
 
 	public void setPerspective() {

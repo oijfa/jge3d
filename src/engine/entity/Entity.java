@@ -11,6 +11,7 @@ package engine.entity;
 
 import engine.Engine;
 import engine.render.Model;
+import engine.render.RenderObject;
 import engine.render.Shader;
 
 import java.lang.reflect.Method;
@@ -33,7 +34,7 @@ public class Entity {
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
-	protected Model model;
+	protected RenderObject model;
 	private boolean shouldDraw = true;
 
 	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
@@ -76,7 +77,6 @@ public class Entity {
 	private void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
 		//TODO: Generate this based on model instead
 		this.model = model;
-		this.model.setShader(shader);
 		
 		CollisionShape shape = model.getCollisionShape();
 		if(c){
@@ -227,7 +227,7 @@ public class Entity {
 	}
 
 	public Model getModel() {
-		return model;
+		return (Model)model;
 	}
 
 	public Set<String> getKeySet() {
@@ -300,8 +300,8 @@ public class Entity {
 		// TODO: This has not been tested at all
 		// Someone should see if this actually corrects for the
 		// offset problem
-		Transform offset = new Transform();
-		offset.origin.set(model.getCenter());
+		//Transform offset = new Transform();
+		//offset.origin.set(model.getCenter());
 		Transform position = new Transform();
 		position.origin.set(this.getPosition());
 		//this.setMotionState(new DefaultMotionState(position, offset));

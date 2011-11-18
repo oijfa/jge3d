@@ -2,14 +2,15 @@ package editor.window;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import engine.window.components.VoxelButton;
+
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.utils.TintAnimator;
 import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 
-public class ColorCell extends Button {
+public class ColorCell extends VoxelButton {
 	private Color base_color;
 	private ArrayList<ActionListener> action_listeners;
 
