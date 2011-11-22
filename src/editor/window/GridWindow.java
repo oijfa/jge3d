@@ -114,7 +114,17 @@ public class GridWindow extends Window implements ActionListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		((Block<Integer>) e.getSource()).setColor(current_color);
+		if( ((Block<Integer>) e.getSource()).getMouseButton() == 0 ) {
+			((Block<Integer>) e.getSource()).setColor(current_color);
+		} else if( ((Block<Integer>) e.getSource()).getMouseButton() == 1 ) {
+			((Block<Integer>) e.getSource()).setColor(null);
+		} else {
+			System.out.println(
+				"GridWindow doesn't handle button: " +
+						((Block<Integer>) e.getSource()).getMouseButton() +
+				", yet. Fix it dummy!");
+		}
+		
 		fireActionEvent();
 	}
 

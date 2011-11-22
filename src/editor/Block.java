@@ -2,14 +2,15 @@ package editor;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import engine.window.components.VoxelButton;
+
 import java.util.ArrayList;
 
-import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.utils.TintAnimator;
 import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 
-public class Block<E extends Number> extends Button {
+public class Block<E extends Number> extends VoxelButton {
 	private Coordinate<E> position;
 	private Color base_color;
 	private Boolean active = false;
@@ -40,21 +41,31 @@ public class Block<E extends Number> extends Button {
 	}
 
 	public void setColor(Color color) {
+		super.setTintAnimator(new TintAnimator(new TimeSource() {
+			@Override
+			public void resetTime() {
+			}
+
+			@Override
+			public int getTime() {
+				return 0;
+			}
+		}));
+
 		if (color != null) {
 			this.base_color = color;
-			super.setTintAnimator(new TintAnimator(new TimeSource() {
-				@Override
-				public void resetTime() {
-				}
-
-				@Override
-				public int getTime() {
-					return 0;
-				}
-			}));
 			this.getTintAnimator().setColor(base_color);
 			active = true;
 		} else {
+			this.getTintAnimator().setColor(
+				new Color(
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0x00
+				)
+			);
+			this.base_color = null;
 			active = false;
 		}
 	}

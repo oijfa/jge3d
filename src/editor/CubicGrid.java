@@ -43,6 +43,8 @@ public class CubicGrid<E> {
 	public Model getModel() {
 		try {
 			Color mat_color;
+			full_model.deleteMeshes();
+			
 			for (int z = 0; z < size; z++) {
 				for (int y = 0; y < size; y++) {
 					for (int x = 0; x < size; x++) {

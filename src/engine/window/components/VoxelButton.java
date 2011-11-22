@@ -1,5 +1,7 @@
 package engine.window.components;
 
+import org.lwjgl.input.Mouse;
+
 import de.matthiasmann.twl.AnimationState;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.GUI;
@@ -11,15 +13,16 @@ import de.matthiasmann.twl.renderer.AnimationState.StateKey;
 import de.matthiasmann.twl.utils.TextUtil;
 
 public class VoxelButton extends TextWidget {
-	    public static final StateKey STATE_ARMED = StateKey.get("armed");
+    public static final StateKey STATE_ARMED = StateKey.get("armed");
     public static final StateKey STATE_PRESSED = StateKey.get("pressed");
     public static final StateKey STATE_SELECTED = StateKey.get("selected");
+    public static final StateKey STATE_HOVER = StateKey.get("hover");
 
     private final Runnable stateChangedCB;
     private ButtonModel model;
     private String themeText;
     private String text;
-    private int mouseButton;
+    private static int mouseButton = -1;
 
     public VoxelButton() {
         this(null, false, null);
@@ -72,7 +75,7 @@ public class VoxelButton extends TextWidget {
      */
     public VoxelButton(AnimationState animState, boolean inherit, ButtonModel model) {
         super(animState, inherit);
-        this.mouseButton = Event.MOUSE_LBUTTON;
+        //this.mouseButton = Event.MOUSE_LBUTTON;
         this.stateChangedCB = new Runnable() {
             public void run() {
                 modelStateChanged();
@@ -234,44 +237,80 @@ public class VoxelButton extends TextWidget {
             return false;
         }
         switch (evt.getType()) {
-        case MOUSE_BTNDOWN:
-        	mouseButton = evt.getMouseButton();
-            model.setPressed(true);
-            model.setArmed(true);
-            break;
-        case MOUSE_BTNUP:
-        	mouseButton = 0;
-            model.setPressed(false);
-            model.setArmed(false);
-            break;
-        case KEY_PRESSED:
-            switch (evt.getKeyCode()) {
-            case Event.KEY_RETURN:
-            case Event.KEY_SPACE:
-                if(!evt.isKeyRepeated()) {
-                    model.setPressed(true);
-                    model.setArmed(true);
-                }
-                return true;
-            }
-            break;
-        case KEY_RELEASED:
-            switch (evt.getKeyCode()) {
-            case Event.KEY_RETURN:
-            case Event.KEY_SPACE:
-                model.setPressed(false);
-                model.setArmed(false);
-                return true;
-            }
-            break;
-        case POPUP_OPENED:
-            model.setHover(false);
-            break;
-        case MOUSE_WHEEL:
-            // ignore mouse wheel
-            return false;
+	        case MOUSE_BTNDOWN:
+	        	getCurrentMouseButtons();
+	            model.setPressed(true);
+	            model.setArmed(true);
+	            break;
+	        case MOUSE_BTNUP:
+	            model.setPressed(false);
+	            model.setArmed(false);
+	            break;
+	        case MOUSE_CLICKED:
+	        	getCurrentMouseButtons();
+	        	break;
+	        case KEY_PRESSED:
+	            switch (evt.getKeyCode()) {
+	            case Event.KEY_RETURN:
+	            case Event.KEY_SPACE:
+	                if(!evt.isKeyRepeated()) {
+	                    model.setPressed(true);
+	                    model.setArmed(true);
+	                }
+	                return true;
+	            }
+	            break;
+	        case KEY_RELEASED:
+	            switch (evt.getKeyCode()) {
+	            case Event.KEY_RETURN:
+	            case Event.KEY_SPACE:
+	                model.setPressed(false);
+	                model.setArmed(false);
+	                return true;
+	            }
+	            break;
+	        case POPUP_OPENED:
+	            model.setHover(false);
+	            break;
+	        case MOUSE_WHEEL:
+	            // ignore mouse wheel
+	            return false;
+	        case MOUSE_ENTERED:
+	        	getCurrentMouseButtons();
+
+	        	if(mouseButton == 0 || mouseButton == 1) {
+		        	model.setPressed(true);
+		        	model.setArmed(true);	     
+		        	
+		        	model.fireActionCallback();
+		        	//getGUI().clearMouseState();
+		        	//mouseButton = -1;
+	        	}
+	        case MOUSE_EXITED:
+	        	break;
+	        case MOUSE_MOVED:
+	        	break;
+	        case MOUSE_DRAGGED:
+        		getGUI().clearMouseState();
+        		break;
+	        default:
+	        	System.out.println(
+	        		"Unhandled Event:" + 
+					evt.getType() + 
+					evt.getType().name()
+				);
         }
+
         // eat all mouse events
         return evt.isMouseEvent();
+    }
+    
+    private void getCurrentMouseButtons() {
+    	if(Mouse.isButtonDown(0))
+    		mouseButton=0;
+    	else if(Mouse.isButtonDown(1))
+    		mouseButton=1;
+    	else
+    		mouseButton=-1;
     }
 }

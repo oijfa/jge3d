@@ -130,7 +130,16 @@ public class PaletteWindow extends Window implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		primary_color.setColor(((ColorCell) e.getSource()).getColor());
+		if( ((ColorCell) e.getSource()).getMouseButton() == 0 ) {
+			primary_color.setColor(((ColorCell) e.getSource()).getColor());
+		} else if(((ColorCell) e.getSource()).getMouseButton() == 1 ) {
+			primary_color.setColor(((ColorCell) e.getSource()).getColor());
+		} else {
+			System.out.println(
+				"PaletteWindow doesn't handle button: " +
+				((ColorCell) e.getSource()).getMouseButton() +
+				", yet. Fix it dummy!");
+		}
 		fireActionEvent();
 	}
 }
