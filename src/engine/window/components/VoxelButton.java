@@ -241,6 +241,13 @@ public class VoxelButton extends TextWidget {
 	        	getCurrentMouseButtons();
 	            model.setPressed(true);
 	            model.setArmed(true);
+	            getCurrentMouseButtons();
+
+	        	if(mouseButton == 0 || mouseButton == 1) {
+		        	model.setPressed(true);
+		        	model.setArmed(true);	     
+		        	model.fireActionCallback();
+	        	}
 	            break;
 	        case MOUSE_BTNUP:
 	            model.setPressed(false);
@@ -281,10 +288,7 @@ public class VoxelButton extends TextWidget {
 	        	if(mouseButton == 0 || mouseButton == 1) {
 		        	model.setPressed(true);
 		        	model.setArmed(true);	     
-		        	
 		        	model.fireActionCallback();
-		        	//getGUI().clearMouseState();
-		        	//mouseButton = -1;
 	        	}
 	        case MOUSE_EXITED:
 	        	break;
