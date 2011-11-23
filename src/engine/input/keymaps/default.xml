@@ -4,6 +4,10 @@
 		<key ID="RIGHT" EVENT="PRESSED">rotateCamRight</key>
 		<key ID="UP" EVENT="PRESSED">rotateCamUp</key>
 		<key ID="DOWN" EVENT="PRESSED">rotateCamDown</key>
+		<key ID="LEFT" EVENT="RELEASED">stopCamLeft</key>
+		<key ID="RIGHT" EVENT="RELEASED">stopCamRight</key>
+		<key ID="UP" EVENT="RELEASED">stopCamUp</key>
+		<key ID="DOWN" EVENT="RELEASED">stopCamDown</key>
 		<key ID="PRIOR" EVENT="PRESSED">zoomCameraIn</key>
 		<key ID="NEXT" EVENT="PRESSED">zoomCameraOut</key>
 		<key ID="W" EVENT="PRESSED">playerForward</key>

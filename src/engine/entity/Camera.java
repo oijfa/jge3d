@@ -19,12 +19,15 @@ public class Camera extends Entity {
 	private static final double minimum_distance = 1;
 	private static final double maximum_distance = 100f;
 	public static final String CAMERA_NAME = "camera";
+	
 
 	/* Class fields */
 	private double declination; // Angle up and down
 	private double rotation; // Angle left and right
 	private double distance; // distance from focus
 	private Vector3f up_vector; // vector pointing up
+	private Vector3f movement; //user control
+	private long prev_time; //last update in nanosecs
 
 	private volatile Entity focus;
 	private volatile Entity default_focus;
@@ -40,6 +43,8 @@ public class Camera extends Entity {
 	}
 
   private void cameraInit(Entity defFocus) {
+	  	prev_time = System.nanoTime();
+	  	movement = new Vector3f();
 		default_focus = defFocus;
 		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
@@ -173,8 +178,26 @@ public class Camera extends Entity {
 		this.rotation = angle;
 	}
 
+	public void addMovement(Vector3f movement) {
+		this.movement.add(movement);
+	}
+	
+	public void subMovement(Vector3f movement) {
+		this.movement.sub(movement);
+	}
+	
 	public void updatePosition() {
 		float a = 0;
+
+		Vector3f adjusted_movementVector3f = new Vector3f(movement);
+		adjusted_movementVector3f.scale(prev_time*0.0000000000000002f);
+		if(!movement.equals(new Vector3f(0,0,0))) {
+			incrementRotation(((Float)adjusted_movementVector3f.x).doubleValue());
+			incrementDeclination(((Float)adjusted_movementVector3f.y).doubleValue());
+			incrementDistance(((Float)adjusted_movementVector3f.z).doubleValue());
+		}
+		prev_time = System.nanoTime();
+		
 		Vector3f position = new Vector3f();
 		Vector3f focPos = getFocusPosition();
 
