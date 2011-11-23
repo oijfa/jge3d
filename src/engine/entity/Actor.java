@@ -46,6 +46,11 @@ public class Actor extends Entity {
 		actor.setWalkDirection(walk_direction);
 	}
 	
+	public void stopActor() {
+		walk_direction.set(0,0,0);
+		actor.setWalkDirection(walk_direction);
+	}
+	
 	public Vector3f getWalkDirection() {
 		return walk_direction;
 	}

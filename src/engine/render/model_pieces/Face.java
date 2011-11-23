@@ -13,7 +13,7 @@ public class Face {
 	private ArrayList<Vector3f> vertices;
 	private ArrayList<Vector3f> vertexNormals;
 
-	Vector3f normal;
+	private Vector3f normal;
 
 	// [(4 bytes * 3 coords) * 2 vectors(vert&norm)] + (2 texcoords * 4 bytes)
 	public static final int VERTEX_STRIDE = 48;
@@ -228,9 +228,9 @@ public class Face {
 		// Make sure that the face is at least a triangle
 		if (vertices.size() >= 3) {
 			for (int i = 0; i < vertices.size() * 12; i += 12) {
-				faceVNT[i] = vertices.get(i / 12).x + mesh.location.x;
-				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.location.y;
-				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.location.z;
+				faceVNT[i] = vertices.get(i / 12).x + mesh.getTransform().x;
+				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.getTransform().y;
+				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.getTransform().z;
 
 				faceVNT[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
 				faceVNT[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;

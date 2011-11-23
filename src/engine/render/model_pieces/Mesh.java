@@ -7,11 +7,11 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 public class Mesh implements Cloneable {
-	ArrayList<Face> faces;
-	Material mat;
-	Vector3f location;
-	Vector3f forward;
-	Vector3f up;
+	private ArrayList<Face> faces;
+	private Material mat;
+	private Vector3f location;
+	private Vector3f forward;
+	private Vector3f up;
 
 	public Mesh() {
 		meshInit();
