@@ -7,7 +7,10 @@ import editor.action_listener.ActionListener;
 
 import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
+import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.utils.TintAnimator;
+import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 import editor.Block;
 import editor.CubicGrid;
 import engine.render.Model;
@@ -49,6 +52,21 @@ public class GridWindow extends Window implements ActionListener {
 		
 		if (grid_size > 0)	
 			loadLayer(0);
+		
+		//Change background color
+		super.setTintAnimator(new TintAnimator(new TimeSource() {
+			@Override
+			public void resetTime() {
+			}
+
+			@Override
+			public int getTime() {
+				return 0;
+			}
+		}));
+		this.getTintAnimator().setColor( 
+			new Color((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x00)
+		);
 	}
 
 	public void setCurrentColor(Color color) {
@@ -131,6 +149,30 @@ public class GridWindow extends Window implements ActionListener {
 				", yet. Fix it dummy!");
 		}
 	}
+	
+	 @Override
+  	 protected boolean handleEvent(Event evt) {
+		 super.handleEvent(evt);
+		 switch (evt.getType()) {
+	        case MOUSE_WHEEL:
+	            //mouse_wheel = evt.getMouseWheelDelta();
+	        	if(evt.getMouseWheelDelta() > 0)
+	        		fireActionEvent("mouseup");
+	        	else if(evt.getMouseWheelDelta() < 0)
+	        		fireActionEvent("mousedown");
+	        /*
+	        default:
+	        	System.out.println(
+	        		"Unhandled Event:" + 
+					evt.getType() + 
+					evt.getType().name()
+				);
+			*/
+        }
+        
+        // eat all mouse events
+        return evt.isMouseEvent();
+    }
 
 	public void fireActionEvent() {
 		for (ActionListener al : action_listeners) {
