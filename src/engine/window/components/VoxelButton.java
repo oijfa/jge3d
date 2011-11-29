@@ -23,6 +23,7 @@ public class VoxelButton extends TextWidget {
     private String themeText;
     private String text;
     private static int mouseButton = -1;
+    private static int mouse_wheel = 0;
 
     public VoxelButton() {
         this(null, false, null);
@@ -150,6 +151,10 @@ public class VoxelButton extends TextWidget {
     public int getMouseButton() {
         return mouseButton;
     }
+    
+    public int getMouseWheel() {
+        return mouse_wheel;
+    }
 
     @Override
     protected void applyTheme(ThemeInfo themeInfo) {
@@ -227,6 +232,7 @@ public class VoxelButton extends TextWidget {
 
     @Override
     protected boolean handleEvent(Event evt) {
+    	mouse_wheel=0;
         if(evt.isMouseEvent()) {
             boolean hover = (evt.getType() != Event.Type.MOUSE_EXITED) && isMouseInside(evt);
             model.setHover(hover);
@@ -280,8 +286,8 @@ public class VoxelButton extends TextWidget {
 	            model.setHover(false);
 	            break;
 	        case MOUSE_WHEEL:
-	            // ignore mouse wheel
-	            return false;
+	            mouse_wheel = evt.getMouseWheelDelta();
+	            model.fireActionCallback();
 	        case MOUSE_ENTERED:
 	        	getCurrentMouseButtons();
 

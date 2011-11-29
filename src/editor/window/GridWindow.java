@@ -31,7 +31,9 @@ public class GridWindow extends Window implements ActionListener {
 		for (int z = 0; z < grid_size; z++) {
 			for (int y = 0; y < grid_size; y++) {
 				for (int x = 0; x < grid_size; x++) {
-					this.grid.set(x, y, z, new Block<Integer>());
+					 Block<Integer> block = new Block<Integer>();
+					 block.setTheme("block");
+ 					this.grid.set(x, y, z,block);
 				}
 			}
 		}
@@ -43,7 +45,10 @@ public class GridWindow extends Window implements ActionListener {
 		// Create the layout and button instances
 		layout = new DialogLayout();
 
-		if (grid_size > 0) loadLayer(0);
+		this.add(layout);
+		
+		if (grid_size > 0)	
+			loadLayer(0);
 	}
 
 	public void setCurrentColor(Color color) {
@@ -56,7 +61,6 @@ public class GridWindow extends Window implements ActionListener {
 
 	public void loadLayer(Integer layer) {
 		layout.removeAllChildren();
-		this.removeChild(layout);
 
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
@@ -95,10 +99,6 @@ public class GridWindow extends Window implements ActionListener {
 		// Otherwise "incomplete" exception is thrown and layout is not applied
 		layout.setHorizontalGroup(h_grid);
 		layout.setVerticalGroup(v_grid);
-
-		// Make sure to add the layout to the frame
-		add(layout);
-		// !!! END EXAMPLE !!!//
 	}
 
 	public void addCellListener(ActionListener listener) {
@@ -116,21 +116,31 @@ public class GridWindow extends Window implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if( ((Block<Integer>) e.getSource()).getMouseButton() == 0 ) {
 			((Block<Integer>) e.getSource()).setColor(current_color);
+			fireActionEvent();
 		} else if( ((Block<Integer>) e.getSource()).getMouseButton() == 1 ) {
 			((Block<Integer>) e.getSource()).setColor(null);
+			fireActionEvent();
+		} else if( ((Block<Integer>) e.getSource()).getMouseWheel() == 1) {
+			fireActionEvent("mouseup");
+		} else if( ((Block<Integer>) e.getSource()).getMouseWheel() == -1) {
+			fireActionEvent("mousedown");
 		} else {
 			System.out.println(
 				"GridWindow doesn't handle button: " +
 						((Block<Integer>) e.getSource()).getMouseButton() +
 				", yet. Fix it dummy!");
 		}
-		
-		fireActionEvent();
 	}
 
 	public void fireActionEvent() {
 		for (ActionListener al : action_listeners) {
 			al.actionPerformed(new ActionEvent(this));
+		}
+	}
+	
+	public void fireActionEvent(String event) {
+		for (ActionListener al : action_listeners) {
+			al.actionPerformed(new ActionEvent(this, event));
 		}
 	}
 

@@ -27,10 +27,28 @@ public class LayerMenu extends Window implements ActionListener {
 		for (int i = 0; i < num_layers; i++) {
 			layer_cb.addItem(i);
 		}
+		layer_cb.setSelected(0);
 	}
 
 	public Integer getSelection() {
-		return layer_cb.getSelected();
+		if(layer_cb.getNumChildren() <= 0)
+			return 0;
+		else
+			return layer_cb.getSelected();
+	}
+	
+	public void setSelection(int selected) {
+		if(	selected + 1 <= layer_cb.getModel().getNumEntries() &&
+			selected - 1 >= -1 )
+		{
+			layer_cb.setSelected(selected);
+		} else { 
+			System.out.println(
+				"Invalid layer number:" + selected + 
+				" ;Currently on:" + layer_cb.getSelected() +
+				" ;TotalChildren:" + layer_cb.getModel().getNumEntries()
+			);
+		}
 	}
 
 	public void addActionListener(ActionListener listener) {

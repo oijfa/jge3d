@@ -318,7 +318,8 @@ public class InputMap {
 	}
 	
 	public void stopMovement() {
-		((Actor)entity_list.getItem("player")).stopActor();
+		if( ((Actor)entity_list.getItem("player")) != null)
+			((Actor)entity_list.getItem("player")).stopActor();
 		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));
 	}
 	

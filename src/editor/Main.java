@@ -127,8 +127,19 @@ public class Main implements ActionListener {
 		if (ae.getSource() == palette_window) {
 			grid_window.setCurrentColor(((PaletteWindow) ae.getSource()).getPrimaryColor());
 		} else if (ae.getSource() == grid_window) {
-			edit_model.setModel(grid_window.getGrid().getModel());
-			engine.updateEntity(edit_model);
+			if(ae.getAction() == "mouseup") {
+				layer_menu.setSelection(layer_menu.getSelection()+1);
+				grid_window.loadLayer(layer_menu.getSelection());
+			}
+			else if(ae.getAction() == "mousedown") {
+				layer_menu.setSelection(layer_menu.getSelection()-1);
+				grid_window.loadLayer(layer_menu.getSelection());
+			}
+			else {
+				//grid_window.loadLayer(layer_menu.getSelection());
+				edit_model.setModel(grid_window.getGrid().getModel());
+				engine.updateEntity(edit_model);
+			}
 		} else if (ae.getSource() == layer_menu) {
 			if (combobox_hack == true) {
 				grid_window.loadLayer(layer_menu.getSelection());

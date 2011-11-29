@@ -805,7 +805,7 @@
             <param name="maxWidth"><int>1000</int></param>
        		<param name="minHeight"><int>100</int></param>
         	<param name="maxHeight"><int>1000</int></param>
-        	<theme name="dialoglayout" ref="-small-gaps">
+        	<theme name="dialoglayout" allowWildcard="true" ref="-small-gaps">
         	    <theme name="" ref="*"/>
   				<theme name="block" ref="medbutton"/>	
             </theme>
