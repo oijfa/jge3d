@@ -17,6 +17,7 @@ public class ToolMenu  extends Window implements ActionListener {
 	private ToggleButton project_window;
 	private ToggleButton palette_window;
 	private ToggleButton grid_window;
+	private ToggleButton animation_window;
 	private ToggleButton perspective_window;
 	private ToggleButton layer_window;
 	private ToggleButton mirror_window;
@@ -46,6 +47,8 @@ public class ToolMenu  extends Window implements ActionListener {
 		palette_window.setTheme("palette_window");
 		grid_window = new ToggleButton("DrawSpace");
 		grid_window.setTheme("grid_window");
+		animation_window = new ToggleButton("Animation");
+		animation_window.setTheme("animation_window");
 		perspective_window = new ToggleButton("Perspective");
 		perspective_window.setTheme("perspective_menu");
 		layer_window = new ToggleButton("Layer");
@@ -58,6 +61,7 @@ public class ToolMenu  extends Window implements ActionListener {
 		project_window.setSize(200, 30);
 		palette_window.setSize(200, 30);
 		grid_window.setSize(200, 30);
+		animation_window.setSize(200, 30);
 		perspective_window.setSize(200, 30);
 		layer_window.setSize(200, 30);
 		mirror_window.setSize(200, 30);
@@ -79,6 +83,7 @@ public class ToolMenu  extends Window implements ActionListener {
 				project_window,
 				palette_window,
 				grid_window,
+				animation_window,
 				perspective_window,
 				layer_window,
 				mirror_window,
@@ -94,6 +99,7 @@ public class ToolMenu  extends Window implements ActionListener {
 			.addWidget(project_window)
 			.addWidget(palette_window)
 			.addWidget(grid_window)
+			.addWidget(animation_window)
 			.addWidget(perspective_window)
 			.addWidget(layer_window)
 			.addWidget(mirror_window)
@@ -140,6 +146,16 @@ public class ToolMenu  extends Window implements ActionListener {
 				window_manager.setPosition(window_manager.getWindows().getByName("grid_window"));
 			}
 		});
+		animation_window.addCallback(new Runnable() {			
+			@Override
+			public void run() {  
+				if(animation_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("animation_window").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("animation_window").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("animation_window"));
+			}
+		});		
 		perspective_window.addCallback(new Runnable() {			
 			@Override
 			public void run() {

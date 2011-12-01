@@ -800,6 +800,28 @@
 	
     <theme name="windowmanager" ref="-defaults">
     	<theme name="resizableframe" ref="resizableframe" />
+    	
+    	<!-- EXAMPLE OF EMBEDDING FRAMES IN OTHER FRAMES
+    		<theme name="shitdick" ref="resizableframe">
+    			<theme name="dialoglayout" ref="-defaults">
+    				<theme name="mirrormenu" ref="resizableframe">
+						<param name="minWidth"><int>100</int></param>
+		        		<param name="maxWidth"><int>400</int></param>
+	   					<param name="minHeight"><int>30</int></param>
+	    				<param name="maxHeight"><int>50</int></param>
+		    			<theme name="mirror_cb" ref="combobox"/>
+					</theme>
+					<theme name="layermenu" ref="resizableframe">
+						<param name="minWidth"><int>100</int></param>
+	        			<param name="maxWidth"><int>400</int></param>
+	   					<param name="minHeight"><int>30</int></param>
+	    				<param name="maxHeight"><int>50</int></param>
+	    				<theme name="layer_cb" ref="combobox"/>
+					</theme>
+				</theme>
+	    	</theme>
+    	-->
+        
         <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>1000</int></param>
@@ -830,6 +852,28 @@
    			<param name="minHeight"><int>30</int></param>
     		<param name="maxHeight"><int>50</int></param>
     		<theme name="layer_cb" ref="combobox"/>
+		</theme>
+		<theme name="animationwindow" ref="resizableframe">
+			<param name="minWidth"><int>100</int></param>
+        	<param name="maxWidth"><int>400</int></param>
+   			<param name="minHeight"><int>30</int></param>
+    		<param name="maxHeight"><int>50</int></param>
+    		<theme name="dialoglayout" ref="-small-gaps">
+    			<theme name="animation_cb" ref="combobox"/>
+	    		<theme name="frame_cb" ref="combobox"/>
+	    		<theme name="add_button" ref="button">
+	    			<param name="overlay"><image>zoomin</image></param>
+	    		</theme>
+	    		<theme name="remove_button" ref="button">
+	    			<param name="overlay"><image>zoomout</image></param>
+	    		</theme>
+	    		<theme name="prev_button" ref="button">
+	    			<param name="overlay"><image>left</image></param>
+	    		</theme>
+	    		<theme name="next_button" ref="button">
+	    			<param name="overlay"><image>right</image></param>
+	    		</theme>
+	    	</theme>
 		</theme>
 		<theme name="mirrormenu" ref="resizableframe">
 			<param name="minWidth"><int>100</int></param>
@@ -877,6 +921,7 @@
 				<theme name="project_window" ref="fittedbutton"/>
 				<theme name="palette_window" ref="fittedbutton"/>
 				<theme name="grid_window" ref="fittedbutton"/>
+				<theme name="animation_window" ref="fittedbutton"/>
 				<theme name="perspective_menu" ref="fittedbutton"/>
 				<theme name="layer_menu" ref="fittedbutton"/>
 				<theme name="mirror_menu" ref="fittedbutton"/>

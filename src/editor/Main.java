@@ -6,6 +6,7 @@ import editor.Main;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
+import editor.window.AnimationWindow;
 import editor.window.ProjectWindow;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
@@ -27,6 +28,7 @@ public class Main implements ActionListener {
 	private GridWindow grid_window;
 	private PaletteWindow palette_window;
 	private LayerMenu layer_menu;
+	private AnimationWindow animation_window;
 	private ProjectWindow project_window;
 	private ToolMenu tool_menu;
 	private MirrorMenu mirror_menu;
@@ -50,11 +52,12 @@ public class Main implements ActionListener {
 		engine.addModel("box", "resources/models/misc/box.xgl");
 		engine.addModel("box2", "resources/models/misc/box2.xgl");
 		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
-		
-		int num_layers = 8;
+				
+		int num_layers = 12;
 		grid_window = new GridWindow(num_layers, engine.getModelByName("box"));
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(num_layers);
+		animation_window = new AnimationWindow();
 		palette_window = new PaletteWindow(216);
 		project_window = new ProjectWindow();
 		perspective_menu = new PerspectiveMenu();
@@ -70,6 +73,8 @@ public class Main implements ActionListener {
 		grid_window.setName("grid_window");
 		engine.addWindow(palette_window, 300, 300);
 		palette_window.setName("palette_window");
+		engine.addWindow(animation_window, 300, 300);
+		animation_window.setName("animation_window");
 		engine.addWindow(layer_menu, 200, 30);
 		layer_menu.setName("layer_menu");
 		engine.addWindow(project_window, 300, 150);
