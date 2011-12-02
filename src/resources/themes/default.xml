@@ -851,7 +851,15 @@
         	<param name="maxWidth"><int>400</int></param>
    			<param name="minHeight"><int>30</int></param>
     		<param name="maxHeight"><int>50</int></param>
-    		<theme name="layer_cb" ref="combobox"/>
+    		<theme name="dialoglayout" ref="dialoglayout">
+    			<theme name="layer_cb" ref="combobox"/>
+	    		<theme name="increase_button" ref="button">
+	    			<param name="overlay"><image>zoomin</image></param>
+	    		</theme>
+	    		<theme name="decrease_button" ref="button">
+	    			<param name="overlay"><image>zoomout</image></param>
+	    		</theme>
+    		</theme>
 		</theme>
 		<theme name="animationwindow" ref="resizableframe">
 			<param name="minWidth"><int>100</int></param>

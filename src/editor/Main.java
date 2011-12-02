@@ -77,7 +77,7 @@ public class Main implements ActionListener {
 		animation_window.setName("animation_window");
 		engine.addWindow(layer_menu, 200, 30);
 		layer_menu.setName("layer_menu");
-		engine.addWindow(project_window, 300, 150);
+		engine.addWindow(project_window, 300, 100);
 		project_window.setName("project_window");
 		engine.addWindow(mirror_menu, 200, 30);
 		mirror_menu.setName("mirror_menu");
@@ -146,11 +146,22 @@ public class Main implements ActionListener {
 				engine.updateEntity(edit_model);
 			}
 		} else if (ae.getSource() == layer_menu) {
-			if (combobox_hack == true) {
-				grid_window.loadLayer(layer_menu.getSelection());
-				combobox_hack = false;
-			} else if (combobox_hack == false) {
-				combobox_hack = true;
+			if(ae.getAction() == "combobox") {
+				if (combobox_hack == true) {
+					grid_window.loadLayer(layer_menu.getSelection());
+					combobox_hack = false;
+				} else if (combobox_hack == false) {
+					combobox_hack = true;
+				}
+			} else {
+				if(ae.getAction() == "increase") {
+					grid_window.setGridSize(grid_window.getGrid().getSize()+1);
+					grid_window.loadLayer(layer_menu.getSelection());
+				}
+				else if(ae.getAction() == "decrease") {
+					grid_window.setGridSize(grid_window.getGrid().getSize()-1);
+					grid_window.loadLayer(layer_menu.getSelection());
+				}
 			}
 		}
 	}

@@ -109,7 +109,13 @@ public class PaletteWindow extends Window implements ActionListener {
 	}
 
 	public Color getPrimaryColor() {
-		return primary_color.getColor();
+		Color temp = new Color(
+			primary_color.getColor().getR(),
+			primary_color.getColor().getG(),
+			primary_color.getColor().getB(),
+			(byte) 0xFF
+		);
+		return temp;
 	}
 
 	public void addActionListener(ActionListener al) {

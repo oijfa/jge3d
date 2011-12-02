@@ -20,7 +20,7 @@ public class Block<E extends Number> extends VoxelButton {
 	// TODO: Textures?
 	public Block() {
 		super();
-		setColor(new Color((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x00));
+		setColor(new Color((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x30));
 		active = false;
 		action_listeners = new ArrayList<ActionListener>();
 		this.addCallback(new Callback(this));
@@ -64,7 +64,7 @@ public class Block<E extends Number> extends VoxelButton {
 					(byte) 0xFF,
 					(byte) 0xFF,
 					(byte) 0xFF,
-					(byte) 0x00
+					(byte) 0x30
 				)
 			);
 			this.base_color = null;

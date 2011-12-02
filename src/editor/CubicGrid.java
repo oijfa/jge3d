@@ -14,13 +14,9 @@ public class CubicGrid<E> {
 	private Model full_model;
 	private Model base_model;
 
-	@SuppressWarnings("unchecked")
-	public CubicGrid(int dim, Model base_model) {
-		// Can't instantiate array of E, but can do this:
-		items = (E[]) new Object[dim * dim * dim];
-		size = dim;
-		full_model = new Model(base_model.getShader());
+	public CubicGrid(Model base_model) {
 		this.base_model = base_model;
+		full_model = new Model(base_model.getShader());
 	}
 
 	public void set(int x, int y, int z, E item) {
@@ -31,7 +27,7 @@ public class CubicGrid<E> {
 		return items[x + (size * y) + (size * size * z)];
 	}
 
-	public Integer size() {
+	public Integer getSize() {
 		return size;
 	}
 
@@ -39,6 +35,12 @@ public class CubicGrid<E> {
 		// TODO: parse the XML
 	}
 
+	@SuppressWarnings("unchecked")
+	public void setSize(int dim) {
+		items = (E[]) new Object[dim * dim * dim];
+		size = dim;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Model getModel() {
 		try {

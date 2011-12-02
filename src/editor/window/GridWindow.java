@@ -9,8 +9,6 @@ import de.matthiasmann.twl.Color;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.utils.TintAnimator;
-import de.matthiasmann.twl.utils.TintAnimator.TimeSource;
 import editor.Block;
 import editor.CubicGrid;
 import engine.render.Model;
@@ -29,17 +27,8 @@ public class GridWindow extends Window implements ActionListener {
 
 		setTitle("Grid View");
 
-		this.grid = new CubicGrid<Block<Integer>>(grid_size,base_model);
-
-		for (int z = 0; z < grid_size; z++) {
-			for (int y = 0; y < grid_size; y++) {
-				for (int x = 0; x < grid_size; x++) {
-					 Block<Integer> block = new Block<Integer>();
-					 block.setTheme("block");
- 					this.grid.set(x, y, z,block);
-				}
-			}
-		}
+		this.grid = new CubicGrid<Block<Integer>>(base_model);
+		setGridSize(grid_size);
 
 		action_listeners = new ArrayList<ActionListener>();
 
@@ -52,23 +41,21 @@ public class GridWindow extends Window implements ActionListener {
 		
 		if (grid_size > 0)	
 			loadLayer(0);
-		
-		//Change background color
-		super.setTintAnimator(new TintAnimator(new TimeSource() {
-			@Override
-			public void resetTime() {
-			}
-
-			@Override
-			public int getTime() {
-				return 0;
-			}
-		}));
-		this.getTintAnimator().setColor( 
-			new Color((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x00)
-		);
 	}
 
+	public void setGridSize(int grid_size) {
+		grid.setSize(grid_size);
+		for (int z = 0; z < grid_size; z++) {
+			for (int y = 0; y < grid_size; y++) {
+				for (int x = 0; x < grid_size; x++) {
+					 Block<Integer> block = new Block<Integer>();
+					 block.setTheme("block");
+					this.grid.set(x, y, z,block);
+				}
+			}
+		}
+	}
+	
 	public void setCurrentColor(Color color) {
 		current_color = color;
 	}
@@ -93,9 +80,9 @@ public class GridWindow extends Window implements ActionListener {
 		Group row = layout.createSequentialGroup();
 
 		// Create the horizontal rows
-		for (int i = 0; i < grid.size(); i++) {
+		for (int i = 0; i < grid.getSize(); i++) {
 			row = layout.createSequentialGroup();
-			for (int j = 0; j < grid.size(); j++) {
+			for (int j = 0; j < grid.getSize(); j++) {
 				// TODO: *un*fix the z axis
 				row.addWidget(grid.get(j, i, layer));
 			}
@@ -103,9 +90,9 @@ public class GridWindow extends Window implements ActionListener {
 		}
 
 		// Create vertical rows
-		for (int i = 0; i < grid.size(); i++) {
+		for (int i = 0; i < grid.getSize(); i++) {
 			row = layout.createSequentialGroup();
-			for (int j = 0; j < grid.size(); j++) {
+			for (int j = 0; j < grid.getSize(); j++) {
 				// TODO: *un*fix the z axis
 				row.addWidget(grid.get(i, j, layer));
 			}
@@ -120,9 +107,9 @@ public class GridWindow extends Window implements ActionListener {
 	}
 
 	public void addCellListener(ActionListener listener) {
-		for (int i = 0; i < grid.size(); i++) {
-			for (int j = 0; j < grid.size(); j++) {
-				for (int k = 0; k < grid.size(); k++) {
+		for (int i = 0; i < grid.getSize(); i++) {
+			for (int j = 0; j < grid.getSize(); j++) {
+				for (int k = 0; k < grid.getSize(); k++) {
 					grid.get(i, j, k).addActionListener(listener);
 				}
 			}
