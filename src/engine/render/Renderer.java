@@ -102,7 +102,7 @@ public class Renderer {
 			if (display_parent != null) {
 				Display.setParent(display_parent);
 			}
-			Display.setDisplayMode(new DisplayMode(900, 900));
+			Display.setDisplayMode(new DisplayMode(1000,1000));
 			Display.create(new PixelFormat(24,8,24,0,0));
 			Display.setTitle("JGE3d");
 

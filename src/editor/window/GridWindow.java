@@ -54,6 +54,7 @@ public class GridWindow extends Window implements ActionListener {
 				}
 			}
 		}
+		this.addCellListener(this);
 	}
 	
 	public void setCurrentColor(Color color) {
