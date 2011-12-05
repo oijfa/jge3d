@@ -81,7 +81,7 @@ public class Model implements RenderObject {
 		//modelVBOindexID = model.getVBOindexID();
 		this.shape = model.getCollisionShape();
 		this.shader = model.shader;
-		// verify();
+		//verify();
 	}
 
 	public void init() {
@@ -191,7 +191,7 @@ public class Model implements RenderObject {
 		for (Mesh m : meshes) {
 			maxes.add(m.getMaximums());
 			mins.add(m.getMinimums());
-			m.calcNormals();
+			m.calcNormals(true);
 		}
 
 		max = new Vector3f();

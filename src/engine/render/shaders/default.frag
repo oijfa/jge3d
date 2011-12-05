@@ -24,8 +24,8 @@ void main(){
 	specular = clamp(specular, 0.0, 1.0); 
 	
 	// write Total Color:  
-	//gl_FragColor = gl_FrontLightModelProduct.sceneColor  + ambient + diffuse + specular;
-	gl_FragColor = color + ambient + diffuse + specular;  
+	gl_FragColor = gl_FrontLightModelProduct.sceneColor + color + ambient + diffuse + specular;
+	//gl_FragColor = color + ambient + diffuse + specular;  
   	
   	//multiply through by diffuse to set the dark portions of the object
   	//gl_FragColor = gl_Color * color * diffuse;

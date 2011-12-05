@@ -275,6 +275,7 @@ public class Engine {
     if(!models.keySet().contains(name)){
       models.put(name, FileLoader.loadFile(location));
       models.get(name).setShader(shaders.get("default"));
+      models.get(name).verify();
       models.get(name).createVBO();
       ret = true;
     }

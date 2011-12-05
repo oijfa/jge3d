@@ -110,6 +110,7 @@ public class EntityList {
 	private void addRenderItem(Entity e) {
 		if (e.keyExists("name")) {
 			if (e.getModel() != null) {
+				e.getModel().verify();
 				e.getModel().createVBO();
 				e.getModel().reduceHull();
 				e.setCollisionShape(e.getModel().getCollisionShape());

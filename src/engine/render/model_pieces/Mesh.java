@@ -269,42 +269,56 @@ public class Mesh implements Cloneable {
 		return min;
 	}
 
-	public void calcNormals() {
-		// if there are no vertices defined in the file we
-		// need to find them from the face
-		for (Face f : faces) {
-			if (f.getNormals().size() <= 0) {
-				ArrayList<Vector3f> normal_set = new ArrayList<Vector3f>();
-				Vector3f vertex0 = new Vector3f(), 
-					vertex1 = new Vector3f(), 
-					vertex2 = new Vector3f(), 
-					line1 = new Vector3f(), 
-					line2 = new Vector3f(), 
-					normal_vert = new Vector3f();
+	public void calcNormals(boolean overwrite_existing) {
 
-				// Copy the verts so we don't scrub the originals
-				// with our math
-				vertex0 = f.getVertex(0);
-				vertex1 = f.getVertex(1);
-				vertex2 = f.getVertex(2);
-
-				// Find two vectors so we can get the orientation
-				// of the face
-				line1.sub(vertex0, vertex2);
-				line2.sub(vertex0, vertex1);
-				normal_vert.cross(line1, line2);
-
-				// To normalize we must find the length of the normal
-				// based on the cross product of our vectors
-				normal_vert.normalize();
-
-				// Since we only have enough information to do
-				// a face vertex we just copy the data for each vert
-				for (int i = 0; i < 3; i++) {
-					normal_set.add(normal_vert);
+		//Clear the existing normals if overwriting is enabled
+		//other wise bailout
+		if(overwrite_existing) {
+			for(Face f : faces) {
+				for(int i=0; i < (f.getVertices().size()-f.getNormals().size()) ; i++) {
+					f.addVertexNorm(new Vector3f(0,0,0));
 				}
-				f.setVertexNormals(normal_set);
+				for(Vector3f normal: f.getNormals()) {
+					normal.set(0,0,0);
+				}					
 			}
+			
+			for (Face f : faces) {
+				if (f.getNormals().size() <= 0 || overwrite_existing) {
+					Vector3f 
+						vertex0 = new Vector3f(), 
+						vertex1 = new Vector3f(), 
+						vertex2 = new Vector3f(), 
+						line1 = new Vector3f(), 
+						line2 = new Vector3f(), 
+						normal_vert = new Vector3f();
+	
+					// Copy the verts so we don't scrub the originals
+					// with our math
+					vertex0 = f.getVertex(0);
+					vertex1 = f.getVertex(1);
+					vertex2 = f.getVertex(2);
+	
+					// Find two vectors so we can get the orientation
+					// of the face
+					line1.sub(vertex0, vertex2);
+					line2.sub(vertex0, vertex1);
+					normal_vert.cross(line1, line2);
+	
+					// Since we only have enough information to do
+					// a face vertex we just copy the data for each vert
+					for (Vector3f normal: f.getNormals()) {
+						normal.add(normal_vert);
+					}
+				}
+			}
+			//TODO: should be done in shader
+			//Post normalization of all normals
+			for(Face f : faces) {
+				for(Vector3f normal: f.getNormals()) {
+					normal.normalize();
+				}
+			}			
 		}
 	}
 }
