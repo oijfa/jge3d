@@ -20,7 +20,7 @@ void main(){
 	diffuse = clamp(diffuse, 0.0, 1.0);     
 	   
 	// calculate Specular Term:
-	vec4 specular = gl_FrontLightProduct[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),0.3*gl_LightSource.shininess);
+	vec4 specular = gl_FrontLightProduct[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),0.3);
 	specular = clamp(specular, 0.0, 1.0); 
 */
 
@@ -33,7 +33,7 @@ void main(){
 	diffuse = clamp(diffuse, 0.0, 1.0);     
 	   
 	// calculate Specular Term:
-	vec4 specular = color * gl_LightSource[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),0.3);
+	vec4 specular = color * gl_LightSource[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),1.0);
 	specular = clamp(specular, 0.0, 1.0); 
 //  END TEST //
 
