@@ -412,10 +412,12 @@ public class Model implements RenderObject {
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
 		
+		/*
 		if(immediate_scale_rotate)
 			for(Mesh mesh: meshes)
 				mesh.drawMaterial();
-					
+		*/		
+		
 		if(shader != null) {
 			shader.startShader(modelVBOID, collision_object);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);

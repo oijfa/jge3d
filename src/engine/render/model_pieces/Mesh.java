@@ -285,28 +285,23 @@ public class Mesh implements Cloneable {
 			
 			for (Face f : faces) {
 				if (f.getNormals().size() <= 0 || overwrite_existing) {
+					// Copy the verts so we don't scrub the originals
+					// with our math
 					Vector3f 
-						vertex0 = new Vector3f(), 
-						vertex1 = new Vector3f(), 
-						vertex2 = new Vector3f(), 
+						vertex0 = new Vector3f(f.getVertex(0)), 
+						vertex1 = new Vector3f(f.getVertex(1)), 
+						vertex2 = new Vector3f(f.getVertex(2)), 
 						line1 = new Vector3f(), 
 						line2 = new Vector3f(), 
 						normal_vert = new Vector3f();
-	
-					// Copy the verts so we don't scrub the originals
-					// with our math
-					vertex0 = f.getVertex(0);
-					vertex1 = f.getVertex(1);
-					vertex2 = f.getVertex(2);
-	
+
 					// Find two vectors so we can get the orientation
 					// of the face
 					line1.sub(vertex0, vertex2);
 					line2.sub(vertex0, vertex1);
 					normal_vert.cross(line1, line2);
 	
-					// Since we only have enough information to do
-					// a face vertex we just copy the data for each vert
+					// 
 					for (Vector3f normal: f.getNormals()) {
 						normal.add(normal_vert);
 					}
