@@ -5,15 +5,16 @@
 
 package engine.importing;
 
+import engine.render.Material;
 import engine.render.Model;
 import engine.render.model_pieces.Face;
-import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -379,12 +380,12 @@ public class XGL_Parser extends Parser {
 	// Creates a new material from a MAT tag
 	private Material readMaterial(Element root) throws Exception {
 		Material m = new Material();
-		m.setAmbient(readVectorTag(root, "AMB", true));
-		m.setDiffuse(readVectorTag(root, "DIFF", true));
-		m.setSpecular(readVectorTag(root, "SPEC", false));
-		m.setEmission(readVectorTag(root, "EMISS", false));
+		m.setAmbient(readVector4fTag(root, "AMB", true));
+		m.setDiffuse(readVector4fTag(root, "DIFF", true));
+		m.setSpecular(readVector4fTag(root, "SPEC", false));
+		//m.setEmission(readVectorTag(root, "EMISS", false));
 		m.setAlpha(readScalarTag(root, "ALPHA", false));
-		m.setShine(readScalarTag(root, "SHINE", false));
+		m.setShininess(readScalarTag(root, "SHINE", false));
 		return m;
 	}
 
@@ -433,6 +434,24 @@ public class XGL_Parser extends Parser {
 
 		return null;
 	}
+	
+	private Vector4f readVector4fTag(Element root, String childName,
+			boolean required) throws Exception {
+			ArrayList<Node> tagList;
+			tagList = findChildrenByName(root, childName);
+			if (tagList.size() == 1) {
+				Element e = (Element) tagList.get(0);
+				return readVector4f(e.getTextContent());
+			} else if (tagList.size() == 0) {
+				if (required) {
+					throwException("Material Tag with no " + childName + " Tag");
+				}
+			} else if (tagList.size() > 1) {
+				throwException("Material Tag with redundant " + childName + " Tag");
+			}
+
+			return null;
+		}
 
 	private Vector3f readVector(String data) {
 		String[] temp = data.split(",");
@@ -441,6 +460,21 @@ public class XGL_Parser extends Parser {
 		ret.x = Float.parseFloat(temp[0]);
 		ret.y = Float.parseFloat(temp[1]);
 		ret.z = Float.parseFloat(temp[2]);
+
+		return ret;
+	}
+	
+	private Vector4f readVector4f(String data) {
+		String[] temp = data.split(",");
+		Vector4f ret = new Vector4f();
+
+		ret.x = Float.parseFloat(temp[0]);
+		ret.y = Float.parseFloat(temp[1]);
+		ret.z = Float.parseFloat(temp[2]);
+		if(ret.length() == 4)
+			ret.w = Float.parseFloat(temp[3]);
+		else
+			ret.w = 1.0f;
 
 		return ret;
 	}

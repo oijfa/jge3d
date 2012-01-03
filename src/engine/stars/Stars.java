@@ -3,11 +3,12 @@ package engine.stars;
 import java.util.Random;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import engine.Engine;
 import engine.entity.Entity;
+import engine.render.Material;
 import engine.render.Model;
-import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
 
 public class Stars {
@@ -36,12 +37,13 @@ public class Stars {
 								Float r = (float) Math.random();
 								Float g = (float) Math.random();
 								Float b = (float) Math.random();
+								Float a = 1.0f;
 								mesh.setMaterial(
 									new Material(
-										new Vector3f(r,g,b),
-										new Vector3f(r,g,b),
-										new Vector3f(r,g,b),
-										new Vector3f(r,g,b),
+										new Vector4f(r,g,b,a),
+										new Vector4f(r,g,b,a),
+										new Vector4f(r,g,b,a),
+										1.0f,
 										1.0f
 									)
 								);

@@ -24,6 +24,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 
 
+import engine.entity.Entity;
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
 
@@ -130,20 +131,20 @@ public class Model implements RenderObject {
 	};
 
 	/* Draw Methods */
-	public void draw(CollisionObject collision_object) {
+	public void draw(Entity ent) {
 		// if the renderer supports VBOs definitely use them; if it doesn't
 		// we fall-back to immediate mode
 		if (hasVBO) {
-			draw_vbo(collision_object);
+			draw_vbo(ent);
 		} else {
-			draw_immediate(collision_object);
+			draw_immediate(ent);
 			System.out.println("DRAWINGIMMEDIATE");
 		}
 	}
 
-	public void draw_immediate(CollisionObject collision_object) {
+	public void draw_immediate(Entity ent) {
 		GL11.glPushMatrix();
-		rotateAndScaleImmediate(collision_object);
+		rotateAndScaleImmediate(ent.getCollisionObject());
 
 		for (Mesh m : meshes) {
 			m.draw();
@@ -289,13 +290,13 @@ public class Model implements RenderObject {
 	}
 
 	// *******************VBO METHODS**************************
-	public static int createVBOID(int i) {
+	public int createVBOID(int i) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(i);
 		ARBVertexBufferObject.glGenBuffersARB(buffer);
 		return buffer.get(0);
 	}
 
-	public static void bufferData(int id, FloatBuffer buffer) {
+	public void bufferData(int id, FloatBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(
 			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(
@@ -305,7 +306,7 @@ public class Model implements RenderObject {
 			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
 	}
 
-	public static void bufferElementData(int id, IntBuffer buffer) {
+	public void bufferElementData(int id, IntBuffer buffer) {
 		ARBVertexBufferObject.glBindBufferARB(
 			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, id);
 		ARBVertexBufferObject.glBufferDataARB(
@@ -370,11 +371,11 @@ public class Model implements RenderObject {
 		}
 	}
 
-	public void draw_vbo(CollisionObject collision_object) {
+	public void draw_vbo(Entity ent) {
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		if (immediate_scale_rotate) {
 			GL11.glPushMatrix();
-			rotateAndScaleImmediate(collision_object);
+			rotateAndScaleImmediate(ent.getCollisionObject());
 		}// else {
 			// do the shader using glUniform etc. here
 
@@ -419,7 +420,7 @@ public class Model implements RenderObject {
 		*/		
 		
 		if(shader != null) {
-			shader.startShader(modelVBOID, collision_object);
+			shader.startShader(modelVBOID, ent);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
 		} else {

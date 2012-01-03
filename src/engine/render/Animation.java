@@ -3,7 +3,7 @@ package engine.render;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
+import engine.entity.Entity;
 
 public class Animation implements RenderObject {
 	HashMap<String, ArrayList<AnimationFrame>> animation = new HashMap<String,ArrayList<AnimationFrame>>();
@@ -37,8 +37,8 @@ public class Animation implements RenderObject {
 	}
 
 	@Override
-	public void draw(CollisionObject collision_object) {
-		animation.get(last_animation_name).get(last_frame).getModel().draw(collision_object);
+	public void draw(Entity ent) {
+		animation.get(last_animation_name).get(last_frame).getModel().draw(ent);
 		nextFrame(last_animation_name);
 	}
 	

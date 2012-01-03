@@ -1,6 +1,34 @@
+//#version 140
+
 uniform mat4 transform;
 uniform vec4 scale;
+/*
+struct Light {
+	vec4 position;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	float constantAtt;
+    float linearAtt;
+    float quadraticAtt;
+    vec3 spotDirection;
+    float spotExponent;
+    float spotCutoff;
+};
 
+uniform Lights {
+	Light light;
+};
+
+struct Material {
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	float shininess;
+};
+
+uniform Material material;
+*/
 varying vec4 color;
 varying vec3 normal;
 varying vec3 vertex;

@@ -242,7 +242,7 @@ public class Entity {
 	public void draw() {
 		if (shouldDraw) {
 			if(model != null) {
-				model.draw(collision_object);
+				model.draw(this);
 			}
 		}
 	}

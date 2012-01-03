@@ -1,11 +1,12 @@
 package editor;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import de.matthiasmann.twl.Color;
 
+import engine.render.Material;
 import engine.render.Model;
-import engine.render.model_pieces.Material;
 import engine.render.model_pieces.Mesh;
 
 public class CubicGrid<E> {
@@ -62,26 +63,25 @@ public class CubicGrid<E> {
 								
 								mesh.setMaterial(
 									new Material(
-										new Vector3f(
+										new Vector4f(
 											mat_color.getRedFloat(), 
 											mat_color.getGreenFloat(), 
-											mat_color.getBlueFloat()
+											mat_color.getBlueFloat(),
+											1f
 										),
-										new Vector3f(
+										new Vector4f(
 											mat_color.getRedFloat(), 
 											mat_color.getGreenFloat(), 
-											mat_color.getBlueFloat()
+											mat_color.getBlueFloat(),
+											1f
 										),
-										new Vector3f(
+										new Vector4f(
 											mat_color.getRedFloat(), 
 											mat_color.getGreenFloat(), 
-											mat_color.getBlueFloat()
+											mat_color.getBlueFloat(),
+											1f
 										),
-										new Vector3f(
-											1, 
-											1, 
-											1
-										),
+										1f,
 										1f
 									)
 								);

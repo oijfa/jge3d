@@ -1,16 +1,55 @@
 varying vec4 color;
 varying vec3 vertex;
 varying vec3 normal;
+/*
+struct Light {
+	vec4 position;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	float constantAtt;
+    float linearAtt;
+    float quadraticAtt;
+    vec3 spotDirection;
+    float spotExponent;
+    float spotCutoff;
+};
+
+layout(std140) uniform Lights {
+	Light light;
+};
+
+struct Material {
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	float shininess;
+};
+
+uniform Material material;
+*/
 
 void main(){
 	//if the object is transparent then don't bother rendering
 	if(color.a == 0.0) {
   		discard;
   	}
-  	
+
 	vec3 light_pos = normalize(gl_LightSource[0].position.xyz - vertex);   
 	vec3 eye_pos = normalize(-vertex); // we are in Eye Coordinates, so EyePos is (0,0,0)  
 	vec3 light_reflection = normalize(-reflect(light_pos,normal));  
+/*	
+	//calculate Ambient Term:  
+	vec4 ambient = material.ambient;    
+	
+	//calculate Diffuse Term:  
+	vec4 diffuse = material.diffuse * max(dot(normal,light_pos), 0.0);
+	diffuse = clamp(diffuse, 0.0, 1.0);     
+	   
+	// calculate Specular Term:
+	vec4 specular = material.specular * pow(max(dot(light_reflection,eye_pos),0.0),0.3);
+	specular = clamp(specular, 0.0, 1.0);
+*/ 
  /*
 	//calculate Ambient Term:  
 	vec4 ambient = gl_FrontLightProduct[0].ambient;    
@@ -26,7 +65,7 @@ void main(){
 
 //	TESTING SOME SHIT //
 	//calculate Ambient Term:  
-	vec4 ambient = color * gl_LightSource[0].ambient;    
+	vec4 ambient = color;    
 	
 	//calculate Diffuse Term:  
 	vec4 diffuse = color * gl_LightSource[0].diffuse * max(dot(normal,light_pos), 0.0);

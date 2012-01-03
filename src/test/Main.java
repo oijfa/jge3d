@@ -8,7 +8,6 @@ import engine.stars.Stars;
 import engine.terrain.Terrain;
 
 public class Main {
-
 	private Engine engine;
 
 	private Actor player;

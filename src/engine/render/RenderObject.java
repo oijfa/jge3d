@@ -1,7 +1,7 @@
 package engine.render;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
+import engine.entity.Entity;
 
 public interface RenderObject {
-	public void draw(CollisionObject collision_object);	
+	public void draw(Entity ent);	
 }

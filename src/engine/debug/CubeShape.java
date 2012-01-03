@@ -1,8 +1,8 @@
 package engine.debug;
 
-import engine.render.model_pieces.Material;
-
 import org.lwjgl.opengl.GL11;
+
+import engine.render.Material;
 
 public class CubeShape {
 
@@ -25,15 +25,17 @@ public class CubeShape {
 			GL11.GL_SPECULAR,
 			mat.getSpecularAsBuffer()
 		);
+		/*
 		GL11.glMaterial(
 			GL11.GL_FRONT_AND_BACK, 
 			GL11.GL_EMISSION,
 			mat.getEmissionAsBuffer()
 		);
+		*/
 		GL11.glMaterialf(
 			GL11.GL_FRONT_AND_BACK, 
 			GL11.GL_SHININESS,
-			mat.getShine()
+			mat.getShininess()
 		);
 		GL11.glBegin(GL11.GL_QUADS);
 

@@ -6,6 +6,8 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
+import engine.render.Material;
+
 public class Mesh implements Cloneable {
 	private ArrayList<Face> faces;
 	private Material mat;
@@ -137,7 +139,7 @@ public class Mesh implements Cloneable {
 	public Vector3f getTransform() {
 		return location;
 	}
-	
+	/*
 	public void drawMaterial() {
 		GL11.glMaterial(
 			GL11.GL_FRONT_AND_BACK, 
@@ -165,10 +167,10 @@ public class Mesh implements Cloneable {
 			mat.getShine()
 		);
 	}
-	
+	*/
 	public void draw() {
 		// Set Material
-		drawMaterial();
+		//drawMaterial();
 
 		// Transform
 		GL11.glTranslatef(location.x, location.y, location.z);

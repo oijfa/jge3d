@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
 
@@ -13,8 +14,9 @@ import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.linearmath.Transform;
+
+import engine.entity.Entity;
 
 public class Shader {
 	/*
@@ -31,6 +33,7 @@ public class Shader {
     private int shader=0;
     private int vertShader=0;
     private int fragShader=0;
+    private HashMap<String, UBO> ubo_interfaces;
     
     private FloatBuffer buf;
 
@@ -54,6 +57,8 @@ public class Shader {
         else 
         	useShader=false;
 
+        //create something to hold ubo refs
+   		ubo_interfaces = new HashMap<String, UBO>();
         
         /*
         * if the vertex and fragment shaders setup sucessfully,
@@ -80,6 +85,19 @@ public class Shader {
     	this.shader = shader.shader;
     	this.useShader = shader.useShader;
     }
+    
+    public void addUBO(UBOInterface ubo_data) {
+    	//create a UBO from our ubo interface
+    	UBO ubo = new UBO();
+    	ubo.createUBO(
+    		ubo_data, 
+    		this
+    	);
+
+    	//put it in the ubo array for usage later
+    	ubo_interfaces.put(ubo_data.getName(), ubo);
+    }
+    
     /*
      * With the exception of syntax, setting up vertex and fragment shaders
      * is the same.
@@ -141,43 +159,40 @@ public class Shader {
     * If the shader was setup successfully, we use the shader. Otherwise
     * we run normal drawing code.
     */
-    public void startShader(int vbo_id, CollisionObject collision_object){
+    public void startShader(int vbo_id, Entity ent){
     	if(useShader) {            
      		//Adjust the position and rotation of the object from physics
     		Transform transform_matrix = new Transform();
-    		transform_matrix = collision_object.getWorldTransform(new Transform());
+    		transform_matrix = ent.getCollisionObject().getWorldTransform(new Transform());
 
     		float[] body_matrix = new float[16];
     		transform_matrix.getOpenGLMatrix(body_matrix);
     		buf.put(body_matrix);
     		buf.flip();
 
-        	//*****Shader drawing*****//
+        	//*****UBO setup*****//
+    		//world space transform
     		ARBShaderObjects.glUseProgramObjectARB(shader);
     		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
     		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
     		
+    		//world space scale op
     		buf.clear();
-    		Vector3f scalevec = collision_object.getCollisionShape().getLocalScaling(new Vector3f());
+    		Vector3f scalevec = ent.getCollisionObject().getCollisionShape().getLocalScaling(new Vector3f());
     		buf.put(scalevec.x);
     		buf.put(scalevec.y);
     		buf.put(scalevec.z);
     		buf.put(1.0f);
     		buf.flip();
-
-        	//*****Shader drawing*****//
-    		//ARBShaderObjects.glUseProgramObjectARB(shader);
     		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
     		ARBShaderObjects.glUniform4ARB(scale, buf);
-    		/*
-    		if(vbo_id==7) {
-	    		System.out.println("###"+vbo_id+"###");
-	    		for(int i=0; i<buf.limit()-1 ;i++) {
-	    			System.out.println(buf.get(i));
-	    		}
-	    		System.out.println("###");
+
+        	//parse material and light uniforms
+    		for(UBO ubo: ubo_interfaces.values()) {
+    			if(ent.getModel().getMesh(0).getMaterial() != null)
+					ubo.buffer_ubo(this, ent.getModel().getMesh(0).getMaterial());
     		}
-	    	*/
+    		
     		buf.clear();
         }
     }
@@ -234,5 +249,9 @@ public class Shader {
         }
         
         return vertexCode;
+	}
+	
+	public int getShaderID() {
+		return shader;
 	}
 }

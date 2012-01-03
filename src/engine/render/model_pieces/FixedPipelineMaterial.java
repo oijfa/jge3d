@@ -6,34 +6,34 @@ import java.util.ArrayList;
 import javax.vecmath.Vector3f;
 import org.lwjgl.BufferUtils;
 
-public class Material {
+public class FixedPipelineMaterial {
 	// For all of these: x = red, y = green, b = blue
 	private Vector3f ambientReflect;
 	private Vector3f diffuseReflect;
 	private Vector3f specularReflect; // default 0.0f, 0.0f, 0.0f
 	private Vector3f emission; // default 0.0f, 0.0f, 0.0f
-	static private FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
+	
 	private float alpha; // default 1.0f
 	private float shine; // default 0.0f
 
-	public Material() {
+	public FixedPipelineMaterial() {
 		matInit();
 	}
 
-	public Material(Vector3f ambient, Vector3f diffuse) {
+	public FixedPipelineMaterial(Vector3f ambient, Vector3f diffuse) {
 		matInit();
 		ambientReflect = new Vector3f(ambient.x, ambient.y, ambient.z);
 		diffuseReflect = new Vector3f(diffuse.x, diffuse.y, diffuse.z);
 	}
 
-	public Material(Vector3f ambient, Vector3f diffuse, Vector3f specular) {
+	public FixedPipelineMaterial(Vector3f ambient, Vector3f diffuse, Vector3f specular) {
 		matInit();
 		ambientReflect = new Vector3f(ambient.x, ambient.y, ambient.z);
 		diffuseReflect = new Vector3f(diffuse.x, diffuse.y, diffuse.z);
 		specularReflect = new Vector3f(specular.x, specular.y, specular.z);
 	}
 
-	public Material(Vector3f ambient, Vector3f diffuse, Vector3f specular,
+	public FixedPipelineMaterial(Vector3f ambient, Vector3f diffuse, Vector3f specular,
 		Vector3f emis) {
 		matInit();
 		ambientReflect = new Vector3f(ambient.x, ambient.y, ambient.z);
@@ -42,7 +42,7 @@ public class Material {
 		emission = new Vector3f(emis.x, emis.y, emis.z);
 	}
 
-	public Material(Vector3f ambient, Vector3f diffuse, Vector3f specular,
+	public FixedPipelineMaterial(Vector3f ambient, Vector3f diffuse, Vector3f specular,
 		Vector3f emis, float a) {
 		matInit();
 		ambientReflect = new Vector3f(ambient.x, ambient.y, ambient.z);
@@ -52,7 +52,7 @@ public class Material {
 		alpha = a;
 	}
 
-	public Material(Vector3f ambient, Vector3f diffuse, Vector3f specular,
+	public FixedPipelineMaterial(Vector3f ambient, Vector3f diffuse, Vector3f specular,
 		Vector3f emis, float a, float s) {
 		matInit();
 		ambientReflect = new Vector3f(ambient.x, ambient.y, ambient.z);
@@ -64,7 +64,7 @@ public class Material {
 	}
 
 	// Deep Copy Constructor
-	public Material(Material mat) {
+	public FixedPipelineMaterial(FixedPipelineMaterial mat) {
 		matInit();
 		if (mat.ambientReflect != null) {
 			this.ambientReflect = new Vector3f(
@@ -118,6 +118,7 @@ public class Material {
 		temp[1] = ambientReflect.y;
 		temp[2] = ambientReflect.z;
 
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 		buffer.clear();
 		buffer.put(temp);
 		buffer.put(1.0f);
@@ -135,6 +136,7 @@ public class Material {
 		temp[1] = diffuseReflect.y;
 		temp[2] = diffuseReflect.z;
 
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 		buffer.clear();
 		buffer.put(temp);
 		buffer.put(1.0f);
@@ -152,6 +154,7 @@ public class Material {
 		temp[1] = specularReflect.y;
 		temp[2] = specularReflect.z;
 
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 		buffer.clear();
 		buffer.put(temp);
 		buffer.put(1.0f);
@@ -169,6 +172,7 @@ public class Material {
 		temp[1] = emission.y;
 		temp[2] = emission.z;
 
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
 		buffer.clear();
 		buffer.put(temp);
 		buffer.put(1.0f);
