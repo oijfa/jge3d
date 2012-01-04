@@ -4,7 +4,6 @@ package engine.render;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -373,7 +372,6 @@ public class Model implements RenderObject {
 		}
 	}
 
-	@SuppressWarnings("static-access")
 	public void draw_vbo(Entity ent) {
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		if (immediate_scale_rotate) {
@@ -382,29 +380,27 @@ public class Model implements RenderObject {
 		}// else {
 			// do the shader using glUniform etc. here
 
-		ByteBuffer buf = BufferUtils.createByteBuffer("vertex".length());
-		buf.wrap("vertex".getBytes());
 		int vertex = GL20.glGetAttribLocation(
 			shader.getShaderID(),
-			buf
+			new String("vertex")
 		);
-		buf = BufferUtils.createByteBuffer("normal".length());
-		buf.wrap("normal".getBytes());
 		int normal = GL20.glGetAttribLocation(
 			shader.getShaderID(),
-			buf
+			new String("normal")
 		);
-		buf = BufferUtils.createByteBuffer("texture".length());
-		buf.wrap("texture".getBytes());
 		int texture = GL20.glGetAttribLocation(
 			shader.getShaderID(),
-			buf
+			new String("texture")
 		);	
-		buf = BufferUtils.createByteBuffer("color".length());
-		buf.wrap("color".getBytes());
 		int color = GL20.glGetAttribLocation(
 			shader.getShaderID(),
-			buf
+			new String("color")
+		);
+		System.out.println(
+			"Vertex: " + vertex + "\n" +
+			"Normal: " + normal + "\n" +
+			"Texture: " + texture + "\n" +
+			"Color: " + color + "\n"
 		);
 		
 		GL20.glEnableVertexAttribArray(vertex);
@@ -483,11 +479,16 @@ public class Model implements RenderObject {
 			//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 		}
 		
-		GL20.glDisableVertexAttribArray(vertex);
-		GL20.glDisableVertexAttribArray(normal);
-		GL20.glDisableVertexAttribArray(texture);
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+		
 		GL20.glDisableVertexAttribArray(color);
-
+		GL20.glDisableVertexAttribArray(texture);
+		GL20.glDisableVertexAttribArray(normal);
+		GL20.glDisableVertexAttribArray(vertex);
+		
 		//if there is an error
 		if(GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
 			//find out how large it is and print

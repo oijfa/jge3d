@@ -1,3 +1,4 @@
+#version 140
 /*
 struct Light {
 	vec4 position;
@@ -26,10 +27,10 @@ uniform Material {
 //uniform Material material;
 */
 
-attribute vec2 texture;
-attribute vec4 color;
-attribute vec3 normal;
-attribute vec3 vertex;
+in vec3 vertex;
+in vec3 normal;
+in vec2 texture;
+in vec4 color;
 
 varying in vec3 vertex_mod;
 varying in vec3 normal_mod;
@@ -74,7 +75,7 @@ void main(){
 	vec4 ambient = color;    
 	
 	//calculate Diffuse Term:  
-	vec4 diffuse = color * gl_LightSource[0].diffuse * max(dot(normal,light_pos), 0.0);
+	vec4 diffuse = color * gl_LightSource[0].diffuse * max(dot(normal_mod,light_pos), 0.0);
 	diffuse = clamp(diffuse, 0.0, 1.0);     
 	   
 	// calculate Specular Term:

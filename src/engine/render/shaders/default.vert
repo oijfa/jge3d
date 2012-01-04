@@ -1,4 +1,4 @@
-//#version 140
+#version 140
 
 uniform mat4 transform;
 uniform vec4 scale;
@@ -30,14 +30,14 @@ struct Material {
 uniform Material material;
 */
 
-attribute vec2 texture;
-attribute vec4 color;
-attribute vec3 normal;
-attribute vec3 vertex;
+in vec3 vertex;
+in vec3 normal;
+in vec2 texture;
+in vec4 color;
 
-varying out vec3 vertex_mod;
-varying out vec3 normal_mod;
-varying out vec4 color_mod;
+out vec3 vertex_mod;
+out vec3 normal_mod;
+out vec4 color_mod;
 
 void main() {
 	/*
@@ -57,13 +57,15 @@ void main() {
 	vertex_mod = vec3(vertex_cast);
 	
 	//Calculate vertex position
-	gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
+	//gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
+	gl_Position = transform * vertex_cast;
 	
 	// Calculate the normal value for this vertex, in world coordinates
-    normal_mod = normalize(gl_NormalMatrix * gl_Normal);
+    //normal_mod = normalize(gl_NormalMatrix * normal);
+    normal_mod = normal;
 
     // Set the front color to the color passed through with glColor
     //gl_FrontColor = gl_Color;
 	
-	//color = gl_Color;
+	color_mod = color;
 }
