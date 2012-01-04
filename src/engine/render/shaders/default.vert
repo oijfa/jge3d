@@ -29,9 +29,15 @@ struct Material {
 
 uniform Material material;
 */
-varying vec4 color;
-varying vec3 normal;
-varying vec3 vertex;
+
+attribute vec2 texture;
+attribute vec4 color;
+attribute vec3 normal;
+attribute vec3 vertex;
+
+varying out vec3 vertex_mod;
+varying out vec3 normal_mod;
+varying out vec4 color_mod;
 
 void main() {
 	/*
@@ -43,20 +49,21 @@ void main() {
 	);
 	*/
 	vec4 vertex_cast;
-	vertex_cast.x = gl_Vertex.x * scale.x;
-	vertex_cast.y = gl_Vertex.y * scale.y;
-	vertex_cast.z = gl_Vertex.z * scale.z;
+	vertex_cast.x = vertex.x * scale.x;
+	vertex_cast.y = vertex.y * scale.y;
+	vertex_cast.z = vertex.z * scale.z;
 	vertex_cast.w = 1.0;
+	
+	vertex_mod = vec3(vertex_cast);
 	
 	//Calculate vertex position
 	gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
-	vertex = vec3(gl_Position);
 	
 	// Calculate the normal value for this vertex, in world coordinates
-    normal = normalize(gl_NormalMatrix * gl_Normal);
+    normal_mod = normalize(gl_NormalMatrix * gl_Normal);
 
     // Set the front color to the color passed through with glColor
     //gl_FrontColor = gl_Color;
 	
-	color = gl_Color;
+	//color = gl_Color;
 }

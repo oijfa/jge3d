@@ -4,6 +4,7 @@ package engine.render;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -15,6 +16,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL20;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -371,6 +373,7 @@ public class Model implements RenderObject {
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	public void draw_vbo(Entity ent) {
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		if (immediate_scale_rotate) {
@@ -379,10 +382,35 @@ public class Model implements RenderObject {
 		}// else {
 			// do the shader using glUniform etc. here
 
-		GL11.glEnable(GL11.GL_VERTEX_ARRAY);
-		GL11.glEnable(GL11.GL_NORMAL_ARRAY);
-		GL11.glEnable(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glEnable(GL11.GL_COLOR_ARRAY);
+		ByteBuffer buf = BufferUtils.createByteBuffer("vertex".length());
+		buf.wrap("vertex".getBytes());
+		int vertex = GL20.glGetAttribLocation(
+			shader.getShaderID(),
+			buf
+		);
+		buf = BufferUtils.createByteBuffer("normal".length());
+		buf.wrap("normal".getBytes());
+		int normal = GL20.glGetAttribLocation(
+			shader.getShaderID(),
+			buf
+		);
+		buf = BufferUtils.createByteBuffer("texture".length());
+		buf.wrap("texture".getBytes());
+		int texture = GL20.glGetAttribLocation(
+			shader.getShaderID(),
+			buf
+		);	
+		buf = BufferUtils.createByteBuffer("color".length());
+		buf.wrap("color".getBytes());
+		int color = GL20.glGetAttribLocation(
+			shader.getShaderID(),
+			buf
+		);
+		
+		GL20.glEnableVertexAttribArray(vertex);
+		GL20.glEnableVertexAttribArray(normal);
+		GL20.glEnableVertexAttribArray(texture);
+		GL20.glEnableVertexAttribArray(color);
 
 		// Bind the index of the object
 		ARBVertexBufferObject.glBindBufferARB(
@@ -392,23 +420,50 @@ public class Model implements RenderObject {
 			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, modelVBOindexID);
 
 		// vertices
-		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
+		long offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
 							// * 4 to convert to bytes.
-		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		GL20.glVertexAttribPointer(
+			vertex, 
+			3,
+			GL11.GL_FLOAT,
+			false,
+			Face.VERTEX_STRIDE, 
+			offset
+		);
 
 		// normals
 		offset = 3 * 4; // 3 components is the initial offset from 0, then
 						// convert to bytes
-		GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		GL20.glVertexAttribPointer(
+			normal, 
+			3,
+			GL11.GL_FLOAT,
+			false,
+			Face.VERTEX_STRIDE, 
+			offset
+		);
 
 		// texture coordinates
 		offset = (3 + 3) * 4;
-		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		GL20.glVertexAttribPointer(
+			texture, 
+			2,
+			GL11.GL_FLOAT,
+			false,
+			Face.VERTEX_STRIDE, 
+			offset
+		);
 
 		// colors
-		offset = (3 + 3 + 2) * 4; // (6*4) is the number of byte to skip to get
-									// to the colour chunk
-		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		offset = (3 + 3 + 2) * 4; // (6*4) skip to color bytes
+		GL20.glVertexAttribPointer(
+			color, 
+			4,
+			GL11.GL_FLOAT,
+			false,
+			Face.VERTEX_STRIDE, 
+			offset		
+		);
 
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
@@ -428,10 +483,10 @@ public class Model implements RenderObject {
 			//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 		}
 		
-		GL11.glDisable(GL11.GL_VERTEX_ARRAY);
-		GL11.glDisable(GL11.GL_NORMAL_ARRAY);
-		GL11.glDisable(GL11.GL_TEXTURE_COORD_ARRAY);
-		GL11.glDisable(GL11.GL_COLOR_ARRAY);
+		GL20.glDisableVertexAttribArray(vertex);
+		GL20.glDisableVertexAttribArray(normal);
+		GL20.glDisableVertexAttribArray(texture);
+		GL20.glDisableVertexAttribArray(color);
 
 		// Pop the matrix if we are in immediate mode
 		if (immediate_scale_rotate) 

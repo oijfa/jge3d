@@ -39,15 +39,15 @@ public class Main {
 		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
 	
 		//Create the ground to stand on
-		Terrain terrain = new Terrain(0,true,engine.getModelByName("singlebox"),engine.getShaderByName("default"));
-		terrain.setProperty(Entity.NAME, "terrain");
-		terrain.setPosition(new Vector3f(0,-10, 0));
-		terrain.createTerrain(20);
-		engine.addEntity(terrain);
+		//Terrain terrain = new Terrain(0,true,engine.getModelByName("singlebox"),engine.getShaderByName("default"));
+		//terrain.setProperty(Entity.NAME, "terrain");
+		//terrain.setPosition(new Vector3f(0,-10, 0));
+		//terrain.createTerrain(20);
+		//engine.addEntity(terrain);
 		
 		//Make some parallax stars
-		Stars stars = new Stars(engine,1000,10000,200,5,400);
-		stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+		//Stars stars = new Stars(engine,1000,10000,200,5,400);
+		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");

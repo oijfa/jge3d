@@ -1,6 +1,3 @@
-varying vec4 color;
-varying vec3 vertex;
-varying vec3 normal;
 /*
 struct Light {
 	vec4 position;
@@ -19,15 +16,24 @@ layout(std140) uniform Lights {
 	Light light;
 };
 
-struct Material {
+uniform Material {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
 	float shininess;
-};
+} material;
 
-uniform Material material;
+//uniform Material material;
 */
+
+attribute vec2 texture;
+attribute vec4 color;
+attribute vec3 normal;
+attribute vec3 vertex;
+
+varying in vec3 vertex_mod;
+varying in vec3 normal_mod;
+varying in vec4 color_mod;
 
 void main(){
 	//if the object is transparent then don't bother rendering
@@ -35,10 +41,10 @@ void main(){
   		discard;
   	}
 
-	vec3 light_pos = normalize(gl_LightSource[0].position.xyz - vertex);   
-	vec3 eye_pos = normalize(-vertex); // we are in Eye Coordinates, so EyePos is (0,0,0)  
-	vec3 light_reflection = normalize(-reflect(light_pos,normal));  
-/*	
+	vec3 light_pos = normalize(gl_LightSource[0].position.xyz - vertex_mod);   
+	vec3 eye_pos = normalize(-vertex_mod); // we are in Eye Coordinates, so EyePos is (0,0,0)  
+	vec3 light_reflection = normalize(-reflect(light_pos,normal_mod));  
+/*
 	//calculate Ambient Term:  
 	vec4 ambient = material.ambient;    
 	
@@ -49,7 +55,7 @@ void main(){
 	// calculate Specular Term:
 	vec4 specular = material.specular * pow(max(dot(light_reflection,eye_pos),0.0),0.3);
 	specular = clamp(specular, 0.0, 1.0);
-*/ 
+ */
  /*
 	//calculate Ambient Term:  
 	vec4 ambient = gl_FrontLightProduct[0].ambient;    
@@ -75,8 +81,8 @@ void main(){
 	vec4 specular = color * gl_LightSource[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),1.0);
 	specular = clamp(specular, 0.0, 1.0); 
 //  END TEST //
-
 	// write Total Color:  
+
 	//gl_FragColor = gl_FrontLightModelProduct.sceneColor + color + ambient + diffuse + specular;
 	gl_FragColor = ambient + diffuse + specular;  
   	
