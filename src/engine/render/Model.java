@@ -488,6 +488,13 @@ public class Model implements RenderObject {
 		GL20.glDisableVertexAttribArray(texture);
 		GL20.glDisableVertexAttribArray(color);
 
+		//if there is an error
+		if(GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
+			//find out how large it is and print
+			int maxLength = GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
+			System.out.println("length: " + maxLength + " " + GL20.glGetProgramInfoLog(shader.getShaderID(), maxLength));
+		}
+		
 		// Pop the matrix if we are in immediate mode
 		if (immediate_scale_rotate) 
 			GL11.glPopMatrix();
