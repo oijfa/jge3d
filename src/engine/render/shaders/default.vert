@@ -35,6 +35,8 @@ in vec3 normal;
 in vec2 texture;
 in vec4 color;
 
+in mat4 projection;
+
 out vec3 vertex_mod;
 out vec3 normal_mod;
 out vec4 color_mod;
@@ -55,10 +57,10 @@ void main() {
 	vertex_cast.w = 1.0;
 	
 	vertex_mod = vec3(vertex_cast);
-	
+
 	//Calculate vertex position
 	//gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
-	gl_Position = transform * vertex_cast;
+	gl_Position = projection * transform * vertex_cast;
 	
 	// Calculate the normal value for this vertex, in world coordinates
     //normal_mod = normalize(gl_NormalMatrix * normal);

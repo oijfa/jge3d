@@ -5,9 +5,9 @@
  */
 package engine.importing;
 
-import engine.render.Material;
 import engine.render.Model;
 import engine.render.model_pieces.*;
+import engine.render.ubos.Material;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

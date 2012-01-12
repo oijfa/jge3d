@@ -2,7 +2,7 @@ package engine.debug;
 
 import org.lwjgl.opengl.GL11;
 
-import engine.render.Material;
+import engine.render.ubos.Material;
 
 public class CubeShape {
 

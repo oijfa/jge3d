@@ -1,4 +1,4 @@
-package engine.render;
+package engine.render.ubos;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

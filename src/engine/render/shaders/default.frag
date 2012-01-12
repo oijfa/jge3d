@@ -27,24 +27,21 @@ uniform Material {
 //uniform Material material;
 */
 
-in vec3 vertex;
-in vec3 normal;
-in vec2 texture;
-in vec4 color;
+in vec3 vertex_mod;
+in vec3 normal_mod;
+in vec4 color_mod;
 
-varying in vec3 vertex_mod;
-varying in vec3 normal_mod;
-varying in vec4 color_mod;
+out vec4 color;
 
 void main(){
 	//if the object is transparent then don't bother rendering
-	if(color.a == 0.0) {
+	if(color_mod.a == 0.0) {
   		discard;
   	}
 
-	vec3 light_pos = normalize(gl_LightSource[0].position.xyz - vertex_mod);   
-	vec3 eye_pos = normalize(-vertex_mod); // we are in Eye Coordinates, so EyePos is (0,0,0)  
-	vec3 light_reflection = normalize(-reflect(light_pos,normal_mod));  
+	//vec3 light_pos = normalize(gl_LightSource[0].position.xyz - vertex_mod);   
+	//vec3 eye_pos = normalize(-vertex_mod); // we are in Eye Coordinates, so EyePos is (0,0,0)  
+	//vec3 light_reflection = normalize(-reflect(light_pos,normal_mod));  
 /*
 	//calculate Ambient Term:  
 	vec4 ambient = material.ambient;    
@@ -72,23 +69,25 @@ void main(){
 
 //	TESTING SOME SHIT //
 	//calculate Ambient Term:  
-	vec4 ambient = color;    
+	//vec4 ambient = color;    
 	
 	//calculate Diffuse Term:  
-	vec4 diffuse = color * gl_LightSource[0].diffuse * max(dot(normal_mod,light_pos), 0.0);
-	diffuse = clamp(diffuse, 0.0, 1.0);     
+	//vec4 diffuse = color * gl_LightSource[0].diffuse * max(dot(normal_mod,light_pos), 0.0);
+	//diffuse = clamp(diffuse, 0.0, 1.0);     
 	   
 	// calculate Specular Term:
-	vec4 specular = color * gl_LightSource[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),1.0);
-	specular = clamp(specular, 0.0, 1.0); 
+	//vec4 specular = color * gl_LightSource[0].specular * pow(max(dot(light_reflection,eye_pos),0.0),1.0);
+	//specular = clamp(specular, 0.0, 1.0); 
 //  END TEST //
 	// write Total Color:  
 
 	//gl_FragColor = gl_FrontLightModelProduct.sceneColor + color + ambient + diffuse + specular;
-	gl_FragColor = ambient + diffuse + specular;  
+	//gl_FragColor = ambient + diffuse + specular;
+	  
+  	color = color_mod;
   	
   	//multiply through by diffuse to set the dark portions of the object
   	//gl_FragColor = gl_Color * color * diffuse;
   	//set alpha back to its original value or you will have the alpha channel set to the diffuse value
-  	gl_FragColor.a = color.a;
+  	//gl_FragColor.a = color.a;
 }

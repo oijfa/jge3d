@@ -17,6 +17,8 @@ import org.lwjgl.opengl.ARBVertexShader;
 import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Entity;
+import engine.render.ubos.ProjectionMatrix;
+import engine.render.ubos.UBOInterface;
 
 public class Shader {
 	/*
@@ -41,6 +43,8 @@ public class Shader {
     
     public Shader(){
     	this(default_path);
+    	UBO projection = new UBO(this,  new ProjectionMatrix(90, 1, 0.01f, 1000));
+    	ubo_interfaces.put("projection",projection);
     }
     
     public Shader(String path){
@@ -88,11 +92,7 @@ public class Shader {
     
     public void addUBO(UBOInterface ubo_data) {
     	//create a UBO from our ubo interface
-    	UBO ubo = new UBO();
-    	ubo.createUBO(
-    		ubo_data, 
-    		this
-    	);
+    	UBO ubo = new UBO(this, ubo_data);
 
     	//put it in the ubo array for usage later
     	ubo_interfaces.put(ubo_data.getName(), ubo);
@@ -189,8 +189,7 @@ public class Shader {
 
         	//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
-    			if(ent.getModel().getMesh(0).getMaterial() != null)
-					ubo.buffer_ubo(this, ent.getModel().getMesh(0).getMaterial());
+				ubo.bufferData(shader);
     		}
     		
     		buf.clear();

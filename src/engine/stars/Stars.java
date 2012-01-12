@@ -7,9 +7,9 @@ import javax.vecmath.Vector4f;
 
 import engine.Engine;
 import engine.entity.Entity;
-import engine.render.Material;
 import engine.render.Model;
 import engine.render.model_pieces.Mesh;
+import engine.render.ubos.Material;
 
 public class Stars {
 	private Entity ent;

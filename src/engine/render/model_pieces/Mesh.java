@@ -6,7 +6,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 
-import engine.render.Material;
+import engine.render.ubos.Material;
 
 public class Mesh implements Cloneable {
 	private ArrayList<Face> faces;

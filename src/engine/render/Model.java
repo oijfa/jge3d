@@ -396,12 +396,14 @@ public class Model implements RenderObject {
 			shader.getShaderID(),
 			new String("color")
 		);
+		/*
 		System.out.println(
 			"Vertex: " + vertex + "\n" +
 			"Normal: " + normal + "\n" +
 			"Texture: " + texture + "\n" +
 			"Color: " + color + "\n"
 		);
+		*/
 		
 		GL20.glEnableVertexAttribArray(vertex);
 		GL20.glEnableVertexAttribArray(normal);
