@@ -108,7 +108,7 @@ public class Light implements UBOInterface {
 		return size;
 	}
 	
-	public static String[] getNames() {
+	public String[] getNames() {
 		return names;
 	}
 	

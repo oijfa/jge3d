@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import engine.render.UBO.Type;
 
 public interface UBOInterface {
+	public String[] getNames();
 	public FloatBuffer createBuffer();
 	public IntBuffer getIndices();
 	public Type getType();

@@ -8,31 +8,31 @@ import org.lwjgl.BufferUtils;
 
 import engine.render.UBO.Type;
 
-public class ProjectionMatrix implements UBOInterface {
+public class TransformationMatrices implements UBOInterface {
 	//private Matrix4f perspective;
     private static final int size = 16;
-    private static final String name = "projection";
+    private static final String name = "TransformationMatrices";
     private static final String names[] = {
 	    "projection"
     };
     		
-    private float matrix[];
+    private float projection[];
     
-	public ProjectionMatrix(float fov, float aspect, float zNear, float zFar) {
-		matrix = new float[size];
-		buildMatrix(matrix, fov, aspect, zNear, zFar);
+	public TransformationMatrices(float fov, float aspect, float zNear, float zFar) {
+		projection = new float[size];
+		buildProjectionMatrix(projection, fov, aspect, zNear, zFar);
 	}
 	
 	public FloatBuffer createBuffer() {
-		FloatBuffer buf = BufferUtils.createFloatBuffer(matrix.length);
+		FloatBuffer buf = BufferUtils.createFloatBuffer(projection.length);
 		
-		buf.put(matrix);
+		buf.put(projection);
 		buf.flip();
 		
 		return buf;
 	}
 	
-	public void buildMatrix(float m[], float fov, float aspect, float zNear, float zFar) {
+	public void buildProjectionMatrix(float m[], float fov, float aspect, float zNear, float zFar) {
 		final float h = 1.0f/(float)Math.tan(fov*(Math.PI/360));
 		final float neg_depth = zNear-zFar;
 	
@@ -58,19 +58,27 @@ public class ProjectionMatrix implements UBOInterface {
 	}
 	
 	public int getSize() {
-		return size;
+		return names.length;
 	}
 	
-	public static String[] getNames() {
+	public String[] getNames() {
 		return names;
 	}
 	
 	public ByteBuffer getNamesAsBuffer() {
-		String name_buffer = new String();
+		int name_size=0;
+		for(String name: names){
+			name_size+=name.length();
+		}
+		ByteBuffer buf = BufferUtils.createByteBuffer(name_size);
+		
 		for(String name: names) {
-			name_buffer += name;
-		} 
-		return ByteBuffer.wrap(name_buffer.getBytes());
+			buf.put(name.getBytes());
+		}		
+		
+		buf.flip();
+
+		return buf;
 	}
 	
 	public String getName() {

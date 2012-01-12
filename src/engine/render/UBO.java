@@ -17,6 +17,9 @@ public class UBO {
 	private int block_size;
 	public static enum Type {LIGHT, MATERIAL, PERSPECTIVE};
 	private UBOInterface ubo_interface;
+	private IntBuffer offsets;
+	private IntBuffer indices;
+	private int shader;
 
 	public UBO(Shader shader, UBOInterface ubo) {
 		createUBO(ubo, shader);
@@ -39,26 +42,10 @@ public class UBO {
 		}
 		
 		ubo_interface = ubo;
+		this.shader = shader.getShaderID();
 		
 		//create a new UBO reference
 		uboID = createUBOID(1);
-		
-		//Set the uniform offsets for updating
-		/*
-		ARBUniformBufferObject.glGetUniformIndices(
-			shader.getShaderID(), 
-			ubo.getNamesAsBuffer(), 
-			ubo.getIndices()
-		);
-		*/		
-		
-		/* No idea what to do with this
-		int offset = ARBUniformBufferObject.glGetActiveUniforms(
-			shader.getShaderID(), 
-			uboID, 
-			ARBUniformBufferObject.GL_UNIFORM_OFFSET
-		);
-		*/
 		
 		//create a reference to the data definition in the shader
 		block_index = ARBUniformBufferObject.glGetUniformBlockIndex(
@@ -74,22 +61,47 @@ public class UBO {
 			ARBUniformBufferObject.GL_UNIFORM_BLOCK_DATA_SIZE
 		);
 
-		//clear buffer
+		//put the index of each variable in the block into an array
+		indices = BufferUtils.createIntBuffer(ubo.getSize());
+		ARBUniformBufferObject.glGetUniformIndices(
+			shader.getShaderID(), 
+			ubo.getNames(), 
+			indices
+		);			
+		
+		//put the offsets for each variable into an intbuffer
+		offsets = BufferUtils.createIntBuffer(ubo.getSize());
+		ARBUniformBufferObject.glGetActiveUniforms(
+			shader.getShaderID(), 
+			indices, 
+			ARBUniformBufferObject.GL_UNIFORM_OFFSET,
+			offsets
+		);
+		
+		//put data into the buffer
 		bufferData(uboID);
 		
-		//not sure why I need to do this (^ didn't we just clear it?)
+		//bind the block to the buffer object
 		ARBUniformBufferObject.glBindBufferBase(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
-			0,
+			block_index,
 			uboID
 		);
 		
+		debug();
+		
+		/*
+		ARBBufferObject.glBindBufferARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			0
+		);*/
+		/*
 		//Associate the uniform to its binding point
 		ARBUniformBufferObject.glUniformBlockBinding(
 			shader.getShaderID(), 
 			block_index,
 			uboID
-		);
+		);*/
 
 		// Set the notifier
 		hasUBO = true;
@@ -120,14 +132,16 @@ public class UBO {
 		);
 		//TODO: conflicting reports of whether 1st arg should be 
 		//ARBUniformBufferObject.GL_UNIFORM_BUFFER_EXT
+		/*
 		ARBBufferObject.glBufferSubDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
 			block_size, 
 			ubo_interface.createBuffer()
-		);
-		ARBBufferObject.glBindBufferARB(
+		);*/
+		ARBBufferObject.glBufferDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			0
+			ubo_interface.createBuffer(), 
+			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
 		);
 	}
 	
@@ -135,5 +149,22 @@ public class UBO {
 		ARBBufferObject.glDeleteBuffersARB(uboID);
 		hasUBO = false;
 	}
-	// *****************END VBO METHODS***********************
+
+	public void debug() {
+		System.out.println(
+			"shader: " + shader + "\n" +
+			"uboID: " + uboID + "\n" +
+			"block_index: " + block_index + "\n" +
+			"block_size: " + block_size + "\n" +
+			"block_name: " + ubo_interface.getName()
+		);
+		System.out.println("indices:");
+		for(int i=0; i < indices.capacity(); i++) {
+			System.out.println("\t" + indices.get(i));
+		}
+		System.out.println("\noffsets:");
+		for(int i=0; i < offsets.capacity(); i++) {
+			System.out.println("\t" + offsets.get(i));
+		}
+	}
 }

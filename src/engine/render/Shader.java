@@ -17,7 +17,7 @@ import org.lwjgl.opengl.ARBVertexShader;
 import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Entity;
-import engine.render.ubos.ProjectionMatrix;
+import engine.render.ubos.TransformationMatrices;
 import engine.render.ubos.UBOInterface;
 
 public class Shader {
@@ -43,7 +43,7 @@ public class Shader {
     
     public Shader(){
     	this(default_path);
-    	UBO projection = new UBO(this,  new ProjectionMatrix(90, 1, 0.01f, 1000));
+    	UBO projection = new UBO(this,  new TransformationMatrices(45.0f, 1.0f, 0.01f, 1000.0f));
     	ubo_interfaces.put("projection",projection);
     }
     

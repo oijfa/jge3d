@@ -30,12 +30,14 @@ struct Material {
 uniform Material material;
 */
 
+uniform TransformationMatrices { 
+	mat4 projection;
+};
+
 in vec3 vertex;
 in vec3 normal;
 in vec2 texture;
 in vec4 color;
-
-in mat4 projection;
 
 out vec3 vertex_mod;
 out vec3 normal_mod;
