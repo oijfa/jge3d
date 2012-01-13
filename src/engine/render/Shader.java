@@ -44,8 +44,19 @@ public class Shader {
     public Shader(){
     	this(default_path);
   
-    	UBO projection = new UBO(this,  new TransformationMatrices(45.0f, 1.0f, 1f, 2000f));
-    	ubo_interfaces.put("projection",projection);
+    	UBO transformation_matrices = new UBO(
+    		this,
+    		new TransformationMatrices(
+    			45f,
+    			1f,
+    			1f,
+    			1000f,
+    			new Vector3f(0,0,-0),
+    			new Vector3f(0,0,1),
+    			new Vector3f(0,1,0)
+    		)
+    	);
+    	ubo_interfaces.put("projection",transformation_matrices);
     }
     
     public Shader(String path){
@@ -229,7 +240,7 @@ public class Shader {
             byte[] infoBytes = new byte[length];
             infoLog.get(infoBytes);
             String out = new String(infoBytes);
-            //System.out.println("Info log:\n"+out);   
+            System.out.println("Info log:\n"+out);   
             return false;
         }        
     }

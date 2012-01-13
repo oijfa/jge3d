@@ -32,6 +32,7 @@ uniform Material material;
 
 uniform TransformationMatrices { 
 	mat4 projection;
+	mat4 lookat;
 };
 
 in vec3 vertex;
@@ -62,7 +63,7 @@ void main() {
 
 	//Calculate vertex position
 	//gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
-	gl_Position = projection * transform * vertex_cast;
+	gl_Position = projection * lookat * transform * vertex_cast;
 	
 	// Calculate the normal value for this vertex, in world coordinates
     //normal_mod = normalize(gl_NormalMatrix * normal);

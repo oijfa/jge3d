@@ -88,7 +88,7 @@ public class UBO {
 			uboID
 		);
 		
-		//debug();
+		debug();
 		
 		/*
 		ARBBufferObject.glBindBufferARB(
