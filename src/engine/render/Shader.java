@@ -43,7 +43,8 @@ public class Shader {
     
     public Shader(){
     	this(default_path);
-    	UBO projection = new UBO(this,  new TransformationMatrices(45.0f, 1.0f, 0.01f, 1000.0f));
+  
+    	UBO projection = new UBO(this,  new TransformationMatrices(45.0f, 1.0f, 1f, 2000f));
     	ubo_interfaces.put("projection",projection);
     }
     
@@ -228,7 +229,7 @@ public class Shader {
             byte[] infoBytes = new byte[length];
             infoLog.get(infoBytes);
             String out = new String(infoBytes);
-            System.out.println("Info log:\n"+out);   
+            //System.out.println("Info log:\n"+out);   
             return false;
         }        
     }

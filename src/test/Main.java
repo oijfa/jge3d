@@ -88,7 +88,7 @@ public class Main {
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(30f);
-		camera.setPosition(new Vector3f(0, 0, 6));
+		camera.setPosition(new Vector3f(0, 0, 40));
 		camera.focusOn(player);
 	}
 
