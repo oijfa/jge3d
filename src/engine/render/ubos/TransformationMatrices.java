@@ -39,63 +39,26 @@ public class TransformationMatrices implements UBOInterface {
 		return buf;
 	}
 	
-	void glhFrustumf2(float matrix[], float left, float right, float bottom, float top, float znear, float zfar){
-		float temp, temp2, temp3, temp4;
-		temp = 2.0f * znear;
-		temp2 = right - left;
-		temp3 = top - bottom;
-		temp4 = zfar - znear;
-		
-		matrix[0] = temp / temp2;
-		matrix[1] = 0.0f;
-		matrix[2] = 0.0f;
-		matrix[3] = 0.0f;
-		matrix[4] = 0.0f;
-		matrix[5] = temp / temp3;
-		matrix[6] = 0.0f;
-		matrix[7] = 0.0f;
-		matrix[8] = (right + left) / temp2;
-		matrix[9] = (top + bottom) / temp3;
-		matrix[10] = (-zfar - znear) / temp4;
-		matrix[11] = (-temp * zfar) / temp4;
-		matrix[12] = 0.0f;
-		matrix[13] = 0.0f;
-		matrix[14] = -1.0f;
-		matrix[15] = 0.0f;
-	}
 	public void buildProjectionMatrix(float fov, float aspect, float zNear, float zFar) {
-		float ymax, xmax;
-	    float temp, temp2, temp3, temp4;
-	    ymax = (float) (zNear * Math.tan(fov * Math.PI / 360.0f));
-	    //ymin = -ymax;
-	    //xmin = -ymax * aspectRatio;
-	    xmax = ymax * aspect;
-	    glhFrustumf2(projection, -xmax, xmax, -ymax, ymax, zNear, zFar);
-		debugMatrix(projection);
-		/*
-		final float f = 1.0f/(float)Math.tan(fov);
-		final float neg_depth = (zNear-zFar);
+		final float w = (float) (2*zNear*(2*Math.PI/360)*fov); //(float)Math.tan(fov);
+		final float h = w*aspect;
 				
 		//TODO: calculate these values instead of this f'd magic number 
 		//float r = 5f;
 		//float t = 5f;
 		//This assumes that near plane of frustum is symmetric.  If not
 		//Then look here: http://www.songho.ca/opengl/gl_projectionmatrix.html
-		//There's a more complex calculation for general frustums.
-		*
-		float[][] matrix = {
-			{ -zNear/r,        0,                               0,      0},
-			{        0, -zNear/t,                               0,      0},
-			{        0,        0,      -(zFar+zNear)/(zFar-zNear),      (-2*zFar*zNear)/(zFar-zNear)},
-			{        0,        0,                              -1,      0},
+		//Ther8
+		
 		};
-		\/
+		/*
 		float[][] matrix = {
 			{ f/aspect,			0,                              	0,      0},
 			{        0,			f,									0,      0},
 			{        0,			0,			(zFar + zNear)/neg_depth,      (2.0f*zFar*zNear)/neg_depth},
 			{        0,			0,									-1,      0},
 		};
+		*/
 		
 		debugMatrix(matrix);
 		
@@ -104,7 +67,7 @@ public class TransformationMatrices implements UBOInterface {
 				projection[(row*4)+col] = matrix[row][col];
 			}
 		}
-		*/
+		
 	}
 	
 	public void buildLookAtMatrix(Vector3f eye, Vector3f focus, Vector3f up) {
