@@ -1,5 +1,5 @@
 #version 140
-layout(row_major) uniform;
+layout(column_major) uniform;
 
 uniform mat4 transform;
 uniform vec4 scale;
@@ -64,7 +64,7 @@ void main() {
 
 	//Calculate vertex position
 	//gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
-	gl_Position = projection * lookat * (transform * vertex_cast);
+	gl_Position = projection * lookat * transform * vertex_cast;
 	
 	// Calculate the normal value for this vertex, in world coordinates
     //normal_mod = normalize(gl_NormalMatrix * normal);
