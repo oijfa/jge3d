@@ -49,7 +49,7 @@ public class Shader {
     		new TransformationMatrices(
     			45f,
     			1f,
-    			50f,
+    			0.1f,
     			100f,
     			new Vector3f(0,0,-10),
     			new Vector3f(0,0,1),
