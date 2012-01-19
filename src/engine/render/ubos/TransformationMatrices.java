@@ -40,7 +40,11 @@ public class TransformationMatrices implements UBOInterface {
 	}
 	
 	public void buildProjectionMatrix(float fov, float aspect, float zNear, float zFar) {
-		float f = 1.0f / (float)Math.tan(fov*(Math.PI/360));
+		
+		float h = 2* zNear * (float)Math.tan(Math.toRadians(fov/2));
+		float f = zNear / h;
+		
+		//float f = zNear / (float)Math.tan(fov*(Math.PI/360));
 		//TODO: calculate these values instead of this f'd magic number 
 		//float r = 5f;
 		//float t = 5f;
@@ -66,24 +70,6 @@ public class TransformationMatrices implements UBOInterface {
 	}
 	
 	public void buildLookAtMatrix(Vector3f eye, Vector3f focus, Vector3f up) {
-		/*
-		Vector3f f = new Vector3f();
-		Vector3f s = new Vector3f();
-		Vector3f u = new Vector3f();
-		
-		f.sub(focus, eye);
-		f.normalize();
-		up.normalize();
-		s.cross(f, up);
-		u.cross(s, f);
-		float[][] matrix = {
-			{	s.x,	s.y,	s.z,	0},
-			{	u.x,	u.y,	u.z,	0},
-			{	-f.x,	-f.y,	-f.z,	0},
-			{	0,		0,		0,		1},
-		};
-		*/
-
 		Vector3f dir = new Vector3f();
 		Vector3f right = new Vector3f();
 		
