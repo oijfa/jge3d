@@ -40,64 +40,66 @@ public class TransformationMatrices implements UBOInterface {
 	}
 	
 	public void buildProjectionMatrix(float fov, float aspect, float zNear, float zFar) {
+		float f = (float) (1 / Math.tan(Math.toRadians(fov)/2));
 		
-		float h = 2* zNear * (float)Math.tan(Math.toRadians(fov/2));
-		float f = zNear / h;
+		//Grouped by columns
+		projection[0] = f/aspect;
+		projection[1] = 0;
+		projection[2] = 0;
+		projection[3] = 0;
 		
-		//float f = zNear / (float)Math.tan(fov*(Math.PI/360));
-		//TODO: calculate these values instead of this f'd magic number 
-		//float r = 5f;
-		//float t = 5f;
-		//This assumes that near plane of frustum is symmetric.  If not
-		//Then look here: http://www.songho.ca/opengl/gl_projectionmatrix.html
-
-		float[][] matrix = {
-			{f/aspect,	0,    	0,    		  0},
-			{0,				f,				0,				0},
-			{0,				0,	 (2 * zFar * zNear) / (zNear - zFar), -1},
-			{0,				0,	 (zFar+zNear)/(zNear-zFar),      0}
-		};
+		projection[4] = 0;
+		projection[5] = f;
+		projection[6] = 0;
+		projection[7] = 0;
 		
-		System.out.println("projection");
-		debugMatrix(matrix);
+		projection[8] = 0;
+		projection[9] = 0;
+		projection[10] = (zFar+zNear)/(zNear-zFar);
+		projection[11] = -1;
 		
-		for(int row = 0; row < 4; row++){
-			for(int col = 0; col < 4; col++){
-				projection[(row*4)+col] = matrix[row][col];
-			}
-		}
-		
+		projection[12] = 0;
+		projection[13] = 0;
+		projection[14] = (2 * zFar * zNear) / (zNear - zFar);
+		projection[15] = 0;
 	}
 	
 	public void buildLookAtMatrix(Vector3f eye, Vector3f focus, Vector3f up) {
-		Vector3f dir = new Vector3f();
+		Vector3f back = new Vector3f();
+		Vector3f forward = new Vector3f();
 		Vector3f right = new Vector3f();
 		
-		dir.sub(focus,eye);
-		dir.normalize();
+		back.set(eye);
+		back.sub(focus);
+		back.normalize();
 		
-		right.cross(up, dir);
+		forward.set(back);
+		forward.scale(-1);
+		forward.normalize();
+		
+		right.cross(forward, up);
 		right.normalize();
-		 
-		up.cross(dir, right);
-
-		//rotation_matrix * translation_matrix, done by hand.
-		//eye.negate();
-		float[][] matrix = {
-			{ right.x, right.y, right.z, 0},
-			{ up.x, up.y, up.z, 0},
-			{ dir.x, dir.y, dir.z, 0},
-			{ eye.x,  eye.y,  eye.z,  1},
-		};
-		  
-		System.out.println("lookat");
-		debugMatrix(matrix);
 		
-		for(int row = 0; row < 4; row++){
-			for(int col = 0; col < 4; col++){
-				lookat[(row*4)+col] = matrix[row][col];
-			}
-		}
+		//Grouped by columns
+		lookat[0] = right.x;
+		lookat[1] = up.x;
+		lookat[2] = back.x;
+		lookat[3] = 0f;
+		
+		lookat[4] = right.y;
+		lookat[5] = up.y;
+		lookat[6] = back.y;
+		lookat[7] = 0f;
+		
+		lookat[8] = right.z;
+		lookat[9] = up.z;
+		lookat[10] = back.z;
+		lookat[11] = 0f;
+		
+		lookat[12] = eye.x;
+		lookat[13] = eye.y;
+		lookat[14] = eye.z;
+		lookat[15] = 1.0f;
 	}
 	
 	public int getSize() {
@@ -134,36 +136,5 @@ public class TransformationMatrices implements UBOInterface {
 	
 	public Type getType() {
 		return Type.PERSPECTIVE;
-	}
-	
-	public void debugMatrix(float matrix[][]) {
-		float m[] = new float[size];
-		System.out.print("[\n");
-		for(int row = 0; row < 4; row++){
-			System.out.print("    [");
-			for(int col = 0; col < 4; col++){
-				m[(row*4)+col] = matrix[row][col];
-				if(col==3)
-					System.out.format(" %f ",m[(row*4)+col]);
-				else
-					System.out.format(" %f, ",m[(row*4)+col]);
-			}
-			System.out.print(" ]\n");
-		}
-		System.out.print("]\n");
-	}
-	public void debugMatrix(float m[]) {
-		System.out.print("[\n");
-		for(int row = 0; row < 4; row++){
-			System.out.print("    [");
-			for(int col = 0; col < 4; col++){
-				if(col==3)
-					System.out.format(" %f ",m[(row*4)+col]);
-				else
-					System.out.format(" %f, ",m[(row*4)+col]);
-			}
-			System.out.print(" ]\n");
-		}
-		System.out.print("]\n");
 	}
 }

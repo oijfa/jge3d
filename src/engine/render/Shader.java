@@ -49,9 +49,9 @@ public class Shader {
     		new TransformationMatrices(
     			45f,
     			1f,
-    			.5049f,
-    			1000f,
-    			new Vector3f(0,0,-100),
+    			1f,
+    			500f,
+    			new Vector3f(0,-50,-50),
     			new Vector3f(0,0,1),
     			new Vector3f(0,1,0)
     		)
