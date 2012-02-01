@@ -142,12 +142,21 @@ public class EntityList {
 	/*****************************************/
 
 	/*************** DRAWING ***************/
-	public void drawList() {
+	public void drawFixedPipeList() {
 		// Have to change keySet into array so that a clone will be made
 		// Avoids concurrency issues
 		for (Entity ent : this.getEntities()){
 			if(ent.shouldDraw())
-				ent.draw();
+				ent.drawFixedPipe();
+		}
+	}
+	
+	public void drawProgrammablePipeList() {
+		// Have to change keySet into array so that a clone will be made
+		// Avoids concurrency issues
+		for (Entity ent : this.getEntities()){
+			if(ent.shouldDraw())
+				ent.drawProgrammablePipe();
 		}
 	}
 	/***************************************/

@@ -239,10 +239,18 @@ public class Entity {
 	}
 
 	/* MISC */
-	public void draw() {
+	public void drawFixedPipe() {
 		if (shouldDraw) {
 			if(model != null) {
-				model.draw(this);
+				model.drawFixedPipe(this);
+			}
+		}
+	}
+	
+	public void drawProgrammablePipe() {
+		if (shouldDraw) {
+			if(model != null) {
+				model.drawProgrammablePipe(this);
 			}
 		}
 	}

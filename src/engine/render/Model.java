@@ -132,27 +132,6 @@ public class Model implements RenderObject {
 	};
 
 	/* Draw Methods */
-	public void draw(Entity ent) {
-		// if the renderer supports VBOs definitely use them; if it doesn't
-		// we fall-back to immediate mode
-		if (hasVBO) {
-			draw_vbo(ent);
-		} else {
-			draw_immediate(ent);
-			System.out.println("DRAWINGIMMEDIATE");
-		}
-	}
-
-	public void draw_immediate(Entity ent) {
-		GL11.glPushMatrix();
-		rotateAndScaleImmediate(ent.getCollisionObject());
-
-		for (Mesh m : meshes) {
-			m.draw();
-		}
-		GL11.glPopMatrix();
-	}
-
 	private void rotateAndScaleImmediate(CollisionObject collision_object) {
 		// Retrieve the current motionstate to get the transform
 		// versus the world
@@ -371,8 +350,77 @@ public class Model implements RenderObject {
 			System.out.println("WARNING: Tried to create VBO with no available meshes.");
 		}
 	}
+	
+	public void drawFixedPipe(Entity ent) {
+		//Non VBO drawing
+		/*
+		 * GL11.glPushMatrix();
+		rotateAndScaleImmediate(ent.getCollisionObject());
 
-	public void draw_vbo(Entity ent) {
+		for (Mesh m : meshes) {
+			m.draw();
+		}
+		GL11.glPopMatrix();
+		 */	
+		
+		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
+		GL11.glPushMatrix();
+		rotateAndScaleImmediate(ent.getCollisionObject());
+	
+		GL11.glEnable(GL11.GL_VERTEX_ARRAY);
+		GL11.glEnable(GL11.GL_NORMAL_ARRAY);
+		GL11.glEnable(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glEnable(GL11.GL_COLOR_ARRAY);
+
+		// Bind the index of the object
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, modelVBOID);
+
+		ARBVertexBufferObject.glBindBufferARB(
+			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, modelVBOindexID);
+
+		// vertices
+		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
+							// * 4 to convert to bytes.
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		// normals
+		offset = 3 * 4; // 3 components is the initial offset from 0, then
+						// convert to bytes
+		GL11.glNormalPointer(GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		// texture coordinates
+		offset = (3 + 3) * 4;
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		// colors
+		offset = (3 + 3 + 2) * 4; // (6*4) is the number of byte to skip to get
+									// to the colour chunk
+		GL11.glColorPointer(4, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+
+		int first = index_buffer.get(0);
+		int last = index_buffer.get(index_buffer.limit() - 1);
+
+		/*
+		//Use this call instead of the one below if the one below isn't working
+		GL12.glDrawRangeElements(
+			GL11.GL_TRIANGLES, 
+			first, 
+			last,
+			index_buffer
+		);
+		*/
+		GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+
+		GL11.glDisable(GL11.GL_VERTEX_ARRAY);
+		GL11.glDisable(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisable(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisable(GL11.GL_COLOR_ARRAY);
+
+		GL11.glPopMatrix();
+	}
+
+	public void drawProgrammablePipe(Entity ent) {
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		if (immediate_scale_rotate) {
 			GL11.glPushMatrix();
@@ -465,13 +513,7 @@ public class Model implements RenderObject {
 
 		int first = index_buffer.get(0);
 		int last = index_buffer.get(index_buffer.limit() - 1);
-		
-		/*
-		if(immediate_scale_rotate)
-			for(Mesh mesh: meshes)
-				mesh.drawMaterial();
-		*/		
-		
+
 		if(shader != null) {
 			shader.startShader(modelVBOID, ent);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
@@ -497,10 +539,6 @@ public class Model implements RenderObject {
 			int maxLength = GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
 			System.out.println("length: " + maxLength + " " + GL20.glGetProgramInfoLog(shader.getShaderID(), maxLength));
 		}
-		
-		// Pop the matrix if we are in immediate mode
-		if (immediate_scale_rotate) 
-			GL11.glPopMatrix();
 	}
 
 	public int getVertexCount() {

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 import engine.entity.AIManager;
 import engine.entity.Camera;
@@ -19,8 +20,10 @@ import engine.input.InputMap;
 import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
+import engine.render.FixedRenderer;
 import engine.render.Model;
-import engine.render.Renderer;
+import engine.render.ProgrammableRenderer;
+import engine.render.RendererInterface;
 import engine.render.Shader;
 import engine.window.WindowManager;
 import engine.window.components.Window;
@@ -35,7 +38,7 @@ public class Engine {
 	private final HashMap<String,Model> models;
 
 	private final Physics physics;
-	private final Renderer renderer;
+	private final RendererInterface renderer;
 
 	private Thread physics_thread;
 	private Thread render_thread;
@@ -53,8 +56,23 @@ public class Engine {
 	public Engine() {
 		finished = new AtomicBoolean(false);
 		physics = new Physics();
+		System.out.println();
 		entity_list = new EntityList(physics);
-		renderer = new Renderer(entity_list);
+		
+		//Find out what GL capabilities we have
+		try {
+			Display.create();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String gl_version = GL11.glGetString(GL11.GL_VERSION).split(" ")[0].substring(0, 1);
+		Display.destroy();
+		
+		if(Float.valueOf(gl_version) >= 2.0)
+			renderer = new ProgrammableRenderer(entity_list);
+		else
+			renderer = new FixedRenderer(entity_list);
 		renderer.initGL();
 		
 		models = new HashMap<String,Model>();

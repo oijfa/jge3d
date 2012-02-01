@@ -36,9 +36,13 @@ public class Animation implements RenderObject {
 		}
 	}
 
-	@Override
-	public void draw(Entity ent) {
-		animation.get(last_animation_name).get(last_frame).getModel().draw(ent);
+	public void drawFixedPipe(Entity ent) {
+		animation.get(last_animation_name).get(last_frame).getModel().drawFixedPipe(ent);
+		nextFrame(last_animation_name);
+	}
+	
+	public void drawProgrammablePipe(Entity ent) {
+		animation.get(last_animation_name).get(last_frame).getModel().drawProgrammablePipe(ent);
 		nextFrame(last_animation_name);
 	}
 	

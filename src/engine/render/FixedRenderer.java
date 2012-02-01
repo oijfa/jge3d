@@ -11,8 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import javax.vecmath.Vector3f;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -25,7 +23,7 @@ import engine.entity.Camera;
 import engine.entity.EntityList;
 import engine.window.WindowManager;
 
-public class Renderer {
+public class FixedRenderer implements RendererInterface {
 	private WindowManager window_manager;
 	private EntityList objectList;
 	private Camera camera;
@@ -45,11 +43,11 @@ public class Renderer {
 	
 	private Canvas display_parent;
 
-	public Renderer(EntityList objectList) {
+	public FixedRenderer(EntityList objectList) {
 		this(objectList, null);
 	}
 
-	public Renderer(EntityList objectList, Canvas display_parent) {
+	public FixedRenderer(EntityList objectList, Canvas display_parent) {
 		this.objectList = objectList;
 		this.display_parent = display_parent;
 	}
@@ -59,32 +57,22 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glLoadIdentity();
 
-		Vector3f camPos;
-		Vector3f focusPos;
-		Vector3f up;
-
 		if (camera != null) {
 			camera.updatePosition();
-			
-			// Get its new position
-			camPos = camera.getPosition();
-			focusPos = camera.getFocusPosition();
-			up = camera.getUp();
 		} else {
 			camera = (Camera) objectList.getItem(Camera.NAME);
-			camPos = new Vector3f(0, 0, 20);
-			focusPos = new Vector3f(0, 0, 0);
-			up = new Vector3f(0, 1, 0);
+			camera.updatePosition();
 		}
 
+		
 		// Look at the camera's focus
-		GLU.gluLookAt(camPos.x, camPos.y, camPos.z, // Camera Location
-			focusPos.x, focusPos.y, focusPos.z, // Focus On Location
-			up.x, up.y, up.z // Up Vector
+		GLU.gluLookAt(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, // Camera Location
+			camera.getFocus().getPosition().x, camera.getFocus().getPosition().y, camera.getFocus().getPosition().z, // Focus On Location
+			camera.getUp().x, camera.getUp().y, camera.getUp().z // Up Vector
 		);
 
 		// Draw the 3d stuff
-		objectList.drawList();
+		objectList.drawFixedPipeList();
 
 		// Draw the window manager stuff
 		if (window_manager != null) window_manager.draw();
@@ -159,14 +147,14 @@ public class Renderer {
 		//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		// Setup openGL hints for quality
-		//GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
-		//GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-		//GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
-		//GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
+		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+		GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
+		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		// Anti-aliasing stuff (probably isn't working)
-		//GL11.glEnable(GL11.GL_POINT_SMOOTH);
-		//GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		//GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+		GL11.glEnable(GL11.GL_POINT_SMOOTH);
+		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
 
 		// Enable lighting
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -196,8 +184,6 @@ public class Renderer {
 			(FloatBuffer) temp.asFloatBuffer().put(lightPosition).flip()
 		);
 		GL11.glEnable(GL11.GL_LIGHT0);
-		
-		//GL11.glEnable(GL11.GL_NORMALIZE);
 	}
 
 	public void setPerspective() {
