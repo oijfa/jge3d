@@ -10,15 +10,19 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import engine.render.Model;
+import engine.render.ubos.TransformationMatrices;
+import engine.render.ubos.UBOInterface;
 
 public class Camera extends Entity {
 	/* Static class variables */
 	// Don't flip over, its confusing.
 	private static final double maximum_declination = (Math.PI / 2.0f) - 0.01f;
 	private static final double minimum_declination = (-1.0f * ((Math.PI / 2.0f) - 0.01f));
-	private static final double minimum_distance = 1;
-	private static final double maximum_distance = 100f;
+	private static final float minimum_distance = 0.1f;
+	private static final float maximum_distance = 1000f;
 	public static final String CAMERA_NAME = "camera";
+	private float fov = 45.0f;
+	private float aspect = 1.0f;
 	
 
 	/* Class fields */
@@ -28,6 +32,7 @@ public class Camera extends Entity {
 	private Vector3f up_vector; // vector pointing up
 	private Vector3f movement; //user control
 	private long prev_time; //last update in nanosecs
+	private TransformationMatrices matrices;
 
 	private volatile Entity focus;
 	private volatile Entity default_focus;
@@ -56,6 +61,16 @@ public class Camera extends Entity {
 		updatePosition();
 		
 		getModel().setTransparent();
+		
+		matrices = new TransformationMatrices(
+	  		fov, 
+	  		aspect, 
+	  		minimum_distance, 
+	  		maximum_distance, 
+	  		getPosition(), 
+	  		getFocusPosition(), 
+	  		getUp()
+	  	);
 	}
 
 	public void focusOn(Entity newFocus) {
@@ -208,6 +223,15 @@ public class Camera extends Entity {
 		position.z = (float) (a * Math.cos(rotation));
 		position.add(focPos);
 		setPosition(position);
+
+		if(matrices != null) {
+			matrices.buildLookAtMatrix(getPosition(), getFocusPosition(), getUp());
+		  	matrices.buildProjectionMatrix(fov, aspect, minimum_distance, maximum_distance);
+		}
+	}
+	
+	public UBOInterface getMVPmatrix() {
+		return matrices;
 	}
 
 	/* debug functions */

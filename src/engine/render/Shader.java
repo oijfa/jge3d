@@ -43,7 +43,7 @@ public class Shader {
     
     public Shader(){
     	this(default_path);
-  
+    	
     	UBO transformation_matrices = new UBO(
     		this,
     		new TransformationMatrices(
@@ -57,6 +57,7 @@ public class Shader {
     		)
     	);
     	ubo_interfaces.put("projection",transformation_matrices);
+    	
     }
     
     public Shader(String path){
