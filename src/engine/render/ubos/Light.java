@@ -1,6 +1,5 @@
 package engine.render.ubos;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -22,20 +21,9 @@ public class Light implements UBOInterface {
     private Vector3f spotDirection;
     private float spotExponent;
     private float spotCutoff;
+    private int array_index = 0;
     private static final int size = 24;
-    private static final String name = "light";
-    private static final String names[] = {
-	    "Lights.light.position",
-	    "Lights.light.ambient",
-	    "Lights.light.diffuse",
-	    "Lights.light.specular",
-	    "Lights.light.constant_attenuation",
-	    "Lights.light.linear_attenuation",
-	    "Lights.light.quadratic_attenuation",
-	    "Lights.light.spot_direction",
-	    "Lights.light.spot_cutoff",
-	    "Lights.light.spot_exponent"
-    };
+    private static final String name = "Lights";
     
 	public Light(
 		Vector4f position,
@@ -61,47 +49,49 @@ public class Light implements UBOInterface {
 	}
 	
 	public FloatBuffer createBuffer() {
-		float light_buffer[] = new float[size];
-
+		FloatBuffer buf = BufferUtils.createFloatBuffer(size);
+		
 		//position
-		light_buffer[0] = position.x;
-		light_buffer[1] = position.y;
-		light_buffer[2] = position.z;
-		light_buffer[3] = position.w;
+		buf.put(position.x);
+		buf.put(position.y);
+		buf.put(position.z);
+		buf.put(position.w);
 
 		//ambient
-		light_buffer[4] = ambient.x;
-		light_buffer[5] = ambient.y;
-		light_buffer[6] = ambient.z;
-		light_buffer[7] = ambient.w;
+		buf.put(ambient.x);
+		buf.put(ambient.y);
+		buf.put(ambient.z);
+		buf.put(ambient.w);
 
 		//diffuse
-		light_buffer[8] = diffuse.x;
-		light_buffer[9] = diffuse.y;
-		light_buffer[10] = diffuse.z;
-		light_buffer[11] = diffuse.w;
+		buf.put(diffuse.x);
+		buf.put(diffuse.y);
+		buf.put(diffuse.z);
+		buf.put(diffuse.w);
 		
 		//specular
-		light_buffer[12] = specular.x;
-		light_buffer[13] = specular.y;
-		light_buffer[14] = specular.z;
-		light_buffer[15] = specular.w;
+		buf.put(specular.x);
+		buf.put(specular.y);
+		buf.put(specular.z);
+		buf.put(specular.w);
 
 		//attenuation
-		light_buffer[16] = constantAtt;
-		light_buffer[17] = linearAtt;
-		light_buffer[18] = quadraticAtt;
+		buf.put(constantAtt);
+		buf.put(linearAtt);
+		buf.put(quadraticAtt);
 	    
 		//spot direction
-		light_buffer[19] = spotDirection.x;
-		light_buffer[20] = spotDirection.y;
-		light_buffer[21] = spotDirection.z;
+		buf.put(spotDirection.x);
+		buf.put(spotDirection.y);
+		buf.put(spotDirection.z);
 	    
 		//shininess
-	    light_buffer[22] = spotExponent;
-	    light_buffer[23] = spotCutoff;
+	    buf.put(spotExponent);
+	    buf.put(spotCutoff);
 	    
-		return FloatBuffer.wrap(light_buffer);
+	    buf.flip();
+	    
+		return buf;
 	}
 	
 	public int getSize() {
@@ -109,15 +99,20 @@ public class Light implements UBOInterface {
 	}
 	
 	public String[] getNames() {
+		String names[] = {
+		    "Lights.light[" + array_index + "].position",
+		    "Lights.light[" + array_index + "].ambient",
+		    "Lights.light[" + array_index + "].diffuse",
+		    "Lights.light[" + array_index + "].specular",
+		    "Lights.light[" + array_index + "].constant_attenuation",
+		    "Lights.light[" + array_index + "].linear_attenuation",
+		    "Lights.light[" + array_index + "].quadratic_attenuation",
+		    "Lights.light[" + array_index + "].spot_direction",
+		    "Lights.light[" + array_index + "].spot_cutoff",
+		    "Lights.light[" + array_index + "].spot_exponent"
+	    };
+		
 		return names;
-	}
-	
-	public ByteBuffer getNamesAsBuffer() {
-		String name_buffer = new String();
-		for(String name: names) {
-			name_buffer += name;
-		} 
-		return ByteBuffer.wrap(name_buffer.getBytes());
 	}
 	
 	public IntBuffer getIndices() {

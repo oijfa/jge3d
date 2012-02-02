@@ -1,6 +1,5 @@
 package engine.render.ubos;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -94,15 +93,7 @@ public class Material implements UBOInterface {
 	public String[] getNames() {
 		return names;
 	}
-	
-	public ByteBuffer getNamesAsBuffer() {
-		String name_buffer = new String();
-		for(String name: names) {
-			name_buffer += name;
-		} 
-		return ByteBuffer.wrap(name_buffer.getBytes());
-	}
-	
+
 	public IntBuffer getIndices() {
 		return BufferUtils.createIntBuffer(size);
 	}

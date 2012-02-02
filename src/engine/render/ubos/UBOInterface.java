@@ -1,6 +1,5 @@
 package engine.render.ubos;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -12,6 +11,5 @@ public interface UBOInterface {
 	public IntBuffer getIndices();
 	public Type getType();
 	public int getSize();
-	public ByteBuffer getNamesAsBuffer();
 	public String getName();
 }

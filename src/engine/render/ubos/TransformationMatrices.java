@@ -1,6 +1,5 @@
 package engine.render.ubos;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -108,22 +107,6 @@ public class TransformationMatrices implements UBOInterface {
 	
 	public String[] getNames() {
 		return names;
-	}
-	
-	public ByteBuffer getNamesAsBuffer() {
-		int name_size=0;
-		for(String name: names){
-			name_size+=name.length();
-		}
-		ByteBuffer buf = BufferUtils.createByteBuffer(name_size);
-		
-		for(String name: names) {
-			buf.put(name.getBytes());
-		}		
-		
-		buf.flip();
-
-		return buf;
 	}
 	
 	public String getName() {

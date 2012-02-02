@@ -12,6 +12,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
@@ -21,6 +22,7 @@ import org.lwjgl.opengl.ARBVertexShader;
 import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Entity;
+import engine.render.ubos.Light;
 import engine.render.ubos.TransformationMatrices;
 import engine.render.ubos.UBOInterface;
 
@@ -270,13 +272,30 @@ public class Shader implements Resource{
     			45f,
     			1f,
     			1f,
-    			500f,
+    			1000f,
     			new Vector3f(0,-50,-50),
-    			new Vector3f(0,0,1),
+    			new Vector3f(0,0,0),
     			new Vector3f(0,1,0)
     		)
     	);
     	ubo_interfaces.put("projection",transformation_matrices);
+    	
+    	UBO light = new UBO(
+    		this,
+    		new Light(
+    			new Vector4f(0,10,0,1),
+    			new Vector4f(0.5f,0.5f,0.5f,1),
+    			new Vector4f(0.5f,0.5f,0.5f,1),
+    			new Vector4f(0.5f,0.5f,0.5f,1),
+    			1.0f,
+    			1.0f,
+    			1.0f,
+    			new Vector3f(0,-1,0),
+    			1.0f,
+    			1.0f
+			)
+    	);
+    	ubo_interfaces.put("light",light);
 	}
 
 	@Override

@@ -15,9 +15,9 @@
 		    float spotCutoff;
 		};
 		
-		layout(std140) uniform Lights {
-			Light light;
-		};
+		uniform Lights {
+			Light light[1];
+		} lights;
 		
 		uniform Material {
 			vec4 ambient;
@@ -97,9 +97,6 @@
 	<vertex>
 		#version 140
 		layout(column_major) uniform;
-		
-		uniform mat4 transform;
-		uniform vec4 scale;
 		/*
 		struct Light {
 			vec4 position;
@@ -114,19 +111,11 @@
 		    float spotCutoff;
 		};
 		
-		uniform Lights {
-			Light light;
-		};
-		
-		struct Material {
-			vec4 ambient;
-			vec4 diffuse;
-			vec4 specular;
-			float shininess;
-		};
-		
-		uniform Material material;
+		layout(std140) uniform Lights {
+			Light light[1];
+		} lights;
 		*/
+		uniform mat4 transform;
 		
 		uniform TransformationMatrices { 
 			mat4 projection;
@@ -137,7 +126,7 @@
 		in vec3 normal;
 		in vec2 texture;
 		in vec4 color;
-		
+		in vec3 scale;
 		out vec3 vertex_mod;
 		out vec3 normal_mod;
 		out vec4 color_mod;
