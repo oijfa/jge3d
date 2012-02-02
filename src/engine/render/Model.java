@@ -4,6 +4,7 @@ package engine.render;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -24,12 +25,14 @@ import com.bulletphysics.collision.shapes.ConvexHullShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 
-
 import engine.entity.Entity;
+import engine.importing.FileLoader;
+
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
+import engine.resource.Resource;
 
-public class Model implements RenderObject {
+public class Model implements RenderObject, Resource {
 	private ArrayList<Mesh> meshes;
 	private volatile Vector3f max, min, center;
 	private boolean hasVBO = false;
@@ -297,6 +300,8 @@ public class Model implements RenderObject {
 	}
 
 	public void createVBO() {
+		verify();
+		
 		// if we support VBOs we need to precompute the thing now
 		// that we have normals and the model is fully loaded
 		int num_faces_all_meshes = 0;
@@ -607,7 +612,20 @@ public class Model implements RenderObject {
 			meshes.add(mesh);
 		}
 		//num_vertices=getVertexCount();
-		destroyVBO();
+		if(hasVBO){
+			destroyVBO();
+		}
 		createVBO();
+	}
+
+	@Override
+	public String toXML() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void loadFromFile(InputStream is) throws Exception {
+		this.combineModels(FileLoader.loadFile(is));
 	}
 }

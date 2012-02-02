@@ -29,20 +29,20 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 		
-		engine.addModel("box", "resources/models/misc/box.xgl");
-		engine.addModel("box2", "resources/models/misc/box2.xgl");
-		engine.addModel("test", "resources/models/misc/test.xgl");
-		engine.addModel("export", "resources/models/misc/export.xgl");
-		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
-		engine.addModel("legoman", "resources/models/misc/legoman.xgl");
-	
 		//Create the ground to stand on
-		//Terrain terrain = new Terrain(0,true,engine.getModelByName("singlebox"),engine.getShaderByName("default"));
-		//terrain.setProperty(Entity.NAME, "terrain");
-		//terrain.setPosition(new Vector3f(0,-10, 0));
-		//terrain.createTerrain(20);
-		//engine.addEntity(terrain);
-		
+		/*
+		Terrain terrain = new Terrain(
+			0,
+			true,
+			(engine.render.Model) engine.resource_manager.getResource("singlebox","models"),
+			(engine.render.Shader) engine.resource_manager.getResource("default","shaders")
+		);
+		terrain.setProperty
+		(Entity.NAME, "terrain");
+		terrain.setPosition(new Vector3f(0,-10, 0));
+		terrain.createTerrain(20);
+		engine.addEntity(terrain);
+		*/
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
 		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));

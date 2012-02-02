@@ -1,6 +1,10 @@
 package engine.render;
 
+import engine.resource.Resource;
+import engine.utils.DomTools;
+
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -20,7 +24,11 @@ import engine.entity.Entity;
 import engine.render.ubos.TransformationMatrices;
 import engine.render.ubos.UBOInterface;
 
-public class Shader {
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+
+public class Shader implements Resource{
 	/*
     * if the shaders are setup ok we can use shaders, otherwise we just
     * use default settings
@@ -39,61 +47,8 @@ public class Shader {
     
     private FloatBuffer buf;
 
-    private static final String default_path = "default";
-    
-    public Shader(){
-    	this(default_path);
+    public Shader() {
     	
-    	UBO transformation_matrices = new UBO(
-    		this,
-    		new TransformationMatrices(
-    			45f,
-    			1f,
-    			1f,
-    			500f,
-    			new Vector3f(0,-50,-50),
-    			new Vector3f(0,0,1),
-    			new Vector3f(0,1,0)
-    		)
-    	);
-    	ubo_interfaces.put("projection",transformation_matrices);
-    	
-    }
-    
-    public Shader(String path){
-        /*
-        * create the shader program. If OK, create vertex
-        * and fragment shaders
-        */
-    	shader=ARBShaderObjects.glCreateProgramObjectARB();
-    	
-        if(shader!=0){
-            vertShader=createVertShader(path + ".vert");
-            fragShader=createFragShader(path + ".frag");
-        }
-        else 
-        	useShader=false;
-
-        //create something to hold ubo refs
-   		ubo_interfaces = new HashMap<String, UBO>();
-        
-        /*
-        * if the vertex and fragment shaders setup sucessfully,
-        * attach them to the shader program, link the shader program
-        * (into the GL context I suppose), and validate
-        */
-        if(vertShader != 0 && fragShader != 0){
-            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
-            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
-            ARBShaderObjects.glLinkProgramARB(shader);
-            ARBShaderObjects.glValidateProgramARB(shader);
-            useShader=printLogInfo(shader);
-            buf = BufferUtils.createFloatBuffer(16);
-        } else {
-        	useShader=false;
-        	System.out.println("Failed to create shader for: " + path);
-        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
-        }        
     }
     
     public Shader(Shader shader) {
@@ -116,7 +71,7 @@ public class Shader {
      * is the same.
      * @param the name and path to the vertex shader
      */
-     private int createVertShader(String filename){
+     private int createVertShader(Document dom){
          //vertShader will be non zero if successfully created
          vertShader=ARBShaderObjects.glCreateShaderObjectARB(ARBVertexShader.GL_VERTEX_SHADER_ARB);
          
@@ -124,7 +79,8 @@ public class Shader {
          String vertexCode;
          if(vertShader==0){return 0;}
          
-         vertexCode = getShaderText(filename);
+   
+         vertexCode = DomTools.findChildrenByName(dom.getDocumentElement(), "vertex").get(0).getTextContent();
 
          /*
          * associate the vertex code String with the created vertex shader
@@ -143,7 +99,7 @@ public class Shader {
      }
 
      //same as per the vertex shader except for method syntax
-     private int createFragShader(String filename){
+     private int createFragShader(Document dom){
      	//fragShader will be non zero if successfully created
          fragShader=ARBShaderObjects.glCreateShaderObjectARB(ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
          
@@ -151,7 +107,7 @@ public class Shader {
          String fragCode;
          if(fragShader==0){return 0;}
          
-         fragCode = getShaderText(filename);
+         fragCode = DomTools.findChildrenByName(dom.getDocumentElement(), "fragment").get(0).getTextContent();
 
          /*
          * associate the vertex code String with the created vertex shader
@@ -246,24 +202,84 @@ public class Shader {
         }        
     }
     
-	protected String getShaderText(String filename) {
+	protected String getShaderText(InputStream in, String tag_name) {
 		String vertexCode="";
         String line;
         try{
-        	InputStreamReader is = new InputStreamReader(Shader.class.getResourceAsStream("shaders/" + filename));
+        	InputStreamReader is = new InputStreamReader(in);
         	BufferedReader reader = new BufferedReader(is);
            	while((line=reader.readLine())!=null){
            		vertexCode+=line + "\n";
            	}
         }catch(Exception e){
-            System.out.println("Failed to read vertex shading code: " + "src/engine/render/shaders/" + filename);
+            System.out.println("Failed to read " + tag_name + " shading code: " + in.toString());
             return "";
         }
         
         return vertexCode;
 	}
-	
+
 	public int getShaderID() {
 		return shader;
+	}
+
+	@Override
+	public void loadFromFile(InputStream is) throws Exception {
+		/*
+	        * create the shader program. If OK, create vertex
+	        * and fragment shaders
+	        */
+	    	shader=ARBShaderObjects.glCreateProgramObjectARB();
+	    	
+	        if(shader!=0){
+	        	Document dom;
+	    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+	    		// Create Dom Structure
+	    		DocumentBuilder db = dbf.newDocumentBuilder();
+	    		dom = db.parse(is);
+	            vertShader=createVertShader(dom);
+	            fragShader=createFragShader(dom);
+	        } else {
+	        	useShader=false;
+	        }
+	        
+	        /*
+	        * if the vertex and fragment shaders setup sucessfully,
+	        * attach them to the shader program, link the shader program
+	        * (into the GL context I suppose), and validate
+	        */
+	        if(vertShader != 0 && fragShader != 0){
+	            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
+	            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
+	            ARBShaderObjects.glLinkProgramARB(shader);
+	            ARBShaderObjects.glValidateProgramARB(shader);
+	            useShader=printLogInfo(shader);
+	            buf = BufferUtils.createFloatBuffer(16);
+	        } else {
+	        	useShader=false;
+	        	System.out.println("Failed to create shader");
+	        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
+	        }
+	        
+	    	UBO transformation_matrices = new UBO(
+        		this,
+        		new TransformationMatrices(
+        			45f,
+        			1f,
+        			1f,
+        			500f,
+        			new Vector3f(0,-50,-50),
+        			new Vector3f(0,0,1),
+        			new Vector3f(0,1,0)
+        		)
+        	);
+        	ubo_interfaces.put("projection",transformation_matrices);
+	}
+
+	@Override
+	public String toXML() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

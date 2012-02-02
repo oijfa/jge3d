@@ -8,6 +8,8 @@
  */
 package engine.importing;
 
+import java.io.InputStream;
+
 import engine.render.Model;
 
 import org.lwjgl.LWJGLException;
@@ -17,29 +19,18 @@ import org.lwjgl.opengl.GL11;
 public class FileLoader {
 	public FileLoader() {
 	}
-
-	public static Model loadFile(String... filePaths) {
-		String[] temp;
-		Parser parser = null;
-		for (int i = 0; i < filePaths.length; i++) {
-			// Choose the parser to use based on the file extension
-			temp = filePaths[i].split("\\.");
-			if (temp[temp.length - 1].toLowerCase().equals("xgl")) {
-				parser = new XGL_Parser();
-			} else {
-				System.out.println("No Parser implemented for that file type.");
-			}
-
-			try {
-				parser.readFile(filePaths[i]);
-			} catch (Exception e) {
-				System.out.println("Unable to load Model file " + filePaths[i]);
-				e.printStackTrace();
-			}
+	
+	public static Model loadFile(InputStream in) {
+		Parser parser = new XGL_Parser();
+		try {
+			parser.readFile(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 		return parser.createModel();
 	}
-
+	
 	/*
 	 * Create a display list from the parser, rather than returning a model This
 	 * type of thing turns out to be very inefficient when there are lots of
@@ -102,4 +93,6 @@ public class FileLoader {
 
 		GL11.glEnd();
 	}
+
+	
 }

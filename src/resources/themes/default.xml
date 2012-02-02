@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE themes PUBLIC "-//www.matthiasmann.de//TWL-Theme//EN" "http://hg.l33tlabs.org/twl/raw-file/tip/src/de/matthiasmann/twl/theme/theme.dtd">
 <themes>
-    <images file="images/widgets.png">
+    <images file="ignore/widgets.png">
         <area name="border_square" xywh="226,38,13,11" splitx="L1,B1" splity="L1,B1" nocenter="true" tint="#E0FFFFFF"/>
         <area name="white" xywh="1,36,1,1"/>
         <area name="black" xywh="23,57,1,1"/>
@@ -80,13 +80,13 @@
             <alias ref="-table.frame.pixel"/>
         </grid>
     </images>
-    <images file="images/arrows.png">
+    <images file="ignore/arrows.png">
         <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
         <area name="down" xywh="28,0,26,32" inset="10" center="true"/>
         <area name="right" xywh="57,0,31,32" inset="10" center="true"/>
         <area name="left" xywh="92,0,31,32" inset="10" center="true"/>
     </images>
-    <images file="images/symbols.png">
+    <images file="ignore/symbols.png">
         <area name="zoomout" xywh="6,12,28,7" center="true"/>
         <area name="zoomin" xywh="46,1,28,29" center="true"/>
         <area name="center" xywh="85,1,29,30" center="true"/>
@@ -191,7 +191,7 @@
         
         
 	</images>
-    <fontDef name="normal" filename="font.fnt" color="white" default="true">
+    <fontDef name="normal" filename="ignore/font.fnt" color="white" default="true">
         <fontParam if="error" color="red"/>
         <fontParam if="warning" color="orange"/>
         <fontParam if="disabled" color="gray"/>

@@ -10,6 +10,7 @@ import engine.render.model_pieces.*;
 import engine.render.ubos.Material;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -34,12 +35,10 @@ public class Obj_Parser extends Parser {
 	}
 
 	@Override
-	public void readFile(String fileName) throws Exception {
+	public void readFile(InputStream in) throws Exception {
 		parseObj(
 			new BufferedReader(
-				new InputStreamReader(
-					this.getClass().getClassLoader().getResourceAsStream(fileName)
-				)
+				new InputStreamReader(in)
 			)
 		);
 	}

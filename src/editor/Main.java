@@ -49,12 +49,9 @@ public class Main implements ActionListener {
 	public Main() {
 		engine = new Engine();
 
-		engine.addModel("box", "resources/models/misc/box.xgl");
-		engine.addModel("box2", "resources/models/misc/box2.xgl");
-		engine.addModel("singlebox", "resources/models/misc/singlebox.xgl");
-				
 		int num_layers = 12;
-		grid_window = new GridWindow(num_layers, engine.getModelByName("box"));
+		grid_window = new GridWindow(num_layers, (engine.render.Model)engine.resource_manager.getResource("box", "models"));
+
 		layer_menu = new LayerMenu();
 		layer_menu.populateLayers(num_layers);
 		animation_window = new AnimationWindow();

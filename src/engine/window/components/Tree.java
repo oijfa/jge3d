@@ -1,8 +1,5 @@
 package engine.window.components;
 
-import java.io.IOException;
-
-import test.JarContents;
 import engine.window.tree.ColoredTextRenderer;
 import engine.window.tree.ColoredTextString;
 import engine.window.tree.EditFieldCellRenderer;
@@ -44,6 +41,7 @@ public class Tree extends ScrollPane {// implements Observer {
 	}
 
 	public void createFromProjectResources() {
+		/*
 		try {
 			//Query the jar for resource listings
 			JarContents jar = new JarContents();
@@ -75,6 +73,7 @@ public class Tree extends ScrollPane {// implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public Node createNode(String key, String value, Model base_node) {
@@ -99,24 +98,8 @@ public class Tree extends ScrollPane {// implements Observer {
 		setScrollPositionY(getMaxScrollPosY() / 2);
 	}
 
+	@SuppressWarnings("unused")
 	private Node searchCurrentLevel(String nodeName, Node findIn) {
-		Node child;
-		// Loop through all children
-		if(findIn != null) {
-			for (int i = 0; i < findIn.getNumChildren(); i++) {
-				child = (Node)findIn.getChild(i);
-	
-				// If the first column has what we're looking for
-				if (child.getData(0).equals(nodeName)) {
-					// return it
-					return child;
-				}
-			}
-		}
-		return null;
-	}
-	
-	private Node searchCurrentLevel(String nodeName, Model findIn) {
 		Node child;
 		// Loop through all children
 		if(findIn != null) {

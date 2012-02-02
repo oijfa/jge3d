@@ -8,21 +8,20 @@ import java.util.HashMap;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.lwjgl.input.Keyboard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import engine.entity.Camera;
 import engine.entity.EntityList;
 import engine.entity.Actor;
 import engine.input.components.KeyMapException;
+import engine.resource.Resource;
 import de.matthiasmann.twl.Event;
 
-public class InputMap {
+public class InputMap implements Resource {
 	HashMap<String,String> key_map;
 
 	final HashMap<String, Integer> lwjgl_keyboard_enums;
@@ -30,13 +29,11 @@ public class InputMap {
 
 	EntityList entity_list;
 
-	public InputMap(String filename, EntityList ent_list) throws KeyMapException{
+	public InputMap() throws KeyMapException{
 		key_map = new HashMap<String,String>();
 
 		lwjgl_keyboard_enums = new HashMap<String,Integer>();
 		enums_to_function = new HashMap<String,String>();
-
-		entity_list = ent_list;
 
 		for(Field f : Keyboard.class.getFields()){
 			if(f.getName().contains("KEY_")){
@@ -46,53 +43,7 @@ public class InputMap {
 				} catch (IllegalAccessException e) {}
 			}
 		}
-
-		parseXml(filename);
-		/*
-		System.out.println("Outputting read key map: ");
-		for( Entry e : enums_to_function.entrySet()){
-			System.out.println("	;" + e.getKey() + "; == ;" + e.getValue() + ";");
-		}*/
 	}
-  
-  	private void parseXml(String filePath) throws KeyMapException{
-  		Document dom;
-  		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    
-  		//Create Dom Structure
-  		DocumentBuilder db;
-  		try {
-  			db = dbf.newDocumentBuilder();
-  			
-  			try {
-  				dom = db.parse(InputMap.class.getResourceAsStream("keymaps/" + filePath));
-  				Element root_element = dom.getDocumentElement();
-  				if(root_element.getNodeName().equalsIgnoreCase("keymap")){
-  					ArrayList<Node> keyboards = findChildrenByName(root_element, "keyboard");
-  					for(Node keyboard : keyboards){
-	  					ArrayList<Node> key_settings = findChildrenByName(keyboard, "key");
-						parseKeyboardSettings(key_settings);
-  					}
-
-					ArrayList<Node> mice = findChildrenByName(root_element,"mouse");
-					for(Node mouse : mice){
-						ArrayList<Node> mouse_settings = findChildrenByName(mouse, "event");
-						parseMouseSettings(mouse_settings);
-					}
-  				}else{
-  					throwException("KeyMap tag should be root element.");
-  				}
-  			} catch (SAXException e) {
-				e.printStackTrace();
-				throwException("Sax Exception");
-		  	} catch (IOException e) {
-		  		e.printStackTrace();
-		  		throwException("IO Exception");
-		  	}
-		}catch (ParserConfigurationException e) {
-			throwException("ParserConfigurationException");
-		}
-  	}
 
 	void parseKeyboardSettings(ArrayList<Node> key_settings) throws KeyMapException{
 		for(Node n : key_settings){
@@ -356,11 +307,49 @@ public class InputMap {
   		System.out.println(key_map.toString());
   	}
   	
-  	private void throwException(String message) throws KeyMapException{
+  	private void throwException(String message) throws Exception {
 	    KeyMapException e = new KeyMapException();
 	    e.initCause(new Throwable(message));
 	    throw e;
   	}
   	
   	private void throwKeyMapException(Exception ex) throws KeyMapException{ throw new KeyMapException(ex); }
+
+	@Override
+	public String toXML() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void loadFromFile(InputStream is) throws Exception {
+		Document dom;
+  		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    
+  		//Create Dom Structure
+  		DocumentBuilder db;
+		db = dbf.newDocumentBuilder();
+		dom = db.parse(is);
+	
+		Element root_element = dom.getDocumentElement();
+		if(root_element.getNodeName().equalsIgnoreCase("keymap")){
+			ArrayList<Node> keyboards = findChildrenByName(root_element, "keyboard");
+			for(Node keyboard : keyboards){
+				ArrayList<Node> key_settings = findChildrenByName(keyboard, "key");
+				parseKeyboardSettings(key_settings);
+			}
+
+			ArrayList<Node> mice = findChildrenByName(root_element,"mouse");
+			for(Node mouse : mice){
+				ArrayList<Node> mouse_settings = findChildrenByName(mouse, "event");
+				parseMouseSettings(mouse_settings);
+			}
+		}else{
+			throwException("KeyMap tag should be root element.");
+		}
+	}
+
+	public void setEntityList(EntityList entity_list2) {
+		this.entity_list = entity_list2;
+	}
 }

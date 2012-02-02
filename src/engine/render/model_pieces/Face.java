@@ -232,7 +232,11 @@ public class Face {
 				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.getTransform().y;
 				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.getTransform().z;
 
+				try{
 				faceVNT[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
+				}catch(Exception e){
+					System.out.println("Error");
+				}
 				faceVNT[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;
 				faceVNT[5 + i] = vertexNormals.get(i / 12).z;// + mesh.location.z;
 

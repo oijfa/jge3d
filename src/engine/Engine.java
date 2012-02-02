@@ -3,7 +3,6 @@ package engine;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
@@ -15,9 +14,7 @@ import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityCallbackFunctions;
 import engine.entity.Actor;
-import engine.importing.FileLoader;
 import engine.input.InputMap;
-import engine.input.components.KeyMapException;
 import engine.entity.EntityList;
 import engine.physics.Physics;
 import engine.render.FixedRenderer;
@@ -25,6 +22,7 @@ import engine.render.Model;
 import engine.render.ProgrammableRenderer;
 import engine.render.RendererInterface;
 import engine.render.Shader;
+import engine.resource.ResourceManager;
 import engine.window.WindowManager;
 import engine.window.components.Window;
 
@@ -33,9 +31,6 @@ import com.bulletphysics.collision.dispatch.GhostObject;
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
 	AtomicBoolean finished;
-	
-	private final HashMap<String,Shader> shaders;
-	private final HashMap<String,Model> models;
 
 	private final Physics physics;
 	private final RendererInterface renderer;
@@ -48,12 +43,15 @@ public class Engine {
 	private EntityList entity_list;
 	
 	private AIManager ai_manager;
+	public final ResourceManager resource_manager;
 
 	public void addWindow(Window window, int width, int height) {
 		renderer.getWindowManager().addWindow(window, width, height);
 	}
 
 	public Engine() {
+		resource_manager = new ResourceManager();
+		
 		finished = new AtomicBoolean(false);
 		physics = new Physics();
 		System.out.println();
@@ -75,15 +73,7 @@ public class Engine {
 			renderer = new FixedRenderer(entity_list);
 		renderer.initGL();
 		
-		models = new HashMap<String,Model>();
-		shaders = new HashMap<String,Shader>();
-		
-		shaders.put(
-		    "default",
-		    new Shader()
-		);
-		
-		addKeyMap("default.xml");
+		setKeyMap("default");
 		
 		ai_manager = new AIManager();
 	}
@@ -95,7 +85,12 @@ public class Engine {
 
 	/* Entity API */
 	public Entity addEntity(String name, float mass, boolean collidable, String model_name, String shader_name) {
-		Entity ent = new Entity(mass, collidable, models.get(model_name), shaders.get(shader_name));
+		Entity ent = new Entity(
+			mass, 
+			collidable, 
+			(Model) resource_manager.getResource(model_name,"models"), 
+			(Shader) resource_manager.getResource(shader_name,"shaders")
+		);
 		ent.setProperty(Entity.NAME, name);
 		this.addEntity(ent);
 		
@@ -122,12 +117,7 @@ public class Engine {
 		return (Actor)getEntity(name);
 	}
 	
-	public Shader getShaderByName(String name) {
-		return shaders.get(name);
-	}
-	
 	public Camera getCamera() {
-		// TODO Auto-generated method stub
 	    return (Camera) getEntity(Camera.CAMERA_NAME);
 	}
 
@@ -181,16 +171,15 @@ public class Engine {
 		}
 	}
 	
-	public boolean addKeyMap(String filename){
-	  boolean ret = false;
-		try {
-			renderer.getWindowManager().setKeyMap(new InputMap(filename,entity_list));
-			ret = true;
-		} catch (KeyMapException e) {
-			// TODO Do something if fails?
-			System.out.println("Setting KeyMap failed");
-			e.printStackTrace();
-		}
+	public boolean setKeyMap(String name){
+		boolean ret = false;
+		InputMap new_map = (InputMap) resource_manager.getResource(name, "inputmaps");
+		new_map.setEntityList(entity_list);
+		
+		renderer.getWindowManager().setKeyMap(new_map);
+		
+		ret = true;
+		
 		return ret;
 	}
 	
@@ -257,71 +246,45 @@ public class Engine {
 		}
 	}
 
-  public Camera addCamera(float mass, boolean collidable, String model_name) {
-	Camera camera = new Camera(mass, collidable, models.get(model_name));
-	addEntity(camera);
-    return camera;
-  }
+	public Camera addCamera(float mass, boolean collidable, String model_name) {
+		Camera camera = new Camera(mass, collidable, (Model) resource_manager.getResource(model_name,"models"));
+		addEntity(camera);
+		return camera;
+	}
 
-  public Actor addActor(String name, float mass, float step_height, String model_name, String shader_name) {
-    Actor actor = new Actor(mass, step_height, models.get(model_name), shaders.get(shader_name));
-    actor.setProperty(Entity.NAME, name);
-    addEntity(actor);
-    return actor;
-  }
+	public Actor addActor(String name, float mass, float step_height, String model_name, String shader_name) {
+		Actor actor = new Actor(
+			mass, 
+			step_height, 
+			(Model) resource_manager.getResource(model_name,"models"), 
+			(Shader) resource_manager.getResource(shader_name,"shaders")
+		);
+		actor.setProperty(Entity.NAME, name);
+		addEntity(actor);
+		return actor;
+	}
   
-  public Actor addActor(String name, float mass, String model_name, String shader_name) {
-	    Actor actor = new Actor(name, mass, models.get(model_name), shaders.get(shader_name));
-	    actor.setProperty(Entity.NAME, name);
-	    addEntity(actor);
-	    return actor;
-	  }
-  
-  public boolean addModel(String name, String location, Shader shader){
-    boolean ret = false;
-    if(!models.keySet().contains(name)){
-      models.put(name, FileLoader.loadFile(location));
-      models.get(name).setShader(shader);
-      models.get(name).createVBO();
-      ret = true;
-    }
-    return ret;
-  }
-  
-  public boolean addModel(String name, String location){
-    boolean ret = false;
-    if(!models.keySet().contains(name)){
-      models.put(name, FileLoader.loadFile(location));
-      models.get(name).setShader(shaders.get("default"));
-      models.get(name).verify();
-      models.get(name).createVBO();
-      ret = true;
-    }
-    return ret;
-  }
-  
-  public boolean addShader(String name, String location){
-    boolean ret = false;
-    if(!shaders.keySet().contains(name)){
-      shaders.put(name, new Shader(location));
-      ret = true;
-    }
-    return ret;
-  }
-  
-  public Model getModelByName(String name)  {
-	  return models.get(name);	  
-  }
+  	public Actor addActor(String name, float mass, String model_name, String shader_name) {
+		Actor actor = new Actor(
+			name, 
+			mass, 
+			(Model) resource_manager.getResource(model_name,"models"), 
+			(Shader) resource_manager.getResource(shader_name, "shaders")
+		);
+		actor.setProperty(Entity.NAME, name);
+		addEntity(actor);
+		return actor;
+  	}
 
-  public WindowManager getWindowManager() {
-	  return renderer.getWindowManager();
-  }
-  
-  public void addAIRoutine(String ent_name, String... script_names) {
-	  ai_manager.assignScript(ent_name, script_names);
-  }
-  
-  public void removeAIRoutine(String ent_name, String script_name) {
-	  ai_manager.unassignScript(ent_name, script_name);
-  }
+	public WindowManager getWindowManager() {
+		return renderer.getWindowManager();
+	}
+	  
+	public void addAIRoutine(String ent_name, String... script_names) {
+		ai_manager.assignScript(ent_name, script_names);
+	}
+	  
+	public void removeAIRoutine(String ent_name, String script_name) {
+		ai_manager.unassignScript(ent_name, script_name);
+	}
 }

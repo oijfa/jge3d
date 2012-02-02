@@ -10,6 +10,9 @@ import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
 import engine.render.ubos.Material;
 
+import engine.utils.DomTools;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -46,14 +49,14 @@ public class XGL_Parser extends Parser {
 	}
 
 	@Override
-	public void readFile(String fileName) throws Exception {
+	public void readFile(InputStream in) throws Exception {
 		Document dom;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
 		// Create Dom Structure
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
-		dom = db.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
+		dom = db.parse(in);
 		parseXGL(dom);
 		model.verify();
 	}
@@ -75,7 +78,7 @@ public class XGL_Parser extends Parser {
 
 				// Get any meshes from objects
 
-				tagList = findChildrenByName(rootElement, "OBJECT");
+				tagList = DomTools.findChildrenByName(rootElement, "OBJECT");
 				for (int i = 0; i < tagList.size(); i++) {
 					ArrayList<Mesh> ms = readObjects((Element) tagList.get(i),
 						mats, meshes, points, normals);
@@ -112,7 +115,7 @@ public class XGL_Parser extends Parser {
 		throws Exception {
 		ArrayList<Node> tagList;
 
-		tagList = findChildrenByName(root, "P");
+		tagList = DomTools.findChildrenByName(root, "P");
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				Element ele = (Element) tagList.get(i);
@@ -127,7 +130,7 @@ public class XGL_Parser extends Parser {
 			}
 		}
 
-		tagList = findChildrenByName(root, "N");
+		tagList = DomTools.findChildrenByName(root, "N");
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				Element ele = (Element) tagList.get(i);
@@ -142,7 +145,7 @@ public class XGL_Parser extends Parser {
 			}
 		}
 
-		tagList = findChildrenByName(root, "MAT");
+		tagList = DomTools.findChildrenByName(root, "MAT");
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				// Get ID;
@@ -159,7 +162,7 @@ public class XGL_Parser extends Parser {
 		}
 
 		root.getNodeName();
-		tagList = findChildrenByName(root, "MESH");
+		tagList = DomTools.findChildrenByName(root, "MESH");
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				// Only load meshes that could be referenced later
@@ -223,7 +226,7 @@ public class XGL_Parser extends Parser {
 		readTransform(rootElement, location, forward, up);
 
 		// Get all defined Meshes
-		tagList = findChildrenByName(rootElement, "MESH");
+		tagList = DomTools.findChildrenByName(rootElement, "MESH");
 		for (int i = 0; i < tagList.size(); i++) {
 			int ID;
 			if (tagList.get(i).hasAttributes()) {
@@ -248,7 +251,7 @@ public class XGL_Parser extends Parser {
 		}
 
 		// Read any sub objects
-		tagList = findChildrenByName(rootElement, "OBJECT");
+		tagList = DomTools.findChildrenByName(rootElement, "OBJECT");
 		for (int i = 0; i < tagList.size(); i++) {
 			// Get all Meshes from sub Objects
 			ArrayList<Mesh> mtemp = readObjects((Element) tagList.get(i), mats,
@@ -259,7 +262,7 @@ public class XGL_Parser extends Parser {
 		}
 
 		// Handle Mesh reference tags
-		tagList = findChildrenByName(rootElement, "MESHREF");
+		tagList = DomTools.findChildrenByName(rootElement, "MESHREF");
 		for (int i = 0; i < tagList.size(); i++) {
 			int mref = Integer.parseInt(tagList.get(i).getTextContent());
 			ArrayList<Mesh> refrenced_meshes = meshes.get(mref);
@@ -302,7 +305,7 @@ public class XGL_Parser extends Parser {
 			normals);
 
 		// Get all defined Patches
-		ArrayList<Node> tagList = findChildrenByName(root, "PATCH");
+		ArrayList<Node> tagList = DomTools.findChildrenByName(root, "PATCH");
 		for (int i = 0; i < tagList.size(); i++) {
 			/*
 			 * int ID; if(tagList.get(i).hasAttributes()){ ID =
@@ -343,7 +346,7 @@ public class XGL_Parser extends Parser {
 		HashMap<Integer, Vector3f> _normals) throws Exception {
 		// Faces will be grouped by what material they are tied too
 		HashMap<Integer, ArrayList<Face>> faces = new HashMap<Integer, ArrayList<Face>>();
-		ArrayList<Node> tagList = findChildrenByName(root, "F");
+		ArrayList<Node> tagList = DomTools.findChildrenByName(root, "F");
 		if (tagList.size() != 0) {
 			for (int i = 0; i < tagList.size(); i++) {
 				Element ele = (Element) tagList.get(i);
@@ -351,7 +354,7 @@ public class XGL_Parser extends Parser {
 				Face f = new Face();
 
 				String[] temp = { "FV1", "FV2", "FV3" };
-				ArrayList<Node> vertexList = findChildrenByName(ele, temp);
+				ArrayList<Node> vertexList = DomTools.findChildrenByName(ele, temp);
 				for (int j = 0; j < vertexList.size(); j++) {
 					int temp2 = (int) readScalarTag(
 						(Element) vertexList.get(j), "PREF", true
@@ -392,7 +395,7 @@ public class XGL_Parser extends Parser {
 	private void readTransform(Element ele, Vector3f location,
 		Vector3f forward, Vector3f up) throws Exception {
 		ArrayList<Node> tagList;
-		tagList = findChildrenByName(ele, "TRANSFORM");
+		tagList = DomTools.findChildrenByName(ele, "TRANSFORM");
 		if (tagList.size() == 1) {
 			Vector3f local_location = readVectorTag(
 				(Element) tagList.get(0),
@@ -420,7 +423,7 @@ public class XGL_Parser extends Parser {
 	private Vector3f readVectorTag(Element root, String childName,
 		boolean required) throws Exception {
 		ArrayList<Node> tagList;
-		tagList = findChildrenByName(root, childName);
+		tagList = DomTools.findChildrenByName(root, childName);
 		if (tagList.size() == 1) {
 			Element e = (Element) tagList.get(0);
 			return readVector(e.getTextContent());
@@ -438,7 +441,7 @@ public class XGL_Parser extends Parser {
 	private Vector4f readVector4fTag(Element root, String childName,
 			boolean required) throws Exception {
 			ArrayList<Node> tagList;
-			tagList = findChildrenByName(root, childName);
+			tagList = DomTools.findChildrenByName(root, childName);
 			if (tagList.size() == 1) {
 				Element e = (Element) tagList.get(0);
 				return readVector4f(e.getTextContent());
@@ -479,46 +482,33 @@ public class XGL_Parser extends Parser {
 		return ret;
 	}
 
-	private ArrayList<Node> findChildrenByName(Node root, String name) {
-		String[] names = new String[1];
-		names[0] = name;
-		return findChildrenByName(root, names);
-	}
-
-	private ArrayList<Node> findChildrenByName(Node root, String[] names) {
-		ArrayList<Node> list = new ArrayList<Node>();
-		for (int i = 0; i < names.length; i++) {
-			Node e = root.getFirstChild();
-			while (e != null) {
-				if (e.getNodeName().equals(names[i])) {
-					list.add(e);
-				}
-				e = e.getNextSibling();
-			}
-		}
-		return list;
-	}
-
-	private float readScalarTag(Element root, String childName, boolean required)
-		throws Exception {
+	private float readScalarTag(Element root, String childName, boolean required) throws Exception {
 		ArrayList<Node> tagList;
-		tagList = findChildrenByName(root, childName);
+		tagList = DomTools.findChildrenByName(root, childName);
+		float ret = 0;
+		
 		if (tagList.size() == 1) {
+			//Found it, just turn the text content into a value
 			Element e = (Element) tagList.get(0);
-			return Float.parseFloat(e.getTextContent());
+			ret = Float.parseFloat(e.getTextContent());
 		} else if (tagList.size() == 0) {
+			//Couldn't find the tag
 			if (required) {
 				throwException(
 					root.getNodeName() + " Tag with no " + childName + " Tag"
 				);
 			}
 		} else if (tagList.size() > 1) {
+			//Multiple scalar tags with same name
 			throwException(
 				root.getNodeName() + " Tag with redundant "	+ childName + " Tag"
 			);
+		}else{
+			//Should never reach this, shouldn't have negative size of an array list
+			throwException("Found less than zero " + childName + " when reading scalar");
 		}
-
-		return -500;// ? TODO
+		
+		return ret;
 	}
 
 	private HashMap<Integer, Vector3f> makeCopy(

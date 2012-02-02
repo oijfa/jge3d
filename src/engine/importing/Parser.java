@@ -6,6 +6,8 @@
 
 package engine.importing;
 
+import java.io.InputStream;
+
 import engine.render.Model;
 
 public abstract class Parser {
@@ -19,7 +21,7 @@ public abstract class Parser {
 		return model;
 	}
 
-	public abstract void readFile(String fileName) throws Exception;
+	public abstract void readFile(InputStream in) throws Exception;
 
 	public abstract void readUrl(String url) throws Exception;
 

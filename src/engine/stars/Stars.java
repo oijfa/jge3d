@@ -17,7 +17,7 @@ public class Stars {
 	public Stars(Engine engine, int rows, int columns, int space_between_levels, int num_levels, int starting_distance) {
 		ent = engine.addEntity("stars", 1f, true, "box", "default");
 		
-		Model base_model = engine.getModelByName("singlebox");
+		Model base_model = (Model) engine.resource_manager.getResource("singlebox","models");
 		Model full_model = new Model(base_model.getShader());
 
 		for(int i=0;i<num_levels;i++) {
