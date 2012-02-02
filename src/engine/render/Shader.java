@@ -225,56 +225,58 @@ public class Shader implements Resource{
 
 	@Override
 	public void loadFromFile(InputStream is) throws Exception {
+		ubo_interfaces = new HashMap<String, UBO>();
+		
 		/*
-	        * create the shader program. If OK, create vertex
-	        * and fragment shaders
-	        */
-	    	shader=ARBShaderObjects.glCreateProgramObjectARB();
-	    	
-	        if(shader!=0){
-	        	Document dom;
-	    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        * create the shader program. If OK, create vertex
+        * and fragment shaders
+        */
+    	shader=ARBShaderObjects.glCreateProgramObjectARB();
+    	
+        if(shader!=0){
+        	Document dom;
+    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-	    		// Create Dom Structure
-	    		DocumentBuilder db = dbf.newDocumentBuilder();
-	    		dom = db.parse(is);
-	            vertShader=createVertShader(dom);
-	            fragShader=createFragShader(dom);
-	        } else {
-	        	useShader=false;
-	        }
-	        
-	        /*
-	        * if the vertex and fragment shaders setup sucessfully,
-	        * attach them to the shader program, link the shader program
-	        * (into the GL context I suppose), and validate
-	        */
-	        if(vertShader != 0 && fragShader != 0){
-	            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
-	            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
-	            ARBShaderObjects.glLinkProgramARB(shader);
-	            ARBShaderObjects.glValidateProgramARB(shader);
-	            useShader=printLogInfo(shader);
-	            buf = BufferUtils.createFloatBuffer(16);
-	        } else {
-	        	useShader=false;
-	        	System.out.println("Failed to create shader");
-	        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
-	        }
-	        
-	    	UBO transformation_matrices = new UBO(
-        		this,
-        		new TransformationMatrices(
-        			45f,
-        			1f,
-        			1f,
-        			500f,
-        			new Vector3f(0,-50,-50),
-        			new Vector3f(0,0,1),
-        			new Vector3f(0,1,0)
-        		)
-        	);
-        	ubo_interfaces.put("projection",transformation_matrices);
+    		// Create Dom Structure
+    		DocumentBuilder db = dbf.newDocumentBuilder();
+    		dom = db.parse(is);
+            vertShader=createVertShader(dom);
+            fragShader=createFragShader(dom);
+        } else {
+        	useShader=false;
+        }
+        
+        /*
+        * if the vertex and fragment shaders setup sucessfully,
+        * attach them to the shader program, link the shader program
+        * (into the GL context I suppose), and validate
+        */
+        if(vertShader != 0 && fragShader != 0){
+            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
+            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
+            ARBShaderObjects.glLinkProgramARB(shader);
+            ARBShaderObjects.glValidateProgramARB(shader);
+            useShader=printLogInfo(shader);
+            buf = BufferUtils.createFloatBuffer(16);
+        } else {
+        	useShader=false;
+        	System.out.println("Failed to create shader");
+        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
+        }
+        
+    	UBO transformation_matrices = new UBO(
+    		this,
+    		new TransformationMatrices(
+    			45f,
+    			1f,
+    			1f,
+    			500f,
+    			new Vector3f(0,-50,-50),
+    			new Vector3f(0,0,1),
+    			new Vector3f(0,1,0)
+    		)
+    	);
+    	ubo_interfaces.put("projection",transformation_matrices);
 	}
 
 	@Override
