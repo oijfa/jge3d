@@ -1,7 +1,7 @@
 <shader>
 	<fragment>
 		#version 140
-		/*
+		
 		struct Light {
 			vec4 position;
 			vec4 ambient;
@@ -17,17 +17,18 @@
 		
 		uniform Lights {
 			Light light[1];
-		} lights;
+		};
 		
+		/*
 		uniform Material {
 			vec4 ambient;
 			vec4 diffuse;
 			vec4 specular;
 			float shininess;
 		} material;
+		*/
 		
 		//uniform Material material;
-		*/
 		
 		in vec3 vertex_mod;
 		in vec3 normal_mod;

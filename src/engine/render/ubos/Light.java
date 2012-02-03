@@ -24,7 +24,7 @@ public class Light implements UBOInterface {
     private int array_index = 0;
     private static final int size = 24;
     private static final String name = "Lights";
-    
+        
 	public Light(
 		Vector4f position,
     	Vector4f ambient,
@@ -95,28 +95,28 @@ public class Light implements UBOInterface {
 	}
 	
 	public int getSize() {
-		return size;
+		return getNames().length;
 	}
 	
 	public String[] getNames() {
 		String names[] = {
-		    "Lights.light[" + array_index + "].position",
-		    "Lights.light[" + array_index + "].ambient",
-		    "Lights.light[" + array_index + "].diffuse",
-		    "Lights.light[" + array_index + "].specular",
-		    "Lights.light[" + array_index + "].constant_attenuation",
-		    "Lights.light[" + array_index + "].linear_attenuation",
-		    "Lights.light[" + array_index + "].quadratic_attenuation",
-		    "Lights.light[" + array_index + "].spot_direction",
-		    "Lights.light[" + array_index + "].spot_cutoff",
-		    "Lights.light[" + array_index + "].spot_exponent"
+		    "light[" + array_index + "].position",
+		    "light[" + array_index + "].ambient",
+		    "light[" + array_index + "].diffuse",
+		    "light[" + array_index + "].specular",
+		    "light[" + array_index + "].constant_attenuation",
+		    "light[" + array_index + "].linear_attenuation",
+		    "light[" + array_index + "].quadratic_attenuation",
+		    "light[" + array_index + "].spot_direction",
+		    "light[" + array_index + "].spot_cutoff",
+		    "light[" + array_index + "].spot_exponent"
 	    };
 		
 		return names;
 	}
 	
 	public IntBuffer getIndices() {
-		return BufferUtils.createIntBuffer(size);
+		return IntBuffer.wrap(new int[size]);
 	}
 
 	public Type getType() {
