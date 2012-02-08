@@ -283,14 +283,14 @@ public class Shader implements Resource{
     	UBO light = new UBO(
     		this,
     		new Light(
-    			new Vector4f(0,10,0,1),
-    			new Vector4f(0.5f,0.5f,0.5f,1),
-    			new Vector4f(0.5f,0.5f,0.5f,1),
-    			new Vector4f(0.5f,0.5f,0.5f,1),
+    			new Vector4f(0.0f,10.0f,0.0f,1.0f),
+    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
+    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
+    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
     			1.0f,
     			1.0f,
     			1.0f,
-    			new Vector3f(0,-1,0),
+    			new Vector3f(0.0f,-1.0f,0.0f),
     			1.0f,
     			1.0f
 			)

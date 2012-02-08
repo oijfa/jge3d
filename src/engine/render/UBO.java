@@ -94,14 +94,15 @@ public class UBO {
 		ARBBufferObject.glBindBufferARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
 			0
-		);*/
-		/*
+		);
+				
 		//Associate the uniform to its binding point
 		ARBUniformBufferObject.glUniformBlockBinding(
 			shader.getShaderID(), 
 			block_index,
 			uboID
-		);*/
+		);
+		*/
 
 		// Set the notifier
 		hasUBO = true;

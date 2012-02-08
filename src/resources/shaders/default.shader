@@ -7,12 +7,12 @@
 			vec4 ambient;
 			vec4 diffuse;
 			vec4 specular;
-			float constantAtt;
-		    float linearAtt;
-		    float quadraticAtt;
-		    vec3 spotDirection;
-		    float spotExponent;
-		    float spotCutoff;
+			float constant_attenuation;
+		    float linear_attenuation;
+		    float quadratic_attenuation;
+		    vec3 spot_direction;
+		    float spot_cutoff;
+		    float spot_exponent;
 		};
 		
 		uniform Lights {

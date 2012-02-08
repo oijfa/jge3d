@@ -15,84 +15,85 @@ public class Light implements UBOInterface {
     private Vector4f ambient;
     private Vector4f diffuse;
     private Vector4f specular;
-    private float constantAtt;
-    private float linearAtt;
-    private float quadraticAtt;
-    private Vector3f spotDirection;
-    private float spotExponent;
-    private float spotCutoff;
+    private float constant_attenuation;
+    private float linear_attenuation;
+    private float quadratic_attenuation;
+    private Vector3f spot_direction;
+    private float spot_cutoff;
+    private float spot_exponent;
     private int array_index = 0;
     private static final int size = 24;
     private static final String name = "Lights";
         
 	public Light(
-		Vector4f position,
-    	Vector4f ambient,
-    	Vector4f diffuse,
-    	Vector4f specular,
-    	float constantAtt,
-    	float linearAtt,
-    	float quadraticAtt,
-    	Vector3f spotDirection,
-    	float spotExponent,
-    	float spotCutoff) {
-			this.position=position;
-			this.ambient=ambient;
-			this.diffuse=diffuse;
-			this.specular=specular;
-			this.constantAtt=constantAtt;
-			this.linearAtt=linearAtt;
-			this.quadraticAtt=quadraticAtt;
-			this.spotDirection=spotDirection;
-			this.spotExponent=spotExponent;
-			this.spotCutoff=spotCutoff;
-	}
-	
-	public FloatBuffer createBuffer() {
-		FloatBuffer buf = BufferUtils.createFloatBuffer(size);
+			Vector4f position,
+	    	Vector4f ambient,
+	    	Vector4f diffuse,
+	    	Vector4f specular,
+	    	float constant_attenuation,
+	    	float linear_attenuation,
+	    	float quadratic_attenuation,
+	    	Vector3f spot_direction,
+	    	float spot_cutoff,
+	    	float spot_exponent
+	    	) {
+				this.position=position;
+				this.ambient=ambient;
+				this.diffuse=diffuse;
+				this.specular=specular;
+				this.constant_attenuation=constant_attenuation;
+				this.linear_attenuation=linear_attenuation;
+				this.quadratic_attenuation=quadratic_attenuation;
+				this.spot_direction=spot_direction;
+				this.spot_cutoff=spot_cutoff;
+				this.spot_exponent=spot_exponent;
+		}
 		
-		//position
-		buf.put(position.x);
-		buf.put(position.y);
-		buf.put(position.z);
-		buf.put(position.w);
+		public FloatBuffer createBuffer() {
+			FloatBuffer buf = BufferUtils.createFloatBuffer(size);
+			
+			//position
+			buf.put(position.x);
+			buf.put(position.y);
+			buf.put(position.z);
+			buf.put(position.w);
 
-		//ambient
-		buf.put(ambient.x);
-		buf.put(ambient.y);
-		buf.put(ambient.z);
-		buf.put(ambient.w);
+			//ambient
+			buf.put(ambient.x);
+			buf.put(ambient.y);
+			buf.put(ambient.z);
+			buf.put(ambient.w);
 
-		//diffuse
-		buf.put(diffuse.x);
-		buf.put(diffuse.y);
-		buf.put(diffuse.z);
-		buf.put(diffuse.w);
-		
-		//specular
-		buf.put(specular.x);
-		buf.put(specular.y);
-		buf.put(specular.z);
-		buf.put(specular.w);
+			//diffuse
+			buf.put(diffuse.x);
+			buf.put(diffuse.y);
+			buf.put(diffuse.z);
+			buf.put(diffuse.w);
+			
+			//specular
+			buf.put(specular.x);
+			buf.put(specular.y);
+			buf.put(specular.z);
+			buf.put(specular.w);
 
-		//attenuation
-		buf.put(constantAtt);
-		buf.put(linearAtt);
-		buf.put(quadraticAtt);
-	    
-		//spot direction
-		buf.put(spotDirection.x);
-		buf.put(spotDirection.y);
-		buf.put(spotDirection.z);
-	    
-		//shininess
-	    buf.put(spotExponent);
-	    buf.put(spotCutoff);
-	    
-	    buf.flip();
-	    
-		return buf;
-	}
+			//attenuation
+			buf.put(constant_attenuation);
+			buf.put(linear_attenuation);
+			buf.put(quadratic_attenuation);
+		    
+			//spot direction
+			buf.put(spot_direction.x);
+			buf.put(spot_direction.y);
+			buf.put(spot_direction.z);
+		    
+			//shininess
+			buf.put(spot_cutoff);
+		    buf.put(spot_exponent);
+		    
+		    buf.flip();
+		    
+			return buf;
+		}
 	
 	public int getSize() {
 		return getNames().length;
@@ -116,7 +117,7 @@ public class Light implements UBOInterface {
 	}
 	
 	public IntBuffer getIndices() {
-		return IntBuffer.wrap(new int[size]);
+		return IntBuffer.wrap(new int[getNames().length]);
 	}
 
 	public Type getType() {
