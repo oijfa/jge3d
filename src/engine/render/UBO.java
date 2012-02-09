@@ -60,7 +60,8 @@ public class UBO {
 			block_index,
 			ARBUniformBufferObject.GL_UNIFORM_BLOCK_DATA_SIZE
 		);
-
+		
+		
 		//put the index of each variable in the block into an array
 		indices = BufferUtils.createIntBuffer(ubo.getSize());
 		ARBUniformBufferObject.glGetUniformIndices(
@@ -79,7 +80,23 @@ public class UBO {
 		);
 		
 		//put data into the buffer
-		bufferData(uboID);
+		ARBBufferObject.glBindBufferARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
+			uboID
+		);
+		//TODO: conflicting reports of whether 1st arg should be 
+		//ARBUniformBufferObject.GL_UNIFORM_BUFFER_EXT
+		/*
+		ARBBufferObject.glBufferSubDataARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			block_size, 
+			ubo_interface.createBuffer()
+		);*/
+		ARBBufferObject.glBufferDataARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			ubo_interface.createBuffer(block_size,offsets), 
+			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
+		);
 		
 		//bind the block to the buffer object
 		ARBUniformBufferObject.glBindBufferBase(
@@ -88,21 +105,12 @@ public class UBO {
 			uboID
 		);
 		
-		debug();
-		
-		/*
 		ARBBufferObject.glBindBufferARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
 			0
 		);
-				
-		//Associate the uniform to its binding point
-		ARBUniformBufferObject.glUniformBlockBinding(
-			shader.getShaderID(), 
-			block_index,
-			uboID
-		);
-		*/
+		
+		debug();
 
 		// Set the notifier
 		hasUBO = true;
@@ -127,23 +135,7 @@ public class UBO {
 	}
 	
 	public void bufferData(int id) {
-		ARBBufferObject.glBindBufferARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
-			id
-		);
-		//TODO: conflicting reports of whether 1st arg should be 
-		//ARBUniformBufferObject.GL_UNIFORM_BUFFER_EXT
-		/*
-		ARBBufferObject.glBufferSubDataARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			block_size, 
-			ubo_interface.createBuffer()
-		);*/
-		ARBBufferObject.glBufferDataARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			ubo_interface.createBuffer(), 
-			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
-		);
+
 	}
 	
 	public void destroyUBO() {

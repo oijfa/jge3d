@@ -56,7 +56,7 @@ public class Material implements UBOInterface {
 			this.alpha=alpha;
 	}
 	
-	public FloatBuffer createBuffer() {
+	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
 		float material_buffer[] = new float[size];
 
 		//position

@@ -28,7 +28,7 @@ public class TransformationMatrices implements UBOInterface {
 		buildLookAtMatrix(eye,focus,up);
 	}
 	
-	public FloatBuffer createBuffer() {
+	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
 		FloatBuffer buf = BufferUtils.createFloatBuffer(projection.length+lookat.length);
 		
 		buf.put(projection);
