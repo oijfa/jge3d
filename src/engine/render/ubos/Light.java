@@ -23,7 +23,7 @@ public class Light implements UBOInterface {
     private float spot_exponent;
     private int array_index = 0;
     //private static final int size = 24;
-    private static final String name = "Lights";
+    private static final String name = "lights";
         
 	public Light(
 		Vector4f position,
