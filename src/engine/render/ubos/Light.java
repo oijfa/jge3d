@@ -52,6 +52,42 @@ public class Light implements UBOInterface {
 		
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
 		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4);
+		/*
+		//position
+		buf.put(position.x);
+		buf.put(position.y);
+		buf.put(position.z);
+		buf.put(position.w);
+		//ambient
+		buf.put(ambient.x);
+		buf.put(ambient.y);
+		buf.put(ambient.z);
+		buf.put(ambient.w);
+		//diffuse
+		buf.put(diffuse.x);
+		buf.put(diffuse.y);
+		buf.put(diffuse.z);
+		buf.put(diffuse.w);
+		//specular
+		buf.put(specular.x);
+		buf.put(specular.y);
+		buf.put(specular.z);
+		buf.put(specular.w);
+		//attenuation
+		buf.put(constant_attenuation);
+		buf.put(linear_attenuation);
+		buf.put(quadratic_attenuation);
+		//spot direction
+		buf.put(spot_direction.x);
+		buf.put(spot_direction.y);
+		buf.put(spot_direction.z);
+		//shininess
+		buf.put(spot_cutoff);
+		buf.put(spot_exponent);
+		
+		buf.flip();
+		*/
+		
 		float[] copy_array = new float[block_size/4];
 		
 		int i=0;
@@ -100,6 +136,7 @@ public class Light implements UBOInterface {
 		
 		buf.put(copy_array);
 		buf.flip();
+
 		/*
 		for(int i=0; i<offsets.limit(); i++) {
 			switch(indices.get(i)) {
@@ -156,6 +193,7 @@ public class Light implements UBOInterface {
 					break;
 			}
 		}
+		buf.flip();
 		*/
 
 		return buf;
@@ -180,10 +218,6 @@ public class Light implements UBOInterface {
 	    };
 		
 		return names;
-	}
-	
-	public IntBuffer getIndices() {
-		return IntBuffer.wrap(new int[getNames().length]);
 	}
 
 	public Type getType() {

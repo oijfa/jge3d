@@ -105,10 +105,10 @@ public class UBO {
 			uboID
 		);
 		
-		//ARBBufferObject.glBindBufferARB(
-		//	ARBUniformBufferObject.GL_UNIFORM_BUFFER,
-		//	0
-		//);
+		ARBBufferObject.glBindBufferARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
+			0
+		);
 		
 		debug();
 

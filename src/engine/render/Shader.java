@@ -266,24 +266,6 @@ public class Shader implements Resource{
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
         }
         
-        UBO light = new UBO(
-    		this,
-    		new Light(
-    			new Vector4f(0.0f,10.0f,0.0f,1.0f),
-    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
-    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
-    			new Vector4f(0.5f,0.5f,0.5f,1.0f),
-    			1.0f,
-    			1.0f,
-    			1.0f,
-    			new Vector3f(0.0f,-1.0f,0.0f),
-    			1.0f,
-    			1.0f
-			)
-    	);
-    	ubo_interfaces.put("light",light);
-    	
-        
     	UBO transformation_matrices = new UBO(
     		this,
     		new TransformationMatrices(
@@ -297,6 +279,22 @@ public class Shader implements Resource{
     		)
     	);
     	ubo_interfaces.put("projection",transformation_matrices);
+        UBO light = new UBO(
+    		this,
+    		new Light(
+    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
+    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
+    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
+    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
+    			1.0f,
+    			1.0f,
+    			1.0f,
+    			new Vector3f(1.0f,1.0f,1.0f),
+    			1.0f,
+    			1.0f
+			)
+    	);
+    	ubo_interfaces.put("light",light);
     	
     	
 	}

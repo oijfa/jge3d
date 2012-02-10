@@ -113,10 +113,6 @@ public class TransformationMatrices implements UBOInterface {
 		return name;
 	}
 	
-	public IntBuffer getIndices() {
-		return IntBuffer.wrap(new int[size]);
-	}
-	
 	public Type getType() {
 		return Type.PERSPECTIVE;
 	}

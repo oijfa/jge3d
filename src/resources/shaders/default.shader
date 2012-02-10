@@ -2,6 +2,50 @@
 	<fragment>
 		#version 140
 
+		struct light_type {
+			vec4 position;
+			vec4 ambient;
+			vec4 diffuse;
+			vec4 specular;
+			float constant_attenuation;
+		    float linear_attenuation;
+		    float quadratic_attenuation;
+		    vec3 spot_direction;
+		    float spot_cutoff;
+		    float spot_exponent;
+		};
+		
+		uniform lights {
+			light_type light[1];
+		};
+/*
+		uniform material {
+			vec4 ambient;
+			vec4 diffuse;
+			vec4 specular;
+			float shininess;
+		} material;
+*/
+		in vec3 vertex_mod;
+		in vec3 normal_mod;
+		in vec4 color_mod;
+		
+		out vec4 color;
+		
+		void main(){
+
+			if(color_mod.a == 0.0) {
+		  		discard;
+		  	}
+
+		  	color = color_mod;//light[0].ambient;
+
+		}
+	</fragment>
+	<vertex>
+		#version 140
+		layout(column_major) uniform;
+		
 		struct Light {
 			vec4 position;
 			vec4 ambient;
@@ -18,55 +62,7 @@
 		uniform lights {
 			Light light[1];
 		};
-
-		/*
-		uniform Material {
-			vec4 ambient;
-			vec4 diffuse;
-			vec4 specular;
-			float shininess;
-		} material;
-		*/
 		
-		//uniform Material material;
-		
-		in vec3 vertex_mod;
-		in vec3 normal_mod;
-		in vec4 color_mod;
-		
-		out vec4 color;
-		
-		void main(){
-
-			if(color_mod.a == 0.0) {
-		  		discard;
-		  	}
-
-		  	color = color_mod;
-
-		}
-	</fragment>
-	<vertex>
-		#version 140
-		layout(column_major) uniform;
-		/*
-		struct Light {
-			vec4 position;
-			vec4 ambient;
-			vec4 diffuse;
-			vec4 specular;
-			float constantAtt;
-		    float linearAtt;
-		    float quadraticAtt;
-		    vec3 spotDirection;
-		    float spotExponent;
-		    float spotCutoff;
-		};
-		
-		layout(std140) uniform Lights {
-			Light light[1];
-		} lights;
-		*/
 		uniform mat4 transform;
 		
 		uniform TransformationMatrices { 
