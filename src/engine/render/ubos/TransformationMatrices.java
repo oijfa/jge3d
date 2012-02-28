@@ -34,7 +34,7 @@ public class TransformationMatrices implements UBOInterface {
 		buf.put(projection);
 		buf.put(lookat);
 		buf.flip();
-		
+
 		return buf;
 	}
 	

@@ -38,56 +38,21 @@ public class Light implements UBOInterface {
     	float spot_exponent
     	)
 	{
-		this.position=position;
-		this.ambient=ambient;
-		this.diffuse=diffuse;
-		this.specular=specular;
-		this.constant_attenuation=constant_attenuation;
-		this.linear_attenuation=linear_attenuation;
-		this.quadratic_attenuation=quadratic_attenuation;
-		this.spot_direction=spot_direction;
-		this.spot_cutoff=spot_cutoff;
-		this.spot_exponent=spot_exponent;
+		this.position=new Vector4f(position);
+		this.ambient=new Vector4f(ambient);
+		this.diffuse=new Vector4f(diffuse);
+		this.specular=new Vector4f(specular);
+		this.constant_attenuation=new Float(constant_attenuation);
+		this.linear_attenuation=new Float(linear_attenuation);
+		this.quadratic_attenuation=new Float(quadratic_attenuation);
+		this.spot_direction=new Vector3f(spot_direction);
+		this.spot_cutoff=new Float(spot_cutoff);
+		this.spot_exponent=new Float(spot_exponent);
 	}
 		
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
 		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4);
-		/*
-		//position
-		buf.put(position.x);
-		buf.put(position.y);
-		buf.put(position.z);
-		buf.put(position.w);
-		//ambient
-		buf.put(ambient.x);
-		buf.put(ambient.y);
-		buf.put(ambient.z);
-		buf.put(ambient.w);
-		//diffuse
-		buf.put(diffuse.x);
-		buf.put(diffuse.y);
-		buf.put(diffuse.z);
-		buf.put(diffuse.w);
-		//specular
-		buf.put(specular.x);
-		buf.put(specular.y);
-		buf.put(specular.z);
-		buf.put(specular.w);
-		//attenuation
-		buf.put(constant_attenuation);
-		buf.put(linear_attenuation);
-		buf.put(quadratic_attenuation);
-		//spot direction
-		buf.put(spot_direction.x);
-		buf.put(spot_direction.y);
-		buf.put(spot_direction.z);
-		//shininess
-		buf.put(spot_cutoff);
-		buf.put(spot_exponent);
-		
-		buf.flip();
-		*/
-		
+
 		float[] copy_array = new float[block_size/4];
 		
 		int i=0;
@@ -137,65 +102,6 @@ public class Light implements UBOInterface {
 		buf.put(copy_array);
 		buf.flip();
 
-		/*
-		for(int i=0; i<offsets.limit(); i++) {
-			switch(indices.get(i)) {
-				case 0:
-					//position
-					buf.put(position.x);
-					buf.put(position.y);
-					buf.put(position.z);
-					buf.put(position.w);
-					break;
-				case 1:
-					//ambient
-					buf.put(ambient.x);
-					buf.put(ambient.y);
-					buf.put(ambient.z);
-					buf.put(ambient.w);
-					break;
-				case 2:
-					//diffuse
-					buf.put(diffuse.x);
-					buf.put(diffuse.y);
-					buf.put(diffuse.z);
-					buf.put(diffuse.w);
-					break;
-				case 3:
-					//specular
-					buf.put(specular.x);
-					buf.put(specular.y);
-					buf.put(specular.z);
-					buf.put(specular.w);
-					break;
-				case 4:
-					//attenuation
-					buf.put(constant_attenuation);
-					break;
-				case 5:
-					buf.put(linear_attenuation);
-					break;
-				case 6:
-					buf.put(quadratic_attenuation);
-				    break;
-				case 7:
-					//spot direction
-					buf.put(spot_direction.x);
-					buf.put(spot_direction.y);
-					buf.put(spot_direction.z);
-				    break;
-				case 8:
-					//shininess
-					buf.put(spot_cutoff);
-					break;
-				case 9:
-					buf.put(spot_exponent);
-					break;
-			}
-		}
-		buf.flip();
-		*/
-
 		return buf;
 	}
 	
@@ -205,16 +111,16 @@ public class Light implements UBOInterface {
 	
 	public String[] getNames() {
 		String names[] = {
-		    "light[" + array_index + "].position",
-		    "light[" + array_index + "].ambient",
-		    "light[" + array_index + "].diffuse",
-		    "light[" + array_index + "].specular",
-		    "light[" + array_index + "].constant_attenuation",
-		    "light[" + array_index + "].linear_attenuation",
-		    "light[" + array_index + "].quadratic_attenuation",
-		    "light[" + array_index + "].spot_direction",
-		    "light[" + array_index + "].spot_cutoff",
-		    "light[" + array_index + "].spot_exponent"
+		    "light["+array_index+"].position",
+		    "light["+array_index+"].ambient",
+		    "light["+array_index+"].diffuse",
+		    "light["+array_index+"].specular",
+		    "light["+array_index+"].constant_attenuation",
+		    "light["+array_index+"].linear_attenuation",
+		    "light["+array_index+"].quadratic_attenuation",
+		    "light["+array_index+"].spot_direction",
+		    "light["+array_index+"].spot_cutoff",
+		    "light["+array_index+"].spot_exponent"
 	    };
 		
 		return names;

@@ -1,6 +1,7 @@
 <shader>
 	<fragment>
-		#version 140
+		#version 330
+		#extension GL_ARB_uniform_buffer_object : enable
 
 		struct light_type {
 			vec4 position;
@@ -14,7 +15,7 @@
 		    float spot_cutoff;
 		    float spot_exponent;
 		};
-		
+
 		uniform lights {
 			light_type light[1];
 		};
@@ -26,42 +27,70 @@
 			float shininess;
 		} material;
 */
-		in vec3 vertex_mod;
-		in vec3 normal_mod;
+		smooth in vec3 vertex_mod;
+		smooth in vec3 normal_mod;
 		in vec4 color_mod;
 		
-		out vec4 color;
+		out vec4 frag_color;
+		
+		int i = 0;
 		
 		void main(){
-
 			if(color_mod.a == 0.0) {
 		  		discard;
 		  	}
 
-		  	color = color_mod;//light[0].ambient;
+		    float nDotVP;       // normal * light direction
+		    float nDotR;        // normal * light reflection vector
+		    float pf;           // power factor
+		    float attenuation;  // computed attenuation factor
+		    float d;            // distance from surface to light position
+		    vec3 VP;            // direction from surface to light position
+		    vec3 reflection;    // direction of maximum highlights
+		
+		    // Compute vector from surface to light position
+		    VP = vec3 (light[i].position) - vertex_mod;
+		
+		    // Compute distance between surface and light position
+		    d = length (VP);
+		
+		    // Normalize the vector from surface to light position
+		    VP = normalize (VP);
+		
+		    // Compute attenuation
+		    attenuation = 1.f / (light[i].constant_attenuation +
+		                         light[i].linear_attenuation * d +
+		                         light[i].quadratic_attenuation * d * d);
+		
+		    reflection = normalize (reflect (-normalize(VP), normalize(normal_mod)));
+		
+		    nDotVP = max (0.f, dot (normal_mod, VP));
+		    nDotR = max (0.f, dot (normalize (normal_mod), reflection));
+		
+		    if (nDotVP == 0.f) {
+		        pf = 0.f;
+		    }
+		    else {
+		        //pf = pow(nDotR, material.shininess);
+		        pf = pow(nDotR, 0.8);
+		    }
+			
+			/*
+		    vec4 ambient = material.ambient * light[i].ambient * attenuation;
+		    vec4 diffuse = material.diffuse * light[i].diffuse * nDotVP * attenuation;
+		    vec4 specular = material.specular * light[i].specular * pf * attenuation;
+		    */
+		    
+		    vec4 ambient = color_mod * light[i].ambient * attenuation;
+		    vec4 diffuse = color_mod * light[i].diffuse * nDotVP * attenuation;
+		    vec4 specular = color_mod * light[i].specular * pf * attenuation;
 
+		  	frag_color = ambient + diffuse + specular;
 		}
 	</fragment>
 	<vertex>
-		#version 140
-		layout(column_major) uniform;
-		
-		struct Light {
-			vec4 position;
-			vec4 ambient;
-			vec4 diffuse;
-			vec4 specular;
-			float constant_attenuation;
-		    float linear_attenuation;
-		    float quadratic_attenuation;
-		    vec3 spot_direction;
-		    float spot_cutoff;
-		    float spot_exponent;
-		};
-		
-		uniform lights {
-			Light light[1];
-		};
+		#version 330
+		#extension GL_ARB_uniform_buffer_object : enable
 		
 		uniform mat4 transform;
 		
@@ -75,19 +104,11 @@
 		in vec2 texture;
 		in vec4 color;
 		in vec3 scale;
-		out vec3 vertex_mod;
-		out vec3 normal_mod;
+		smooth out vec3 vertex_mod;
+		smooth out vec3 normal_mod;
 		out vec4 color_mod;
 		
 		void main() {
-			/*
-			mat4 identity = mat4(
-				vec4(1.0,0.0,0.0,0.0),
-				vec4(0.0,1.0,0.0,0.0),
-				vec4(0.0,0.0,1.0,0.0),
-				vec4(p.x,p.y,p.z,1.0)
-			);
-			*/
 			vec4 vertex_cast;
 			vertex_cast.x = vertex.x * scale.x;
 			vertex_cast.y = vertex.y * scale.y;
@@ -97,16 +118,12 @@
 			vertex_mod = vec3(vertex_cast);
 		
 			//Calculate vertex position
-			//gl_Position = gl_ModelViewProjectionMatrix * transform * vertex_cast;
 			gl_Position = projection * lookat * transform * vertex_cast;
 		
 			// Calculate the normal value for this vertex, in world coordinates
-		    //normal_mod = normalize(gl_NormalMatrix * normal);
 		    normal_mod = normal;
 		
 		    // Set the front color to the color passed through with glColor
-		    //gl_FrontColor = gl_Color;
-		
 			color_mod = color;
 		}
 	</vertex>

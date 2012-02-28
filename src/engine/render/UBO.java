@@ -91,10 +91,17 @@ public class UBO {
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
 			block_size, 
 			ubo_interface.createBuffer()
-		);*/
+		);
 		ARBBufferObject.glBufferDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
 			ubo_interface.createBuffer(block_size,offsets), 
+			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
+		);
+		*/
+
+		ARBBufferObject.glBufferDataARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			ubo_interface.createBuffer(block_size, offsets), 
 			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
 		);
 		
@@ -105,10 +112,7 @@ public class UBO {
 			uboID
 		);
 		
-		ARBBufferObject.glBindBufferARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
-			0
-		);
+		ARBUniformBufferObject.glUniformBlockBinding(shader.getShaderID(), block_index, block_index);
 		
 		debug();
 
@@ -135,7 +139,17 @@ public class UBO {
 	}
 	
 	public void bufferData(int id) {
-
+		/*
+		ARBBufferObject.glBindBufferARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
+			uboID
+		);
+		ARBBufferObject.glBufferDataARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
+			ubo_interface.createBuffer(block_size,offsets), 
+			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
+		);
+		*/
 	}
 	
 	public void destroyUBO() {
