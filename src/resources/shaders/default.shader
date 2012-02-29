@@ -1,7 +1,6 @@
 <shader>
 	<fragment>
 		#version 330
-		#extension GL_ARB_uniform_buffer_object : enable
 
 		struct light_type {
 			vec4 position;
@@ -52,23 +51,23 @@
 		    VP = vec3 (light[i].position) - vertex_mod;
 		
 		    // Compute distance between surface and light position
-		    d = length (VP);
+		    d = length(VP);
 		
 		    // Normalize the vector from surface to light position
-		    VP = normalize (VP);
+		    VP = normalize(VP);
 		
 		    // Compute attenuation
-		    attenuation = 1.f / (light[i].constant_attenuation +
-		                         light[i].linear_attenuation * d +
-		                         light[i].quadratic_attenuation * d * d);
+		    attenuation = 1.0f / (light[i].constant_attenuation +
+		                          light[i].linear_attenuation * d +
+		                          light[i].quadratic_attenuation * d * d);
 		
-		    reflection = normalize (reflect (-normalize(VP), normalize(normal_mod)));
+		    reflection = normalize(reflect(-normalize(VP), normalize(normal_mod)));
 		
-		    nDotVP = max (0.f, dot (normal_mod, VP));
-		    nDotR = max (0.f, dot (normalize (normal_mod), reflection));
+		    nDotVP = max (0.0f, dot (normal_mod, VP));
+		    nDotR = max (0.0f, dot(normalize(normal_mod), reflection));
 		
-		    if (nDotVP == 0.f) {
-		        pf = 0.f;
+		    if (nDotVP == 0.0f) {
+		        pf = 0.0f;
 		    }
 		    else {
 		        //pf = pow(nDotR, material.shininess);
@@ -90,7 +89,6 @@
 	</fragment>
 	<vertex>
 		#version 330
-		#extension GL_ARB_uniform_buffer_object : enable
 		
 		uniform mat4 transform;
 		
@@ -114,11 +112,13 @@
 			vertex_cast.y = vertex.y * scale.y;
 			vertex_cast.z = vertex.z * scale.z;
 			vertex_cast.w = 1.0;
+			
+			vertex_cast = transform * vertex_cast;
 		
 			vertex_mod = vec3(vertex_cast);
 		
 			//Calculate vertex position
-			gl_Position = projection * lookat * transform * vertex_cast;
+			gl_Position = projection * lookat * vertex_cast;
 		
 			// Calculate the normal value for this vertex, in world coordinates
 		    normal_mod = normal;

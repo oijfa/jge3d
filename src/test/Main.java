@@ -4,6 +4,7 @@ import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.*;
+import engine.terrain.Terrain;
 
 public class Main {
 	private Engine engine;
@@ -30,7 +31,7 @@ public class Main {
 		engine = new Engine();
 		
 		//Create the ground to stand on
-		/*
+		
 		Terrain terrain = new Terrain(
 			0,
 			true,
@@ -42,7 +43,7 @@ public class Main {
 		terrain.setPosition(new Vector3f(0,-10, 0));
 		terrain.createTerrain(20);
 		engine.addEntity(terrain);
-		*/
+		
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
 		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
@@ -87,8 +88,8 @@ public class Main {
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(30f);
-		camera.setPosition(new Vector3f(0, 0, 40));
+		camera.setDistance(25f);
+		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.focusOn(player);
 	}
 

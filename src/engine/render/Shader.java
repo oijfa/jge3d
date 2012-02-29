@@ -268,15 +268,15 @@ public class Shader implements Resource{
         UBO light = new UBO(
     		this,
     		new Light(
-    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
-    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
-    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
-    			new Vector4f(1.0f,1.0f,1.0f,1.0f),
+    			new Vector4f(0.0f,10.0f,0.0f,1.0f),
+    			new Vector4f(100.0f,100.0f,100.0f,255.0f),
+    			new Vector4f(30.0f,30.0f,30.0f,255.0f),
+    			new Vector4f(30.0f,30.0f,30.0f,255.0f),
+    			0.1f,
+    			0.1f,
     			1.0f,
-    			1.0f,
-    			1.0f,
-    			new Vector3f(1.0f,1.0f,1.0f),
-    			1.0f,
+    			new Vector3f(0.0f,-1.0f,0.0f),
+    			1000.0f,
     			1.0f
 			)
     	);
@@ -286,9 +286,9 @@ public class Shader implements Resource{
     		new TransformationMatrices(
     			45f,
     			1f,
-    			1f,
+    			0.1f,
     			1000f,
-    			new Vector3f(0,-50,-50),
+    			new Vector3f(0,0,-25),
     			new Vector3f(0,0,0),
     			new Vector3f(0,1,0)
     		)
