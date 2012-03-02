@@ -30,8 +30,23 @@ public class Main {
 	public Main() {
 		engine = new Engine();
 		
-		//Create the ground to stand on
+		/*
+		//Uncomment if you need to import a model into a different format
+		Parser import_model = new Obj_Parser();
+		try {
+			import_model.readFile(new FileInputStream("/home/adam/workspace/jge3d/src/resources/models/armadillo.obj"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Model export_model = import_model.createModel();
+		export_model.saveXGL("/home/adam/workspace/jge3d/src/resources/models/misc/armadillo.xgl");
+		*/
 		
+		//Create the ground to stand on
 		Terrain terrain = new Terrain(
 			0,
 			true,
@@ -85,6 +100,15 @@ public class Main {
 		model5.setPosition(new Vector3f(10, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 		model5.setGravity(new Vector3f(0,0,0));
+		
+		/*
+		//Test armadillo
+		Entity armadillo;
+		armadillo = engine.addEntity("armadillo", 1f, true, "armadillo", "default");
+		armadillo.setProperty(Entity.NAME, "armadillo");
+		armadillo.setPosition(new Vector3f(0, 0, 0));
+		armadillo.setScale(new Vector3f(0.1f,0.1f,0.1f));
+		*/
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
