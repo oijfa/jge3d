@@ -85,6 +85,7 @@
 		    vec4 specular = color_mod * light[i].specular * pf * attenuation;
 
 		  	frag_color = ambient + diffuse + specular;
+		  	frag_color.a = color_mod.a;
 		}
 	</fragment>
 	<vertex>
