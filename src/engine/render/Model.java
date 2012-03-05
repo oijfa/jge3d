@@ -625,7 +625,7 @@ public class Model implements RenderObject, Resource {
 	}
 
 	@Override
-	public void loadFromFile(InputStream is) throws Exception {
-		this.combineModels(FileLoader.loadFile(is));
+	public void loadFromFile(InputStream is, String extension) throws Exception {
+		this.combineModels(FileLoader.loadFile(is, extension));
 	}
 }

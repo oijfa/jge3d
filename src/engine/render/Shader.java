@@ -226,7 +226,7 @@ public class Shader implements Resource{
 	}
 
 	@Override
-	public void loadFromFile(InputStream is) throws Exception {
+	public void loadFromFile(InputStream is, String extension) throws Exception {
 		ubo_interfaces = new HashMap<String, UBO>();
 		
 		/*
@@ -288,7 +288,7 @@ public class Shader implements Resource{
     			1f,
     			0.1f,
     			1000f,
-    			new Vector3f(0,0,-25),
+    			new Vector3f(0,0,-50),
     			new Vector3f(0,0,0),
     			new Vector3f(0,1,0)
     		)

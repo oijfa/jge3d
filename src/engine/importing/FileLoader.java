@@ -20,8 +20,16 @@ public class FileLoader {
 	public FileLoader() {
 	}
 	
-	public static Model loadFile(InputStream in) {
+	public static Model loadFile(InputStream in, String extension) {
 		Parser parser = new XGL_Parser();
+		
+		if(extension.equals("obj"))
+			parser = new Obj_Parser();
+		else if(extension.equals("xgl"))
+			parser = new XGL_Parser();
+		else 
+			System.out.println("Unsuported model format");
+		
 		try {
 			parser.readFile(in);
 		} catch (Exception e) {

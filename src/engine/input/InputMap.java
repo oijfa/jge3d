@@ -322,7 +322,7 @@ public class InputMap implements Resource {
 	}
 
 	@Override
-	public void loadFromFile(InputStream is) throws Exception {
+	public void loadFromFile(InputStream is, String extension) throws Exception {
 		Document dom;
   		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     

@@ -98,12 +98,13 @@ public class ResourceManager {
 			if( res.data == null ){
 				try {
 					File f = new File(res.path);
-				
 					System.out.println(f.getAbsolutePath());
 					
 					InputStream in = new FileInputStream(f);
 					res.data = res.item_class.newInstance();
-					res.data.loadFromFile(in);
+					String[] extension;
+					extension = res.path.split("\\.");
+					res.data.loadFromFile(in, extension[extension.length-1]);
 					
 					if( res.item_class == Model.class ){
 						Model model = (Model)res.data;
