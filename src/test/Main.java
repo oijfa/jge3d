@@ -1,15 +1,10 @@
 package test;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javax.vecmath.Vector3f;
 
 import engine.Engine;
 import engine.entity.*;
-import engine.importing.Obj_Parser;
-import engine.importing.Parser;
-import engine.render.Model;
+
 import engine.terrain.Terrain;
 
 public class Main {
@@ -108,14 +103,13 @@ public class Main {
 		model5.setGravity(new Vector3f(0,0,0));
 		
 		//Test armadillo
-		Entity armadillo;
-		armadillo = engine.addEntity("armadillo", 1f, false, "armadillo", "default");
-		armadillo.setProperty(Entity.NAME, "export_model");
+		Entity armadillo = engine.addEntity("armadillo", 0f, false, "armadillo", "default");
+		armadillo.setProperty(Entity.NAME, "armadillo");
 		armadillo.setPosition(new Vector3f(0, 0, 0));
-		armadillo.setScale(new Vector3f(0.1f,0.1f,0.1f));
+		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
 		
 		//Create a camera
-		camera = engine.addCamera(1f, false, "box2");
+		camera = engine.addCamera(1f, false, "armadillo");
 		camera.setDistance(25f);
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.focusOn(player);

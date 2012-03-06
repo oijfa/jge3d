@@ -94,8 +94,7 @@
 		uniform mat4 transform;
 		
 		uniform TransformationMatrices { 
-			mat4 projection;
-			mat4 lookat;
+			mat4 MVP;
 		};
 		
 		in vec3 vertex;
@@ -119,7 +118,7 @@
 			vertex_mod = vec3(vertex_cast);
 		
 			//Calculate vertex position
-			gl_Position = projection * lookat * vertex_cast;
+			gl_Position = MVP * vertex_cast;
 		
 			// Calculate the normal value for this vertex, in world coordinates
 		    normal_mod = normal;

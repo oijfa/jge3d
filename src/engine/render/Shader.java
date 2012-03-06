@@ -269,7 +269,7 @@ public class Shader implements Resource{
     		this,
     		new Light(
     			new Vector4f(0.0f,10.0f,0.0f,1.0f),
-    			new Vector4f(50.0f,50.0f,50.0f,255.0f),
+    			new Vector4f(250.0f,250.0f,250.0f,255.0f),
     			new Vector4f(255.0f,0.0f,0.0f,255.0f),
     			new Vector4f(255.0f,0.0f,0.0f,255.0f),
     			1.0f,
@@ -288,7 +288,7 @@ public class Shader implements Resource{
     			1f,
     			0.1f,
     			1000f,
-    			new Vector3f(0,0,-50),
+    			new Vector3f(0,150,50),
     			new Vector3f(0,0,0),
     			new Vector3f(0,1,0)
     		)
