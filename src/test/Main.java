@@ -1,10 +1,14 @@
 package test;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import engine.Engine;
 import engine.entity.*;
 
+import engine.render.Shader;
+import engine.render.ubos.Light;
+import engine.render.ubos.TransformationMatrices;
 import engine.terrain.Terrain;
 
 public class Main {
@@ -101,18 +105,49 @@ public class Main {
 		model5.setPosition(new Vector3f(10, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 		model5.setGravity(new Vector3f(0,0,0));
-		
+		/*
 		//Test armadillo
 		Entity armadillo = engine.addEntity("armadillo", 0f, false, "armadillo", "default");
 		armadillo.setProperty(Entity.NAME, "armadillo");
 		armadillo.setPosition(new Vector3f(0, 0, 0));
-		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
-		
+		armadillo.setScale(new Vector3f(0.1f,0.1f,0.1f));
+		*/
 		//Create a camera
-		camera = engine.addCamera(1f, false, "armadillo");
+		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(25f);
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.focusOn(player);
+		
+		addUBOsToDefaultShader();
+	}
+	
+	//This function is just for testing; we'll need to set this stuff at the map level
+	public void addUBOsToDefaultShader() {
+		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
+		
+        Light light = new Light(
+			new Vector4f(0.0f,10.0f,0.0f,1.0f),
+			new Vector4f(250.0f,250.0f,250.0f,255.0f),
+			new Vector4f(255.0f,0.0f,0.0f,255.0f),
+			new Vector4f(255.0f,0.0f,0.0f,255.0f),
+			1.0f,
+			1.0f,
+			1.0f,
+			new Vector3f(0.0f,-1.0f,0.0f),
+			10.0f,
+			1.0f
+		);
+        shader.addUBO(light);
+    	TransformationMatrices transformation_matrices = new TransformationMatrices(
+			45f,
+			1f,
+			0.1f,
+			1000f,
+			new Vector3f(0,-100,50),
+			new Vector3f(0,0,0),
+			new Vector3f(0,1,0)
+		);
+    	shader.addUBO(transformation_matrices);
 	}
 
 	public void runMultiThread() {

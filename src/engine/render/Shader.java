@@ -12,7 +12,6 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
@@ -22,8 +21,6 @@ import org.lwjgl.opengl.ARBVertexShader;
 import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Entity;
-import engine.render.ubos.Light;
-import engine.render.ubos.TransformationMatrices;
 import engine.render.ubos.UBOInterface;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -265,35 +262,6 @@ public class Shader implements Resource{
         	System.out.println("Failed to create shader");
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
         }
-        UBO light = new UBO(
-    		this,
-    		new Light(
-    			new Vector4f(0.0f,10.0f,0.0f,1.0f),
-    			new Vector4f(250.0f,250.0f,250.0f,255.0f),
-    			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-    			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-    			1.0f,
-    			1.0f,
-    			1.0f,
-    			new Vector3f(0.0f,-1.0f,0.0f),
-    			10.0f,
-    			1.0f
-			)
-    	);
-    	ubo_interfaces.put("light",light);
-    	UBO transformation_matrices = new UBO(
-    		this,
-    		new TransformationMatrices(
-    			45f,
-    			1f,
-    			0.1f,
-    			1000f,
-    			new Vector3f(0,150,50),
-    			new Vector3f(0,0,0),
-    			new Vector3f(0,1,0)
-    		)
-    	);
-    	ubo_interfaces.put("projection",transformation_matrices);
 	}
 
 	@Override
