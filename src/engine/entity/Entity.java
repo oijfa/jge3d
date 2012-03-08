@@ -274,6 +274,14 @@ public class Entity {
 			System.out.println("Method [applyImpulse] not supported for ghost object");
 		}
 	}
+	
+	public void clearForces() {
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).clearForces();
+		} else {
+			System.out.println("Method [clearForces] not supported for ghost object");
+		}
+	}
 
 	public CollisionObject getCollisionObject() {
 		return collision_object;

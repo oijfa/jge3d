@@ -12,6 +12,7 @@ public class AIFunctions {
 	public static void followPlayer(Engine engine, Actor ent){
 		Actor player = (Actor)engine.getEntity("player");
 		if( player != null ){
+			//ent.clearForces();
 			Vector3f towards_pos = new Vector3f();
 			Vector3f player_pos = player.getPosition();
 			player_pos.sub(ent.getPosition());

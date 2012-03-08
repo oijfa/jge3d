@@ -84,20 +84,6 @@ public class UBO {
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
 			uboID
 		);
-		//TODO: conflicting reports of whether 1st arg should be 
-		//ARBUniformBufferObject.GL_UNIFORM_BUFFER_EXT
-		/*
-		ARBBufferObject.glBufferSubDataARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			block_size, 
-			ubo_interface.createBuffer()
-		);
-		ARBBufferObject.glBufferDataARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			ubo_interface.createBuffer(block_size,offsets), 
-			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
-		);
-		*/
 
 		ARBBufferObject.glBufferDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
@@ -114,7 +100,7 @@ public class UBO {
 		
 		ARBUniformBufferObject.glUniformBlockBinding(shader.getShaderID(), block_index, block_index);
 		
-		debug();
+		//debug();
 
 		// Set the notifier
 		hasUBO = true;
@@ -138,18 +124,12 @@ public class UBO {
 		return buffer.get(0);
 	}
 	
-	public void bufferData(int id) {
-		/*
-		ARBBufferObject.glBindBufferARB(
-			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
-			uboID
-		);
-		ARBBufferObject.glBufferDataARB(
+	public void bufferData() {
+		ARBBufferObject.glBufferSubDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
-			ubo_interface.createBuffer(block_size,offsets), 
-			ARBBufferObject.GL_DYNAMIC_DRAW_ARB
+			0, 
+			ubo_interface.createBuffer(block_size, offsets)
 		);
-		*/
 	}
 	
 	public void destroyUBO() {

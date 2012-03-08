@@ -303,13 +303,12 @@ public class Mesh implements Cloneable {
 					line2.sub(vertex0, vertex1);
 					normal_vert.cross(line1, line2);
 	
-					// 
 					for (Vector3f normal: f.getNormals()) {
 						normal.add(normal_vert);
 					}
 				}
 			}
-			//TODO: should be done in shader
+
 			//Post normalization of all normals
 			for(Face f : faces) {
 				for(Vector3f normal: f.getNormals()) {

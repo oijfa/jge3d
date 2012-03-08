@@ -157,7 +157,7 @@ public class Shader implements Resource{
 
         	//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
-				ubo.bufferData(shader);
+    			ubo.bufferData();
     		}
     		
     		buf.clear();
