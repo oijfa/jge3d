@@ -8,17 +8,16 @@ import engine.entity.*;
 
 import engine.render.Shader;
 import engine.render.ubos.Light;
-import engine.terrain.Terrain;
 
 public class Main {
 	private Engine engine;
-
+/*
 	private Actor player;
 	private Actor model;
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
-	private Entity model5;
+	private Entity model5;*/
 	private Camera camera;
 	
 	public static void main(String args[]) {
@@ -49,7 +48,7 @@ public class Main {
 		Model export_model = import_model.createModel();
 		export_model.saveXGL("/home/adam/workspace/jge3d/src/resources/models/misc/armadillo.xgl");
 		*/
-		
+		/*
 		//Create the ground to stand on
 		Terrain terrain = new Terrain(
 			0,
@@ -64,8 +63,8 @@ public class Main {
 		engine.addEntity(terrain);
 		
 		//Make some parallax stars
-		//Stars stars = new Stars(engine,1000,10000,200,5,400);
-		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+		Stars stars = new Stars(engine,1000,10000,200,5,400);
+		stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
@@ -104,18 +103,18 @@ public class Main {
 		model5.setPosition(new Vector3f(10, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 		model5.setGravity(new Vector3f(0,0,0));
-		/*
+		*/
 		//Test armadillo
 		Entity armadillo = engine.addEntity("armadillo", 0f, true, "armadillo", "default");
 		armadillo.setProperty(Entity.NAME, "armadillo");
 		armadillo.setPosition(new Vector3f(0, 0, 0));
 		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
-		*/
+		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(25f);
+		camera.setDistance(200f);
 		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.focusOn(player);
+		camera.focusOn(armadillo);
 		
 		addUBOsToDefaultShader();
 	}
@@ -125,10 +124,10 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		
         Light light = new Light(
-			new Vector4f(0.0f,10.0f,0f,1.0f),
+			new Vector4f(0.0f,-50.0f,-100.0f,1.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-			new Vector4f(40.0f,0.0f,0.0f,255.0f),
-			new Vector4f(100.0f,0.0f,0.0f,255.0f),
+			new Vector4f(255.0f,0.0f,0.0f,255.0f),
+			new Vector4f(255.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
