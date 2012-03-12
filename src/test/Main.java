@@ -124,14 +124,14 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		
         Light light = new Light(
-			new Vector4f(0.0f,-50.0f,-100.0f,1.0f),
+			new Vector4f(0.0f,-45.0f,-80.0f,1.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
-			new Vector3f(0.0f,-1.0f,0.0f),
+			new Vector3f(0.0f,10.0f,10.0f),
 			100.0f,
 			1.0f
 		);
@@ -141,8 +141,8 @@ public class Main {
 
 	public void runMultiThread() {
 		engine.run();
-	}
 	
+	}
 	public void runSingleThread() {
 		while(true){
 			engine.renderOnce();

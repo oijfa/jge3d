@@ -1,6 +1,7 @@
 package editor;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import editor.Main;
 
@@ -18,6 +19,8 @@ import editor.window.ToolMenu;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
+import engine.render.Shader;
+import engine.render.ubos.Light;
 
 public class Main implements ActionListener {
 	// A filthy hack to get around the combobox sending to events on select
@@ -98,6 +101,8 @@ public class Main implements ActionListener {
 		
 		engine.getWindowManager().getWindows().hideAll();
 		tool_menu.setVisible(true);
+		
+		addUBOsToDefaultShader();
 	}
 
 	public void run() {
@@ -122,6 +127,26 @@ public class Main implements ActionListener {
 			engine.renderOnce();
 			engine.physicsOnce();
 		}
+	}
+	
+	//This function is just for testing; we'll need to set this stuff at the map level
+	public void addUBOsToDefaultShader() {
+		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
+		
+        Light light = new Light(
+			new Vector4f(0.0f,5.0f,0.0f,1.0f),
+			new Vector4f(128.0f,128.0f,128.0f,255.0f),
+			new Vector4f(64.0f,64.0f,64.0f,255.0f),
+			new Vector4f(64.0f,64.0f,64.0f,255.0f),
+			1.0f,
+			1.0f,
+			1.0f,
+			new Vector3f(0.0f,-1.0f,0.0f),
+			100.0f,
+			1.0f
+		);
+        shader.addUBO(light);
+    	shader.addUBO(camera.getMVPmatrix());
 	}
 	
 	@Override
