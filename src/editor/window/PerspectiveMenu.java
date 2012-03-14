@@ -14,12 +14,15 @@ public class PerspectiveMenu extends Window implements ActionListener {
 	public PerspectiveMenu() {
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Perspective Menu");
-
+		
 		perspective_cb = new ComboBox<String>();
 		perspective_cb.setTheme("perspective_cb");
 		perspective_cb.addActionListener(this);
-		
+	
 		add(perspective_cb);
+		
+		populateCM();
+		
 	}
 
 	public void populateCM() {

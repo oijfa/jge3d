@@ -406,6 +406,7 @@
         <param name="border"><border>3,5,3,1</border></param>
         <param name="maxHeight"><int>500</int></param>
         <param name="minWidth"><int>100</int></param>
+        <param name="minDisplayedRows"><int>1</int></param>
         <theme name="vscrollbar" ref="vscrollbar">
             <param name="scaleThumb"><bool>true</bool></param>
         </theme>

@@ -26,7 +26,6 @@ public class Obj_Parser extends Parser {
 	// private ArrayList<Vector3f> vertexTextures = new ArrayList<Vector3f>();
 	// // Vertex Coordinates Textures
 
-	//private static int faceCount = 0;
 	private Model model;
 
 	public Obj_Parser() {
@@ -56,44 +55,26 @@ public class Obj_Parser extends Parser {
 	public void parseObj(BufferedReader file) throws Exception {
 		Mesh mesh = new Mesh();
 		String currentLine = file.readLine();
-
-		while (!currentLine.subSequence(0, 2).equals("v ")) {
-			// System.out.println("***" + currentLine.subSequence(0, 2) +
-			// "***");
-			currentLine = file.readLine();
-		}
-
-		// Read Vertices
-		while (currentLine.subSequence(0, 2).equals("v ")) {
-			vertices.add(parseVector(currentLine));
-			currentLine = file.readLine();
-		}
-
-		// Skip other shit
-		while (!currentLine.subSequence(0, 3).equals("vn ")) {
-			currentLine = file.readLine();
-		}
-
-		// Read Normals
-		while (currentLine.subSequence(0, 3).equals("vn ")) {
-			vertexNormals.add(parseVector(currentLine));
-			currentLine = file.readLine();
-		}
-
-		// Skip other shit
-		while (!currentLine.subSequence(0, 2).equals("f ")) {
-			currentLine = file.readLine();
-		}
-
-		// Read faces
-		while (currentLine != null && currentLine.subSequence(0, 2).equals("f ")) {
-			mesh.addFace(readFace(currentLine));
-			currentLine = file.readLine();
-			if (currentLine == null) {
-				break;
+		
+		while(currentLine != null) {
+			switch(currentLine.split("\\s+")[0]) {
+				case "v":
+					vertices.add(parseVector(currentLine));
+					break;
+				case "vn":
+					vertexNormals.add(parseVector(currentLine));
+					break;
+				case "f":
+					mesh.addFace(readFace(currentLine));
+					break;
+				default:
+					System.out.println("Unknown def encountered while parsing obj");
+					System.out.println("\t"+currentLine);
+					break;
 			}
+			currentLine = file.readLine();
 		}
-
+		
 		// Give mesh fake material
 		mesh.setMaterial(new Material());
 		model.addMesh(mesh);

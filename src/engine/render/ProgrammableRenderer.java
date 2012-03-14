@@ -9,7 +9,6 @@ package engine.render;
 import java.awt.Canvas;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -32,14 +31,7 @@ public class ProgrammableRenderer implements RendererInterface {
 	public static float nearClipping = 1f;
 	public static float farClipping = 10000.0f;
 	private float zoom = 1f; // The closer this value is to 0, the farther you
-								// are zoomed in.
 
-	// Default light (needs turning into an entity
-	private float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	private float lightDiffuse[] = { 0.3f, 0.3f, 0.3f, 1f };
-	private float lightSpecular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	private float lightPosition[] = { 0.0f, 10.0f, 0.0f, 1.0f };
-	
 	private Canvas display_parent;
 
 	public ProgrammableRenderer(EntityList objectList) {
@@ -68,11 +60,7 @@ public class ProgrammableRenderer implements RendererInterface {
 		// Draw the window manager stuff
 		if (window_manager != null) window_manager.draw();
 
-		GL11.glFlush();
 		Display.update();
-
-		// Reduce input lag
-		// Display.processMessages(); // process new native messages since
 	}
 
 	public void initGL() {
@@ -122,37 +110,6 @@ public class ProgrammableRenderer implements RendererInterface {
 		// Blending functions so we can have transparency
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
-
-		// Enable lighting
-		GL11.glEnable(GL11.GL_LIGHTING);
-		// Create some debug lights
-		// Setup The Ambient Light
-		GL11.glLight(
-			GL11.GL_LIGHT0, 
-			GL11.GL_AMBIENT, 
-			(FloatBuffer) temp.asFloatBuffer().put(lightAmbient).flip()
-		);
-		// Setup The Diffuse Light
-		GL11.glLight(
-			GL11.GL_LIGHT0, 
-			GL11.GL_DIFFUSE, 
-			(FloatBuffer) temp.asFloatBuffer().put(lightDiffuse).flip()
-		);
-		// Setup The Specular Light
-		GL11.glLight(
-			GL11.GL_LIGHT0, 
-			GL11.GL_SPECULAR, 
-			(FloatBuffer) temp.asFloatBuffer().put(lightSpecular).flip()
-		);
-		// Position The Light
-		GL11.glLight(
-			GL11.GL_LIGHT0, 
-			GL11.GL_POSITION, 
-			(FloatBuffer) temp.asFloatBuffer().put(lightPosition).flip()
-		);
-		GL11.glEnable(GL11.GL_LIGHT0);
-		
-		//GL11.glEnable(GL11.GL_NORMALIZE);
 	}
 
 	public void setPerspective() {
