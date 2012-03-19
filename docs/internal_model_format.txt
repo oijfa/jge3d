@@ -1,0 +1,36 @@
+Section 1:  Primitives, 2 +  n x (28|60) bytes
+	1 byte to specify which basic piece the file will be using.  0x0 for blocks, 0x1 for faces.
+	2 bytes for the number of primitives defined.
+	n x (28|60) for the primitive definitions
+		Blocks:
+			Each block is defined with 4 + 8 + 16 = 28 bytes:
+				4 bytes for scale.  Each block is 1x1x1, assuming zero is at the center of the box, then scaled by this value.
+				8 bytes are for the texture.
+				16 bytes are for the base color.
+		Face: 0,0,
+			Each face is defined with 36 + 8 + 16 =  60 bytes:
+				36 bytes for 3 points:
+					3 floats per point: x,y,z in that order.
+				8 bytes for the texture.
+				16 bytes for the base color.
+Section 2: Materials, 2+ (n x 52) bytes
+	2 bytes for the number of materials defined.
+	n x 52 bytes for the definitions
+		16 + 16 + 16 + 4 = 52 bytes.  3 sets of 4 floats and 1 float for shininess.  Ambient, Diffuse, Specular, Shininess.  Each is rgba.
+
+Section 3: Meshes, 2 + (n*(1 + (2 + x*2) + 12 + 8)) bytes
+	2 bytes for the number of meshes defined.
+	n * (1 + 2 + x*2 + 12 + 8) bytes for mesh definitions (n is number of meshes)
+ 		1 bytes for defining whether references are to primitives or meshes.
+			0x0 for primitives, 0x1 for meshes
+		(2+x*2) bytes for references.
+			2 bytes for number of references
+			x*2 bytes for references
+		12 bytes for translation.  3 floats.  x,y,z
+		8 bytes for rotation.  2 floats.  pitch,yaw 
+
+Section 4: Objects, 2 + (x*2)
+	Objects are just collections of meshes.
+	
+	2 bytes are for the number of meshes in the object
+	(x*2) bytes are the references themselves.
