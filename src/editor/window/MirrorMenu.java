@@ -30,6 +30,8 @@ public class MirrorMenu extends Window implements ActionListener {
 		mirror_cb.addItem("XZ");
 		mirror_cb.addItem("YZ");
 		mirror_cb.addItem("XYZ");
+		
+		mirror_cb.setSelected(0);
 	}
 
 	public Integer getSelection() {

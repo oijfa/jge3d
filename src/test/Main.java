@@ -126,8 +126,8 @@ public class Main {
         Light light = new Light(
 			new Vector4f(0.0f,-45.0f,-80.0f,1.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-			new Vector4f(255.0f,0.0f,0.0f,255.0f),
+			new Vector4f(150.0f,0.0f,0.0f,255.0f),
+			new Vector4f(150.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
@@ -141,8 +141,8 @@ public class Main {
 
 	public void runMultiThread() {
 		engine.run();
-	
 	}
+	
 	public void runSingleThread() {
 		while(true){
 			engine.renderOnce();
