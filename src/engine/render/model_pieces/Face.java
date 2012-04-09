@@ -53,6 +53,11 @@ public class Face {
 		init();
 	}
 
+	public Face(Vector3f[] verts) {
+		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
+		init();
+	}
+	
 	// Copy Constructor
 	public Face(Face f) {
 		this.vertices = new ArrayList<Vector3f>();
