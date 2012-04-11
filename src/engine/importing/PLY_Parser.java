@@ -195,9 +195,9 @@ public class PLY_Parser extends Parser {
 
 		vertices.add(
 			new Vector3f(
+				Float.parseFloat(line[0]),
 				Float.parseFloat(line[1]),
-				Float.parseFloat(line[2]),
-				Float.parseFloat(line[3])
+				Float.parseFloat(line[2])
 			)
 		);
 	}
