@@ -37,8 +37,23 @@ public class PaletteWindow extends Window implements ActionListener {
 		frame_layout.setVerticalGroup(v_frame);
 
 		primary_color = new ColorCell();
+		primary_color.setColor(
+			new Color(
+				new Byte((byte) 0xFF),
+				new Byte((byte) 0xFF),
+				new Byte((byte) 0xFF),
+				new Byte((byte) 0xFF)
+			)
+		);
 		alt_color = new ColorCell();
-
+		alt_color.setColor(
+			new Color(
+				new Byte((byte) 0x00),
+				new Byte((byte) 0x00),
+				new Byte((byte) 0x00),
+				new Byte((byte) 0x00)
+			)
+		);
 		Group h_preview = preview_layout.createParallelGroup().addWidget(primary_color).addWidget(alt_color);
 		Group v_preview = preview_layout.createSequentialGroup().addWidget(primary_color).addWidget(alt_color);
 

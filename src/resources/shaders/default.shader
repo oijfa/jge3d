@@ -101,7 +101,7 @@
 		in vec3 normal;
 		in vec2 texture;
 		in vec4 color;
-		in vec3 scale;
+		uniform vec4 scale;
 		smooth out vec3 vertex_mod;
 		smooth out vec3 normal_mod;
 		out vec4 color_mod;
@@ -111,7 +111,7 @@
 			vertex_cast.x = vertex.x * scale.x;
 			vertex_cast.y = vertex.y * scale.y;
 			vertex_cast.z = vertex.z * scale.z;
-			vertex_cast.w = 1.0;
+			vertex_cast.w = 1.0 * scale.w;
 			
 			vertex_cast = transform * vertex_cast;
 		

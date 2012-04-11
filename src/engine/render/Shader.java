@@ -44,8 +44,6 @@ public class Shader implements Resource{
     private int fragShader=0;
     private HashMap<String, UBO> ubo_interfaces;
     
-    private FloatBuffer buf;
-
     public Shader() {
     	
     }
@@ -132,7 +130,8 @@ public class Shader implements Resource{
      		//Adjust the position and rotation of the object from physics
     		Transform transform_matrix = new Transform();
     		transform_matrix = ent.getCollisionObject().getWorldTransform(new Transform());
-
+    		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+    		
     		float[] body_matrix = new float[16];
     		transform_matrix.getOpenGLMatrix(body_matrix);
     		buf.put(body_matrix);
@@ -146,6 +145,8 @@ public class Shader implements Resource{
     		
     		//world space scale op
     		buf.clear();
+    		buf = BufferUtils.createFloatBuffer(4);
+    		
     		Vector3f scalevec = ent.getCollisionObject().getCollisionShape().getLocalScaling(new Vector3f());
     		buf.put(scalevec.x);
     		buf.put(scalevec.y);
@@ -154,13 +155,12 @@ public class Shader implements Resource{
     		buf.flip();
     		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
     		ARBShaderObjects.glUniform4ARB(scale, buf);
-
+    		buf.clear();
+    		
         	//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
     			ubo.bufferData();
     		}
-    		
-    		buf.clear();
         }
     }
     
@@ -256,7 +256,6 @@ public class Shader implements Resource{
             ARBShaderObjects.glLinkProgramARB(shader);
             ARBShaderObjects.glValidateProgramARB(shader);
             useShader=printLogInfo(shader);
-            buf = BufferUtils.createFloatBuffer(16);
         } else {
         	useShader=false;
         	System.out.println("Failed to create shader");

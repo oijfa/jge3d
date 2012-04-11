@@ -53,6 +53,11 @@ public class Face {
 		init();
 	}
 
+	public Face(Vector3f[] verts) {
+		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
+		init();
+	}
+	
 	// Copy Constructor
 	public Face(Face f) {
 		this.vertices = new ArrayList<Vector3f>();
@@ -231,15 +236,21 @@ public class Face {
 				faceVNT[i] = vertices.get(i / 12).x + mesh.getTransform().x;
 				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.getTransform().y;
 				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.getTransform().z;
-
 				try{
-				faceVNT[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
+					faceVNT[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
+					faceVNT[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;
+					faceVNT[5 + i] = vertexNormals.get(i / 12).z;// + mesh.location.z;
 				}catch(Exception e){
-					System.out.println("Error");
+					Vector3f normal = calculateNormal(
+						vertices.get(0),
+						vertices.get(1),
+						vertices.get(2)
+					);
+					faceVNT[3 + i] = normal.x;// + mesh.location.x;
+					faceVNT[4 + i] = normal.y;// + mesh.location.y;
+					faceVNT[5 + i] = normal.z;// + mesh.location.z;
 				}
-				faceVNT[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;
-				faceVNT[5 + i] = vertexNormals.get(i / 12).z;// + mesh.location.z;
-
+				
 				faceVNT[6 + i] = 0.0f;
 				faceVNT[7 + i] = 1.0f;
 
