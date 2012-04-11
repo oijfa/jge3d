@@ -120,11 +120,11 @@ public class Main {
 		Entity cube = engine.addEntity(name_to_use, 0f, true, name_to_use, "default");
 		cube.setProperty(Entity.NAME, name_to_use);
 		cube.setPosition(new Vector3f(0, 0, 0));
-		cube.setScale(new Vector3f(5.00f,5.00f,5.00f));
+		cube.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(200f);
+		camera.setDistance(50f);
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.focusOn(cube);
 		
@@ -136,10 +136,10 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		
         Light light = new Light(
-			new Vector4f(5.0f,10.0f,-5.0f,1.0f),
-			new Vector4f(255.0f,0.0f,0.0f,255.0f),
-			new Vector4f(150.0f,0.0f,0.0f,255.0f),
-			new Vector4f(150.0f,0.0f,0.0f,255.0f),
+			new Vector4f(0.0f,40.0f,0.0f,1.0f),
+			new Vector4f(200.0f,0.0f,0.0f,255.0f),
+			new Vector4f(200.0f,0.0f,0.0f,255.0f),
+			new Vector4f(200.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
