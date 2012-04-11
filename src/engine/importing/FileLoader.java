@@ -27,6 +27,8 @@ public class FileLoader {
 			parser = new Obj_Parser();
 		else if(extension.equals("xgl"))
 			parser = new XGL_Parser();
+		else if(extension.equals("ply"))
+			parser = new PLY_Parser();
 		else 
 			System.out.println("Unsuported model format");
 		

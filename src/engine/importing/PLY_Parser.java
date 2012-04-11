@@ -20,6 +20,8 @@ public class PLY_Parser extends Parser {
 		public String name = "";
 		
 		public Element(String name, int num_elements) {
+			this.name = name;
+			this.num_elements = num_elements;
 			properties = new ArrayList<Property>();
 		}
 	}
@@ -60,11 +62,11 @@ public class PLY_Parser extends Parser {
 
 	@Override
 	public void readFile(InputStream in) throws Exception {
-		parseObj(
-			new BufferedReader(
-				new InputStreamReader(in)
-			)
+		file = new BufferedReader(
+			new InputStreamReader(in)
 		);
+		
+		parsePly();
 	}
 
 	@Override
@@ -74,17 +76,12 @@ public class PLY_Parser extends Parser {
 				this.getClass().getClassLoader().getResourceAsStream(url)
 			)
 		);
-		parseObj(file);
+		parsePly();
 	}
 
-	public void parseObj(BufferedReader file) throws Exception {
-		Mesh mesh = new Mesh();
-		
+	public void parsePly() throws Exception {
 		parseHeader();
 		parseBody();
-		
-		mesh.setMaterial(new Material());
-		model.addMesh(mesh);
 	}
 
 	private void parseHeader() throws IOException {
@@ -94,22 +91,36 @@ public class PLY_Parser extends Parser {
 			System.exit(1);
 		}
 		
+		currentLine = file.readLine();
 		while(currentLine != null) {
 			String split_line[] = currentLine.split("\\s+");
 			switch(split_line[0]) {
 				case "comment":
 					comments.add(split_line[1]);
+					currentLine = file.readLine();
 					break;
-				case "format":	
+				case "format":
 					format = split_line[1];
 					version = Float.parseFloat(split_line[2]);
+					currentLine = file.readLine();
+					break;
 				case "element":
-					readElement(currentLine);
+					//String split_line[] = currentLine.split("\\s+");
+					Element element = new Element(split_line[1], Integer.parseInt(split_line[2]));
+					currentLine = file.readLine();
+					while(currentLine != null &&
+						 !currentLine.contains("element") &&
+						 !currentLine.contains("end_header"))
+					{
+						readProperty(element, currentLine);			
+						currentLine = file.readLine();
+					}
+					elements.add(element);
 					break;
 				case "end_header":
 					return;
 				default:
-					System.out.println("Unknown def encountered while parsing obj");
+					System.out.println("Unknown def encountered while parsing ply");
 					System.out.println("\t"+currentLine);
 					break;
 			}
@@ -127,7 +138,7 @@ public class PLY_Parser extends Parser {
 						currentLine = file.readLine();
 					}
 					break;
-				case "vertex_indices":
+				case "face":
 					for(int i=0; i < element.num_elements; i++) {
 						parseIndex(currentLine, mesh);
 						currentLine = file.readLine();
@@ -138,6 +149,7 @@ public class PLY_Parser extends Parser {
 					break;
 			}
 		}
+		mesh.setMaterial(new Material());
 		model.addMesh(mesh);
 	}
 	
@@ -161,21 +173,6 @@ public class PLY_Parser extends Parser {
 			);
 		}
 	}
-	
-	private void readElement(String currentLine) throws IOException {
-		String split_line[] = currentLine.split("\\s+");
-		Element element = new Element(split_line[1], Integer.parseInt(split_line[2]));
-		
-		currentLine = file.readLine();
-		while(currentLine != null &&
-			 !currentLine.contains("element") &&
-			 !currentLine.contains("end_header"))
-		{
-			readProperty(element, currentLine);			
-			currentLine = file.readLine();
-		}
-		elements.add(element);
-	}
 
 	private Type getDataType(String type) {
 		switch(type) {
@@ -188,26 +185,30 @@ public class PLY_Parser extends Parser {
 			case "float": return Float.TYPE;
 			case "double": return Double.TYPE;
 			default:
-				System.out.println("Unknown datatype: " + type);
+				//System.out.println("Unknown datatype: " + type);
 				return null;
 		}
 	}
 	
-	public Vector3f parseVector(String string) throws Exception {
+	public void parseVector(String string) throws Exception {
 		String[] line = string.trim().split("\\s+");
 
-		return new Vector3f(
-			Float.parseFloat(line[1]), Float.parseFloat(line[2]), Float.parseFloat(line[3])
+		vertices.add(
+			new Vector3f(
+				Float.parseFloat(line[1]),
+				Float.parseFloat(line[2]),
+				Float.parseFloat(line[3])
+			)
 		);
 	}
 	
 	private void parseIndex(String currentLine, Mesh mesh) {
 		String split_line[] = currentLine.split("\\s+");
 		
-		Vector3f[] face = new Vector3f[Integer.parseInt(split_line[0])];
-		for(int i=0; i < face.length; i++)
-			face[i] = vertices.get(Integer.parseInt(split_line[i+1])); 
-		
+		Face face = new Face();
+		for(int i=0; i < Integer.parseInt(split_line[0]); i++) {
+			face.addVertex(vertices.get(Integer.parseInt(split_line[i+1]))); 
+		}
 		
 		mesh.addFace(new Face(face));
 	}
