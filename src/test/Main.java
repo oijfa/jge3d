@@ -110,17 +110,22 @@ public class Main {
 		armadillo.setPosition(new Vector3f(0, 0, 0));
 		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
 		*/
-		
+		/*
 		Entity bunny = engine.addEntity("bunny", 0f, true, "bunny", "default");
 		bunny.setProperty(Entity.NAME, "bunny");
 		bunny.setPosition(new Vector3f(0, 0, 0));
 		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
+		*/
+		Entity teapot = engine.addEntity("teapot", 0f, true, "teapot", "default");
+		teapot.setProperty(Entity.NAME, "teapot");
+		teapot.setPosition(new Vector3f(-50, 0, 0));
+		teapot.setScale(new Vector3f(0.50f,0.50f,0.50f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(200f);
 		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.focusOn(bunny);
+		camera.focusOn(teapot);
 		
 		addUBOsToDefaultShader();
 	}
@@ -130,14 +135,14 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		
         Light light = new Light(
-			new Vector4f(0.0f,-0.0f,-0.0f,1.0f),
+			new Vector4f(5.0f,10.0f,-5.0f,1.0f),
 			new Vector4f(255.0f,0.0f,0.0f,255.0f),
 			new Vector4f(150.0f,0.0f,0.0f,255.0f),
 			new Vector4f(150.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
-			new Vector3f(0.0f,10.0f,10.0f),
+			new Vector3f(0.0f,-1.0f,10.0f),
 			100.0f,
 			1.0f
 		);
