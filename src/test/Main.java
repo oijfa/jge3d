@@ -116,16 +116,16 @@ public class Main {
 		bunny.setPosition(new Vector3f(0, 0, 0));
 		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
 		*/
-		Entity teapot = engine.addEntity("teapot", 0f, true, "teapot", "default");
-		teapot.setProperty(Entity.NAME, "teapot");
-		teapot.setPosition(new Vector3f(-50, 0, 0));
-		teapot.setScale(new Vector3f(0.50f,0.50f,0.50f));
+		Entity cube = engine.addEntity("cube", 0f, true, "cube", "default");
+		cube.setProperty(Entity.NAME, "cube");
+		cube.setPosition(new Vector3f(0, 0, 0));
+		cube.setScale(new Vector3f(5.00f,5.00f,5.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(200f);
 		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.focusOn(teapot);
+		camera.focusOn(cube);
 		
 		addUBOsToDefaultShader();
 	}
