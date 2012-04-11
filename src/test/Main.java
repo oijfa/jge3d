@@ -116,8 +116,9 @@ public class Main {
 		bunny.setPosition(new Vector3f(0, 0, 0));
 		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
 		*/
-		Entity cube = engine.addEntity("cube", 0f, true, "cube", "default");
-		cube.setProperty(Entity.NAME, "cube");
+		String name_to_use = "bunny";
+		Entity cube = engine.addEntity(name_to_use, 0f, true, name_to_use, "default");
+		cube.setProperty(Entity.NAME, name_to_use);
 		cube.setPosition(new Vector3f(0, 0, 0));
 		cube.setScale(new Vector3f(5.00f,5.00f,5.00f));
 		
