@@ -8,6 +8,7 @@ import engine.entity.*;
 
 import engine.render.Shader;
 import engine.render.ubos.Light;
+import engine.render.ubos.Lights;
 
 public class Main {
 	private Engine engine;
@@ -117,16 +118,16 @@ public class Main {
 		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
 		*/
 		String name_to_use = "bunny";
-		Entity cube = engine.addEntity(name_to_use, 0f, true, name_to_use, "default");
-		cube.setProperty(Entity.NAME, name_to_use);
-		cube.setPosition(new Vector3f(0, 0, 0));
-		cube.setScale(new Vector3f(100.00f,100.00f,100.00f));
+		Entity test = engine.addEntity(name_to_use, 0f, true, name_to_use, "default");
+		test.setProperty(Entity.NAME, name_to_use);
+		test.setPosition(new Vector3f(0, 0, 0));
+		//test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(50f);
+		camera.setDistance(5f);
 		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.focusOn(cube);
+		camera.focusOn(test);
 		
 		addUBOsToDefaultShader();
 	}
@@ -134,20 +135,35 @@ public class Main {
 	//This function is just for testing; we'll need to set this stuff at the map level
 	public void addUBOsToDefaultShader() {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
-		
+		Lights lights = new Lights();
         Light light = new Light(
-			new Vector4f(0.0f,40.0f,0.0f,1.0f),
-			new Vector4f(200.0f,0.0f,0.0f,255.0f),
-			new Vector4f(200.0f,0.0f,0.0f,255.0f),
-			new Vector4f(200.0f,0.0f,0.0f,255.0f),
+			new Vector4f(0.0f,2.0f,-20.0f,1.0f),
+			new Vector4f(50.0f,0.0f,0.0f,255.0f),
+			new Vector4f(50.0f,0.0f,0.0f,255.0f),
+			new Vector4f(100.0f,0.0f,0.0f,255.0f),
 			1.0f,
 			1.0f,
 			1.0f,
-			new Vector3f(0.0f,-1.0f,10.0f),
-			100.0f,
+			new Vector3f(0.0f,-1.0f,0.0f),
+			10.0f,
+			1.0f
+		);       
+        Light light2 = new Light(
+			new Vector4f(0.0f,2.0f,20.0f,1.0f),
+			new Vector4f(0.0f,0.0f,50.0f,255.0f),
+			new Vector4f(0.0f,0.0f,50.0f,255.0f),
+			new Vector4f(0.0f,0.0f,100.0f,255.0f),
+			1.0f,
+			1000.0f,
+			1.0f,
+			new Vector3f(0.0f,-1.0f,0.0f),
+			10.0f,
 			1.0f
 		);
-        shader.addUBO(light);
+        lights.add(light);
+        lights.add(light2);
+        shader.addUBO(lights);
+        
     	shader.addUBO(camera.getMVPmatrix());
 	}
 

@@ -13,11 +13,13 @@
 		    vec3 spot_direction;
 		    float spot_cutoff;
 		    float spot_exponent;
+		    int light_index;
+		    int num_lights;
 		};
-
-		uniform lights {
-			light_type light[1];
-		};
+		
+		uniform alights {
+			light_type light[8];
+		} lights;
 /*
 		uniform material {
 			vec4 ambient;
@@ -32,13 +34,7 @@
 		
 		out vec4 frag_color;
 		
-		int i = 0;
-		
-		void main(){
-			if(color_mod.a == 0.0) {
-		  		discard;
-		  	}
-
+		vec4 phongPass(int light_id) {		
 		    float nDotVP;       // normal * light direction
 		    float nDotR;        // normal * light reflection vector
 		    float pf;           // power factor
@@ -46,9 +42,10 @@
 		    float d;            // distance from surface to light position
 		    vec3 VP;            // direction from surface to light position
 		    vec3 reflection;    // direction of maximum highlights
+		    vec4 frag;			// sum of all frag operations
 		
 		    // Compute vector from surface to light position
-		    VP = vec3 (light[i].position) - vertex_mod;
+		    VP = vec3 (lights.light[light_id].position) - vertex_mod;
 		
 		    // Compute distance between surface and light position
 		    d = length(VP);
@@ -57,9 +54,9 @@
 		    VP = normalize(VP);
 		
 		    // Compute attenuation
-		    attenuation = 1.0f / (light[i].constant_attenuation +
-		                          light[i].linear_attenuation * d +
-		                          light[i].quadratic_attenuation * d * d);
+		    attenuation = 1.0f / (lights.light[light_id].constant_attenuation +
+		                          lights.light[light_id].linear_attenuation * d +
+		                          lights.light[light_id].quadratic_attenuation * d * d);
 		
 		    reflection = normalize(reflect(-normalize(VP), normalize(normal_mod)));
 		
@@ -71,21 +68,33 @@
 		    }
 		    else {
 		        //pf = pow(nDotR, material.shininess);
-		        pf = pow(nDotR, 0.8);
+		        pf = pow(nDotR, 0.8f);
 		    }
 			
 			/*
-		    vec4 ambient = material.ambient * light[i].ambient * attenuation;
-		    vec4 diffuse = material.diffuse * light[i].diffuse * nDotVP * attenuation;
-		    vec4 specular = material.specular * light[i].specular * pf * attenuation;
+		    vec4 ambient = material.ambient * lights.light[light_id].ambient * attenuation;
+		    vec4 diffuse = material.diffuse * lights.light[light_id].diffuse * nDotVP * attenuation;
+		    vec4 specular = material.specular * lights.light[light_id].specular * pf * attenuation;
 		    */
 		    
-		    vec4 ambient = color_mod * light[i].ambient * attenuation;
-		    vec4 diffuse = color_mod * light[i].diffuse * nDotVP * attenuation;
-		    vec4 specular = color_mod * light[i].specular * pf * attenuation;
+		    vec4 ambient = color_mod * lights.light[light_id].ambient * attenuation;
+		    vec4 diffuse = color_mod * lights.light[light_id].diffuse * nDotVP * attenuation;
+		    vec4 specular = color_mod * lights.light[light_id].specular * pf * attenuation;
 
-		  	frag_color = ambient + diffuse + specular;
-		  	frag_color.a = color_mod.a;
+		  	frag = ambient + diffuse + specular;
+		  	frag.a = color_mod.a;
+		  	
+		  	return frag;
+		}
+		
+		void main(){
+			if(color_mod.a == 0.0) {
+		  		discard;
+		  	}
+		  	frag_color = vec4(0,0,0,0);
+			for(int i=0;i != 2;i++) {
+				frag_color += phongPass(i);
+			}
 		}
 	</fragment>
 	<vertex>

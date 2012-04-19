@@ -54,13 +54,11 @@ public class UBO {
 		);
 		
 		//get the size of the block you just found
-		//TODO: I'm unsure of the last param I think it's very wrong
 		block_size = ARBUniformBufferObject.glGetActiveUniformBlock(
-			shader.getShaderID(), 
+			shader.getShaderID(),
 			block_index,
 			ARBUniformBufferObject.GL_UNIFORM_BLOCK_DATA_SIZE
 		);
-		
 		
 		//put the index of each variable in the block into an array
 		indices = BufferUtils.createIntBuffer(ubo.getSize());
