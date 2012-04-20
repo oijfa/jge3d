@@ -118,14 +118,16 @@ public class Main {
 		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
 		*/
 		String name_to_use = "bunny";
-		Entity test = engine.addEntity(name_to_use, 0f, true, name_to_use, "default");
+		Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
 		test.setProperty(Entity.NAME, name_to_use);
 		test.setPosition(new Vector3f(0, 0, 0));
+		test.setAngularFactor(0, new Vector3f(0,1,0));
+		test.setGravity(new Vector3f(0,0,0));
 		//test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(5f);
+		camera.setDistance(0.5f);
 		camera.setPosition(new Vector3f(0, 0, 0));
 		camera.focusOn(test);
 		

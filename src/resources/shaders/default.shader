@@ -68,7 +68,7 @@
 		    }
 		    else {
 		        //pf = pow(nDotR, material.shininess);
-		        pf = pow(nDotR, 0.8f);
+		        pf = pow(nDotR, 1.0f);
 		    }
 			
 			/*

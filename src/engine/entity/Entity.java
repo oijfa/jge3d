@@ -275,6 +275,14 @@ public class Entity {
 		}
 	}
 	
+	public void applyTorqueImpulse(Vector3f impulse) {
+		if (object_type == ObjectType.rigidbody){ 
+			((RigidBody) collision_object).applyTorqueImpulse(impulse);
+		} else {
+			System.out.println("Method [applyTorqueImpulse] not supported for ghost object");
+		}
+	}
+	
 	public void clearForces() {
 		if (object_type == ObjectType.rigidbody){ 
 			((RigidBody) collision_object).clearForces();

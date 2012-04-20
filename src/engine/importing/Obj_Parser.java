@@ -23,6 +23,9 @@ public class Obj_Parser extends Parser {
 	private ArrayList<Vector3f> vertexNormals = new ArrayList<Vector3f>(); // Vertex
 																			// Coordinates
 																			// Normals
+	private ArrayList<String> comments = new ArrayList<String>(); // Vertex
+	// Coordinates
+	// Normals
 	// private ArrayList<Vector3f> vertexTextures = new ArrayList<Vector3f>();
 	// // Vertex Coordinates Textures
 
@@ -67,6 +70,9 @@ public class Obj_Parser extends Parser {
 				case "f":
 					mesh.addFace(readFace(currentLine));
 					break;
+				case "#":
+					comments.add(currentLine);
+					break;
 				default:
 					System.out.println("Unknown def encountered while parsing obj");
 					System.out.println("\t"+currentLine);
@@ -87,12 +93,23 @@ public class Obj_Parser extends Parser {
 		// Split on white Spaces
 		String[] tokens = string.trim().split("\\s+");
 
-		for (int i = 1; i < tokens.length; i++) {
-			verts = tokens[i].split("/");
-
-			if (verts.length == 3) {
-				f.addVertex(vertices.get(Integer.parseInt(verts[0]) - 1));
-				f.addVertexNorm(vertexNormals.get(Integer.parseInt(verts[2]) - 1));
+		if( string.contains("/")) {
+			for (int i = 1; i < tokens.length; i++) {
+				verts = tokens[i].split("/");
+	
+				if (verts.length == 3) {
+					f.addVertex(vertices.get(Integer.parseInt(verts[0]) - 1));
+					f.addVertexNorm(vertexNormals.get(Integer.parseInt(verts[2]) - 1));
+				} else {
+					System.out.println("Weird OBJ file.  Uses alternative face format");
+					throw new Exception();
+				}
+			}
+		} else {
+			if (tokens.length == 4) {
+				f.addVertex(vertices.get(Integer.parseInt(tokens[1])-1));
+				f.addVertex(vertices.get(Integer.parseInt(tokens[2])-1));
+				f.addVertex(vertices.get(Integer.parseInt(tokens[3])-1));
 			} else {
 				System.out.println("Weird OBJ file.  Uses alternative face format");
 				throw new Exception();
