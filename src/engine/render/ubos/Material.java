@@ -28,11 +28,11 @@ public class Material implements UBOInterface {
     };
     
     public Material() {
-        ambient = new Vector4f(0.75f,0.75f,0.75f,0.75f);
-    	diffuse = new Vector4f(0.75f,0.75f,0.75f,0.75f);
-    	specular = new Vector4f(0.75f,0.75f,0.75f,0.75f);
-    	shininess = 0.8f;
-    	alpha = 1.0f;
+        ambient = new Vector4f(1f,1f,1f,255f);
+    	diffuse = new Vector4f(1f,1f,1f,255f);
+    	specular = new Vector4f(1f,1f,1f,255f);
+    	shininess = 1f;
+    	alpha = 255.0f;
     }
     
     public Material(Material material) {

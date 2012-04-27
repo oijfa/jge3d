@@ -41,22 +41,30 @@ public class Lights implements UBOInterface {
 				}
 				sub_offset.flip();
 				
-				sub_block_size = 
-					offsets.get((j+1)*(offsets.capacity()/lights.size())-1)
-					-
-					offsets.get((j*(offsets.capacity()/lights.size())));
-			
+				if(j < lights.size()-1) {
+					sub_block_size = 
+						offsets.get((j+1)*(offsets.capacity()/lights.size()))
+						-
+						offsets.get(j*(offsets.capacity()/lights.size()));
+				} else {
+					sub_block_size = 
+						block_size/4
+						-
+						offsets.get(j*(offsets.capacity()/lights.size()));
+				}
+				
 				combined_buffers.put(
 					lights.get(j).createBuffer(
 						sub_block_size,
 						sub_offset
 					)
 				);
+				
 				sub_offset.clear();
 			}
 			
 			combined_buffers.flip();
-			
+
 			return combined_buffers;
 		}
 		return null;

@@ -45,7 +45,7 @@
 		    vec4 frag;			// sum of all frag operations
 		
 		    // Compute vector from surface to light position
-		    VP = vec3 (lights.light[light_id].position) - vertex_mod;
+		    VP = vec3(lights.light[light_id].position) - vertex_mod;
 		
 		    // Compute distance between surface and light position
 		    d = length(VP);
@@ -68,7 +68,7 @@
 		    }
 		    else {
 		        //pf = pow(nDotR, material.shininess);
-		        pf = pow(nDotR, 1.0f);
+		        pf = pow(nDotR, 0.7f);
 		    }
 			
 			/*
@@ -130,7 +130,7 @@
 			gl_Position = MVP * vertex_cast;
 		
 			// Calculate the normal value for this vertex, in world coordinates
-		    normal_mod = normal;
+		    normal_mod = vec3(transform * vec4(normal.x,normal.y,normal.z,1.0));
 		
 		    // Set the front color to the color passed through with glColor
 			color_mod = color;

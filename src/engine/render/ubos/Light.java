@@ -53,8 +53,8 @@ public class Light implements UBOInterface {
 	}
 		
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
-		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4+1);
-		float[] copy_array = new float[block_size/4+1];
+		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4);
+		float[] copy_array = new float[block_size/4];
 		
 		int i=0;
 		copy_array[offsets.get(i)/4 + 0] = position.x;

@@ -139,27 +139,27 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		Lights lights = new Lights();
         Light light = new Light(
-			new Vector4f(0.0f,2.0f,-20.0f,1.0f),
-			new Vector4f(50.0f,0.0f,0.0f,255.0f),
-			new Vector4f(50.0f,0.0f,0.0f,255.0f),
-			new Vector4f(100.0f,0.0f,0.0f,255.0f),
+			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
+			new Vector4f(5.0f,0.0f,0.0f,255.0f),
+			new Vector4f(5.0f,0.0f,0.0f,255.0f),
+			new Vector4f(5.0f,0.0f,0.0f,255.0f),
+			0.1f,
 			1.0f,
-			1.0f,
-			1.0f,
+			0.1f,
 			new Vector3f(0.0f,-1.0f,0.0f),
-			10.0f,
+			1.0f,
 			1.0f
 		);       
         Light light2 = new Light(
-			new Vector4f(0.0f,2.0f,20.0f,1.0f),
-			new Vector4f(0.0f,0.0f,50.0f,255.0f),
-			new Vector4f(0.0f,0.0f,50.0f,255.0f),
-			new Vector4f(0.0f,0.0f,100.0f,255.0f),
+			new Vector4f(0.0f,2.0f,10.0f,1.0f),
+			new Vector4f(0.0f,0.0f,5.0f,255.0f),
+			new Vector4f(0.0f,0.0f,5.0f,255.0f),
+			new Vector4f(0.0f,0.0f,5.0f,255.0f),
+			0.1f,
 			1.0f,
-			1000.0f,
-			1.0f,
+			0.1f,
 			new Vector3f(0.0f,-1.0f,0.0f),
-			10.0f,
+			1.0f,
 			1.0f
 		);
         lights.add(light);
