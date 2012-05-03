@@ -16,15 +16,14 @@ public class Material implements UBOInterface {
     private Vector4f specular;
     private float shininess;
     private float alpha;
-    
-    private static final int size = 14;
-    private static final String name = "material";
+
+    private static final String name = "amaterial";
     private static final String names[] = {
-	    "Material.ambient",
-	    "Material.diffuse",
-	    "Material.specular",
-	    "Material.shininess",
-	    "Material.alpha"
+	    "amaterial.ambient",
+	    "amaterial.diffuse",
+	    "amaterial.specular",
+	    "amaterial.shininess",
+	    "amaterial.alpha"
     };
     
     public Material() {
@@ -57,45 +56,50 @@ public class Material implements UBOInterface {
 	}
 	
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
-		float material_buffer[] = new float[size];
-
-		//position
-		material_buffer[0] = ambient.x;
-		material_buffer[1] = ambient.y;
-		material_buffer[2] = ambient.z;
-		material_buffer[3] = ambient.w;
-
-		//ambient
-		material_buffer[4] = diffuse.x;
-		material_buffer[5] = diffuse.y;
-		material_buffer[6] = diffuse.z;
-		material_buffer[7] = diffuse.w;
-
-		//diffuse
-		material_buffer[8] = specular.x;
-		material_buffer[9] = specular.y;
-		material_buffer[10] = specular.z;
-		material_buffer[11] = specular.w;
+		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4);
+		float[] copy_array = new float[block_size/4];
 		
-		//specular
-		material_buffer[12] = shininess;
+		int i=0;
+		copy_array[offsets.get(i)/4 + 0] = ambient.x;
+		copy_array[offsets.get(i)/4 + 1] = ambient.y;
+		copy_array[offsets.get(i)/4 + 2] = ambient.z;
+		copy_array[offsets.get(i)/4 + 3] = ambient.w;
+
+		i++;
+		copy_array[offsets.get(i)/4 + 0] = diffuse.x;
+		copy_array[offsets.get(i)/4 + 1] = diffuse.y;
+		copy_array[offsets.get(i)/4 + 2] = diffuse.z;
+		copy_array[offsets.get(i)/4 + 3] = diffuse.w;
 		
-		//specular
-		material_buffer[13] = alpha;
-	    
-		return FloatBuffer.wrap(material_buffer);
+		i++;
+		copy_array[offsets.get(i)/4 + 0] = specular.x;
+		copy_array[offsets.get(i)/4 + 1] = specular.y;
+		copy_array[offsets.get(i)/4 + 2] = specular.z;
+		copy_array[offsets.get(i)/4 + 3] = specular.w;
+		
+		i++;
+		copy_array[offsets.get(i)/4 + 0] = shininess;
+		
+		i++;
+		copy_array[offsets.get(i)/4 + 0] = alpha;
+		/*
+		for(int j=0;j<copy_array.length;j++) {
+			System.out.println(j + ":" + block_size/4 + ":" + copy_array[j]);
+		}
+		*/
+		
+		buf.put(copy_array);
+		buf.flip();
+		
+		return buf;
 	}
 	
 	public int getSize() {
-		return size;
+		return getNames().length;
 	}
 	
 	public String[] getNames() {
 		return names;
-	}
-
-	public IntBuffer getIndices() {
-		return BufferUtils.createIntBuffer(size);
 	}
 	
 	public Type getType() {

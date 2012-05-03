@@ -1,7 +1,6 @@
 package engine.render;
 
 import engine.resource.Resource;
-import engine.utils.DomTools;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -22,10 +21,6 @@ import com.bulletphysics.linearmath.Transform;
 
 import engine.entity.Entity;
 import engine.render.ubos.UBOInterface;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
 
 public class Shader implements Resource{
 	/*
@@ -68,16 +63,12 @@ public class Shader implements Resource{
      * is the same.
      * @param the name and path to the vertex shader
      */
-     private int createVertShader(Document dom){
+     private int createVertShader(String vertexCode){
          //vertShader will be non zero if successfully created
          vertShader=ARBShaderObjects.glCreateShaderObjectARB(ARBVertexShader.GL_VERTEX_SHADER_ARB);
          
          //if created, convert the vertex shader code to a String
-         String vertexCode;
          if(vertShader==0){return 0;}
-         
-   
-         vertexCode = DomTools.findChildrenByName(dom.getDocumentElement(), "vertex").get(0).getTextContent();
 
          /*
          * associate the vertex code String with the created vertex shader
@@ -96,15 +87,12 @@ public class Shader implements Resource{
      }
 
      //same as per the vertex shader except for method syntax
-     private int createFragShader(Document dom){
+     private int createFragShader(String fragCode){
      	//fragShader will be non zero if successfully created
          fragShader=ARBShaderObjects.glCreateShaderObjectARB(ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
          
          //if created, convert the vertex shader code to a String
-         String fragCode;
          if(fragShader==0){return 0;}
-         
-         fragCode = DomTools.findChildrenByName(dom.getDocumentElement(), "fragment").get(0).getTextContent();
 
          /*
          * associate the vertex code String with the created vertex shader
@@ -156,13 +144,16 @@ public class Shader implements Resource{
     		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
     		ARBShaderObjects.glUniform4ARB(scale, buf);
     		buf.clear();
-    		
-    		//ent.getModel().getMesh(0).getMaterial().
-    		
-        	//parse material and light uniforms
+    		    	
+    		//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
     			ubo.bufferData();
     		}
+    		
+    		//TODO: Material hack, not sure how we want to do this
+    		//seems like it should be in the ubo list too...
+    		UBO material = new UBO(this,(UBOInterface)ent.getModel().getMesh(0).getMaterial());
+    		material.bufferData();
         }
     }
     
@@ -224,14 +215,75 @@ public class Shader implements Resource{
 		return shader;
 	}
 
+	public void loadFromFile(InputStream is, String extension) throws Exception {
+		ubo_interfaces = new HashMap<String, UBO>();
+		
+        //create the shader program. If OK, create vertex
+        //and fragment shaders
+    	shader=ARBShaderObjects.glCreateProgramObjectARB();
+    	
+    	InputStreamReader isr = new InputStreamReader(is);
+    	BufferedReader br = new BufferedReader(isr);
+    	String line = br.readLine();
+    	
+    	String vert = new String();
+    	String frag = new String();
+    	
+    	while(line != null) {
+    		switch(line) {
+    			case "###VERT###": 
+    				line = br.readLine();
+    				while(line != null && !line.contains("###ENDVERT###")) {
+    					vert += line + "\n";
+    					line = br.readLine();
+    				}
+    				line = br.readLine();
+    				break;
+    			case "###FRAG###":
+    				line = br.readLine();
+    				while(line != null && !line.contains("###ENDFRAG###")) {
+    					frag += line + "\n";
+    					line = br.readLine();
+    				}
+    				line = br.readLine();
+    				break;
+    			default:
+    				line = br.readLine();
+    				break;
+    		}
+    	}
+
+        if(shader!=0){
+            vertShader=createVertShader(vert);
+            fragShader=createFragShader(frag);
+        } else {
+        	useShader=false;
+        }
+
+        //if the vertex and fragment shaders setup sucessfully,
+        //attach them to the shader program, link the shader program
+        //(into the GL context I suppose), and validate
+        if(vertShader != 0 && fragShader != 0){
+            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
+            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
+            ARBShaderObjects.glLinkProgramARB(shader);
+            ARBShaderObjects.glValidateProgramARB(shader);
+            useShader=printLogInfo(shader);
+        } else {
+        	useShader=false;
+        	System.out.println("Failed to create shader");
+        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
+        }
+	}
+	
+	/*
+	//This thing is shit and I hate it
 	@Override
 	public void loadFromFile(InputStream is, String extension) throws Exception {
 		ubo_interfaces = new HashMap<String, UBO>();
 		
-		/*
-        * create the shader program. If OK, create vertex
-        * and fragment shaders
-        */
+        //create the shader program. If OK, create vertex
+        //and fragment shaders
     	shader=ARBShaderObjects.glCreateProgramObjectARB();
     	
         if(shader!=0){
@@ -246,12 +298,10 @@ public class Shader implements Resource{
         } else {
         	useShader=false;
         }
-        
-        /*
-        * if the vertex and fragment shaders setup sucessfully,
-        * attach them to the shader program, link the shader program
-        * (into the GL context I suppose), and validate
-        */
+
+        //if the vertex and fragment shaders setup sucessfully,
+        //attach them to the shader program, link the shader program
+        //(into the GL context I suppose), and validate
         if(vertShader != 0 && fragShader != 0){
             ARBShaderObjects.glAttachObjectARB(shader, vertShader);
             ARBShaderObjects.glAttachObjectARB(shader, fragShader);
@@ -264,7 +314,7 @@ public class Shader implements Resource{
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
         }
 	}
-
+	*/
 	@Override
 	public String toXML() {
 		// TODO Auto-generated method stub

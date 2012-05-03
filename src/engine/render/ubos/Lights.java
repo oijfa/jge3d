@@ -48,7 +48,7 @@ public class Lights implements UBOInterface {
 						offsets.get(j*(offsets.capacity()/lights.size()));
 				} else {
 					sub_block_size = 
-						block_size/4
+						block_size
 						-
 						offsets.get(j*(offsets.capacity()/lights.size()));
 				}

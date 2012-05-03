@@ -525,7 +525,6 @@ public class Model implements RenderObject, Resource {
 			shader.stopShader();
 		} else {
 			System.out.println("Missing shader [rendering direct]:\nmodelVBOID:"+modelVBOID+" modelVBOIDXID:"+modelVBOindexID+"\n");
-			//GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 		}
 		
 		ARBVertexBufferObject.glBindBufferARB(

@@ -24,7 +24,7 @@ public class Light implements UBOInterface {
     private static int num_lights=0;
     private int light_index=0;
     //private static final int size = 24;
-    private static final String name = "lights";
+    private static final String name = "light";
     
 	public Light(
 		Vector4f position,
@@ -105,7 +105,7 @@ public class Light implements UBOInterface {
 		
 		i++;
 		copy_array[offsets.get(i)/4 + 0] = num_lights;
-
+		
 		buf.put(copy_array);
 		buf.flip();
 
