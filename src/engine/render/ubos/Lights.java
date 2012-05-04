@@ -11,13 +11,19 @@ import engine.render.UBO.Type;
 public class Lights implements UBOInterface {
     private ArrayList<Light> lights;
     //private static final int size = 24;
-    private static final String name = "alights";
+    private static final String name = "Lights";
+    private int num_lights=0;
     
 	public Lights()	{
 		lights = new ArrayList<Light>();
 	}
 		
 	public void add(Light light) {
+		light.setLightIndex(num_lights);
+		num_lights++;
+		for(Light current: lights) {
+			current.setNumLights(num_lights);
+		}
 		lights.add(light);
 	}
 	

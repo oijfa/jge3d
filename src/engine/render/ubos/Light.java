@@ -21,7 +21,7 @@ public class Light implements UBOInterface {
     private Vector3f spot_direction;
     private float spot_cutoff;
     private float spot_exponent;
-    private static int num_lights=0;
+    private int num_lights=0;
     private int light_index=0;
     //private static final int size = 24;
     private static final String name = "light";
@@ -49,7 +49,6 @@ public class Light implements UBOInterface {
 		this.spot_direction=new Vector3f(spot_direction);
 		this.spot_cutoff=new Float(spot_cutoff);
 		this.spot_exponent=new Float(spot_exponent);
-		this.light_index=num_lights++;
 	}
 		
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
@@ -135,6 +134,14 @@ public class Light implements UBOInterface {
 		return names;
 	}
 
+	public void setLightIndex(int index) {
+		this.light_index=index;
+	}
+	
+	public void setNumLights(int num_lights) {
+		this.num_lights=num_lights;
+	}
+	
 	public Type getType() {
 		return Type.LIGHT;
 	}

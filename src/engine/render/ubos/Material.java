@@ -17,13 +17,13 @@ public class Material implements UBOInterface {
     private float shininess;
     private float alpha;
 
-    private static final String name = "amaterial";
+    private static final String name = "Material";
     private static final String names[] = {
-	    "amaterial.ambient",
-	    "amaterial.diffuse",
-	    "amaterial.specular",
-	    "amaterial.shininess",
-	    "amaterial.alpha"
+	    "Material.ambient",
+	    "Material.diffuse",
+	    "Material.specular",
+	    "Material.shininess",
+	    "Material.alpha"
     };
     
     public Material() {

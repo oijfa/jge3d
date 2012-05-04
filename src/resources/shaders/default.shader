@@ -1,7 +1,7 @@
 ###FRAG###
 	#version 330
 
-	struct light_type {
+	struct Light {
 		vec4 position;
 		vec4 ambient;
 		vec4 diffuse;
@@ -16,11 +16,11 @@
 	    int num_lights;
 	};
 	
-	uniform alights {
-		light_type light[2];
+	uniform Lights {
+		Light light[2];
 	} lights;
 
-	uniform amaterial {
+	uniform Material {
 		vec4 ambient;
 		vec4 diffuse;
 		vec4 specular;
@@ -30,7 +30,6 @@
 
 	smooth in vec3 vertex_mod;
 	smooth in vec3 normal_mod;
-	in vec4 color_mod;
 	
 	out vec4 frag_color;
 	
@@ -65,34 +64,26 @@
 	
 	    if (nDotVP == 0.0f) {
 	        pf = 0.0f;
+	    } else {
+			pf = pow(nDotR, material.shininess);
 	    }
-	    else {
-			pf = pow(nDotR, 0.0f);
-	        //pf = pow(nDotR, 0.7f);
-	    }
-		
-		/*
+
 	    vec4 ambient = material.ambient * lights.light[light_id].ambient * attenuation;
 	    vec4 diffuse = material.diffuse * lights.light[light_id].diffuse * nDotVP * attenuation;
 	    vec4 specular = material.specular * lights.light[light_id].specular * pf * attenuation;
-	    */
-	    
-	    vec4 ambient = color_mod * lights.light[light_id].ambient * attenuation;
-	    vec4 diffuse = color_mod * lights.light[light_id].diffuse * nDotVP * attenuation;
-	    vec4 specular = color_mod * lights.light[light_id].specular * pf * attenuation;
 		
 	  	frag = ambient + diffuse + specular;
-	  	frag.a = color_mod.a;
+	  	frag.a = material.alpha;
 	  	
 	  	return frag;
 	}
 	
 	void main(){
-		if(color_mod.a == 0.0) {
+		if(material.alpha == 0.0) {
 	  		discard;
 	  	}
 	  	frag_color = vec4(0,0,0,0);
-		for(int i=0;i != 2;i++) {
+		for(int i=0;i<2;i++) {
 			frag_color += phongPass(i);
 		}
 	}
@@ -109,11 +100,10 @@
 	in vec3 vertex;
 	in vec3 normal;
 	in vec2 texture;
-	in vec4 color;
+	//in vec4 color;
 	uniform vec4 scale;
 	smooth out vec3 vertex_mod;
 	smooth out vec3 normal_mod;
-	out vec4 color_mod;
 	
 	void main() {
 		vec4 vertex_cast;
@@ -133,6 +123,6 @@
 	    normal_mod = vec3(transform * vec4(normal.x,normal.y,normal.z,1.0));
 	
 	    // Set the front color to the color passed through with glColor
-		color_mod = color;
+		//color_mod = color;
 	}
 ###ENDVERT###
