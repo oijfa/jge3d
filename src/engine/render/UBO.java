@@ -123,11 +123,27 @@ public class UBO {
 	}
 	
 	public void bufferData() {
+		//put data into the buffer
+		ARBBufferObject.glBindBufferARB(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
+			uboID
+		);
+
 		ARBBufferObject.glBufferSubDataARB(
 			ARBUniformBufferObject.GL_UNIFORM_BUFFER, 
 			0, 
 			ubo_interface.createBuffer(block_size, offsets)
 		);
+		/*
+		//bind the block to the buffer object
+		ARBUniformBufferObject.glBindBufferBase(
+			ARBUniformBufferObject.GL_UNIFORM_BUFFER,
+			block_index,
+			uboID
+		);
+		
+		ARBUniformBufferObject.glUniformBlockBinding(shader, block_index, block_index);
+		*/
 	}
 	
 	public void destroyUBO() {
@@ -135,6 +151,14 @@ public class UBO {
 		hasUBO = false;
 	}
 
+	public void setInterface(UBOInterface ubo_interface) {
+		this.ubo_interface = ubo_interface; 
+	}
+	
+	public UBOInterface getInterface() {
+		return ubo_interface; 
+	}
+	
 	public void debug() {
 		System.out.println(
 			"shader: " + shader + "\n" +

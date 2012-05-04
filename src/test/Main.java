@@ -9,6 +9,7 @@ import engine.entity.*;
 import engine.render.Shader;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
+import engine.render.ubos.Material;
 
 public class Main {
 	private Engine engine;
@@ -164,9 +165,12 @@ public class Main {
 		);
         lights.add(light);
         lights.add(light2);
+        
         shader.addUBO(lights);
         
     	shader.addUBO(camera.getMVPmatrix());
+    	
+    	shader.addUBO(new Material());
 	}
 
 	public void runMultiThread() {

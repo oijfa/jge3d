@@ -21,10 +21,10 @@ public class Lights implements UBOInterface {
 	public void add(Light light) {
 		light.setLightIndex(num_lights);
 		num_lights++;
+		lights.add(light);
 		for(Light current: lights) {
 			current.setNumLights(num_lights);
 		}
-		lights.add(light);
 	}
 	
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {

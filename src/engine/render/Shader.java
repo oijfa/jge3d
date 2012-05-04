@@ -144,16 +144,13 @@ public class Shader implements Resource{
     		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
     		ARBShaderObjects.glUniform4ARB(scale, buf);
     		buf.clear();
-    		    	
+    		
+    		ubo_interfaces.get("Material").setInterface(ent.getModel().getMesh(0).getMaterial());
+    		
     		//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
     			ubo.bufferData();
     		}
-    		
-    		//TODO: Material hack, not sure how we want to do this
-    		//seems like it should be in the ubo list too...
-    		UBO material = new UBO(this,(UBOInterface)ent.getModel().getMesh(0).getMaterial());
-    		material.bufferData();
         }
     }
     

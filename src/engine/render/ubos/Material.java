@@ -30,7 +30,7 @@ public class Material implements UBOInterface {
         ambient = new Vector4f(1f,1f,1f,255f);
     	diffuse = new Vector4f(1f,1f,1f,255f);
     	specular = new Vector4f(1f,1f,1f,255f);
-    	shininess = 1f;
+    	shininess = 255.0f;
     	alpha = 255.0f;
     }
     
@@ -82,11 +82,6 @@ public class Material implements UBOInterface {
 		
 		i++;
 		copy_array[offsets.get(i)/4 + 0] = alpha;
-		/*
-		for(int j=0;j<copy_array.length;j++) {
-			System.out.println(j + ":" + block_size/4 + ":" + copy_array[j]);
-		}
-		*/
 		
 		buf.put(copy_array);
 		buf.flip();
