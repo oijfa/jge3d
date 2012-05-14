@@ -15,16 +15,38 @@ import engine.render.Model;
 import engine.render.Shader;
 
 public class ResourceManager {
+	/*
+	 * Basically just a struct for keeping internal info
+	 */
+	class ResourceItem{
+		public String category;
+		public String name;
+		public String path;
+		public Class<? extends Resource> item_class;
+		public Resource data;
+	}
+	
+	//Path we are currently running from
 	String program_path;
+	
+	//Holds the list of resources in each category.
 	HashMap<String,ArrayList<ResourceItem>> resources;
 	
+	//Used to convert categories into their class names
 	HashMap<String, Class<? extends Resource>> cat_to_class;
 	
 	public ResourceManager(){
+		//Setup cat_to_class hashmap
 		loadCatToClass();
 		
 		resources = new HashMap<String, ArrayList<ResourceItem>>();
 		
+		/*
+		 * Get current path so that we can determine whether being
+		 * 	Run from a jar or class files.
+		 * 
+		 * Each of those situations has its own file loader.
+		 */
 		program_path = (new File(".")).getAbsolutePath();
 		ContentExtractor c;
 		if(program_path.endsWith(".jar")){
@@ -36,8 +58,17 @@ public class ResourceManager {
 			c = new FileSystemContents(program_path);
 		}
 		
+		/*
+		 * Regardless of which method was used, we want a list of
+		 * 	files available to us.
+		 */
 		ArrayList<String> file_list = filter_files(c.getFiles());
 		
+		
+		/*
+		 * Loop through each file, creating a resource item for it.
+		 * 	Don't load the file yet, we do that as each resource is needed.
+		 */
 		for(String file_path : file_list){
 			ResourceItem tmp = new ResourceItem();
 			tmp.category = getCategory(file_path);
@@ -56,6 +87,15 @@ public class ResourceManager {
 		}
 	}
 	
+	/*
+	 * Filter out the files we want to ignore.  
+	 * 	Anything that's not in the resources folder is thrown out.
+	 * 
+	 * 	Anything with "ignore" in its path is also thrown out.
+	 * 		\ This lets us keep the theme images and such in the 
+	 * 		\	Resource folder without having a seperate resource
+	 * 		\	for each one. 
+	 */
 	private ArrayList<String> filter_files(ArrayList<String> files){
 		ArrayList<String> filtered = new ArrayList<String>();
 		
@@ -68,6 +108,9 @@ public class ResourceManager {
 		return filtered;
 	}
 	
+	/*
+	 * Setup the hash that lets us pull the class name from the category
+	 */
 	private void loadCatToClass() {
 		cat_to_class = new HashMap<String, Class<? extends Resource>>();
 		
@@ -76,6 +119,10 @@ public class ResourceManager {
 		cat_to_class.put("shaders", Shader.class);
 	}
 
+	
+	/*
+	 * Write out any changes that have been made to the resource.
+	 */
 	public void saveResource(String name, String category){
 		ResourceItem res = findResource(name, category);
 		
@@ -91,46 +138,45 @@ public class ResourceManager {
 		}
 	}
 	
+	
+	/*
+	 * Load the resource on the fly, or just return it if it has been
+	 * 	loaded previously.
+	 */
 	public Object getResource(String name, String category){
 		ResourceItem res = findResource(name, category);
-		
-		if( res != null){
-			if( res.data == null ){
-				try {
-					File f = new File(res.path);
-					System.out.println(f.getAbsolutePath());
-					
-					InputStream in = new FileInputStream(f);
-					res.data = res.item_class.newInstance();
+		try {
+			if( res != null){
+				//Only load it if we haven't before.
+				if( res.data == null ){
 					String[] extension;
-					extension = res.path.split("\\.");
-					res.data.loadFromFile(in, extension[extension.length-1]);
 					
-					if( res.item_class == Model.class ){
-						Model model = (Model)res.data;
-						Shader shader = (Shader)getResource("default", "shaders");
-						model.setShader(shader);
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					System.exit(0);
-				} catch (Exception e){
-					e.printStackTrace();
-					System.exit(0);
-				}	
+					
+					//Create a stream
+					File f = new File(res.path);
+					InputStream in = new FileInputStream(f);
+					
+					
+					extension = res.path.split("\\.");
+					
+					//Pass to interface
+					res.data = res.item_class.newInstance();
+					res.data.loadFromFile(this, in, extension[extension.length-1]);
+				}
+				
+				return res.data;
 			}
-			
-			return res.data;
-		}
-		
-		try{
-			throw new Exception();
-		}catch(Exception e){
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 		
+		/*
+		 * TODO:  Return a default for each category if nothing else
+		 * 	was found, or there was an error.
+		 */
 		System.out.println("No such resource found: (" + name + "," + category + ")");
-		System.exit(0);
 		return null;
 	}
 	
@@ -168,6 +214,9 @@ public class ResourceManager {
 		resources.get(r.category).add(r);
 	}
 	
+	/*
+	 * Search through the resource list
+	 */
 	private ResourceItem findResource(String name, String category){
 		ArrayList<ResourceItem> cat = resources.get(category);
 		if( cat != null){
@@ -178,13 +227,5 @@ public class ResourceManager {
 			}
 		}
 		return null;
-	}
-	
-	class ResourceItem{
-		public String category;
-		public String name;
-		public String path;
-		public Class<? extends Resource> item_class;
-		public Resource data;
 	}
 }

@@ -19,6 +19,7 @@ import engine.entity.EntityList;
 import engine.entity.Actor;
 import engine.input.components.KeyMapException;
 import engine.resource.Resource;
+import engine.resource.ResourceManager;
 import de.matthiasmann.twl.Event;
 
 public class InputMap implements Resource {
@@ -322,7 +323,7 @@ public class InputMap implements Resource {
 	}
 
 	@Override
-	public void loadFromFile(InputStream is, String extension) throws Exception {
+	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
 		Document dom;
   		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     

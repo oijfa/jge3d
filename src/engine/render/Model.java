@@ -31,6 +31,7 @@ import engine.importing.FileLoader;
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
 import engine.resource.Resource;
+import engine.resource.ResourceManager;
 
 public class Model implements RenderObject, Resource {
 	private ArrayList<Mesh> meshes;
@@ -624,7 +625,9 @@ public class Model implements RenderObject, Resource {
 	}
 
 	@Override
-	public void loadFromFile(InputStream is, String extension) throws Exception {
+	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
 		this.combineModels(FileLoader.loadFile(is, extension));
+		Shader shader = (Shader)resource_manager.getResource("default", "shaders");
+		this.setShader(shader);
 	}
 }

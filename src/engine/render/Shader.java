@@ -1,6 +1,7 @@
 package engine.render;
 
 import engine.resource.Resource;
+import engine.resource.ResourceManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -212,7 +213,8 @@ public class Shader implements Resource{
 		return shader;
 	}
 
-	public void loadFromFile(InputStream is, String extension) throws Exception {
+	@Override
+	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
 		ubo_interfaces = new HashMap<String, UBO>();
 		
         //create the shader program. If OK, create vertex
@@ -272,46 +274,7 @@ public class Shader implements Resource{
         	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
         }
 	}
-	
-	/*
-	//This thing is shit and I hate it
-	@Override
-	public void loadFromFile(InputStream is, String extension) throws Exception {
-		ubo_interfaces = new HashMap<String, UBO>();
-		
-        //create the shader program. If OK, create vertex
-        //and fragment shaders
-    	shader=ARBShaderObjects.glCreateProgramObjectARB();
-    	
-        if(shader!=0){
-        	Document dom;
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-    		// Create Dom Structure
-    		DocumentBuilder db = dbf.newDocumentBuilder();
-    		dom = db.parse(is);
-            vertShader=createVertShader(dom);
-            fragShader=createFragShader(dom);
-        } else {
-        	useShader=false;
-        }
-
-        //if the vertex and fragment shaders setup sucessfully,
-        //attach them to the shader program, link the shader program
-        //(into the GL context I suppose), and validate
-        if(vertShader != 0 && fragShader != 0){
-            ARBShaderObjects.glAttachObjectARB(shader, vertShader);
-            ARBShaderObjects.glAttachObjectARB(shader, fragShader);
-            ARBShaderObjects.glLinkProgramARB(shader);
-            ARBShaderObjects.glValidateProgramARB(shader);
-            useShader=printLogInfo(shader);
-        } else {
-        	useShader=false;
-        	System.out.println("Failed to create shader");
-        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
-        }
-	}
-	*/
 	@Override
 	public String toXML() {
 		// TODO Auto-generated method stub
