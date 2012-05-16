@@ -1,11 +1,13 @@
 package engine.terrain;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import engine.entity.Entity;
 import engine.render.Model;
 import engine.render.Shader;
 import engine.render.model_pieces.Mesh;
+import engine.render.ubos.Material;
 
 public class Terrain extends Entity {
 	private DynamicMatrix terrain;
@@ -14,7 +16,7 @@ public class Terrain extends Entity {
 
 	public Terrain(float mass, boolean collide, Model base_model, Shader shader) {
 		super(mass, collide, base_model, shader);
-		this.base_model = base_model;
+		this.base_model = new Model(base_model);
 		this.base_model.setShader(shader);
 		this.full_model = new Model(shader);
 	}
@@ -29,6 +31,16 @@ public class Terrain extends Entity {
 		terrain = new DynamicMatrix();
 		
 		full_model.deleteMeshes();
+		
+		base_model.getMesh(0).setMaterial(
+			new Material(
+				new Vector4f(13.0f,13.0f,13.0f,255.0f),
+				new Vector4f(13.0f,13.0f,13.0f,255.0f),
+				new Vector4f(13.0f,13.0f,13.0f,255.0f),
+				100.0f,
+				255.0f
+			)
+		);
 		
 		//Create the base matrix for the terrain
 		for (int i = 0; i < land_size; i++)

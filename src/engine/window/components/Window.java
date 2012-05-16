@@ -6,6 +6,7 @@ public class Window extends ResizableFrame {
 	String name;
 	
 	public Window() {
+		super();
 		name = new String();
 	}
 	
