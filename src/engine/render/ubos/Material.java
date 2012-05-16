@@ -176,6 +176,19 @@ public class Material implements UBOInterface {
     	this.alpha=alpha;
     }
     
+	public void setMaterial(
+    	Vector4f ambient,
+    	Vector4f diffuse,
+    	Vector4f specular,
+    	float shininess,
+    	float alpha) {
+			this.ambient=ambient;
+			this.diffuse=diffuse;
+			this.specular=specular;
+			this.shininess=shininess;
+			this.alpha=alpha;
+	}
+    
     public FloatBuffer getAmbientAsBuffer() {
 		float[] temp = new float[3];
 		temp[0] = ambient.x;

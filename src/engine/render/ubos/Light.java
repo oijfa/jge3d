@@ -142,6 +142,31 @@ public class Light implements UBOInterface {
 		this.num_lights=num_lights;
 	}
 	
+	public void setLight(
+			Vector4f position,
+	    	Vector4f ambient,
+	    	Vector4f diffuse,
+	    	Vector4f specular,
+	    	float constant_attenuation,
+	    	float linear_attenuation,
+	    	float quadratic_attenuation,
+	    	Vector3f spot_direction,
+	    	float spot_cutoff,
+	    	float spot_exponent
+	    	)
+		{
+			this.position=new Vector4f(position);
+			this.ambient=new Vector4f(ambient);
+			this.diffuse=new Vector4f(diffuse);
+			this.specular=new Vector4f(specular);
+			this.constant_attenuation=new Float(constant_attenuation);
+			this.linear_attenuation=new Float(linear_attenuation);
+			this.quadratic_attenuation=new Float(quadratic_attenuation);
+			this.spot_direction=new Vector3f(spot_direction);
+			this.spot_cutoff=new Float(spot_cutoff);
+			this.spot_exponent=new Float(spot_exponent);
+		}
+	
 	public Type getType() {
 		return Type.LIGHT;
 	}

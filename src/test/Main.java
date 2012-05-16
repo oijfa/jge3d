@@ -3,6 +3,8 @@ package test;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
+import editor.window.LightMenu;
+import editor.window.MaterialMenu;
 import engine.Engine;
 import engine.entity.*;
 
@@ -13,14 +15,23 @@ import engine.render.ubos.Material;
 
 public class Main {
 	private Engine engine;
-/*
+	/*
 	private Actor player;
 	private Actor model;
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
-	private Entity model5;*/
+	private Entity model5;
+	*/
+	
+	private Lights lights;
+    private Light light;
+    private Light light2;
+	
 	private Camera camera;
+	
+	private LightMenu lightmenu;
+	private MaterialMenu materialmenu;
 	
 	public static void main(String args[]) {
 		boolean multiThreaded = false;
@@ -34,7 +45,6 @@ public class Main {
 
 	public Main() {
 		engine = new Engine();
-		
 		/*
 		//Uncomment if you need to import a model into a different format
 		Parser import_model = new Obj_Parser();
@@ -55,13 +65,13 @@ public class Main {
 		Terrain terrain = new Terrain(
 			0,
 			true,
-			(engine.render.Model) engine.resource_manager.getResource("singlebox","models"),
+			(engine.render.Model) engine.resource_manager.getResource("subdivided_cube","models"),
 			(engine.render.Shader) engine.resource_manager.getResource("default","shaders")
 		);
 		terrain.setProperty
 		(Entity.NAME, "terrain");
 		terrain.setPosition(new Vector3f(0,-10, 0));
-		terrain.createTerrain(20);
+		terrain.createTerrain(10);
 		engine.addEntity(terrain);
 		
 		//Make some parallax stars
@@ -105,18 +115,12 @@ public class Main {
 		model5.setPosition(new Vector3f(10, 0, 0));
 		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 		model5.setGravity(new Vector3f(0,0,0));
-		
+		/*
 		//Test armadillo
 		Entity armadillo = engine.addEntity("armadillo", 0f, true, "armadillo", "default");
 		armadillo.setProperty(Entity.NAME, "armadillo");
 		armadillo.setPosition(new Vector3f(0, 0, 0));
 		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
-		*/
-		/*
-		Entity bunny = engine.addEntity("bunny", 0f, true, "bunny", "default");
-		bunny.setProperty(Entity.NAME, "bunny");
-		bunny.setPosition(new Vector3f(0, 0, 0));
-		bunny.setScale(new Vector3f(100.0f,100.0f,100.0f));
 		*/
 		String name_to_use = "bunny";
 		Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
@@ -133,14 +137,27 @@ public class Main {
 		camera.focusOn(test);
 		
 		addUBOsToDefaultShader();
-	}
+		
+		lightmenu = new LightMenu();
+		lightmenu.setTheme("lightmenu");
+		engine.addWindow(lightmenu, 400, 400);
+		lightmenu.setName("Light Menu");
+		materialmenu = new MaterialMenu();
+		materialmenu.setTheme("materialmenu");
+		engine.addWindow(materialmenu, 400, 400);
+		materialmenu.setName("Material Menu");
+		
+		lightmenu.setLight(light);
+		materialmenu.setMaterial(test.getModel().getMesh(0).getMaterial());
+	}	
 	
 	//This function is just for testing; we'll need to set this stuff at the map level
 	public void addUBOsToDefaultShader() {
+		lights = new Lights();
+		
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
-		Lights lights = new Lights();
-        Light light = new Light(
-			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
+		light = new Light(
+			new Vector4f(0.0f,2.0f,10.0f,1.0f),
 			new Vector4f(5.0f,0.0f,0.0f,255.0f),
 			new Vector4f(5.0f,0.0f,0.0f,255.0f),
 			new Vector4f(5.0f,0.0f,0.0f,255.0f),
@@ -150,9 +167,9 @@ public class Main {
 			new Vector3f(0.0f,-1.0f,0.0f),
 			1.0f,
 			1.0f
-		);       
-        Light light2 = new Light(
-			new Vector4f(0.0f,2.0f,10.0f,1.0f),
+		);
+        light2 = new Light(
+			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
 			new Vector4f(0.0f,0.0f,5.0f,255.0f),
 			new Vector4f(0.0f,0.0f,5.0f,255.0f),
 			new Vector4f(0.0f,0.0f,5.0f,255.0f),
