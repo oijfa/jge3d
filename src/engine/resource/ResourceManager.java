@@ -2,17 +2,16 @@ package engine.resource;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import engine.input.InputMap;
 import engine.render.Model;
 import engine.render.Shader;
+import engine.window.WindowManager;
 
 public class ResourceManager {
 	/*
@@ -117,6 +116,7 @@ public class ResourceManager {
 		cat_to_class.put("inputmaps", InputMap.class);
 		cat_to_class.put("models", Model.class);
 		cat_to_class.put("shaders", Shader.class);
+		cat_to_class.put("themes", WindowManager.class);
 	}
 
 	
@@ -154,14 +154,12 @@ public class ResourceManager {
 					
 					//Create a stream
 					File f = new File(res.path);
-					InputStream in = new FileInputStream(f);
-					
 					
 					extension = res.path.split("\\.");
 					
 					//Pass to interface
 					res.data = res.item_class.newInstance();
-					res.data.loadFromFile(this, in, extension[extension.length-1]);
+					res.data.loadFromFile(this, f.toURI().toURL(), extension[extension.length-1]);
 				}
 				
 				return res.data;

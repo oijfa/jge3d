@@ -1,11 +1,11 @@
 package engine.resource;
 
-import java.io.InputStream;
+import java.net.URL;
 
 public interface Resource {
 	public void loadFromFile(
 		ResourceManager resource_manager, 
-		InputStream is, 
+		URL url, 
 		String extension
 	) throws Exception;
 	

@@ -1,12 +1,14 @@
 package engine.window;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.lwjgl.LWJGLException;
 
+import engine.resource.Resource;
+import engine.resource.ResourceManager;
 import engine.window.components.Window;
 import engine.window.components.WindowList;
-import engine.window.tree.Model;
 
 import de.matthiasmann.twl.DesktopArea;
 import de.matthiasmann.twl.Event;
@@ -17,7 +19,7 @@ import engine.input.components.KeyMapException;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
-public class WindowManager extends DesktopArea {
+public class WindowManager extends DesktopArea implements Resource {
 	private LWJGLRenderer renderer;
 	private GUI gui;
 	private ThemeManager theme;
@@ -29,15 +31,10 @@ public class WindowManager extends DesktopArea {
 
 	public WindowManager() {
 		super();
-		windowInit(null);
+		//windowInit(null);
 	}
 
-	public WindowManager(Model m) {
-		super();
-		windowInit(m);
-	}
-
-	public void windowInit(Model m) {
+	public void loadFromFile(ResourceManager resource_manager, URL url, String extension) throws Exception {
 		try {
 			renderer = new LWJGLRenderer();
 		} catch (LWJGLException e1) {
@@ -45,9 +42,7 @@ public class WindowManager extends DesktopArea {
 		}
 		gui = new GUI(this, renderer);
 		try {
-			theme = ThemeManager.createThemeManager(this.getClass()
-				.getClassLoader().getResource("resources/themes/default.xml"),
-				renderer);
+			theme = ThemeManager.createThemeManager(url,renderer);
 			gui.applyTheme(theme);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -128,4 +123,7 @@ public class WindowManager extends DesktopArea {
 	public WindowList getWindows() {
 		return windows;
 	}
+	
+	//TODO: Fill this method out
+	public String toXML(){ return ""; }
 }

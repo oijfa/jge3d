@@ -6,6 +6,7 @@ import engine.resource.ResourceManager;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -214,14 +215,14 @@ public class Shader implements Resource{
 	}
 
 	@Override
-	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
+	public void loadFromFile(ResourceManager resource_manager, URL url, String extension) throws Exception {
 		ubo_interfaces = new HashMap<String, UBO>();
 		
         //create the shader program. If OK, create vertex
         //and fragment shaders
     	shader=ARBShaderObjects.glCreateProgramObjectARB();
     	
-    	InputStreamReader isr = new InputStreamReader(is);
+    	InputStreamReader isr = new InputStreamReader(url.openStream());
     	BufferedReader br = new BufferedReader(isr);
     	String line = br.readLine();
     	

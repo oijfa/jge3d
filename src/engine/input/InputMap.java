@@ -1,7 +1,7 @@
 package engine.input;
 
-import java.io.*;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -323,14 +323,14 @@ public class InputMap implements Resource {
 	}
 
 	@Override
-	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
+	public void loadFromFile(ResourceManager resource_manager, URL url, String extension) throws Exception {
 		Document dom;
   		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     
   		//Create Dom Structure
   		DocumentBuilder db;
 		db = dbf.newDocumentBuilder();
-		dom = db.parse(is);
+		dom = db.parse(url.openStream());
 	
 		Element root_element = dom.getDocumentElement();
 		if(root_element.getNodeName().equalsIgnoreCase("keymap")){

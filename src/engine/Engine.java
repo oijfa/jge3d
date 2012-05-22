@@ -73,9 +73,15 @@ public class Engine {
 			renderer = new FixedRenderer(entity_list);
 		renderer.initGL();
 		
+		
+		setWindowTheme("default");
 		setKeyMap("default");
 		
 		ai_manager = new AIManager();
+	}
+
+	private void setWindowTheme(String wm) {
+		renderer.setWindowManager((WindowManager)resource_manager.getResource(wm, "themes"));
 	}
 
 	public void run() {

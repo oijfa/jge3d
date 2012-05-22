@@ -4,7 +4,7 @@ package engine.render;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -625,8 +625,8 @@ public class Model implements RenderObject, Resource {
 	}
 
 	@Override
-	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
-		this.combineModels(FileLoader.loadFile(is, extension));
+	public void loadFromFile(ResourceManager resource_manager, URL url, String extension) throws Exception {
+		this.combineModels(FileLoader.loadFile(url.openStream(), extension));
 		Shader shader = (Shader)resource_manager.getResource("default", "shaders");
 		this.setShader(shader);
 	}
