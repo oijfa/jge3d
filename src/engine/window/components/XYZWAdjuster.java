@@ -1,33 +1,39 @@
 package engine.window.components;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector4f;
 
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.Widget;
+import editor.action_listener.ActionEvent;
+import editor.action_listener.ActionListener;
 
 
-public class XYZWAdjuster extends Widget {
+public class XYZWAdjuster extends Widget implements ActionListener {
+	private ArrayList<ActionListener> action_listeners;
 	private DialogLayout dialoglayout;
 	private Label label;
-	private SlidingValueAdjuster x;
-	private SlidingValueAdjuster y;
-	private SlidingValueAdjuster z;
-	private SlidingValueAdjuster w;
+	private LabeledValueAdjuster x;
+	private LabeledValueAdjuster y;
+	private LabeledValueAdjuster z;
+	private LabeledValueAdjuster w;
 
 	public XYZWAdjuster(String name) {
+		action_listeners = new ArrayList<ActionListener>();
 		this.setTheme("rgbaadjuster");
 		label = new Label(name);
 		label.setTheme("label");
-		x = new SlidingValueAdjuster("X");
-		x.setTheme("slidingvalueadjuster");
-		y = new SlidingValueAdjuster("Y");
-		y.setTheme("slidingvalueadjuster");
-		z = new SlidingValueAdjuster("Z");
-		z.setTheme("slidingvalueadjuster");
-		w = new SlidingValueAdjuster("W");
-		w.setTheme("slidingvalueadjuster");
+		x = new LabeledValueAdjuster("X");
+		x.setTheme("labeledvalueadjuster");
+		y = new LabeledValueAdjuster("Y");
+		y.setTheme("labeledvalueadjuster");
+		z = new LabeledValueAdjuster("Z");
+		z.setTheme("labeledvalueadjuster");
+		w = new LabeledValueAdjuster("W");
+		w.setTheme("labeledvalueadjuster");
 		
 		dialoglayout = new DialogLayout();
 		dialoglayout.setTheme("dialoglayout");
@@ -67,10 +73,26 @@ public class XYZWAdjuster extends Widget {
 		dialoglayout.setSize(300, 150);
 		
 		this.add(dialoglayout);
+		
+		addCallbacks();
+	}
+	
+	public void addCallbacks() {
+		x.addActionListener(this);
+		y.addActionListener(this);
+		z.addActionListener(this);
+		w.addActionListener(this);
 	}
 	
 	public void setLabel(String name) {
 		label.setText(name);
+	}
+	
+	public void setValue(Vector4f value) {
+		x.setValue(value.x);
+		y.setValue(value.y);
+		z.setValue(value.z);
+		w.setValue(value.w);
 	}
 	public float getXValue() {
 		return x.getValue();
@@ -86,5 +108,20 @@ public class XYZWAdjuster extends Widget {
 	}	
 	public Vector4f getVector() {
 		return new Vector4f(x.getValue(),y.getValue(),z.getValue(),w.getValue());
+	}
+	
+	public void addActionListener(ActionListener listener) {
+		action_listeners.add(listener);
+	}
+
+	private void fireActionEvent() {
+		for (ActionListener ae : action_listeners) {
+			ae.actionPerformed(new ActionEvent(this));
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		fireActionEvent();
 	}
 }

@@ -73,20 +73,21 @@ public class Engine {
 			renderer = new FixedRenderer(entity_list);
 		renderer.initGL();
 		
-		
-		setWindowTheme("default");
 		setKeyMap("default");
 		
 		ai_manager = new AIManager();
 	}
 
-	private void setWindowTheme(String wm) {
-		renderer.setWindowManager((WindowManager)resource_manager.getResource(wm, "themes"));
-	}
-
 	public void run() {
 		startPhysics();
 		startRendering();
+
+		try {
+			render_thread.join();
+			physics_thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* Entity API */
@@ -159,6 +160,7 @@ public class Engine {
 				while (!finished.get()) {
 					physicsOnce();
 				}
+				
 			}
 		};
 		physics_thread.start();

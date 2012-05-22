@@ -105,6 +105,7 @@ public class FixedRenderer implements RendererInterface {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		window_manager = new WindowManager();
 
 		// camera = (Camera) objectList.getItem(Camera.CAMERA_NAME);
 
@@ -228,10 +229,5 @@ public class FixedRenderer implements RendererInterface {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
-	}
-
-	@Override
-	public void setWindowManager(WindowManager wm) {
-		this.window_manager = wm;
 	}
 }

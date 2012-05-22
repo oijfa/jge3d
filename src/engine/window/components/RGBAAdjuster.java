@@ -1,14 +1,18 @@
 package engine.window.components;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector4f;
 
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.Widget;
+import editor.action_listener.ActionEvent;
+import editor.action_listener.ActionListener;
 
-
-public class RGBAAdjuster extends Widget {
+public class RGBAAdjuster extends Widget implements ActionListener {
+	private ArrayList<ActionListener> action_listeners;
 	private DialogLayout dialoglayout;
 	private Label label;
 	private SlidingValueAdjuster r;
@@ -17,6 +21,7 @@ public class RGBAAdjuster extends Widget {
 	private SlidingValueAdjuster a;
 
 	public RGBAAdjuster(String name) {
+		action_listeners = new ArrayList<ActionListener>();
 		this.setTheme("rgbaadjuster");
 		label = new Label(name);
 		label.setTheme("label");
@@ -67,6 +72,22 @@ public class RGBAAdjuster extends Widget {
 		dialoglayout.setSize(300, 150);
 		
 		this.add(dialoglayout);
+		
+		addCallbacks();
+	}
+	
+	public void addCallbacks() {
+		r.addActionListener(this);
+		g.addActionListener(this);
+		b.addActionListener(this);
+		a.addActionListener(this);
+	}
+	
+	public void setValue(Vector4f color) {
+		r.setValue(color.x);
+		g.setValue(color.y);
+		b.setValue(color.z);
+		a.setValue(color.w);
 	}
 	
 	public void setLabel(String name) {
@@ -86,5 +107,18 @@ public class RGBAAdjuster extends Widget {
 	}	
 	public Vector4f getVector() {
 		return new Vector4f(r.getValue(),g.getValue(),b.getValue(),a.getValue());
+	}
+
+	public void addActionListener(ActionListener listener) {
+		action_listeners.add(listener);
+	}
+	private void fireActionEvent(String event) {
+		for (ActionListener ae : action_listeners) {
+			ae.actionPerformed(new ActionEvent(this, event));
+		}
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		fireActionEvent("rgbaadjuster");
 	}
 }

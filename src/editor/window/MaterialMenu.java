@@ -24,6 +24,7 @@ public class MaterialMenu extends Window implements ActionListener {
 	
 	public MaterialMenu() {
 		super();
+		material = new Material();
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Material Menu");
 
@@ -66,21 +67,30 @@ public class MaterialMenu extends Window implements ActionListener {
 		
 		//this.add(layout);
 		this.add(dialoglayout);
+		
+		addCallbacks();
+	}
+	
+	private void addCallbacks() {
+		ambient.addActionListener(this);
+		diffuse.addActionListener(this);
+		specular.addActionListener(this);
+		shininess.addActionListener(this);
+		alpha.addActionListener(this);
 	}
 
 	public void addActionListener(ActionListener listener) {
 		action_listeners.add(listener);
 	}
-
 	private void fireActionEvent(String event) {
 		for (ActionListener ae : action_listeners) {
 			ae.actionPerformed(new ActionEvent(this, event));
 		}
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		fireActionEvent("material");
+		updateMaterial();
 	}
 	
 	public Material getMaterial() {
@@ -96,6 +106,12 @@ public class MaterialMenu extends Window implements ActionListener {
 		);
 	}
 	public void setMaterial(Material material) {
+		ambient.setValue(material.getAmbient());
+		diffuse.setValue(material.getDiffuse());
+		specular.setValue(material.getSpecular());
+		shininess.setValue(material.getShininess());
+		alpha.setValue(material.getAlpha());
+		
 		this.material = material;
 	}
 }

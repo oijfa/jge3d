@@ -448,6 +448,30 @@
         <param name="maxHeight"><int>25</int></param>
     </theme>
 
+	<theme name="labeledvalueadjuster" ref="-defaults">
+    	<theme name="dialoglayout" ref="dialoglayout">
+			<theme name="label" ref="label">
+                <param name="minWidth"><int>50</int></param>
+                <param name="maxWidth"><int>400</int></param>
+                <param name="minHeight"><int>25</int></param>
+                <param name="maxHeight"><int>25</int></param>
+            </theme>
+			<theme name="valueadjuster" ref="valueadjuster">
+                <param name="minWidth"><int>100</int></param>
+                <param name="maxWidth"><int>400</int></param>
+                <param name="minHeight"><int>25</int></param>
+                <param name="maxHeight"><int>25</int></param>
+            </theme>
+            <param name="minWidth"><int>300</int></param>
+            <param name="maxWidth"><int>2000</int></param>
+            <param name="minHeight"><int>25</int></param>
+            <param name="maxHeight"><int>25</int></param>
+		</theme>
+        <param name="minWidth"><int>300</int></param>
+        <param name="maxWidth"><int>2000</int></param>
+        <param name="minHeight"><int>25</int></param>
+        <param name="maxHeight"><int>25</int></param>
+    </theme>
     <theme name="slidingvalueadjuster" ref="-defaults">
     	<theme name="dialoglayout" ref="dialoglayout">
 			<theme name="label" ref="label">
@@ -495,7 +519,7 @@
 	<theme name="xyzwadjuster" ref="widget">
     	<theme name="dialoglayout" ref="dialoglayout">
     		<theme name="label" ref="label"/>
-        	<theme name="slidingvalueadjuster" ref="slidingvalueadjuster"/>
+        	<theme name="labeledvalueadjuster" ref="labeledvalueadjuster"/>
             <param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>175</int></param>
@@ -509,7 +533,7 @@
 	<theme name="xyzadjuster" ref="widget">
     	<theme name="dialoglayout" ref="dialoglayout">
     		<theme name="label" ref="label"/>
-        	<theme name="slidingvalueadjuster" ref="slidingvalueadjuster"/>
+        	<theme name="labeledvalueadjuster" ref="labeledvalueadjuster"/>
             <param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>125</int></param>

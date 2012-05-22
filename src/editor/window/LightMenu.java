@@ -36,6 +36,7 @@ public class LightMenu extends Window implements ActionListener {
     
 	public LightMenu() {
 		super();
+		light = new Light();
 		action_listeners = new ArrayList<ActionListener>();
 		setTitle("Material Menu");
 
@@ -110,21 +111,35 @@ public class LightMenu extends Window implements ActionListener {
 		
 		//this.add(layout);
 		this.add(dialoglayout);
+		
+		addCallbacks();
+	}
+	
+	private void addCallbacks() {
+		position.addActionListener(this);
+		ambient.addActionListener(this);
+		diffuse.addActionListener(this);
+		specular.addActionListener(this);
+	    constant_attenuation.addActionListener(this);
+	    linear_attenuation.addActionListener(this);
+	    quadratic_attenuation.addActionListener(this);
+	    spot_direction.addActionListener(this);
+	    spot_cutoff.addActionListener(this);
+	    spot_exponent.addActionListener(this);
 	}
 
 	public void addActionListener(ActionListener listener) {
 		action_listeners.add(listener);
 	}
-
 	private void fireActionEvent(String event) {
 		for (ActionListener ae : action_listeners) {
 			ae.actionPerformed(new ActionEvent(this, event));
 		}
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		fireActionEvent("material");
+		fireActionEvent("light");
+		updateLight();
 	}
 	
 	public Light getLight() {
@@ -145,6 +160,19 @@ public class LightMenu extends Window implements ActionListener {
 		);
 	}
 	public void setLight(Light light) {
-		this.light = light;
+		position.setValue(light.getPosition());
+		ambient.setValue(light.getAmbient());
+		diffuse.setValue(light.getDiffuse());
+		specular.setValue(light.getSpecular());
+	    constant_attenuation.setValue(light.getConstantAttenuation());
+	    linear_attenuation.setValue(light.getLinearAttenuation());
+	    quadratic_attenuation.setValue(light.getQuadraticAttenuation());
+	    spot_direction.setValue(light.getSpotDirection());
+	    spot_cutoff.setValue(light.getSpotCutoff());
+	    spot_exponent.setValue(light.getSpotExponent());
+	    
+	    this.light = light;
 	}
+	
+	
 }

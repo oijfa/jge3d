@@ -6,7 +6,6 @@ import engine.resource.ResourceManager;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -16,6 +15,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
+import org.lwjgl.opengl.ARBGeometryShader4;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
@@ -39,6 +39,7 @@ public class Shader implements Resource{
     private int shader=0;
     private int vertShader=0;
     private int fragShader=0;
+    private int geomShader=0;
     private HashMap<String, UBO> ubo_interfaces;
     
     public Shader() {
@@ -48,6 +49,7 @@ public class Shader implements Resource{
     public Shader(Shader shader) {
     	this.vertShader = shader.vertShader;
     	this.fragShader = shader.fragShader;
+    	this.geomShader = shader.geomShader;
     	this.shader = shader.shader;
     	this.useShader = shader.useShader;
     }
@@ -109,6 +111,29 @@ public class Shader implements Resource{
          }
          //if zero we won't be using the shader
          return fragShader;
+     }
+     
+   //same as per the vertex shader except for method syntax
+     private int createGeomShader(String geomCode){
+     	//fragShader will be non zero if successfully created
+    	 geomShader=ARBShaderObjects.glCreateShaderObjectARB(ARBGeometryShader4.GL_GEOMETRY_SHADER_ARB);
+         
+         //if created, convert the vertex shader code to a String
+         if(geomShader==0){return 0;}
+
+         /*
+         * associate the vertex code String with the created vertex shader
+         * and compile
+         */
+         ARBShaderObjects.glShaderSourceARB(geomShader, geomCode);
+         ARBShaderObjects.glCompileShaderARB(geomShader);
+         //if there was a problem compiling, reset vertShader to zero
+         if(!printLogInfo(geomShader)){
+        	 System.out.println("ERROR [fragshader id:" + geomShader + "]:\n" + geomCode);
+        	 geomShader=0;
+         }
+         //if zero we won't be using the shader
+         return geomShader;
      }
      
     /*
@@ -215,19 +240,20 @@ public class Shader implements Resource{
 	}
 
 	@Override
-	public void loadFromFile(ResourceManager resource_manager, URL url, String extension) throws Exception {
+	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
 		ubo_interfaces = new HashMap<String, UBO>();
 		
         //create the shader program. If OK, create vertex
         //and fragment shaders
     	shader=ARBShaderObjects.glCreateProgramObjectARB();
     	
-    	InputStreamReader isr = new InputStreamReader(url.openStream());
+    	InputStreamReader isr = new InputStreamReader(is);
     	BufferedReader br = new BufferedReader(isr);
     	String line = br.readLine();
     	
     	String vert = new String();
     	String frag = new String();
+    	String geom = new String();
     	
     	while(line != null) {
     		switch(line) {
@@ -247,6 +273,14 @@ public class Shader implements Resource{
     				}
     				line = br.readLine();
     				break;
+    			case "###GEOM###":
+    				line = br.readLine();
+    				while(line != null && !line.contains("###ENDGEOM###")) {
+    					geom += line + "\n";
+    					line = br.readLine();
+    				}
+    				line = br.readLine();
+    				break;
     			default:
     				line = br.readLine();
     				break;
@@ -256,6 +290,10 @@ public class Shader implements Resource{
         if(shader!=0){
             vertShader=createVertShader(vert);
             fragShader=createFragShader(frag);
+            if(!geom.equals("")) {
+            	geomShader=createGeomShader(geom);
+            }
+            
         } else {
         	useShader=false;
         }
@@ -266,13 +304,15 @@ public class Shader implements Resource{
         if(vertShader != 0 && fragShader != 0){
             ARBShaderObjects.glAttachObjectARB(shader, vertShader);
             ARBShaderObjects.glAttachObjectARB(shader, fragShader);
+            if(geomShader != 0)
+            	ARBShaderObjects.glAttachObjectARB(shader, geomShader);
             ARBShaderObjects.glLinkProgramARB(shader);
             ARBShaderObjects.glValidateProgramARB(shader);
             useShader=printLogInfo(shader);
         } else {
         	useShader=false;
         	System.out.println("Failed to create shader");
-        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader);
+        	System.out.println("\tvertShader: " + vertShader + " && fragShader: " + fragShader + "geomShader: " + geomShader);
         }
 	}
 

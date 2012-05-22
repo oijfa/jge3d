@@ -3,6 +3,8 @@ package test;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
+import org.lwjgl.opengl.Display;
+
 import editor.window.LightMenu;
 import editor.window.MaterialMenu;
 import engine.Engine;
@@ -32,10 +34,9 @@ public class Main {
 	
 	private LightMenu lightmenu;
 	private MaterialMenu materialmenu;
+	private static boolean multiThreaded = true;
 	
 	public static void main(String args[]) {
-		boolean multiThreaded = false;
-		
 		Main m = new Main();
 		if(multiThreaded == true)
 			m.runMultiThread();
@@ -158,9 +159,9 @@ public class Main {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		light = new Light(
 			new Vector4f(0.0f,2.0f,10.0f,1.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
@@ -170,9 +171,9 @@ public class Main {
 		);
         light2 = new Light(
 			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(5.0f,5.0f,5.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
@@ -184,9 +185,7 @@ public class Main {
         lights.add(light2);
         
         shader.addUBO(lights);
-        
     	shader.addUBO(camera.getMVPmatrix());
-    	
     	shader.addUBO(new Material());
 	}
 
@@ -195,7 +194,7 @@ public class Main {
 	}
 	
 	public void runSingleThread() {
-		while(true){
+		while(!Display.isCloseRequested()){
 			engine.renderOnce();
 			engine.physicsOnce();
 		}

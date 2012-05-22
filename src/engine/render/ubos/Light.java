@@ -50,6 +50,19 @@ public class Light implements UBOInterface {
 		this.spot_cutoff=new Float(spot_cutoff);
 		this.spot_exponent=new Float(spot_exponent);
 	}
+	
+	public Light(){
+			this.position=new Vector4f();
+			this.ambient=new Vector4f();
+			this.diffuse=new Vector4f();
+			this.specular=new Vector4f();
+			this.constant_attenuation=0;
+			this.linear_attenuation=0;
+			this.quadratic_attenuation=0;
+			this.spot_direction=new Vector3f();
+			this.spot_cutoff=0;
+			this.spot_exponent=0;
+		}
 		
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
 		FloatBuffer buf = BufferUtils.createFloatBuffer(block_size/4);
@@ -173,5 +186,46 @@ public class Light implements UBOInterface {
 	
 	public String getName() {
 		return name;
+	}
+
+	public Vector4f getPosition() {
+		return position;
+	}
+	
+    public Vector4f getAmbient() {
+    	return ambient;
+    }
+    
+    public Vector4f getDiffuse() {
+    	return diffuse;
+    }
+    
+    public Vector4f getSpecular() {
+    	return specular;
+    }
+    
+    public float getConstantAttenuation() {
+    	return constant_attenuation;
+    }
+    public float getLinearAttenuation() {
+    	return linear_attenuation;
+    }
+    public float getQuadraticAttenuation() {
+    	return quadratic_attenuation;
+    }
+	public Vector3f getSpotDirection() {
+		return spot_direction;
+	}
+	public float getSpotCutoff() {
+		return spot_cutoff;
+	}
+	public float getSpotExponent() {
+		return spot_exponent;
+	}
+	public int getNumLight() {
+		return num_lights;
+	}
+	public int getLightIndex() {
+		return light_index;
 	}
 }
