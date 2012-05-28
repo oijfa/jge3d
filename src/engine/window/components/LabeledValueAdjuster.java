@@ -20,8 +20,8 @@ public class LabeledValueAdjuster extends Widget implements ActionListener {
 	private DialogLayout dialoglayout;
 	private ValueAdjusterFloat value_adjuster;
 	private Label label;
-	private static int min = 0;
-	private static int max = 255;
+	private static float min = Float.MIN_VALUE;
+	private static float max = Float.MAX_VALUE;
 	private Color base_color;
 	
 	public LabeledValueAdjuster(String name) {
@@ -42,7 +42,7 @@ public class LabeledValueAdjuster extends Widget implements ActionListener {
 		FloatModel va_model = new SimpleFloatModel(min,max,0);
 		value_adjuster.setModel(va_model);
 				
-		dialoglayout.setSize(300, 25);
+		dialoglayout.setSize(350, 25);
 		
 		createCallbacks();
 		createLayout();

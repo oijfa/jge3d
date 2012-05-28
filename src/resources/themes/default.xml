@@ -435,8 +435,8 @@
             <param name="overlay"><image>zoomin</image></param>
         
             <param name="minWidth"><int>25</int></param>
-            <param name="maxWidth"><int>025</int></param>
-            <param name="minHeight"><int>025</int></param>
+            <param name="maxWidth"><int>25</int></param>
+            <param name="minHeight"><int>25</int></param>
             <param name="maxHeight"><int>25</int></param>
         </theme>
         <param name="useMouseWheel"><bool>true</bool></param>
@@ -457,17 +457,17 @@
                 <param name="maxHeight"><int>25</int></param>
             </theme>
 			<theme name="valueadjuster" ref="valueadjuster">
-                <param name="minWidth"><int>100</int></param>
+                <param name="minWidth"><int>150</int></param>
                 <param name="maxWidth"><int>400</int></param>
                 <param name="minHeight"><int>25</int></param>
                 <param name="maxHeight"><int>25</int></param>
             </theme>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>25</int></param>
             <param name="maxHeight"><int>25</int></param>
 		</theme>
-        <param name="minWidth"><int>300</int></param>
+        <param name="minWidth"><int>350</int></param>
         <param name="maxWidth"><int>2000</int></param>
         <param name="minHeight"><int>25</int></param>
         <param name="maxHeight"><int>25</int></param>
@@ -487,17 +487,17 @@
                 <param name="maxHeight"><int>25</int></param>
             </theme>
 			<theme name="valueadjuster" ref="valueadjuster">
-                <param name="minWidth"><int>100</int></param>
+                <param name="minWidth"><int>150</int></param>
                 <param name="maxWidth"><int>400</int></param>
                 <param name="minHeight"><int>25</int></param>
                 <param name="maxHeight"><int>25</int></param>
             </theme>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>25</int></param>
             <param name="maxHeight"><int>25</int></param>
 		</theme>
-        <param name="minWidth"><int>300</int></param>
+        <param name="minWidth"><int>350</int></param>
         <param name="maxWidth"><int>2000</int></param>
         <param name="minHeight"><int>25</int></param>
         <param name="maxHeight"><int>25</int></param>
@@ -506,12 +506,12 @@
     	<theme name="dialoglayout" ref="dialoglayout">
     		<theme name="label" ref="label"/>
         	<theme name="slidingvalueadjuster" ref="slidingvalueadjuster"/>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>175</int></param>
             <param name="maxHeight"><int>2000</int></param>
         </theme>
-        <param name="minWidth"><int>300</int></param>
+        <param name="minWidth"><int>350</int></param>
         <param name="maxWidth"><int>2000</int></param>
         <param name="minHeight"><int>175</int></param>
         <param name="maxHeight"><int>2000</int></param>
@@ -520,12 +520,12 @@
     	<theme name="dialoglayout" ref="dialoglayout">
     		<theme name="label" ref="label"/>
         	<theme name="labeledvalueadjuster" ref="labeledvalueadjuster"/>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>175</int></param>
             <param name="maxHeight"><int>2000</int></param>
         </theme>
-        <param name="minWidth"><int>300</int></param>
+        <param name="minWidth"><int>350</int></param>
         <param name="maxWidth"><int>2000</int></param>
         <param name="minHeight"><int>175</int></param>
         <param name="maxHeight"><int>2000</int></param>
@@ -534,12 +534,12 @@
     	<theme name="dialoglayout" ref="dialoglayout">
     		<theme name="label" ref="label"/>
         	<theme name="labeledvalueadjuster" ref="labeledvalueadjuster"/>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>125</int></param>
             <param name="maxHeight"><int>2000</int></param>
         </theme>
-        <param name="minWidth"><int>300</int></param>
+        <param name="minWidth"><int>350</int></param>
         <param name="maxWidth"><int>2000</int></param>
         <param name="minHeight"><int>150</int></param>
         <param name="maxHeight"><int>2000</int></param>
@@ -946,7 +946,7 @@
     	<theme name="dialoglayout" ref="dialoglayout">
         	<theme name="rgbaadjuster" ref="rgbaadjuster"/>
         	<theme name="slidingvalueadjuster" ref="slidingvalueadjuster"/>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>550</int></param>
             <param name="maxHeight"><int>2000</int></param>
@@ -959,7 +959,7 @@
         	<theme name="xyzadjuster" ref="xyzadjuster"/>
         	<theme name="label" ref="label"/>
         	<theme name="slidingvalueadjuster" ref="slidingvalueadjuster"/>
-            <param name="minWidth"><int>300</int></param>
+            <param name="minWidth"><int>350</int></param>
             <param name="maxWidth"><int>2000</int></param>
             <param name="minHeight"><int>600</int></param>
             <param name="maxHeight"><int>2000</int></param>

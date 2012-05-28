@@ -107,7 +107,7 @@ public class LightMenu extends Window implements ActionListener {
 		dialoglayout.setHorizontalGroup(h_grid);
 		dialoglayout.setVerticalGroup(v_grid);
 		
-		dialoglayout.setSize(300,800);
+		dialoglayout.setSize(350,800);
 		
 		//this.add(layout);
 		this.add(dialoglayout);

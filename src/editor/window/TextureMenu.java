@@ -26,6 +26,9 @@ public class TextureMenu extends ResizableFrame {
 	private final Tree textree;
 	private final DialogLayout layout;
 
+	//Texture Menu
+	//
+	
 	public TextureMenu() {
 		setTitle("Texture Editor");
 

@@ -47,8 +47,6 @@ public class SlidingValueAdjuster extends Widget implements ActionListener {
 		value_adjuster.setModel(va_model);
 		h_scroll.setMinMaxValue(min, max);
 		
-		dialoglayout.setSize(300, 25);
-		
 		createCallbacks();
 		createLayout();
 	}
@@ -98,7 +96,11 @@ public class SlidingValueAdjuster extends Widget implements ActionListener {
 		dialoglayout.setHorizontalGroup(h_grid);
 		dialoglayout.setVerticalGroup(v_grid);
 		
-		dialoglayout.setSize(300, 25);
+		label.setSize(100, 25);
+		h_scroll.setSize(100, 25);
+		value_adjuster.setSize(150, 25);
+		
+		dialoglayout.setSize(350, 25);
 		
 		this.add(dialoglayout);
 	}

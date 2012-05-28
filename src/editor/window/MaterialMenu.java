@@ -63,7 +63,7 @@ public class MaterialMenu extends Window implements ActionListener {
 		dialoglayout.setHorizontalGroup(h_grid);
 		dialoglayout.setVerticalGroup(v_grid);
 		
-		dialoglayout.setSize(300,600);
+		dialoglayout.setSize(350,600);
 		
 		//this.add(layout);
 		this.add(dialoglayout);

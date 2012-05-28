@@ -69,7 +69,7 @@ public class RGBAAdjuster extends Widget implements ActionListener {
 		dialoglayout.setHorizontalGroup(h_grid);
 		dialoglayout.setVerticalGroup(v_grid);
 		
-		dialoglayout.setSize(300, 150);
+		dialoglayout.setSize(350, 150);
 		
 		this.add(dialoglayout);
 		

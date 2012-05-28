@@ -64,7 +64,7 @@ public class XYZAdjuster extends Widget implements ActionListener {
 		dialoglayout.setHorizontalGroup(h_grid);
 		dialoglayout.setVerticalGroup(v_grid);
 		
-		dialoglayout.setSize(300, 125);
+		dialoglayout.setSize(350, 125);
 		
 		this.add(dialoglayout);
 		addCallbacks();
