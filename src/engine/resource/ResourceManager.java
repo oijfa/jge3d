@@ -18,7 +18,7 @@ public class ResourceManager {
 	/*
 	 * Basically just a struct for keeping internal info
 	 */
-	class ResourceItem{
+	public class ResourceItem{
 		public String category;
 		public String name;
 		public String path;
@@ -227,5 +227,13 @@ public class ResourceManager {
 			}
 		}
 		return null;
+	}
+	
+	public ArrayList<ResourceItem> getResourcesInCategory(String category) {
+		return resources.get(category);
+	}
+	
+	public HashMap<String, ArrayList<ResourceItem>> getResources() {
+		return resources;
 	}
 }

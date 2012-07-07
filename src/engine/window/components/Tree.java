@@ -8,6 +8,7 @@ import engine.window.tree.Node;
 import engine.window.tree.SpanRenderer;
 import engine.window.tree.SpanString;
 import de.matthiasmann.twl.ScrollPane;
+import de.matthiasmann.twl.TableSelectionManager;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.StringModel;
 
@@ -76,6 +77,19 @@ public class Tree extends ScrollPane {// implements Observer {
 		*/
 	}
 
+	public Model getBase() {
+		return treeModel;
+	}
+	
+	public boolean contains(String key) {
+		boolean found = false;
+		for(Node node: treeModel.getChildren()) {
+			if(node.getData(1).equals("key"))
+				found = true;
+		}
+		return found;
+	}
+	
 	public Node createNode(String key, String value, Model base_node) {
 			return base_node.insert(key, value);
 	}
@@ -98,8 +112,7 @@ public class Tree extends ScrollPane {// implements Observer {
 		setScrollPositionY(getMaxScrollPosY() / 2);
 	}
 
-	@SuppressWarnings("unused")
-	private Node searchCurrentLevel(String nodeName, Node findIn) {
+	public Node searchCurrentLevel(String nodeName, Node findIn) {
 		Node child;
 		// Loop through all children
 		if(findIn != null) {
@@ -116,7 +129,7 @@ public class Tree extends ScrollPane {// implements Observer {
 		return null;
 	}
 	
-	private Node searchAllNodes(String nodeName, Node findIn) {
+	public Node searchAllNodes(String nodeName, Node findIn) {
 		Node child;
 		// Loop through all children
 		for (int i = 0; i < findIn.getNumChildren(); i++) {
@@ -133,5 +146,9 @@ public class Tree extends ScrollPane {// implements Observer {
 			}
 		}
 		return null;
+	}
+	
+	public void setTreeSelectionManager(TableSelectionManager tsm) {
+		treeTable.setSelectionManager(tsm);
 	}
 }

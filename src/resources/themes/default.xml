@@ -427,8 +427,8 @@
             <param name="overlay"><image>zoomout</image></param>
         
             <param name="minWidth"><int>25</int></param>
-            <param name="maxWidth"><int>025</int></param>
-            <param name="minHeight"><int>025</int></param>
+            <param name="maxWidth"><int>25</int></param>
+            <param name="minHeight"><int>25</int></param>
             <param name="maxHeight"><int>25</int></param>
         </theme>
         <theme name="incButton" ref="smallbutton">
@@ -452,7 +452,7 @@
     	<theme name="dialoglayout" ref="dialoglayout">
 			<theme name="label" ref="label">
                 <param name="minWidth"><int>50</int></param>
-                <param name="maxWidth"><int>400</int></param>
+                <param name="maxWidth"><int>300</int></param>
                 <param name="minHeight"><int>25</int></param>
                 <param name="maxHeight"><int>25</int></param>
             </theme>

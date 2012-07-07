@@ -1,26 +1,36 @@
 package editor.window;
 
+import engine.resource.ResourceManager;
 import engine.window.components.Tree;
 import engine.window.components.Window;
 import engine.window.tree.Model;
+import engine.window.tree.Node;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.TableSelectionManager;
+import de.matthiasmann.twl.model.TreeTableNode;
 
 public class ResourceWindow extends Window {
 	private final Tree resource_window;
 	private final DialogLayout layout;
+	private ResourceManager resource_manager;
+	private TableSelectionManager tsm;
 
-	public ResourceWindow() {
+	public ResourceWindow(ResourceManager resource_manager) {
 		super();
+		tsm = new TreeDragNodeSelectionManager();
 		resource_window = new Tree();
+		resource_window.setTreeSelectionManager(tsm);
 		layout = new DialogLayout();
+		this.resource_manager = resource_manager;
 		resourceMenuInit();
 	}
 
-	public ResourceWindow(Model m) {
+	public ResourceWindow(Model m, ResourceManager resource_manager) {
 		super();
 		resource_window = new Tree(m);
 		layout = new DialogLayout();
+		this.resource_manager = resource_manager;
 		resourceMenuInit();
 	}
 
@@ -41,6 +51,25 @@ public class ResourceWindow extends Window {
 		add(layout);
 		
 		// update tree contents after it has been added.
-		resource_window.createFromProjectResources();
+		//resource_window.createFromProjectResources();
+		createResources();
+	}
+	
+	public void createResources() {
+		Node found_node;
+		for(String category: resource_manager.getResources().keySet()) {
+			if(resource_window.contains(category))
+				found_node = resource_window.searchCurrentLevel(category, (Node)(TreeTableNode)resource_window.getBase());
+			else
+				found_node = resource_window.createNode(category, category, resource_window.getBase());
+			
+			for(ResourceManager.ResourceItem resource: resource_manager.getResourcesInCategory(category)) {
+				resource_window.createNode(resource.name, resource.name, found_node);
+			}
+		}
+	}
+
+	public void setResourceManager(ResourceManager resource_manager) {
+		this.resource_manager = resource_manager;
 	}
 }

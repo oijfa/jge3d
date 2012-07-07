@@ -68,7 +68,7 @@ public class Main implements ActionListener {
 		project_window = new ProjectWindow();
 		perspective_menu = new PerspectiveMenu();
 		mirror_menu = new MirrorMenu();
-		resource_window = new ResourceWindow();
+		resource_window = new ResourceWindow(engine.resource_manager);
 		
 		tool_menu = new ToolMenu(engine.getWindowManager());
 		// tool_box = new ToolBox();
