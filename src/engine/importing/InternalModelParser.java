@@ -1,10 +1,14 @@
 package engine.importing;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.DataInputStream;
 import java.net.URL;
 
+import javax.vecmath.Vector3f;
+
 import engine.render.Model;
+import engine.render.model_pieces.Face;
 
 public class InternalModelParser {
 	private static final int SIZE_TRANSLATION = 12;
@@ -17,7 +21,6 @@ public class InternalModelParser {
 	private static final int SIZE_NUM_MESHES = 2;
 	private static final int SIZE_NUM_REFS = 2;
 	
-
 	DataInputStream input;
 	
 	boolean use_blocks;
@@ -84,8 +87,25 @@ public class InternalModelParser {
 	}
 
 	private void readFace(byte[] bytes) {
-		// TODO Auto-generated method stub
-		
+		try{
+			DataInputStream face_data = new DataInputStream(
+				new ByteArrayInputStream(bytes)
+			);
+			
+			Vector3f[] verts = new Vector3f[3];
+			Vector3f[] vertnorms = new Vector3f[3];
+			Vector3f norm = null;
+			
+			for(int i = 0; i < 3; i++){
+				verts[i].x = face_data.readFloat();
+				verts[i].y = face_data.readFloat();
+				verts[i].z = face_data.readFloat();
+			}
+			
+			Face f = new Face(verts, vertnorms, norm);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	private void readBlock(byte[] bytes) {
