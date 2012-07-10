@@ -6,7 +6,8 @@ import de.matthiasmann.twl.TableSelectionManager;
 import de.matthiasmann.twl.model.TableSelectionModel;
 
 public class TreeDragNodeSelectionManager implements TableSelectionManager {
-
+	private TableBase table;
+	
 	@Override
 	public TableSelectionModel getSelectionModel() {
 		// TODO Auto-generated method stub
@@ -15,8 +16,7 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 
 	@Override
 	public void setAssociatedTable(TableBase base) {
-		// TODO Auto-generated method stub
-
+		table = base;
 	}
 
 	@Override
@@ -33,10 +33,18 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 
 	@Override
 	public boolean handleMouseEvent(int row, int column, Event event) {
-		if( row == -1 && !(column == -1))
-			System.out.println(row + ":" + column + " " + event.getMouseX() + ":" + event.getMouseY());
-		
-		return true;
+		if(table != null) {
+			if(event.getMouseButton() != -1 && row != -1)
+				System.out.println("CLICKED:" + row + ":" + column+"@"+event.getMouseButton());
+			if( row == -1 && !(column == -1))
+				System.out.println("DROPPED:" + row + ":" + column + " " + event.getMouseX() + ":" + event.getMouseY());
+			
+			
+			
+			return true;
+		}
+		System.out.println("Table is not set");
+		return false;
 	}
 
 	@Override
@@ -93,4 +101,7 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 
 	}
 
+	public void getLastClickedNode() {
+		
+	}
 }
