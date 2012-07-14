@@ -1,5 +1,6 @@
 package engine.window.components;
 
+import engine.resource.ResourceManager.ResourceItem;
 import engine.window.tree.ColoredTextRenderer;
 import engine.window.tree.ColoredTextString;
 import engine.window.tree.EditFieldCellRenderer;
@@ -81,6 +82,10 @@ public class Tree extends ScrollPane {// implements Observer {
 		return treeModel;
 	}
 	
+	public TreeTable getTable() {
+		return treeTable;
+	}
+	
 	public boolean contains(String key) {
 		boolean found = false;
 		for(Node node: treeModel.getChildren()) {
@@ -94,7 +99,7 @@ public class Tree extends ScrollPane {// implements Observer {
 			return base_node.insert(key, value);
 	}
 	
-	public Node createNode(String key, String value, Node base_node) {
+	public Node createNode(String key, ResourceItem value, Node base_node) {
 		return base_node.insert(key, value);
 	}
 

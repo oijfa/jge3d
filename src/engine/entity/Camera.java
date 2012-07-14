@@ -6,7 +6,7 @@ import java.nio.IntBuffer;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.glu.GLU;
 
 import engine.render.Model;
@@ -225,7 +225,7 @@ public class Camera extends Entity {
 		setPosition(position);
 
 		if(matrices != null) {
-			matrices.buildLookAtMatrix(getPosition(), getFocusPosition(), getUp());
+			matrices.buildModelViewMatrix(getPosition(), getFocusPosition(), getUp());
 		  	matrices.buildProjectionMatrix(fov, aspect, minimum_distance, maximum_distance);
 		}
 	}
@@ -263,31 +263,23 @@ public class Camera extends Entity {
 	}
 
 	public Vector3f getRayTo(int x, int y, int farDistance) {
-		// Create stupid floatbuffers for LWJGL
-		IntBuffer viewport = BufferUtils.createIntBuffer(16);
-		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-		FloatBuffer winZ = BufferUtils.createFloatBuffer(1);
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
+		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		Vector3f pos = new Vector3f();
 
-		// Get some information about the viewport, modelview, and projection
-		// matrix
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
-		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
-
-		// Find the depth to
-		GL11.glReadPixels(
-			x, y, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT,	winZ
-		);
-
+		viewport.put(0);
+		viewport.put(0);
+		viewport.put(Display.getWidth());
+		viewport.put(Display.getHeight());
+		
+		viewport.flip();
+		
 		// get the position in 3d space by casting a ray from the mouse
 		// coords to the first contacted point in space
 		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
 		// viewport, position);
 		GLU.gluUnProject(
-			x, y, winZ.get(), modelview, projection, viewport, position
+			x, y, farDistance, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
 		);
 
 		// Make a vector out of the silly float buffer LWJGL forces us to use

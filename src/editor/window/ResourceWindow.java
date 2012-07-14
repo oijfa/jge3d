@@ -1,5 +1,6 @@
 package editor.window;
 
+import engine.entity.Camera;
 import engine.resource.ResourceManager;
 import engine.window.components.Tree;
 import engine.window.components.Window;
@@ -7,20 +8,21 @@ import engine.window.tree.Model;
 import engine.window.tree.Node;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.TableSelectionManager;
 import de.matthiasmann.twl.model.TreeTableNode;
 
 public class ResourceWindow extends Window {
 	private final Tree resource_window;
 	private final DialogLayout layout;
 	private ResourceManager resource_manager;
-	private TableSelectionManager tsm;
+	private TreeDragNodeSelectionManager tsm;
+	private Camera camera;
 
 	public ResourceWindow(ResourceManager resource_manager) {
 		super();
-		tsm = new TreeDragNodeSelectionManager();
 		resource_window = new Tree();
+		tsm = new TreeDragNodeSelectionManager(resource_window.getTable());
 		resource_window.setTreeSelectionManager(tsm);
+		tsm.setCamera(camera);
 		layout = new DialogLayout();
 		this.resource_manager = resource_manager;
 		resourceMenuInit();
@@ -64,12 +66,16 @@ public class ResourceWindow extends Window {
 				found_node = resource_window.createNode(category, category, resource_window.getBase());
 			
 			for(ResourceManager.ResourceItem resource: resource_manager.getResourcesInCategory(category)) {
-				resource_window.createNode(resource.name, resource.name, found_node);
+				resource_window.createNode(resource.name, resource, found_node);
 			}
 		}
 	}
 
 	public void setResourceManager(ResourceManager resource_manager) {
 		this.resource_manager = resource_manager;
+	}
+
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 }

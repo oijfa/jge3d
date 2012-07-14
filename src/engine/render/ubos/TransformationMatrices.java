@@ -18,19 +18,19 @@ public class TransformationMatrices implements UBOInterface {
     };
     		
     private float projection[];
-    private float lookat[];
+    private float modelview[];
     
 	public TransformationMatrices(float fov, float aspect, float zNear, float zFar, Vector3f eye, Vector3f focus, Vector3f up) {
 		projection = new float[size];
-		lookat = new float[size];
+		modelview = new float[size];
 		buildProjectionMatrix(fov, aspect, zNear, zFar);
-		buildLookAtMatrix(eye,focus,up);
+		buildModelViewMatrix(eye,focus,up);
 	}
 
 	public FloatBuffer createBuffer(int block_size, IntBuffer offsets) {
-		FloatBuffer buf = BufferUtils.createFloatBuffer(projection.length+lookat.length);
+		FloatBuffer buf = BufferUtils.createFloatBuffer(projection.length+modelview.length);
 		
-		float result[] = matmult(lookat, projection);
+		float result[] = matmult(modelview, projection);
 		for(int i=0; i<result.length;i++) {
 			buf.put(result[i]);
 		}
@@ -64,7 +64,7 @@ public class TransformationMatrices implements UBOInterface {
 		projection[15] = 0;
 	}
 	
-	public void buildLookAtMatrix(Vector3f eye, Vector3f focus, Vector3f up) {
+	public void buildModelViewMatrix(Vector3f eye, Vector3f focus, Vector3f up) {
 		Vector3f x = new Vector3f();
 		Vector3f y = new Vector3f();
 		Vector3f z = new Vector3f(focus);
@@ -78,26 +78,26 @@ public class TransformationMatrices implements UBOInterface {
 		y.cross(x, z);
 		
 		//Grouped by columns
-		lookat[0] = x.x;
-		lookat[1] = y.x;
-		lookat[2] = -z.x;
-		lookat[3] = 0f;
+		modelview[0] = x.x;
+		modelview[1] = y.x;
+		modelview[2] = -z.x;
+		modelview[3] = 0f;
 		
-		lookat[4] = x.y;
-		lookat[5] = y.y;
-		lookat[6] = -z.y;
-		lookat[7] = 0f;
+		modelview[4] = x.y;
+		modelview[5] = y.y;
+		modelview[6] = -z.y;
+		modelview[7] = 0f;
 		
-		lookat[8] = x.z;
-		lookat[9] = y.z;
-		lookat[10] = -z.z;
-		lookat[11] = 0f;
+		modelview[8] = x.z;
+		modelview[9] = y.z;
+		modelview[10] = -z.z;
+		modelview[11] = 0f;
 		
 		Vector3f translated_eye = new Vector3f(eye);
-		lookat[12] = -x.dot(translated_eye);
-		lookat[13] = -y.dot(translated_eye);
-		lookat[14] = z.dot(translated_eye);
-		lookat[15] = 1.0f;
+		modelview[12] = -x.dot(translated_eye);
+		modelview[13] = -y.dot(translated_eye);
+		modelview[14] = z.dot(translated_eye);
+		modelview[15] = 1.0f;
 	
 	}
 	
@@ -146,5 +146,13 @@ public class TransformationMatrices implements UBOInterface {
 		R[15] = one[12]*two[3] + one[13]*two[7] + one[14]*two[11] + one[15]*two[15];
     
 	    return R;
+	}
+	
+	public FloatBuffer getProjectionBuffer() {
+		return FloatBuffer.wrap(projection);
+	}
+	
+	public FloatBuffer getModelviewBuffer() {
+		return FloatBuffer.wrap(modelview);
 	}
 }

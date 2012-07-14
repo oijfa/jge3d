@@ -1,12 +1,22 @@
 package editor.window;
 
+import javax.vecmath.Vector3f;
+
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.TableBase;
 import de.matthiasmann.twl.TableSelectionManager;
+import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.TableSelectionModel;
+import engine.entity.Camera;
 
 public class TreeDragNodeSelectionManager implements TableSelectionManager {
 	private TableBase table;
+	private TreeTable table_data;
+	private Camera camera;
+	
+	public TreeDragNodeSelectionManager(TreeTable table_data) {
+		this.table_data = table_data;
+	}
 	
 	@Override
 	public TableSelectionModel getSelectionModel() {
@@ -33,17 +43,23 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 
 	@Override
 	public boolean handleMouseEvent(int row, int column, Event event) {
-		if(table != null) {
-			if(event.getMouseButton() != -1 && row != -1)
-				System.out.println("CLICKED:" + row + ":" + column+"@"+event.getMouseButton());
-			if( row == -1 && !(column == -1))
-				System.out.println("DROPPED:" + row + ":" + column + " " + event.getMouseX() + ":" + event.getMouseY());
-			
-			
-			
-			return true;
+		if(camera == null) {
+			if(table != null) {
+				if(event.getMouseButton() != -1 && event.isMouseDragEnd()) 
+					System.out.println(
+						"DROPPED: " + 
+						table_data.getNodeFromRow(row).getData(1).toString() + 
+						"@" + event.getMouseX() + ":" + event.getMouseY()
+					);
+					Vector3f new_pos = camera.getRayTo(event.getMouseX(), event.getMouseY(), 20);
+					((ResourceItem)table_data.getNodeFromRow(row).getData(1)).
+				
+				return true;
+			}
+			System.out.println("Table is not set");
 		}
-		System.out.println("Table is not set");
+		System.out.println("Camera ref is not set");
+		
 		return false;
 	}
 
@@ -103,5 +119,9 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 
 	public void getLastClickedNode() {
 		
+	}
+	
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 }

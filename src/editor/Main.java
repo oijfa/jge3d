@@ -91,7 +91,7 @@ public class Main implements ActionListener {
 		perspective_menu.setName("perspective_menu");
 		engine.addWindow(resource_window, 200, 400);
 		resource_window.setName("resource_window");
-		
+				
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
@@ -104,6 +104,7 @@ public class Main implements ActionListener {
 		camera.setDistance(40.0f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(edit_model);
+		resource_window.setCamera(camera);
 		
 		engine.getWindowManager().getWindows().hideAll();
 		tool_menu.setVisible(true);

@@ -86,7 +86,7 @@ public class InternalModelParser {
 		
 	}
 
-	private void readFace(byte[] bytes) {
+	private Face readFace(byte[] bytes) {
 		try{
 			DataInputStream face_data = new DataInputStream(
 				new ByteArrayInputStream(bytes)
@@ -102,10 +102,11 @@ public class InternalModelParser {
 				verts[i].z = face_data.readFloat();
 			}
 			
-			Face f = new Face(verts, vertnorms, norm);
+			return new Face(verts, vertnorms, norm);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	private void readBlock(byte[] bytes) {
