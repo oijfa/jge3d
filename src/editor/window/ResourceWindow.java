@@ -15,14 +15,12 @@ public class ResourceWindow extends Window {
 	private final DialogLayout layout;
 	private ResourceManager resource_manager;
 	private TreeDragNodeSelectionManager tsm;
-	private Camera camera;
 
 	public ResourceWindow(ResourceManager resource_manager) {
 		super();
 		resource_window = new Tree();
 		tsm = new TreeDragNodeSelectionManager(resource_window.getTable());
 		resource_window.setTreeSelectionManager(tsm);
-		tsm.setCamera(camera);
 		layout = new DialogLayout();
 		this.resource_manager = resource_manager;
 		resourceMenuInit();
@@ -76,6 +74,6 @@ public class ResourceWindow extends Window {
 	}
 
 	public void setCamera(Camera camera) {
-		this.camera = camera;
+		tsm.setCamera(camera);
 	}
 }

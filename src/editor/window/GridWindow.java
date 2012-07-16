@@ -148,14 +148,12 @@ public class GridWindow extends Window implements ActionListener {
 	        		fireActionEvent("mouseup");
 	        	else if(evt.getMouseWheelDelta() < 0)
 	        		fireActionEvent("mousedown");
-	        /*
 	        default:
 	        	System.out.println(
 	        		"Unhandled Event:" + 
 					evt.getType() + 
 					evt.getType().name()
 				);
-			*/
         }
         
         // eat all mouse events

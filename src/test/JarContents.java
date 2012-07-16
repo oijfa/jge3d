@@ -38,6 +38,7 @@ public class JarContents{
 					System.out.println(filtered_files);
 				}
 			}
+			jarfile.close();
 		}
 		catch(ZipException ze){
 			System.out.println(ze.getMessage());

@@ -28,6 +28,7 @@ public class JarContents implements ContentExtractor{
 				String file_names = em1.nextElement().toString();
 				found_file_paths.add(file_names);
 			}
+			jarfile.close();
 		}catch(ZipException ze){
 			System.out.println(ze.getMessage());
 			System.exit(0);

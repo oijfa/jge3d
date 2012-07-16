@@ -8,6 +8,8 @@ import de.matthiasmann.twl.TableSelectionManager;
 import de.matthiasmann.twl.TreeTable;
 import de.matthiasmann.twl.model.TableSelectionModel;
 import engine.entity.Camera;
+import engine.entity.Entity;
+import engine.resource.ResourceManager.ResourceItem;
 
 public class TreeDragNodeSelectionManager implements TableSelectionManager {
 	private TableBase table;
@@ -40,10 +42,17 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	/*
+	String name_to_use = "bunny";
+	Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
+	test.setProperty(Entity.NAME, name_to_use);
+	test.setPosition(new Vector3f(0, 0, 0));
+	test.setAngularFactor(0, new Vector3f(0,1,0));
+	test.setGravity(new Vector3f(0,0,0));
+	*/
 	@Override
 	public boolean handleMouseEvent(int row, int column, Event event) {
-		if(camera == null) {
+		if(camera != null) {
 			if(table != null) {
 				if(event.getMouseButton() != -1 && event.isMouseDragEnd()) 
 					System.out.println(
@@ -51,8 +60,11 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 						table_data.getNodeFromRow(row).getData(1).toString() + 
 						"@" + event.getMouseX() + ":" + event.getMouseY()
 					);
-					Vector3f new_pos = camera.getRayTo(event.getMouseX(), event.getMouseY(), 20);
-					((ResourceItem)table_data.getNodeFromRow(row).getData(1)).
+					//Vector3f new_pos = camera.getRayTo(event.getMouseX(), event.getMouseY(), 20);
+					//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
+					//item_class.newInstance()
+				
+					
 				
 				return true;
 			}
