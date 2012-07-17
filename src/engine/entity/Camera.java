@@ -271,7 +271,9 @@ public class Camera extends Entity {
 		viewport.put(0);
 		viewport.put(Display.getWidth());
 		viewport.put(Display.getHeight());
-		
+		for(int i=0;i<12;i++){
+			viewport.put(0);
+		}
 		viewport.flip();
 		
 		// get the position in 3d space by casting a ray from the mouse
@@ -282,9 +284,20 @@ public class Camera extends Entity {
 			x, y, farDistance, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
 		);
 
-		// Make a vector out of the silly float buffer LWJGL forces us to use
 		pos.set(position.get(0), position.get(1), position.get(2));
 
 		return pos;
 	}
+	/*
+	public void debugViewport() {
+		IntBuffer viewport = BufferUtils.createIntBuffer(16);
+		GL11.glGetInteger(GL11.GL_VIEWPORT,viewport);
+		
+		System.out.println("\nViewport:\n");
+		for(int i=0;i<viewport.capacity();i++){
+			System.out.println(viewport.get(i));
+		}
+		System.out.println("\nENDViewport\n");
+	}
+	 */
 }

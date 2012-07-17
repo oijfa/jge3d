@@ -51,26 +51,27 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 	public boolean handleMouseEvent(int row, int column, Event event) {
 		if(engine.getEntityList().getItem("camera") != null && ent != null) {
 			if(table != null) {
-				
 				if(event.getMouseButton() != -1 && event.isMouseDragEnd()) {
 					System.out.println(
 						"DROPPED: " + 
-						table_data.getNodeFromRow(row).getData(1).toString() + 
+						table_data.getNodeFromRow(row).getData(0) + 
 						"@" + event.getMouseX() + ":" + event.getMouseY()
 					);
-					Vector3f new_pos = ((Camera)engine.getEntityList().getItem("camera")).getRayTo(event.getMouseX(), event.getMouseY(), 20);
+					Vector3f new_pos = ((Camera)engine.getEntityList().getItem("camera")).getRayTo(event.getMouseX(), event.getMouseY(), 0);
 					//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
 					//item_class.newInstance()
-				
+					
 					ent.setPosition(new_pos);
 					System.out.println(new_pos.x+":"+new_pos.y+":"+new_pos.z);
 				
-				return true;
+					return true;
 				}
+			} else {
+				System.out.println("Table is not set");
 			}
-			System.out.println("Table is not set");
+		} else {
+			System.out.println("Camera ref is not set");
 		}
-		System.out.println("Camera ref is not set");
 		
 		return false;
 	}
