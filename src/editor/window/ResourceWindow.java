@@ -1,6 +1,6 @@
 package editor.window;
 
-import engine.entity.Camera;
+import engine.Engine;
 import engine.resource.ResourceManager;
 import engine.window.components.Tree;
 import engine.window.components.Window;
@@ -73,7 +73,7 @@ public class ResourceWindow extends Window {
 		this.resource_manager = resource_manager;
 	}
 
-	public void setCamera(Camera camera) {
-		tsm.setCamera(camera);
+	public void setEngine(Engine engine) {
+		tsm.setEngine(engine);
 	}
 }

@@ -104,7 +104,7 @@ public class Main implements ActionListener {
 		camera.setDistance(40.0f);
 		camera.setPosition(new Vector3f(0, 0, 6));
 		camera.focusOn(edit_model);
-		resource_window.setCamera(camera);
+		resource_window.setEngine(engine);
 		
 		engine.getWindowManager().getWindows().hideAll();
 		tool_menu.setVisible(true);
