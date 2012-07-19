@@ -57,7 +57,7 @@ public class TreeDragNodeSelectionManager implements TableSelectionManager {
 						table_data.getNodeFromRow(row).getData(0) + 
 						"@" + event.getMouseX() + ":" + event.getMouseY()
 					);
-					Vector3f new_pos = ((Camera)engine.getEntityList().getItem("camera")).getRayTo(event.getMouseX(), event.getMouseY(), 0);
+					Vector3f new_pos = ((Camera)engine.getEntityList().getItem("camera")).getRayTo(event.getMouseX(), event.getMouseY(), 40);
 					//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
 					//item_class.newInstance()
 					

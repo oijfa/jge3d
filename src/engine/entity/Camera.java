@@ -7,6 +7,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import engine.render.Model;
@@ -263,6 +264,7 @@ public class Camera extends Entity {
 	}
 
 	public Vector3f getRayTo(int x, int y, int farDistance) {
+		/*
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		Vector3f pos = new Vector3f();
@@ -276,28 +278,144 @@ public class Camera extends Entity {
 		}
 		viewport.flip();
 		
+		
+		FloatBuffer poopdick = BufferUtils.createFloatBuffer(16);
+		float[] butts = matrices.getModelviewBuffer().array();
+		butts[12]=0;
+		butts[13]=0;
+		butts[14]=0;
+
+		poopdick = FloatBuffer.wrap(butts);
+		
 		// get the position in 3d space by casting a ray from the mouse
 		// coords to the first contacted point in space
 		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
 		// viewport, position);
 		GLU.gluUnProject(
-			x, y, farDistance, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
+			x, Display.getWidth()-y, 0.999f, poopdick, matrices.getProjectionBuffer(), viewport, position
 		);
 
-		pos.set(position.get(0), position.get(1), position.get(2));
-
+		pos.set(position.get(0), position.get(1),0);
+		
+		debugViewport();
+		debugModelview();
+		debugProjection();
+		
 		return pos;
+		*/
+		
+		Vector3f rayFrom = new Vector3f(this.getPosition());
+		Vector3f rayForward = new Vector3f();
+		rayForward.sub(this.getFocusPosition(), this.getPosition());
+		rayForward.normalize();
+
+		//Scale by the far clipping plane
+		rayForward.scale(farDistance);
+
+		Vector3f vertical = new Vector3f(this.getUp());
+
+		Vector3f hor = new Vector3f();
+		hor.cross(rayForward, vertical);
+		hor.normalize();
+		vertical.cross(hor, rayForward);
+		vertical.normalize();
+
+		float aspect = Display.getHeight() / (float)Display.getWidth();
+
+		hor.scale(farDistance );
+		vertical.scale(farDistance );
+
+		if (aspect < 1f) {
+			hor.scale(1f / aspect);
+		}
+		else {
+			vertical.scale(aspect);
+		}
+
+		Vector3f rayToCenter = new Vector3f();
+		rayToCenter.add(rayFrom, rayForward);
+		Vector3f dHor = new Vector3f(hor);
+		dHor.scale(1f / (float) Display.getWidth());
+		Vector3f dVert = new Vector3f(vertical);
+		dVert.scale(1.0f / (float) Display.getHeight());
+
+		Vector3f tmp1 = new Vector3f();
+		Vector3f tmp2 = new Vector3f();
+		tmp1.scale(0.5f, hor);
+		tmp2.scale(0.5f, vertical);
+
+		Vector3f rayTo = new Vector3f();
+		rayTo.sub(rayToCenter, tmp1);
+		rayTo.add(tmp2);
+
+		tmp1.scale(x, dHor);
+		tmp2.scale(y, dVert);
+
+		rayTo.add(tmp1);
+		rayTo.sub(tmp2);
+
+		return rayTo;
 	}
-	/*
+	
 	public void debugViewport() {
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
+		
 		GL11.glGetInteger(GL11.GL_VIEWPORT,viewport);
 		
-		System.out.println("\nViewport:\n");
+		System.out.println("\nVIEWPORT:\n");
+		System.out.println("GL11:");
 		for(int i=0;i<viewport.capacity();i++){
 			System.out.println(viewport.get(i));
 		}
-		System.out.println("\nENDViewport\n");
+		
+		viewport.clear();
+
+		viewport.put(0);
+		viewport.put(0);
+		viewport.put(Display.getWidth());
+		viewport.put(Display.getHeight());
+		for(int i=0;i<12;i++){
+			viewport.put(0);
+		}
+		viewport.flip();
+		
+		System.out.println("otherway:");
+		for(int i=0;i<viewport.capacity();i++){
+			System.out.println(viewport.get(i));
+		}
+		
+		System.out.println("\nENDVIEWPORT\n");
 	}
-	 */
+	
+	public void debugModelview() {
+		FloatBuffer model_view = BufferUtils.createFloatBuffer(16);
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX,model_view);
+		
+		System.out.println("\nMODELVIEW:\n");
+		System.out.println("GL11:");
+		for(int i=0;i<model_view.capacity();i++){
+			System.out.println(model_view.get(i));
+		}
+		System.out.println("otherway:");
+		for(int i=0;i<matrices.getModelviewBuffer().capacity();i++){
+			System.out.println(matrices.getModelviewBuffer().get(i));
+		}
+		System.out.println("\nENDMODELVIEW\n");
+	}
+	
+	public void debugProjection() {
+		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX,projection);
+		
+		System.out.println("\nPROJECTION:\n");
+		System.out.println("GL11:");
+		for(int i=0;i<projection.capacity();i++){
+			System.out.println(projection.get(i));
+		}
+		System.out.println("otherway:");
+		for(int i=0;i<matrices.getProjectionBuffer().capacity();i++){
+			System.out.println(matrices.getProjectionBuffer().get(i));
+		}
+		System.out.println("\nENDPROJECTION\n");
+	}
 }
