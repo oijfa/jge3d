@@ -263,7 +263,7 @@ public class Camera extends Entity {
 		return getRayTo(x, y, (int) 1000);
 	}
 
-	public Vector3f getRayTo(int x, int y, int farDistance) {
+	public Vector3f getRayTo(int x, int y, double farDistance) {
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		Vector3f pos = new Vector3f();
