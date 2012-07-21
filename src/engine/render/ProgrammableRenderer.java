@@ -117,14 +117,18 @@ public class ProgrammableRenderer implements RendererInterface {
 	}
 
 	public void setPerspective(float near, float far, float zoomVal) {
-		nearClipping = near;
-		farClipping = far;
-		if (zoomVal <= 1.0 && zoomVal > 0) {
-			zoom = zoomVal;
-		} else if (zoomVal > 1000.0) {
-			zoom = 1.0f;
+		if(camera != null) {
+			nearClipping = camera.getNear();
+			farClipping = camera.getFar();
+			if (zoomVal <= 1.0 && zoomVal > 0) {
+				zoom = zoomVal;
+			} else if (zoomVal > 1000.0) {
+				zoom = 1.0f;
+			} else {
+				zoom = 0.1f; // TODO: I guess this is the smallest zoom we'd want?
+			}
 		} else {
-			zoom = 0.1f; // TODO: I guess this is the smallest zoom we'd want?
+			System.out.println("Camera not set at setPerspective");
 		}
 	}
 

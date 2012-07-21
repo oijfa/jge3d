@@ -19,8 +19,8 @@ public class Camera extends Entity {
 	// Don't flip over, its confusing.
 	private static final double maximum_declination = (Math.PI / 2.0f) - 0.01f;
 	private static final double minimum_declination = (-1.0f * ((Math.PI / 2.0f) - 0.01f));
-	private static final float minimum_distance = 0.1f;
-	private static final float maximum_distance = 1000f;
+	private static float minimum_distance = 0.1f;
+	private static float maximum_distance = 1000f;
 	public static final String CAMERA_NAME = "camera";
 	private float fov = 45.0f;
 	private float aspect = 1.0f;
@@ -264,11 +264,10 @@ public class Camera extends Entity {
 	}
 
 	public Vector3f getRayTo(int x, int y, int farDistance) {
-		/*
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		Vector3f pos = new Vector3f();
-
+		
 		viewport.put(0);
 		viewport.put(0);
 		viewport.put(Display.getWidth());
@@ -277,33 +276,36 @@ public class Camera extends Entity {
 			viewport.put(0);
 		}
 		viewport.flip();
-		
+		/*
 		
 		FloatBuffer poopdick = BufferUtils.createFloatBuffer(16);
-		float[] butts = matrices.getModelviewBuffer().array();
-		butts[12]=0;
-		butts[13]=0;
+		float[] butts = matrices.getProjectionBuffer().array();
+		butts[0]=1;
+		butts[5]=1;
 		butts[14]=0;
 
 		poopdick = FloatBuffer.wrap(butts);
-		
+		//GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX,poopdick);
+		*/
 		// get the position in 3d space by casting a ray from the mouse
 		// coords to the first contacted point in space
 		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
 		// viewport, position);
+		
+		float z = (float) ((distance-minimum_distance)/distance);
 		GLU.gluUnProject(
-			x, Display.getWidth()-y, 0.999f, poopdick, matrices.getProjectionBuffer(), viewport, position
+			x, Display.getWidth()-y, z, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
 		);
 
 		pos.set(position.get(0), position.get(1),0);
 		
-		debugViewport();
-		debugModelview();
-		debugProjection();
+		//debugViewport();
+		//debugModelview();
+		//debugProjection();
 		
 		return pos;
-		*/
 		
+		/*
 		Vector3f rayFrom = new Vector3f(this.getPosition());
 		Vector3f rayForward = new Vector3f();
 		rayForward.sub(this.getFocusPosition(), this.getPosition());
@@ -355,6 +357,7 @@ public class Camera extends Entity {
 		rayTo.sub(tmp2);
 
 		return rayTo;
+		*/
 	}
 	
 	public void debugViewport() {
@@ -417,5 +420,13 @@ public class Camera extends Entity {
 			System.out.println(matrices.getProjectionBuffer().get(i));
 		}
 		System.out.println("\nENDPROJECTION\n");
+	}
+	
+	public float getNear() {
+		return minimum_distance;
+	}
+	
+	public float getFar() {
+		return maximum_distance;
 	}
 }
