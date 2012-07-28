@@ -10,7 +10,6 @@ import de.matthiasmann.twl.model.TableSelectionModel;
 import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Entity;
-import engine.resource.ResourceManager.ResourceItem;
 
 public class TreeDragNodeResource implements TableSelectionManager {
 	private TableBase table;

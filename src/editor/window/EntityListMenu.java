@@ -37,7 +37,7 @@ public class EntityListMenu extends Window implements ActionListener {
 	}
 
 	private void resourceMenuInit() {
-		setTitle("Resource Editor");
+		setTitle("EntityList");
 
 		Group hgroup = layout.createSequentialGroup().addGroup(
 			layout.createParallelGroup(entitylist_window));
