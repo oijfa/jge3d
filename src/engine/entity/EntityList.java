@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import editor.action_listener.ActionEvent;
+import editor.action_listener.ActionListener;
 import engine.physics.Physics;
 
-public class EntityList {
+public class EntityList implements ActionListener {
 	private HashMap<Object, Entity> entities;
 	private Physics physics;
+	private ArrayList<ActionListener> action_listeners;
 
 	// private HashMap<String,TypedConstraint> constraints;
 
@@ -20,7 +23,7 @@ public class EntityList {
 	public EntityList(Physics physics) {
 		entities = new HashMap<Object, Entity>();
 		this.physics = physics;
-
+		action_listeners = new ArrayList<ActionListener>();
 		physicsQueue = new ConcurrentLinkedQueue<QueueItem>();
 		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
 	}
@@ -55,6 +58,7 @@ public class EntityList {
 		entities.put(ent.collision_object, ent);
 		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
 		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
+		fireActionEvent();
 	}
 	public void removeEntity(Object key) {
 		if (entities.containsKey(key)) {
@@ -64,11 +68,13 @@ public class EntityList {
 			entities.remove(ent.collision_object);
 			physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
 			renderQueue.add(new QueueItem(ent, QueueItem.REMOVE));
+			fireActionEvent();
 		}
 	}
 	
 	public void updateEntity(Entity ent) {
 		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
+		fireActionEvent();
 	}
 	
 	public int physicsQueueSize() {
@@ -175,4 +181,26 @@ public class EntityList {
 	 * (constraints.get(constraint_name)); constraints.remove(constraint_name);
 	 * } }
 	 */
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void fireActionEvent() {
+		for (ActionListener al : action_listeners) {
+			al.actionPerformed(new ActionEvent(this));
+		}
+	}
+	
+	public void fireActionEvent(String event) {
+		for (ActionListener al : action_listeners) {
+			al.actionPerformed(new ActionEvent(this, event));
+		}
+	}
+
+	public void addActionListener(ActionListener al) {
+		action_listeners.add(al);
+	}
 }

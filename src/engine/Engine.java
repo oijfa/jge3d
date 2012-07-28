@@ -104,6 +104,18 @@ public class Engine {
 		return ent;
 	}
 
+	public Entity addEntity(float mass, boolean collidable, String model_name, String shader_name) {
+		Entity ent = new Entity(
+			mass, 
+			collidable, 
+			(Model) resource_manager.getResource(model_name,"models"), 
+			(Shader) resource_manager.getResource(shader_name,"shaders")
+		);
+		this.addEntity(ent);
+		
+		return ent;
+	}
+	
 	public void addEntity(Entity ent) {
 		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
 			renderer.setCamera((Camera)ent);

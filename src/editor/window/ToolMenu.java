@@ -22,6 +22,7 @@ public class ToolMenu  extends Window implements ActionListener {
 	private ToggleButton layer_window;
 	private ToggleButton mirror_window;
 	private ToggleButton resource_window;
+	private ToggleButton entity_window;
 	
 	private WindowManager window_manager;
 
@@ -57,6 +58,8 @@ public class ToolMenu  extends Window implements ActionListener {
 		mirror_window.setTheme("mirror_menu");
 		resource_window = new ToggleButton("Resources");
 		resource_window.setTheme("resource_window");
+		entity_window = new ToggleButton("EntityList");
+		entity_window.setTheme("entity_window");
 		
 		project_window.setSize(200, 30);
 		palette_window.setSize(200, 30);
@@ -66,6 +69,7 @@ public class ToolMenu  extends Window implements ActionListener {
 		layer_window.setSize(200, 30);
 		mirror_window.setSize(200, 30);
 		resource_window.setSize(200, 30);
+		entity_window.setSize(200, 30);
 		
 		// !!!EXAMPLE OF DIALOG LAYOUT!!!//
 		// Sequential groups are like a Swing boxlayout and just lists from top
@@ -87,7 +91,8 @@ public class ToolMenu  extends Window implements ActionListener {
 				perspective_window,
 				layer_window,
 				mirror_window,
-				resource_window)
+				resource_window,
+				entity_window)
 			)
 			.addGap();
 
@@ -103,7 +108,8 @@ public class ToolMenu  extends Window implements ActionListener {
 			.addWidget(perspective_window)
 			.addWidget(layer_window)
 			.addWidget(mirror_window)
-			.addWidget(resource_window);
+			.addWidget(resource_window)
+			.addWidget(entity_window);
 
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup
@@ -194,6 +200,16 @@ public class ToolMenu  extends Window implements ActionListener {
 				else
 					 window_manager.getWindows().getByName("resource_window").setVisible(false);
 				window_manager.setPosition(window_manager.getWindows().getByName("resource_window"));
+			}
+		});
+		entity_window.addCallback(new Runnable() {			
+			@Override
+			public void run() {  
+				if(entity_window.getModel().isSelected()) 
+					 window_manager.getWindows().getByName("entity_list").setVisible(true);
+				else
+					 window_manager.getWindows().getByName("entity_list").setVisible(false);
+				window_manager.setPosition(window_manager.getWindows().getByName("entity_list"));
 			}
 		});
 	}

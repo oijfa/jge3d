@@ -8,6 +8,7 @@ import editor.Main;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import editor.window.AnimationWindow;
+import editor.window.EntityListMenu;
 import editor.window.ProjectWindow;
 import editor.window.GridWindow;
 import editor.window.LayerMenu;
@@ -39,6 +40,7 @@ public class Main implements ActionListener {
 	private MirrorMenu mirror_menu;
 	private PerspectiveMenu perspective_menu;
 	private ResourceWindow resource_window;
+	private EntityListMenu entity_list;
 	// private ToolBox tool_box;
 
 	private Entity edit_model;
@@ -69,6 +71,7 @@ public class Main implements ActionListener {
 		perspective_menu = new PerspectiveMenu();
 		mirror_menu = new MirrorMenu();
 		resource_window = new ResourceWindow(engine.resource_manager);
+		entity_list = new EntityListMenu(engine);
 		
 		tool_menu = new ToolMenu(engine.getWindowManager());
 		// tool_box = new ToolBox();
@@ -91,6 +94,8 @@ public class Main implements ActionListener {
 		perspective_menu.setName("perspective_menu");
 		engine.addWindow(resource_window, 200, 400);
 		resource_window.setName("resource_window");
+		engine.addWindow(entity_list, 200, 400);
+		entity_list.setName("entity_list");
 				
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);

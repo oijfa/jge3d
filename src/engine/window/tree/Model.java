@@ -15,7 +15,7 @@ public class Model extends AbstractTreeTableModel {
 		return COLUMN_NAMES[column];
 	}
 
-	public Node insert(Object str0, String str1) {
+	public Node insert(String str0, Object str1) {
 		Node n = new Node(this, str0, str1);
 		insertChild(n, getNumChildren());
 		return n;

@@ -35,7 +35,7 @@ public class Node extends AbstractTreeTableNode {
 		}
 
 		// create the node
-		Node n = parent.insert(this.str0, (String) this.str1);
+		Node n = parent.insert((String)this.str0, this.str1);
 
 		// insert its children
 		createChildren(n, children);

@@ -16,5 +16,7 @@ public class EntityMenu {
 	//
 	//Color Props
 	
-	
+	public EntityMenu() {
+		
+	}
 }

@@ -14,12 +14,12 @@ public class ResourceWindow extends Window {
 	private final Tree resource_window;
 	private final DialogLayout layout;
 	private ResourceManager resource_manager;
-	private TreeDragNodeSelectionManager tsm;
+	private TreeDragNodeResource tsm;
 
 	public ResourceWindow(ResourceManager resource_manager) {
 		super();
 		resource_window = new Tree();
-		tsm = new TreeDragNodeSelectionManager(resource_window.getTable());
+		tsm = new TreeDragNodeResource(resource_window.getTable());
 		resource_window.setTreeSelectionManager(tsm);
 		layout = new DialogLayout();
 		this.resource_manager = resource_manager;

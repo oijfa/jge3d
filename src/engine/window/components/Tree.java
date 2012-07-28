@@ -95,7 +95,7 @@ public class Tree extends ScrollPane {// implements Observer {
 		return found;
 	}
 	
-	public Node createNode(String key, String value, Model base_node) {
+	public Node createNode(String key, Object value, Model base_node) {
 			return base_node.insert(key, value);
 	}
 	
@@ -111,6 +111,10 @@ public class Tree extends ScrollPane {// implements Observer {
 		return null;	
 	}
 
+	public void removeAllNodes() {
+		treeModel.removeAll();
+	}
+	
 	public void centerScrollPane() {
 		updateScrollbarSizes();
 		setScrollPositionX(getMaxScrollPosX() / 2);

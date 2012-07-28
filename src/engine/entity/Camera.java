@@ -24,7 +24,7 @@ public class Camera extends Entity {
 	public static final String CAMERA_NAME = "camera";
 	private float fov = 45.0f;
 	private float aspect = 1.0f;
-	
+	private static float speed_scale = 0.0000000000000002f;
 
 	/* Class fields */
 	private double declination; // Angle up and down
@@ -142,8 +142,8 @@ public class Camera extends Entity {
 		//Vector3f focPos = getFocusPosition();
 
 		double xrotrad, yrotrad;
-	    yrotrad = declination / 180 * 3.141592654f;
-	    xrotrad = rotation / 180 * 3.141592654f;
+	    yrotrad = declination / 180 * Math.PI;
+	    xrotrad = rotation / 180 * Math.PI;
 	    position.x += Math.sin(yrotrad);
 	    position.z -= Math.cos(yrotrad);
 	    position.y -= Math.sin(xrotrad);
@@ -179,11 +179,11 @@ public class Camera extends Entity {
 		 * the camera's rotation doesn't lock up(Slow Down) at around 2*Pi +
 		 * Pi/2 of the rotation
 		 */
-		if (Math.abs(rotation) > 6.28318531f) {
+		if (Math.abs(rotation) > 2*Math.PI) {
 			if (rotation > 0) {
-				rotation -= 6.28318531f;
+				rotation -= 2*Math.PI;
 			} else if (rotation < 0) {
-				rotation += 6.28318531f;
+				rotation += 2*Math.PI;
 			}
 		}
 		// Not needed because renderer always calls it
@@ -206,7 +206,7 @@ public class Camera extends Entity {
 		float a = 0;
 
 		Vector3f adjusted_movementVector3f = new Vector3f(movement);
-		adjusted_movementVector3f.scale(prev_time*0.0000000000000002f);
+		adjusted_movementVector3f.scale(prev_time*speed_scale);
 		if(!movement.equals(new Vector3f(0,0,0))) {
 			incrementRotation(((Float)adjusted_movementVector3f.x).doubleValue());
 			incrementDeclination(((Float)adjusted_movementVector3f.y).doubleValue());
@@ -297,7 +297,7 @@ public class Camera extends Entity {
 			x, Display.getWidth()-y, z, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
 		);
 
-		pos.set(position.get(0), position.get(1),0);
+		pos.set(position.get(0), position.get(1),z);
 		
 		//debugViewport();
 		//debugModelview();
