@@ -426,124 +426,123 @@ public class Model implements RenderObject, Resource {
 		GL11.glPopMatrix();
 	}
 
-	public void drawProgrammablePipe(Entity ent) {
-		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
-		if (immediate_scale_rotate) {
-			GL11.glPushMatrix();
-			rotateAndScaleImmediate(ent.getCollisionObject());
-		}// else {
-			// do the shader using glUniform etc. here
-
-		int vertex = GL20.glGetAttribLocation(
-			shader.getShaderID(),
-			new String("vertex")
-		);
-		int normal = GL20.glGetAttribLocation(
-			shader.getShaderID(),
-			new String("normal")
-		);
-		int texture = GL20.glGetAttribLocation(
-			shader.getShaderID(),
-			new String("texture")
-		);	
-		int color = GL20.glGetAttribLocation(
-			shader.getShaderID(),
-			new String("color")
-		);
-		/*
-		System.out.println(
-			"Vertex: " + vertex + "\n" +
-			"Normal: " + normal + "\n" +
-			"Texture: " + texture + "\n" +
-			"Color: " + color + "\n"
-		);
-		*/
-		
-		GL20.glEnableVertexAttribArray(vertex);
-		GL20.glEnableVertexAttribArray(normal);
-		GL20.glEnableVertexAttribArray(texture);
-		GL20.glEnableVertexAttribArray(color);
-
-		// Bind the index of the object
-		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, modelVBOID);
-
-		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, modelVBOindexID);
-
-		// vertices
-		long offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
-							// * 4 to convert to bytes.
-		GL20.glVertexAttribPointer(
-			vertex, 
-			3,
-			GL11.GL_FLOAT,
-			false,
-			Face.VERTEX_STRIDE, 
-			offset
-		);
-
-		// normals
-		offset = 3 * 4; // 3 components is the initial offset from 0, then
-						// convert to bytes
-		GL20.glVertexAttribPointer(
-			normal, 
-			3,
-			GL11.GL_FLOAT,
-			false,
-			Face.VERTEX_STRIDE, 
-			offset
-		);
-
-		// texture coordinates
-		offset = (3 + 3) * 4;
-		GL20.glVertexAttribPointer(
-			texture, 
-			2,
-			GL11.GL_FLOAT,
-			false,
-			Face.VERTEX_STRIDE, 
-			offset
-		);
-
-		// colors
-		offset = (3 + 3 + 2) * 4; // (6*4) skip to color bytes
-		GL20.glVertexAttribPointer(
-			color, 
-			4,
-			GL11.GL_FLOAT,
-			false,
-			Face.VERTEX_STRIDE, 
-			offset		
-		);
-
-		int first = index_buffer.get(0);
-		int last = index_buffer.get(index_buffer.limit() - 1);
-
+	public void drawProgrammablePipe(Entity ent, Shader shader) {
+		if(shader == null) {
+			shader = this.shader;
+		}
 		if(shader != null) {
+			// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
+			if (immediate_scale_rotate) {
+				GL11.glPushMatrix();
+				rotateAndScaleImmediate(ent.getCollisionObject());
+			}// else {
+				// do the shader using glUniform etc. here
+	
+			int vertex = GL20.glGetAttribLocation(
+				shader.getShaderID(),
+				new String("vertex")
+			);
+			int normal = GL20.glGetAttribLocation(
+				shader.getShaderID(),
+				new String("normal")
+			);
+			int texture = GL20.glGetAttribLocation(
+				shader.getShaderID(),
+				new String("texture")
+			);	
+			int color = GL20.glGetAttribLocation(
+				shader.getShaderID(),
+				new String("color")
+			);
+			
+			GL20.glEnableVertexAttribArray(vertex);
+			GL20.glEnableVertexAttribArray(normal);
+			GL20.glEnableVertexAttribArray(texture);
+			GL20.glEnableVertexAttribArray(color);
+	
+			// Bind the index of the object
+			ARBVertexBufferObject.glBindBufferARB(
+				ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, modelVBOID);
+	
+			ARBVertexBufferObject.glBindBufferARB(
+				ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, modelVBOindexID);
+	
+			// vertices
+			long offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
+								// * 4 to convert to bytes.
+			GL20.glVertexAttribPointer(
+				vertex, 
+				3,
+				GL11.GL_FLOAT,
+				false,
+				Face.VERTEX_STRIDE, 
+				offset
+			);
+	
+			// normals
+			offset = 3 * 4; // 3 components is the initial offset from 0, then
+							// convert to bytes
+			GL20.glVertexAttribPointer(
+				normal, 
+				3,
+				GL11.GL_FLOAT,
+				false,
+				Face.VERTEX_STRIDE, 
+				offset
+			);
+	
+			// texture coordinates
+			offset = (3 + 3) * 4;
+			GL20.glVertexAttribPointer(
+				texture, 
+				2,
+				GL11.GL_FLOAT,
+				false,
+				Face.VERTEX_STRIDE, 
+				offset
+			);
+	
+			// colors
+			offset = (3 + 3 + 2) * 4; // (6*4) skip to color bytes
+			GL20.glVertexAttribPointer(
+				color, 
+				4,
+				GL11.GL_FLOAT,
+				false,
+				Face.VERTEX_STRIDE, 
+				offset		
+			);
+	
+			int first = index_buffer.get(0);
+			int last = index_buffer.get(index_buffer.limit() - 1);
+	
 			shader.startShader(modelVBOID, ent);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
+		
+			ARBVertexBufferObject.glBindBufferARB(
+				ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
+			ARBVertexBufferObject.glBindBufferARB(
+				ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+			
+			GL20.glDisableVertexAttribArray(color);
+			GL20.glDisableVertexAttribArray(texture);
+			GL20.glDisableVertexAttribArray(normal);
+			GL20.glDisableVertexAttribArray(vertex);
+			
+			//if there is an error
+			if(GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
+				//find out how large it is and print
+				int maxLength = GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
+				System.out.println("length: " + maxLength + " " + GL20.glGetProgramInfoLog(shader.getShaderID(), maxLength));
+			}
 		} else {
 			System.out.println("Missing shader [rendering direct]:\nmodelVBOID:"+modelVBOID+" modelVBOIDXID:"+modelVBOindexID+"\n");
 		}
-		
-		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
-		ARBVertexBufferObject.glBindBufferARB(
-			ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-		
-		GL20.glDisableVertexAttribArray(color);
-		GL20.glDisableVertexAttribArray(texture);
-		GL20.glDisableVertexAttribArray(normal);
-		GL20.glDisableVertexAttribArray(vertex);
-		
-		//if there is an error
-		if(GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
-			//find out how large it is and print
-			int maxLength = GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
-			System.out.println("length: " + maxLength + " " + GL20.glGetProgramInfoLog(shader.getShaderID(), maxLength));
-		}
+	}
+	
+	public void drawProgrammablePipe(Entity ent) {
+		drawProgrammablePipe(ent,null);
 	}
 
 	public int getVertexCount() {

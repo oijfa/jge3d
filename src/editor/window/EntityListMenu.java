@@ -23,7 +23,7 @@ public class EntityListMenu extends Window implements ActionListener {
 		tsm = new TreeDragNodeEntity(entitylist_window.getTable());
 		entitylist_window.setTreeSelectionManager(tsm);
 		layout = new DialogLayout();
-		this.engine = engine;
+		setEngine(engine);
 		resourceMenuInit();
 		engine.getEntityList().addActionListener(this);
 	}

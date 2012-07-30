@@ -42,7 +42,11 @@ public class Animation implements RenderObject {
 	}
 	
 	public void drawProgrammablePipe(Entity ent) {
-		animation.get(last_animation_name).get(last_frame).getModel().drawProgrammablePipe(ent);
+		drawProgrammablePipe(ent, null);
+	}
+	
+	public void drawProgrammablePipe(Entity ent, Shader shader) {
+		animation.get(last_animation_name).get(last_frame).getModel().drawProgrammablePipe(ent,null);
 		nextFrame(last_animation_name);
 	}
 	

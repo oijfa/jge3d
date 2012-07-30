@@ -276,88 +276,20 @@ public class Camera extends Entity {
 			viewport.put(0);
 		}
 		viewport.flip();
-		/*
-		
-		FloatBuffer poopdick = BufferUtils.createFloatBuffer(16);
-		float[] butts = matrices.getProjectionBuffer().array();
-		butts[0]=1;
-		butts[5]=1;
-		butts[14]=0;
 
-		poopdick = FloatBuffer.wrap(butts);
-		//GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX,poopdick);
-		*/
-		// get the position in 3d space by casting a ray from the mouse
-		// coords to the first contacted point in space
-		// GLU.gluUnProject(mouseX, mouseY, winZ.get(), modelview, projection,
-		// viewport, position);
-		
-		float z = (float) ((distance-minimum_distance)/distance);
 		GLU.gluUnProject(
-			x, Display.getWidth()-y, z, matrices.getModelviewBuffer(), matrices.getProjectionBuffer(), viewport, position
+			x,
+			Display.getWidth()-y, 
+			(float)((distance-minimum_distance)/distance),
+			matrices.getModelviewBuffer(),
+			matrices.getProjectionBuffer(),
+			viewport,
+			position
 		);
 
-		pos.set(position.get(0), position.get(1),z);
-		
-		//debugViewport();
-		//debugModelview();
-		//debugProjection();
-		
+		pos.set(position.get(0), position.get(1), position.get(2));
+
 		return pos;
-		
-		/*
-		Vector3f rayFrom = new Vector3f(this.getPosition());
-		Vector3f rayForward = new Vector3f();
-		rayForward.sub(this.getFocusPosition(), this.getPosition());
-		rayForward.normalize();
-
-		//Scale by the far clipping plane
-		rayForward.scale(farDistance);
-
-		Vector3f vertical = new Vector3f(this.getUp());
-
-		Vector3f hor = new Vector3f();
-		hor.cross(rayForward, vertical);
-		hor.normalize();
-		vertical.cross(hor, rayForward);
-		vertical.normalize();
-
-		float aspect = Display.getHeight() / (float)Display.getWidth();
-
-		hor.scale(farDistance );
-		vertical.scale(farDistance );
-
-		if (aspect < 1f) {
-			hor.scale(1f / aspect);
-		}
-		else {
-			vertical.scale(aspect);
-		}
-
-		Vector3f rayToCenter = new Vector3f();
-		rayToCenter.add(rayFrom, rayForward);
-		Vector3f dHor = new Vector3f(hor);
-		dHor.scale(1f / (float) Display.getWidth());
-		Vector3f dVert = new Vector3f(vertical);
-		dVert.scale(1.0f / (float) Display.getHeight());
-
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
-		tmp1.scale(0.5f, hor);
-		tmp2.scale(0.5f, vertical);
-
-		Vector3f rayTo = new Vector3f();
-		rayTo.sub(rayToCenter, tmp1);
-		rayTo.add(tmp2);
-
-		tmp1.scale(x, dHor);
-		tmp2.scale(y, dVert);
-
-		rayTo.add(tmp1);
-		rayTo.sub(tmp2);
-
-		return rayTo;
-		*/
 	}
 	
 	public void debugViewport() {

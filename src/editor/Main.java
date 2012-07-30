@@ -70,7 +70,7 @@ public class Main implements ActionListener {
 		project_window = new ProjectWindow();
 		perspective_menu = new PerspectiveMenu();
 		mirror_menu = new MirrorMenu();
-		resource_window = new ResourceWindow(engine.resource_manager);
+		resource_window = new ResourceWindow(engine);
 		entity_list = new EntityListMenu(engine);
 		
 		tool_menu = new ToolMenu(engine.getWindowManager());

@@ -15,6 +15,7 @@ public class TreeDragNodeEntity implements TableSelectionManager {
 	private TableBase table;
 	private TreeTable table_data;
 	private Engine engine;
+	private String dragging_name;
 	
 	public TreeDragNodeEntity(TreeTable table_data) {
 		this.table_data = table_data;
@@ -56,11 +57,8 @@ public class TreeDragNodeEntity implements TableSelectionManager {
 						
 						//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
 						//item_class.newInstance()
-						
 						try {
-							String name = (String)table_data.getNodeFromRow(row).getData(0);
-							System.out.println("row:"+row+":"+column+";"+name);
-							Entity ent = engine.addEntity(1f, true, name, "default");
+							Entity ent = engine.addEntity(new Entity(engine.getEntity(dragging_name)));
 							ent.setPosition(new Vector3f(0, 0, 0));
 							ent.setAngularFactor(0, new Vector3f(0,1,0));
 							ent.setGravity(new Vector3f(0,0,0));
@@ -68,6 +66,8 @@ public class TreeDragNodeEntity implements TableSelectionManager {
 						} catch (Exception e){
 							e.printStackTrace();
 						}
+					} else if (event.getMouseButton() != -1 && !event.isMouseDragEnd()) {
+						dragging_name = (String)table_data.getNodeFromRow(row).getData(0);
 					}
 				} else {
 					System.out.println("Table is not set");

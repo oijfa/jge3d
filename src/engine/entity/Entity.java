@@ -36,8 +36,9 @@ public class Entity {
 	private HashMap<String, Object> data;
 	protected RenderObject model;
 	private boolean shouldDraw = true;
+	private Shader shader;
 
-	ArrayList<Method> collision_functions = new ArrayList<Method>(); 
+	private ArrayList<Method> collision_functions = new ArrayList<Method>(); 
 	
 	public static enum ObjectType {
 		ghost, rigidbody, actor
@@ -66,6 +67,15 @@ public class Entity {
 
 	public Entity(String name, float mass, boolean collide, Model model, Shader shader) {
 		initialSetup(name, mass, collide, model, shader);
+	}
+	
+	public Entity(Entity ent) {
+		String new_name = (String)ent.getProperty(Entity.NAME);
+		float mass = ((RigidBody)ent.getCollisionObject()).getInvMass();
+		boolean collide = (boolean)ent.getProperty(Entity.COLLIDABLE);
+		Shader shader = (Shader)ent.getProperty("shader");		
+				
+		initialSetup(new_name, mass, collide, (Model)ent.getModel(), shader);
 	}
 	
 	// Sets the initial name of the body in the list
@@ -250,7 +260,10 @@ public class Entity {
 	public void drawProgrammablePipe() {
 		if (shouldDraw) {
 			if(model != null) {
-				model.drawProgrammablePipe(this);
+				if(shader == null)
+					model.drawProgrammablePipe(this);
+				else
+					model.drawProgrammablePipe(this,shader);
 			}
 		}
 	}
