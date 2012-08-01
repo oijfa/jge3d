@@ -13,24 +13,24 @@ import de.matthiasmann.twl.model.TreeTableNode;
 public class ResourceWindow extends Window {
 	private final Tree resource_window;
 	private final DialogLayout layout;
-	private ResourceManager resource_manager;
 	private TreeDragNodeResource tsm;
+	private Engine engine;
 
-	public ResourceWindow(ResourceManager resource_manager) {
+	public ResourceWindow(Engine engine) {
 		super();
 		resource_window = new Tree();
 		tsm = new TreeDragNodeResource(resource_window.getTable());
 		resource_window.setTreeSelectionManager(tsm);
 		layout = new DialogLayout();
-		this.resource_manager = resource_manager;
+		this.engine = engine;
 		resourceMenuInit();
 	}
 
-	public ResourceWindow(Model m, ResourceManager resource_manager) {
+	public ResourceWindow(Model m, Engine engine) {
 		super();
 		resource_window = new Tree(m);
 		layout = new DialogLayout();
-		this.resource_manager = resource_manager;
+		this.engine = engine;
 		resourceMenuInit();
 	}
 
@@ -57,20 +57,16 @@ public class ResourceWindow extends Window {
 	
 	public void createResources() {
 		Node found_node;
-		for(String category: resource_manager.getResources().keySet()) {
+		for(String category: engine.resource_manager.getResources().keySet()) {
 			if(resource_window.contains(category))
 				found_node = resource_window.searchCurrentLevel(category, (Node)(TreeTableNode)resource_window.getBase());
 			else
-				found_node = resource_window.createNode(category, category, resource_window.getBase());
+				found_node = resource_window.createNode(category, "", resource_window.getBase());
 			
-			for(ResourceManager.ResourceItem resource: resource_manager.getResourcesInCategory(category)) {
+			for(ResourceManager.ResourceItem resource: engine.resource_manager.getResourcesInCategory(category)) {
 				resource_window.createNode(resource.name, resource, found_node);
 			}
 		}
-	}
-
-	public void setResourceManager(ResourceManager resource_manager) {
-		this.resource_manager = resource_manager;
 	}
 
 	public void setEngine(Engine engine) {

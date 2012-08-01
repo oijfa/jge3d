@@ -116,12 +116,13 @@ public class Engine {
 		return ent;
 	}
 	
-	public void addEntity(Entity ent) {
+	public Entity addEntity(Entity ent) {
 		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
 			renderer.setCamera((Camera)ent);
 			ent.setShouldDraw(false);
 		}
 		entity_list.addEntity(ent);
+		return ent;
 	}
 
 	public void updateEntity(Entity ent) {
@@ -269,6 +270,7 @@ public class Engine {
 	public Camera addCamera(float mass, boolean collidable, String model_name) {
 		Camera camera = new Camera(mass, collidable, (Model) resource_manager.getResource(model_name,"models"));
 		addEntity(camera);
+		renderer.setCamera(camera);
 		return camera;
 	}
 
