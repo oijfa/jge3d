@@ -5,8 +5,6 @@ import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.Display;
 
-import editor.window.LightMenu;
-import editor.window.MaterialMenu;
 import engine.Engine;
 import engine.entity.*;
 
@@ -14,17 +12,18 @@ import engine.render.Shader;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
+import engine.stars.Stars;
+import engine.terrain.Terrain;
 
 public class Main {
 	private Engine engine;
-	/*
+	
 	private Actor player;
 	private Actor model;
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
 	private Entity model5;
-	*/
 	
 	private Lights lights;
     private Light light;
@@ -32,8 +31,8 @@ public class Main {
 	
 	private Camera camera;
 	
-	private LightMenu lightmenu;
-	private MaterialMenu materialmenu;
+	//private LightMenu lightmenu;
+	//private MaterialMenu materialmenu;
 	private static boolean multiThreaded = true;
 	
 	public static void main(String args[]) {
@@ -61,7 +60,6 @@ public class Main {
 		Model export_model = import_model.createModel();
 		export_model.saveXGL("/home/adam/workspace/jge3d/src/resources/models/misc/armadillo.xgl");
 		*/
-		/*
 		//Create the ground to stand on
 		Terrain terrain = new Terrain(
 			0,
@@ -126,19 +124,18 @@ public class Main {
 		String name_to_use = "bunny";
 		Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
 		test.setProperty(Entity.NAME, name_to_use);
-		test.setPosition(new Vector3f(0, 0, 0));
+		test.setPosition(new Vector3f(0, 30, 0));
 		test.setAngularFactor(0, new Vector3f(0,1,0));
-		test.setGravity(new Vector3f(0,0,0));
-		//test.setScale(new Vector3f(100.00f,100.00f,100.00f));
+		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(0.5f);
+		camera.setDistance(20f);
 		camera.setPosition(new Vector3f(0, 0, 0));
-		camera.focusOn(test);
+		camera.focusOn(player);
 		
 		addUBOsToDefaultShader();
-		
+		/*
 		lightmenu = new LightMenu();
 		lightmenu.setTheme("lightmenu");
 		engine.addWindow(lightmenu, 400, 400);
@@ -150,6 +147,7 @@ public class Main {
 		
 		lightmenu.setLight(light);
 		materialmenu.setMaterial(test.getModel().getMesh(0).getMaterial());
+		*/
 	}	
 	
 	//This function is just for testing; we'll need to set this stuff at the map level
@@ -158,26 +156,26 @@ public class Main {
 		
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		light = new Light(
-			new Vector4f(0.0f,2.0f,10.0f,1.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(10.0f,10.0f,10.0f,1.0f),
+			new Vector4f(2.0f,2.0f,1.0f,255.0f),
+			new Vector4f(2.0f,2.0f,1.0f,255.0f),
+			new Vector4f(2.0f,2.0f,1.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
-			new Vector3f(0.0f,-1.0f,0.0f),
+			new Vector3f(-1.0f,-1.0f,0.0f),
 			1.0f,
-			1.0f
+			0.1f
 		);
         light2 = new Light(
-			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
-			new Vector4f(5.0f,5.0f,5.0f,255.0f),
+			new Vector4f(-10.0f,10.0f,10.0f,1.0f),
+			new Vector4f(1.0f,2.0f,2.0f,255.0f),
+			new Vector4f(1.0f,2.0f,2.0f,255.0f),
+			new Vector4f(1.0f,2.0f,2.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
-			new Vector3f(0.0f,-1.0f,0.0f),
+			new Vector3f(1.0f,-1.0f,0.0f),
 			1.0f,
 			1.0f
 		);

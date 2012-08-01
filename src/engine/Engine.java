@@ -270,6 +270,7 @@ public class Engine {
 	public Camera addCamera(float mass, boolean collidable, String model_name) {
 		Camera camera = new Camera(mass, collidable, (Model) resource_manager.getResource(model_name,"models"));
 		addEntity(camera);
+		renderer.setCamera(camera);
 		return camera;
 	}
 

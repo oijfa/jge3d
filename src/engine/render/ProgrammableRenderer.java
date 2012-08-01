@@ -146,5 +146,6 @@ public class ProgrammableRenderer implements RendererInterface {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+		setPerspective();
 	}
 }

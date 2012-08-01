@@ -52,7 +52,7 @@ public class Entity {
 	public static final String TIME_TO_LIVE = "TTL";
 
 	// Required keys
-	private String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE };
+	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;

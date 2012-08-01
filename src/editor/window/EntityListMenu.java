@@ -7,8 +7,12 @@ import engine.entity.Entity;
 import engine.window.components.Tree;
 import engine.window.components.Window;
 import engine.window.tree.Model;
+import engine.window.tree.Node;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
+import de.matthiasmann.twl.TextArea;
+import de.matthiasmann.twl.ValueAdjusterFloat;
+import de.matthiasmann.twl.ValueAdjusterInt;
 
 public class EntityListMenu extends Window implements ActionListener {
 	private final Tree entitylist_window;
@@ -59,8 +63,23 @@ public class EntityListMenu extends Window implements ActionListener {
 	
 	public void createEntityList() {
 		for(Entity e : engine.getEntityList().getEntities()) {
-			if(!entitylist_window.contains((String)e.getProperty("name")))
-				entitylist_window.createNode((String)e.getProperty("name"), e, entitylist_window.getBase());
+			if(!entitylist_window.contains((String)e.getProperty("name"))) {
+				Node node = entitylist_window.createNode(
+						(String)e.getProperty("name"), e, entitylist_window.getBase()
+				);
+				
+				for(String prop: Entity.reqKeys) {
+					if(e.getProperty(prop).getClass() == float.class) { 
+						node.insert(e.getProperty(prop), new ValueAdjusterFloat());					
+					} else if (e.getProperty(prop).getClass() == int.class) {
+						node.insert(e.getProperty(prop), new ValueAdjusterInt());
+					} else if (e.getProperty(prop).getClass() == String.class) {
+						node.insert(e.getProperty(prop), new TextArea());
+					} else{
+						
+					}
+				}
+			}
 			
 			//for(ResourceManager.ResourceItem resource: entity_list.getResourcesInCategory(category)) {
 			//	resource_window.createNode(resource.name, resource, found_node);
