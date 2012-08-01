@@ -309,4 +309,13 @@ public class Engine {
 	public void removeAIRoutine(String ent_name, String script_name) {
 		ai_manager.unassignScript(ent_name, script_name);
 	}
+	
+	public Entity pickEntity(int x, int y){
+		camera.getRayTo(x, y, camera.getFar());
+		
+		
+		
+		return null;
+		
+	}
 }
