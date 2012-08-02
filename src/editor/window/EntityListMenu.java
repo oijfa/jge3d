@@ -10,7 +10,9 @@ import engine.window.tree.Model;
 import engine.window.tree.Node;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
-import de.matthiasmann.twl.TextArea;
+import de.matthiasmann.twl.EditField;
+import de.matthiasmann.twl.Label;
+import de.matthiasmann.twl.ToggleButton;
 import de.matthiasmann.twl.ValueAdjusterFloat;
 import de.matthiasmann.twl.ValueAdjusterInt;
 
@@ -67,16 +69,27 @@ public class EntityListMenu extends Window implements ActionListener {
 				Node node = entitylist_window.createNode(
 						(String)e.getProperty("name"), e, entitylist_window.getBase()
 				);
+				Node subnode;
 				
 				for(String prop: Entity.reqKeys) {
-					if(e.getProperty(prop).getClass() == float.class) { 
-						node.insert(e.getProperty(prop), new ValueAdjusterFloat());					
-					} else if (e.getProperty(prop).getClass() == int.class) {
-						node.insert(e.getProperty(prop), new ValueAdjusterInt());
+					System.out.println(e.getProperty(prop).getClass().getName());
+					if(e.getProperty(prop).getClass() == float.class
+							|| e.getProperty(prop).getClass() == Float.class) { 
+						subnode = node.insert(prop, new ValueAdjusterFloat());
+						((ValueAdjusterFloat)subnode.getData(1)).setValue((float)e.getProperty(prop));
+					} else if (e.getProperty(prop).getClass() == int.class
+							|| e.getProperty(prop).getClass() == Integer.class) {
+						subnode = node.insert(prop, new ValueAdjusterInt());
+						((ValueAdjusterInt)subnode.getData(1)).setValue((int)e.getProperty(prop));
 					} else if (e.getProperty(prop).getClass() == String.class) {
-						node.insert(e.getProperty(prop), new TextArea());
+						subnode = node.insert(prop, new EditField());
+						((EditField)subnode.getData(1)).setText((String)e.getProperty(prop));
+					} else if (e.getProperty(prop).getClass() == boolean.class ||
+							e.getProperty(prop).getClass() == Boolean.class) {
+						subnode = node.insert(prop, new ToggleButton());
+						((ToggleButton)subnode.getData(1)).getModel().setPressed((Boolean)e.getProperty(prop));
 					} else{
-						
+						node.insert("WTF is this shit?", new Label());
 					}
 				}
 			}
