@@ -257,12 +257,6 @@ public class Camera extends Entity {
 		);
 	}
 
-	// TODO: This needs cleaned up and commented real bad
-	// TODO: Magic Number for far clipping
-	public Vector3f getRayTo(int x, int y) {
-		return getRayTo(x, y, (int) 1000);
-	}
-
 	public Vector3f getRayTo(int x, int y, double farDistance) {
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
