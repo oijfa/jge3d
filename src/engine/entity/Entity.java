@@ -30,7 +30,7 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-public class Entity {
+public class Entity{
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;

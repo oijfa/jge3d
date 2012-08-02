@@ -3,6 +3,7 @@ package engine.entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -10,7 +11,7 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.physics.Physics;
 
-public class EntityList implements ActionListener {
+public class EntityList implements ActionListener, Iterable<Entity> {
 	private HashMap<Object, Entity> entities;
 	private Physics physics;
 	private ArrayList<ActionListener> action_listeners;
@@ -202,5 +203,10 @@ public class EntityList implements ActionListener {
 
 	public void addActionListener(ActionListener al) {
 		action_listeners.add(al);
+	}
+
+	@Override
+	public Iterator<Entity> iterator() {
+		return new EntityIterator(this);
 	}
 }
