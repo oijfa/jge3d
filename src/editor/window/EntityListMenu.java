@@ -64,7 +64,7 @@ public class EntityListMenu extends Window implements ActionListener {
 	}
 	
 	public void createEntityList() {
-		for(Entity e : engine.getEntityList().getEntities()) {
+		for(Entity e : engine.getEntityList()) {
 			if(!entitylist_window.contains((String)e.getProperty("name"))) {
 				Node node = entitylist_window.createNode(
 						(String)e.getProperty("name"), e, entitylist_window.getBase()

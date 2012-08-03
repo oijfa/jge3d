@@ -207,6 +207,9 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 
 	@Override
 	public Iterator<Entity> iterator() {
-		return new EntityIterator(this);
+		if(entities != null)
+			return new EntityIterator(entities);
+		else
+			return new EntityIterator();
 	}
 }
