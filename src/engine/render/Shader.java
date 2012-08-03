@@ -19,8 +19,6 @@ import org.lwjgl.opengl.ARBGeometryShader4;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
-import com.bulletphysics.linearmath.Transform;
-
 import engine.entity.Entity;
 import engine.render.ubos.UBOInterface;
 
@@ -143,12 +141,9 @@ public class Shader implements Resource{
     public void startShader(int vbo_id, Entity ent){
     	if(useShader) {            
      		//Adjust the position and rotation of the object from physics
-    		Transform transform_matrix = new Transform();
-    		transform_matrix = ent.getCollisionObject().getWorldTransform(new Transform());
     		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-    		
     		float[] body_matrix = new float[16];
-    		transform_matrix.getOpenGLMatrix(body_matrix);
+    		ent.getTransformation(body_matrix);
     		buf.put(body_matrix);
     		buf.flip();
 

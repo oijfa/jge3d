@@ -211,7 +211,7 @@ public class Entity{
 	public Vector3f getPosition() {
 		Transform out = new Transform();
 		out = collision_object.getWorldTransform(new Transform());
-		return out.origin;
+		return new Vector3f(out.origin);
 
 	}
 
@@ -418,5 +418,28 @@ public class Entity{
 	
 	public Vector3f getScale() {
 		return collision_object.getCollisionShape().getLocalScaling(new Vector3f());
+	}
+
+	public double distanceFrom(Entity other_entity) {
+		Vector3f this_pos = this.getPosition();
+		Vector3f other_pos = other_entity.getPosition();
+		
+		return Math.abs(
+			Math.sqrt(
+				Math.pow(this_pos.x + other_pos.x, 2) +
+				Math.pow(this_pos.y + other_pos.y, 2) +
+				Math.pow(this_pos.z + other_pos.z, 2)
+			)
+		);
+	}
+
+	public boolean collidesWithRay(Vector3f position, Vector3f ray_to) {
+		return true; //TODO: Obvious
+	}
+
+	public void getTransformation(float[] body_matrix) {
+		Transform transform_matrix = new Transform();
+		transform_matrix = this.getCollisionObject().getWorldTransform(new Transform());
+		transform_matrix.getOpenGLMatrix(body_matrix);
 	}
 }

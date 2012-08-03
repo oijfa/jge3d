@@ -239,7 +239,7 @@ public class Camera extends Entity {
 	public void debug() {
 		// Debug the camera
 		// System.out.print("Height:		" + height + "	Width:	" + width + "\n");
-		Vector3f position = new Vector3f();
+		javax.vecmath.Vector3f position = new Vector3f();
 		position = this.getPosition();
 
 		Vector3f focpos = this.getFocusPosition();

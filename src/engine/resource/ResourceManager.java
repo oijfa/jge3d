@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import engine.Engine;
 import engine.input.InputMap;
 import engine.render.Model;
 import engine.render.Shader;
@@ -34,8 +35,11 @@ public class ResourceManager {
 	
 	//Used to convert categories into their class names
 	HashMap<String, Class<? extends Resource>> cat_to_class;
+
+	private Engine engine;
 	
-	public ResourceManager(){
+	public ResourceManager(Engine engine){
+		this.engine = engine;
 		//Setup cat_to_class hashmap
 		loadCatToClass();
 		
@@ -235,5 +239,9 @@ public class ResourceManager {
 	
 	public HashMap<String, ArrayList<ResourceItem>> getResources() {
 		return resources;
+	}
+
+	public Engine getEngine() {
+		return engine;
 	}
 }

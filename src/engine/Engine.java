@@ -1,22 +1,20 @@
 package engine;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import javax.vecmath.Vector3f;
 
 import engine.entity.AIManager;
 import engine.entity.Camera;
 import engine.entity.Entity;
-import engine.entity.EntityCallbackFunctions;
 import engine.entity.Actor;
 import engine.input.InputMap;
 import engine.entity.EntityList;
 import engine.physics.Physics;
+import engine.physics.PhysicsInterface;
 import engine.render.FixedRenderer;
 import engine.render.Model;
 import engine.render.ProgrammableRenderer;
@@ -26,19 +24,16 @@ import engine.resource.ResourceManager;
 import engine.window.WindowManager;
 import engine.window.components.Window;
 
-import com.bulletphysics.collision.dispatch.GhostObject;
-
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
 	AtomicBoolean finished;
 
-	private final Physics physics;
+	private final PhysicsInterface physics;
 	private final RendererInterface renderer;
 
 	private Thread physics_thread;
 	private Thread render_thread;
 
-	@SuppressWarnings("unused")
 	private Camera camera;
 	private EntityList entity_list;
 	
@@ -50,7 +45,7 @@ public class Engine {
 	}
 
 	public Engine() {
-		resource_manager = new ResourceManager();
+		resource_manager = new ResourceManager(this);
 		
 		finished = new AtomicBoolean(false);
 		physics = new Physics();
@@ -204,32 +199,6 @@ public class Engine {
 		return ret;
 	}
 	
-	private void handleGhostCollisions() {
-		for(Entity entity : entity_list.getEntities()){
-			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
-				GhostObject ghost = (GhostObject) entity.getCollisionObject();
-				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
-					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
-				}
-			}
-		}
-	}
-	
-	private void entCollidedWith(Entity source, Entity collided_with){
-		ArrayList<Method> methods = source.getCollisionFunctions();
-		for(Method method : methods){
-			try {
-				method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public void renderOnce(){
 		// Check for close requests
 		if (Display.isCloseRequested()) {
@@ -263,7 +232,7 @@ public class Engine {
 			entity_list.parsePhysicsQueue();
 		else {
 			physics.clientUpdate();
-			handleGhostCollisions();
+			physics.handleGhostCollisions(entity_list);
 		}
 	}
 
@@ -311,11 +280,7 @@ public class Engine {
 	}
 	
 	public Entity pickEntity(int x, int y){
-		camera.getRayTo(x, y, camera.getFar());
-		
-		
-		
-		return null;
-		
+		Vector3f ray_to = camera.getRayTo(x, y, camera.getFar());
+		return physics.pickEntityWithRay(camera.getPosition(),ray_to,entity_list);
 	}
 }

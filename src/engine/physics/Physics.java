@@ -1,10 +1,15 @@
 package engine.physics;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.dispatch.GhostPairCallback;
 
@@ -14,11 +19,15 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 
+import com.bulletphysics.collision.dispatch.GhostObject;
+
 import engine.entity.Entity;
 import engine.entity.Actor;
+import engine.entity.EntityCallbackFunctions;
 import engine.entity.Entity.ObjectType;
+import engine.entity.EntityList;
 
-public class Physics {
+public class Physics implements PhysicsInterface{
 	// World Definitions
 	private DefaultCollisionConfiguration collisionConfiguration;
 	private CollisionDispatcher dispatcher;
@@ -129,6 +138,47 @@ public class Physics {
 		if(e.getObjectType() == ObjectType.actor) {
 			dynamicsWorld.removeAction(((Actor)e).getActor());
 		}
+	}
+	
+	public void handleGhostCollisions(EntityList entity_list) {
+		for(Entity entity : entity_list.getEntities()){
+			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
+				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getCollisionObject();
+				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
+					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
+				}
+			}
+		}
+	}
+	private void entCollidedWith(Entity source, Entity collided_with){
+		ArrayList<Method> methods = source.getCollisionFunctions();
+		for(Method method : methods){
+			try {
+				method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public Entity pickEntityWithRay(Vector3f ray_from, Vector3f ray_to, EntityList entity_list) {
+		ClosestRayResultCallback resultCallback = new ClosestRayResultCallback(ray_from, ray_to);
+		
+		dynamicsWorld.rayTest(ray_from, ray_to, resultCallback);
+		
+		if(resultCallback.collisionObject != null){
+			for(Entity ent : entity_list){
+				if(resultCallback.collisionObject == ent.getCollisionObject()){
+					return ent;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/*

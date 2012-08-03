@@ -9,11 +9,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
-import engine.physics.Physics;
+import engine.physics.PhysicsInterface;
 
 public class EntityList implements ActionListener, Iterable<Entity> {
 	private HashMap<Object, Entity> entities;
-	private Physics physics;
+	private PhysicsInterface physics;
 	private ArrayList<ActionListener> action_listeners;
 
 	// private HashMap<String,TypedConstraint> constraints;
@@ -21,9 +21,9 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	private ConcurrentLinkedQueue<QueueItem> physicsQueue;
 	private ConcurrentLinkedQueue<QueueItem> renderQueue;
 
-	public EntityList(Physics physics) {
+	public EntityList(PhysicsInterface physics2) {
 		entities = new HashMap<Object, Entity>();
-		this.physics = physics;
+		this.physics = physics2;
 		action_listeners = new ArrayList<ActionListener>();
 		physicsQueue = new ConcurrentLinkedQueue<QueueItem>();
 		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
@@ -107,7 +107,7 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 		return new ArrayList<Entity>(ents);
 	}
 	
-	public Physics getPhysics() {
+	public PhysicsInterface getPhysics() {
 		return physics;
 	}
 	/******************************************/	
