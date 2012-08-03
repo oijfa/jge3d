@@ -64,7 +64,10 @@ public class EntityListMenu extends Window implements ActionListener {
 	}
 	
 	public void createEntityList() {
+		System.out.println("Before FOR");
 		for(Entity e : engine.getEntityList()) {
+			//System.out.println(e.getProperty(Entity.NAME));
+			
 			if(!entitylist_window.contains((String)e.getProperty("name"))) {
 				Node node = entitylist_window.createNode(
 						(String)e.getProperty("name"), e, entitylist_window.getBase()
@@ -98,6 +101,11 @@ public class EntityListMenu extends Window implements ActionListener {
 			//	resource_window.createNode(resource.name, resource, found_node);
 			//}
 		}
+		System.out.println("After FOR");
+		System.out.println(" ");
+		System.out.println(" ");
+		System.out.println(" ");
+		System.out.println(" ");
 	}
 
 	public void setEngine(Engine engine) {
