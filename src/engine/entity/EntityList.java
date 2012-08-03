@@ -56,7 +56,7 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	
 	public void addEntity(Entity ent) {
 		entities.put(ent.getProperty("name"), ent);
-		entities.put(ent.collision_object, ent);
+		//entities.put(ent.collision_object, ent);
 		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
 		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
 		fireActionEvent();
