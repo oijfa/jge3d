@@ -218,6 +218,7 @@
         <param name="minHeight"><int>0</int></param>
         <param name="overlay"><image>none</image></param>
     </theme>
+
     <theme name="-default-gaps" ref="-defaults">
     	<param name="smallGap"><dimension>0,0</dimension></param>
 		<param name="mediumGap"><dimension>00,0</dimension></param>
@@ -251,6 +252,7 @@
     		</map>
 		</param>
     </theme>
+    <theme name="*" ref="-defaults"/>
 	<theme name="dialoglayout" ref="-defaults" allowWildcard="true">
 		<param name="defaultGap"><dimension>5,5</dimension></param>
 		<param name="smallGap"><dimension>8,8</dimension></param>

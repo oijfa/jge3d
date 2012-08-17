@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc.//DTD JNLP 1.5//EN" "http://java.sun.com/dtd/JNLP-6.0.dtd">
+<jnlp codebase="http://twl.l33tlabs.org/themer" href="themer.jnlp">
+  <information>
+    <title>Themer - TWL Theme Editor</title>
+    <vendor>Matthias Mann</vendor>
+    <homepage href="http://twl.l33tlabs.org"/>
+    <description>default</description>
+    <icon href="icon32.png"/>
+    <offline-allowed/>
+    <shortcut online="true">
+        <desktop/>
+    </shortcut>
+    <icon href="http://twl.l33tlabs.org/TWLLogo.png" kind="splash"/>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <resources locale="" os="">
+    <j2se href="http://java.sun.com/products/autodl/j2se" max-heap-size="512M" version="1.5+"/>
+  </resources>
+    <resources locale="" os="">
+    <jar download="eager" href="TWLThemeEditor.jar" main="true" version=""/>
+    <jar download="eager" href="xpp3-1.1.4c.jar" main="false" version=""/>
+    <jar download="eager" href="lwjgl.jar" main="false" version=""/>
+    <jar download="eager" href="TWL.jar" main="false" version=""/>
+    <jar download="eager" href="TWLEffects.jar" main="false" version=""/>
+    <jar download="eager" href="jna.jar" main="false" version=""/>
+    <jar download="eager" href="asm3.jar" main="false" version=""/>
+    <jar download="eager" href="asm-tree-3.1.jar" main="false" version=""/>
+    <jar download="eager" href="asm-analysis-3.1.jar" main="false" version=""/>
+    <jar download="eager" href="JavaFreeType.jar" main="false" version=""/>
+  </resources>
+  <resources locale="" os="Windows">
+    <nativelib download="eager" href="lwjgl-win.jar" version=""/>
+  </resources>
+  <resources locale="" os="Linux">
+    <nativelib download="eager" href="lwjgl-linux.jar" version=""/>
+  </resources>
+  <resources locale="" os="Mac">
+    <nativelib download="eager" href="lwjgl-mac.jar" version=""/>
+  </resources>
+  <application-desc main-class="de.matthiasmann.twlthemeeditor.Main"/>
+</jnlp>

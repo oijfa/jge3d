@@ -2,12 +2,15 @@ package engine.window.components;
 
 import java.util.ArrayList;
 
+import de.matthiasmann.twl.TableBase.CellRenderer;
+import de.matthiasmann.twl.ThemeInfo;
+import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.model.ListModel;
 import de.matthiasmann.twl.model.SimpleChangableListModel;
 import editor.action_listener.ActionListener;
 import editor.action_listener.ActionEvent;
 
-public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<E> {
+public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<E> implements CellRenderer {
 	private ArrayList<ActionListener> action_listeners;
 
 	public ComboBox() {
@@ -68,4 +71,32 @@ public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<E> {
 			owner.fireActionEvent();
 		}
 	}
+
+	@Override
+	public void setCellData(int row, int column, Object data) {
+		//System.out.println(row+":"+column+"&&"+data);
+		//SimpleChangableListModel<E> new_list_model = (SimpleChangableListModel<E>) this.getModel();
+		//new_list_model.
+		//this.setSelected(row-1);
+	}
+
+	@Override
+	public int getColumnSpan() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public Widget getCellRenderWidget(int x, int y, int width, int height,
+			boolean isSelected) {
+		setPosition(x, y);
+        setSize(width, height);
+        getAnimationState().setAnimationState(STATE_HAS_OPEN_POPUPS, isSelected);
+        return this;
+	}
+	
+	@Override
+    public void applyTheme(ThemeInfo themeInfo) {
+        super.applyTheme(themeInfo);
+    }
 }

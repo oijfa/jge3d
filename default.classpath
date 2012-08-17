@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF8" standalone="yes"?>
 <classpath>
     <entriesToScan>
-        <entry>bin/window/</entry>
+        <entry>bin/</entry>
     </entriesToScan>
     <entriesDependencies>
     </entriesDependencies>

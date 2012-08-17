@@ -37,6 +37,8 @@ public class Tree extends ScrollPane {// implements Observer {
 			new EditFieldCellRenderer());
 		treeTable.registerCellRenderer(ColoredTextString.class,
 			new ColoredTextRenderer());
+		//treeTable.registerCellRenderer(EditField.class, new EditFieldCellRenderer());
+		treeTable.registerCellRenderer(ComboBox.class, new ComboBox<String>());
 
 		setContent(treeTable);
 		setTheme("/tableScrollPane");

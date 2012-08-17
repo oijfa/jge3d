@@ -4,6 +4,7 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.Engine;
 import engine.entity.Entity;
+import engine.window.components.ComboBox;
 import engine.window.components.Tree;
 import engine.window.components.Window;
 import engine.window.tree.Model;
@@ -13,8 +14,6 @@ import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ToggleButton;
-import de.matthiasmann.twl.ValueAdjusterFloat;
-import de.matthiasmann.twl.ValueAdjusterInt;
 
 public class EntityListMenu extends Window implements ActionListener {
 	private final Tree entitylist_window;
@@ -78,12 +77,17 @@ public class EntityListMenu extends Window implements ActionListener {
 					System.out.println(e.getProperty(prop).getClass().getName());
 					if(e.getProperty(prop).getClass() == float.class
 							|| e.getProperty(prop).getClass() == Float.class) { 
-						subnode = node.insert(prop, new ValueAdjusterFloat());
-						((ValueAdjusterFloat)subnode.getData(1)).setValue((float)e.getProperty(prop));
+						subnode = node.insert(prop, new EditField());
+						((EditField)subnode.getData(1)).setText((String)e.getProperty(prop));
 					} else if (e.getProperty(prop).getClass() == int.class
 							|| e.getProperty(prop).getClass() == Integer.class) {
-						subnode = node.insert(prop, new ValueAdjusterInt());
-						((ValueAdjusterInt)subnode.getData(1)).setValue((int)e.getProperty(prop));
+						//subnode = node.insert(prop, new ValueAdjusterInt());
+						//((ValueAdjusterInt)subnode.getData(1)).setValue((int)e.getProperty(prop));
+						ComboBox<String> poopdick = new ComboBox<String>();
+						poopdick.addItem("Dongs");
+						poopdick.addItem("Dongs2");
+						poopdick.addItem("Dongs3");
+						subnode = node.insert(prop, poopdick);
 					} else if (e.getProperty(prop).getClass() == String.class) {
 						subnode = node.insert(prop, new EditField());
 						((EditField)subnode.getData(1)).setText((String)e.getProperty(prop));
@@ -101,11 +105,6 @@ public class EntityListMenu extends Window implements ActionListener {
 			//	resource_window.createNode(resource.name, resource, found_node);
 			//}
 		}
-		System.out.println("After FOR");
-		System.out.println(" ");
-		System.out.println(" ");
-		System.out.println(" ");
-		System.out.println(" ");
 	}
 
 	public void setEngine(Engine engine) {
