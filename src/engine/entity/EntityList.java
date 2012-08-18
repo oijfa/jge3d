@@ -15,32 +15,19 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	private HashMap<Object, Entity> entities;
 	private PhysicsInterface physics;
 	private ArrayList<ActionListener> action_listeners;
+	private ArrayList<EntityListListener> listeners;
 
 	// private HashMap<String,TypedConstraint> constraints;
-
-	private ConcurrentLinkedQueue<QueueItem> physicsQueue;
 	private ConcurrentLinkedQueue<QueueItem> renderQueue;
 
 	public EntityList(PhysicsInterface physics2) {
 		entities = new HashMap<Object, Entity>();
 		this.physics = physics2;
 		action_listeners = new ArrayList<ActionListener>();
-		physicsQueue = new ConcurrentLinkedQueue<QueueItem>();
 		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
 	}
-
+	
 	/*************** QUEUE METHODS ***************/
-	public void parsePhysicsQueue() {
-		Object[] itemArray = physicsQueue.toArray();
-		for (Object item : itemArray) {
-			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
-				addPhysicsItem(((QueueItem) item).getEnt());
-			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
-				removePhysicsItem(((QueueItem) item).getEnt());
-			}
-			physicsQueue.remove(item);
-		}
-	}
 	public void parseRenderQueue() {
 		Object[] itemArray = renderQueue.toArray();
 		for (Object item : itemArray) {
@@ -57,9 +44,11 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	public void addEntity(Entity ent) {
 		entities.put(ent.getProperty("name"), ent);
 		entities.put(ent.collision_object, ent);
-		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
 		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
 		fireActionEvent();
+		for(EntityListListener listener : listeners){
+			listener.entityAdded(ent);
+		}
 	}
 	public void removeEntity(Object key) {
 		if (entities.containsKey(key)) {
@@ -67,9 +56,11 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 
 			entities.remove(ent.getProperty(Entity.NAME));
 			entities.remove(ent.collision_object);
-			physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
 			renderQueue.add(new QueueItem(ent, QueueItem.REMOVE));
 			fireActionEvent();
+			for(EntityListListener listener : listeners){
+				listener.entityRemoved(ent);
+			}
 		}
 	}
 	
@@ -78,9 +69,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 		fireActionEvent();
 	}
 	
-	public int physicsQueueSize() {
-		return physicsQueue.size();
-	}
 	public int renderQueueSize() {
 		return renderQueue.size();
 	}
@@ -138,13 +126,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 		} else {
 			System.out.println("Trying to delete render object of unnamed entity");
 		}
-	}
-	
-	private void addPhysicsItem(Entity entity) {
-		physics.addEntity(entity);
-	}
-	private void removePhysicsItem(Entity entity) {
-		physics.removeEntity(entity);
 	}
 	/*****************************************/
 

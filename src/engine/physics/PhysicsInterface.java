@@ -4,8 +4,9 @@ import javax.vecmath.Vector3f;
 
 import engine.entity.Entity;
 import engine.entity.EntityList;
+import engine.entity.EntityListListener;
 
-public interface PhysicsInterface {
+public interface PhysicsInterface extends EntityListListener {
 	public void clientUpdate();
 
 	public void handleGhostCollisions(EntityList entity_list);

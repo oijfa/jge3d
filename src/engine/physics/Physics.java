@@ -3,6 +3,7 @@ package engine.physics;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.vecmath.Vector3f;
 
@@ -24,6 +25,7 @@ import com.bulletphysics.collision.dispatch.GhostObject;
 import engine.entity.Entity;
 import engine.entity.Actor;
 import engine.entity.EntityCallbackFunctions;
+import engine.entity.QueueItem;
 import engine.entity.Entity.ObjectType;
 import engine.entity.EntityList;
 
@@ -49,8 +51,13 @@ public class Physics implements PhysicsInterface{
 
 	// For holding the previous time in microseconds to calculate deltaT
 	private long prev_time;
+	
+	//Keeping track of entities that need added/removed
+	private ConcurrentLinkedQueue<QueueItem> physicsQueue;
 
 	public Physics() {
+		physicsQueue = new ConcurrentLinkedQueue<QueueItem>();
+		
 		// Default collision constructor
 		collisionConfiguration = new DefaultCollisionConfiguration();
 
@@ -179,6 +186,35 @@ public class Physics implements PhysicsInterface{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void entityAdded(Entity ent) {
+		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
+	}
+
+	@Override
+	public void entityRemoved(Entity ent) {
+		physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
+	}
+	
+	public void parsePhysicsQueue() {
+		QueueItem[] itemArray = (QueueItem[]) physicsQueue.toArray();
+		for (QueueItem item : itemArray) {
+			
+			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
+				if (item.getEnt().getCollisionObject() != null) {
+					dynamicsWorld.addCollisionObject(item.getEnt().getCollisionObject());
+					if(item.getEnt().getObjectType() == ObjectType.actor) {
+						//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
+						dynamicsWorld.addAction(((Actor)item.getEnt()).getActor());
+					}
+				}
+			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
+				removePhysicsItem(item.getEnt());
+			}
+			physicsQueue.remove(item);
+		}
 	}
 	
 	/*
