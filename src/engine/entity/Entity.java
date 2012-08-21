@@ -11,7 +11,6 @@ package engine.entity;
 
 import engine.Engine;
 import engine.render.Model;
-import engine.render.RenderObject;
 import engine.render.Shader;
 
 import java.lang.reflect.Method;
@@ -34,7 +33,8 @@ public class Entity{
 	// Properties
 	protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
-	protected RenderObject model;
+	private ArrayList<EntityListener> listeners;
+	//protected RenderObject model;
 	private boolean shouldDraw = true;
 	private Shader shader;
 
@@ -75,7 +75,8 @@ public class Entity{
 		boolean collide = (boolean)ent.getProperty(Entity.COLLIDABLE);
 		Shader shader = (Shader)ent.getProperty("shader");		
 				
-		initialSetup(new_name, mass, collide, (Model)ent.getModel(), shader);
+		//TODO: Error checking for model cast
+		initialSetup(new_name, mass, collide, (Model)ent.getProperty("model"), shader);
 	}
 	
 	// Sets the initial name of the body in the list
@@ -85,9 +86,18 @@ public class Entity{
 	}
 
 	private void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
-		//TODO: Generate this based on model instead
-		this.model = model;
 		
+		listeners = new ArrayList<EntityListener>();
+
+		num_entities++;
+		data = new HashMap<String, Object>();
+		data.put("name", name);
+		data.put("collidable", c);
+		data.put("TTL", 0);
+		//TODO: Generate this based on model instead
+		//this.model = model;
+		setProperty("model",model);
+				
 		CollisionShape shape = model.getCollisionShape();
 		if(c){
 			createRigidBody(mass, shape);
@@ -96,12 +106,6 @@ public class Entity{
 			createGhostBody(mass, shape);
 			object_type = ObjectType.ghost;
 		}
-		
-		num_entities++;
-		data = new HashMap<String, Object>();
-		data.put("name", name);
-		data.put("collidable", c);
-		data.put("TTL", 0);
 	}
 
 	/* Initializing segments */
@@ -186,6 +190,9 @@ public class Entity{
 
 	public void setProperty(String key, Object val) {
 		data.put(key, val);
+		for(EntityListener listener : listeners){
+			listener.entityPropertyChanged(key, this);
+		}
 	}
 
 	public void removeProperty(String key) {
@@ -199,9 +206,11 @@ public class Entity{
 		}
 	}
 
+	/*
 	public void setModel(Model model) {
 		this.model = model;
 	}
+	*/
 
 	public void setShouldDraw(boolean shouldDraw) {
 		this.shouldDraw = shouldDraw;
@@ -236,9 +245,11 @@ public class Entity{
 		return data.get(key);
 	}
 
+	/*
 	public Model getModel() {
 		return (Model)model;
 	}
+	*/
 
 	public Set<String> getKeySet() {
 		return data.keySet();
@@ -250,15 +261,21 @@ public class Entity{
 
 	/* MISC */
 	public void drawFixedPipe() {
+		
 		if (shouldDraw) {
+			//TODO: Error checking for model cast
+			Model model = (Model)getProperty("model");
 			if(model != null) {
 				model.drawFixedPipe(this);
 			}
 		}
 	}
 	
+	
 	public void drawProgrammablePipe() {
 		if (shouldDraw) {
+			//TODO: Error checking for model cast
+			Model model = (Model)getProperty("model");
 			if(model != null) {
 				if(shader == null)
 					model.drawProgrammablePipe(this);

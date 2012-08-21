@@ -25,7 +25,7 @@ import engine.entity.EntityList;
 import engine.window.WindowManager;
 
 //TODO: Doesn't have a render queue, so it basically doesn't work.  Add that if you want this.
-public class FixedRenderer implements RendererInterface {
+public class FixedRenderer extends RendererInterface {
 	private WindowManager window_manager;
 	private EntityList objectList;
 	private Camera camera;
@@ -237,26 +237,23 @@ public class FixedRenderer implements RendererInterface {
 		this.camera = camera;
 	}
 
-	@Override
 	public void parseRenderQueue() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void entityAdded(Entity ent) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void entityRemoved(Entity ent) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void entityModelChanged(Entity ent) {
+	public void entityPropertyChanged(String property, Entity entity) {
 		// TODO Auto-generated method stub
 		
 	}

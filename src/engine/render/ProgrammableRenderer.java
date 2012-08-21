@@ -24,7 +24,7 @@ import engine.entity.EntityList;
 import engine.entity.QueueItem;
 import engine.window.WindowManager;
 
-public class ProgrammableRenderer implements RendererInterface {
+public class ProgrammableRenderer extends RendererInterface {
 	private WindowManager window_manager;
 	private EntityList object_list;
 	private Camera camera;
@@ -176,13 +176,18 @@ public class ProgrammableRenderer implements RendererInterface {
 	// Add an item to the entity List
 	private void addRenderItem(Entity e) {
 		if (e.keyExists("name")) {
-			if (e.getModel() != null) {
-				e.getModel().verify();
-				e.getModel().createVBO();
-				e.getModel().reduceHull();
-				e.setCollisionShape(e.getModel().getCollisionShape());
-			} else {
-				System.out.println("Trying to add/update render object of NULL model");
+			if( e.keyExists("model")){
+				//TODO: Check to make sure actually is a Model class
+				Model ent_model = (Model)e.getProperty("model");
+				
+				if (ent_model != null) {
+					ent_model.verify();
+					ent_model.createVBO();
+					ent_model.reduceHull();
+					e.setCollisionShape(ent_model.getCollisionShape());
+				} else {
+					System.out.println("Trying to add/update render object of NULL model");
+				}
 			}
 		} else {
 			System.out.println("Trying to add/update render object of unnamed entity");
@@ -191,8 +196,11 @@ public class ProgrammableRenderer implements RendererInterface {
 	
 	private void removeRenderItem(Entity e) {
 		if (e.keyExists("name")) {
-			if (e.getModel() != null) {
-				e.getModel().destroyVBO();
+			//TODO: Check to make sure actually is a Model class
+			Model ent_model = (Model)e.getProperty("model");
+			
+			if (ent_model != null) {
+				ent_model.destroyVBO();
 			} else {
 				System.out.println("Trying to delete render object of NULL model");
 			}
@@ -201,18 +209,18 @@ public class ProgrammableRenderer implements RendererInterface {
 		}
 	}
 		
-	@Override
 	public void entityAdded(Entity ent) {
 		render_queue.add(new QueueItem(ent, QueueItem.ADD));
 	}
 
-	@Override
 	public void entityRemoved(Entity ent) {
 		render_queue.add(new QueueItem(ent, QueueItem.REMOVE));
 	}
 
 	@Override
-	public void entityModelChanged(Entity ent) {
-		render_queue.add(new QueueItem(ent, QueueItem.ADD));
+	public void entityPropertyChanged(String property, Entity entity) {
+		if(property == "model"){
+			render_queue.add(new QueueItem(entity, QueueItem.ADD));
+		}
 	}
 }

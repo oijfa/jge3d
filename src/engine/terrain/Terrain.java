@@ -63,7 +63,7 @@ public class Terrain extends Entity {
 				full_model.addMesh(new_mesh);		
 			}
 		}
-		this.setModel(full_model);
+		this.setProperty("model",full_model);
 	}
 
 	public String toString() {

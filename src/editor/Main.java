@@ -194,8 +194,7 @@ public class Main implements ActionListener {
 			}
 			else {
 				//grid_window.loadLayer(layer_menu.getSelection());
-				edit_model.setModel(grid_window.getGrid().getModel());
-				engine.updateEntity(edit_model);
+				edit_model.setProperty("model",grid_window.getGrid().getModel());
 			}
 		} else if (ae.getSource() == layer_menu) {
 			if(ae.getAction() == "combobox") {

@@ -61,7 +61,9 @@ public class Camera extends Entity {
 		setUpVector(new Vector3f(0, 1, 0));
 		updatePosition();
 		
-		getModel().setTransparent();
+		//TODO: Check to make sure actually is a Model class
+		Model ent_model = (Model)getProperty("model");
+		ent_model.setTransparent();
 		
 		matrices = new TransformationMatrices(
 	  		fov, 

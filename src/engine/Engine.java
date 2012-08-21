@@ -125,10 +125,6 @@ public class Engine {
 		return ent;
 	}
 
-	public void updateEntity(Entity ent) {
-		entity_list.updateEntity(ent);
-	}
-
 	public Entity getEntity(String name) {
 		return entity_list.getItem(name);
 	}

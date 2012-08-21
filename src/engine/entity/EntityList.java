@@ -42,13 +42,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 			}
 		}
 	}
-	
-	public void updateEntity(Entity ent) {
-		for(EntityListListener listener : listeners){
-			listener.entityModelChanged(ent);
-		}
-		fireActionEvent();
-	}
 	/**********************************************/
 	
 	/*************** ACCESSORS ***************/

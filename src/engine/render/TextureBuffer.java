@@ -159,7 +159,10 @@ public class TextureBuffer implements Resource{
     		ARBShaderObjects.glUniform4ARB(scale, buf);
     		buf.clear();
     		
-    		ubo_interfaces.get("Material").setInterface(ent.getModel().getMesh(0).getMaterial());
+    		//TODO: Check to make sure actually is model class
+    		Object ent_model = ent.getProperty("model");
+
+    		ubo_interfaces.get("Material").setInterface(((Model)ent_model).getMesh(0).getMaterial());
     		
     		//parse material and light uniforms
     		for(UBO ubo: ubo_interfaces.values()) {
