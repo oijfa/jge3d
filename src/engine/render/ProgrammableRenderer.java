@@ -9,6 +9,7 @@ package engine.render;
 import java.awt.Canvas;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -18,28 +19,33 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.PixelFormat;
 
 import engine.entity.Camera;
+import engine.entity.Entity;
 import engine.entity.EntityList;
+import engine.entity.QueueItem;
 import engine.window.WindowManager;
 
 public class ProgrammableRenderer implements RendererInterface {
 	private WindowManager window_manager;
-	private EntityList objectList;
+	private EntityList object_list;
 	private Camera camera;
-	private static boolean supportsVBO = false;
+	private static boolean supports_vbo = false;
 	// private float x=0,y=0,z=0;
 
-	public static float nearClipping = 1f;
-	public static float farClipping = 10000.0f;
+	public static float near_clipping = 1f;
+	public static float far_clipping = 10000.0f;
 	private float zoom = 1f; // The closer this value is to 0, the farther you
 
 	private Canvas display_parent;
+	
+	private ConcurrentLinkedQueue<QueueItem> render_queue;
 
 	public ProgrammableRenderer(EntityList objectList) {
 		this(objectList, null);
+		render_queue = new ConcurrentLinkedQueue<QueueItem>();
 	}
 
 	public ProgrammableRenderer(EntityList objectList, Canvas display_parent) {
-		this.objectList = objectList;
+		this.object_list = objectList;
 		this.display_parent = display_parent;
 	}
 
@@ -50,12 +56,15 @@ public class ProgrammableRenderer implements RendererInterface {
 		if (camera != null) {
 			camera.updatePosition();
 		} else {
-			camera = (Camera) objectList.getItem(Camera.NAME);
+			camera = (Camera) object_list.getItem(Camera.NAME);
 			camera.updatePosition();
 		}
 
 		// Draw the 3d stuff
-		objectList.drawProgrammablePipeList();
+		for (Entity ent : object_list.getEntities()){
+			if(ent.shouldDraw())
+				ent.drawProgrammablePipe();
+		}
 
 		// Draw the window manager stuff
 		if (window_manager != null) window_manager.draw();
@@ -102,9 +111,9 @@ public class ProgrammableRenderer implements RendererInterface {
 		temp.order(ByteOrder.nativeOrder());
 
 		if (GLContext.getCapabilities().GL_ARB_vertex_buffer_object) {
-			supportsVBO = true;
+			supports_vbo = true;
 		} else {
-			supportsVBO = false;
+			supports_vbo = false;
 		}
 
 		// Blending functions so we can have transparency
@@ -113,13 +122,13 @@ public class ProgrammableRenderer implements RendererInterface {
 	}
 
 	public void setPerspective() {
-		setPerspective(nearClipping, farClipping, zoom);
+		setPerspective(near_clipping, far_clipping, zoom);
 	}
 
 	public void setPerspective(float near, float far, float zoomVal) {
 		if(camera != null) {
-			nearClipping = camera.getNear();
-			farClipping = camera.getFar();
+			near_clipping = camera.getNear();
+			far_clipping = camera.getFar();
 			if (zoomVal <= 1.0 && zoomVal > 0) {
 				zoom = zoomVal;
 			} else if (zoomVal > 1000.0) {
@@ -133,7 +142,7 @@ public class ProgrammableRenderer implements RendererInterface {
 	}
 
 	public static boolean supportsVBO() {
-		return supportsVBO;
+		return supports_vbo;
 	}
 	
 	public WindowManager getWindowManager() {
@@ -147,5 +156,63 @@ public class ProgrammableRenderer implements RendererInterface {
 	public void setCamera(Camera camera) {
 		this.camera = camera;
 		setPerspective();
+	}
+	
+	public void parseRenderQueue() {
+		if(render_queue.size() > 0){
+			Object[] itemArray = render_queue.toArray();
+			for (Object item : itemArray) {
+				if (QueueItem.ADD == ((QueueItem) item).getAction()) {
+					addRenderItem(((QueueItem) item).getEnt());
+				} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
+					removeRenderItem(((QueueItem) item).getEnt());
+				}
+	
+				render_queue.remove(item);
+			}
+		}
+	}
+
+	// Add an item to the entity List
+	private void addRenderItem(Entity e) {
+		if (e.keyExists("name")) {
+			if (e.getModel() != null) {
+				e.getModel().verify();
+				e.getModel().createVBO();
+				e.getModel().reduceHull();
+				e.setCollisionShape(e.getModel().getCollisionShape());
+			} else {
+				System.out.println("Trying to add/update render object of NULL model");
+			}
+		} else {
+			System.out.println("Trying to add/update render object of unnamed entity");
+		}
+	}
+	
+	private void removeRenderItem(Entity e) {
+		if (e.keyExists("name")) {
+			if (e.getModel() != null) {
+				e.getModel().destroyVBO();
+			} else {
+				System.out.println("Trying to delete render object of NULL model");
+			}
+		} else {
+			System.out.println("Trying to delete render object of unnamed entity");
+		}
+	}
+		
+	@Override
+	public void entityAdded(Entity ent) {
+		render_queue.add(new QueueItem(ent, QueueItem.ADD));
+	}
+
+	@Override
+	public void entityRemoved(Entity ent) {
+		render_queue.add(new QueueItem(ent, QueueItem.REMOVE));
+	}
+
+	@Override
+	public void entityModelChanged(Entity ent) {
+		render_queue.add(new QueueItem(ent, QueueItem.ADD));
 	}
 }

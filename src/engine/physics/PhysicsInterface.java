@@ -16,4 +16,6 @@ public interface PhysicsInterface extends EntityListListener {
 	public void removeEntity(Entity entity);
 
 	public Entity pickEntityWithRay(Vector3f position, Vector3f ray_to, EntityList entity_list);
+
+	public void parsePhysicsQueue();
 }

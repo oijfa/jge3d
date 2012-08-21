@@ -5,46 +5,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
-import engine.physics.PhysicsInterface;
 
 public class EntityList implements ActionListener, Iterable<Entity> {
 	private HashMap<Object, Entity> entities;
-	private PhysicsInterface physics;
 	private ArrayList<ActionListener> action_listeners;
 	private ArrayList<EntityListListener> listeners;
 
-	// private HashMap<String,TypedConstraint> constraints;
-	private ConcurrentLinkedQueue<QueueItem> renderQueue;
-
-	public EntityList(PhysicsInterface physics2) {
+	public EntityList() {
 		entities = new HashMap<Object, Entity>();
-		this.physics = physics2;
 		action_listeners = new ArrayList<ActionListener>();
-		renderQueue = new ConcurrentLinkedQueue<QueueItem>();
+		listeners = new ArrayList<EntityListListener>();
 	}
 	
 	/*************** QUEUE METHODS ***************/
-	public void parseRenderQueue() {
-		Object[] itemArray = renderQueue.toArray();
-		for (Object item : itemArray) {
-			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
-				addRenderItem(((QueueItem) item).getEnt());
-			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
-				removeRenderItem(((QueueItem) item).getEnt());
-			}
-
-			renderQueue.remove(item);
-		}
-	}
-	
 	public void addEntity(Entity ent) {
 		entities.put(ent.getProperty("name"), ent);
 		entities.put(ent.collision_object, ent);
-		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
 		fireActionEvent();
 		for(EntityListListener listener : listeners){
 			listener.entityAdded(ent);
@@ -56,7 +35,7 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 
 			entities.remove(ent.getProperty(Entity.NAME));
 			entities.remove(ent.collision_object);
-			renderQueue.add(new QueueItem(ent, QueueItem.REMOVE));
+
 			fireActionEvent();
 			for(EntityListListener listener : listeners){
 				listener.entityRemoved(ent);
@@ -65,12 +44,10 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	}
 	
 	public void updateEntity(Entity ent) {
-		renderQueue.add(new QueueItem(ent, QueueItem.ADD));
+		for(EntityListListener listener : listeners){
+			listener.entityModelChanged(ent);
+		}
 		fireActionEvent();
-	}
-	
-	public int renderQueueSize() {
-		return renderQueue.size();
 	}
 	/**********************************************/
 	
@@ -94,80 +71,11 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 		}
 		return new ArrayList<Entity>(ents);
 	}
-	
-	public PhysicsInterface getPhysics() {
-		return physics;
-	}
 	/******************************************/	
-
-	/*************** MUTATORS ***************/
-	// Add an item to the entity List
-	private void addRenderItem(Entity e) {
-		if (e.keyExists("name")) {
-			if (e.getModel() != null) {
-				e.getModel().verify();
-				e.getModel().createVBO();
-				e.getModel().reduceHull();
-				e.setCollisionShape(e.getModel().getCollisionShape());
-			} else {
-				System.out.println("Trying to add/update render object of NULL model");
-			}
-		} else {
-			System.out.println("Trying to add/update render object of unnamed entity");
-		}
-	}
-	private void removeRenderItem(Entity e) {
-		if (e.keyExists("name")) {
-			if (e.getModel() != null) {
-				e.getModel().destroyVBO();
-			} else {
-				System.out.println("Trying to delete render object of NULL model");
-			}
-		} else {
-			System.out.println("Trying to delete render object of unnamed entity");
-		}
-	}
-	/*****************************************/
-
-	/*************** DRAWING ***************/
-	public void drawFixedPipeList() {
-		// Have to change keySet into array so that a clone will be made
-		// Avoids concurrency issues
-		for (Entity ent : this.getEntities()){
-			if(ent.shouldDraw())
-				ent.drawFixedPipe();
-		}
-	}
-	
-	public void drawProgrammablePipeList() {
-		// Have to change keySet into array so that a clone will be made
-		// Avoids concurrency issues
-		for (Entity ent : this.getEntities()){
-			if(ent.shouldDraw())
-				ent.drawProgrammablePipe();
-		}
-	}
-	/***************************************/
-	/* Physics Constraints */
-	/*
-	 * public void addBallJoint(String name, Entity object1, Vector3f point1,
-	 * Entity object2, Vector3f point2){ //Setup a Ball joint between the two
-	 * objects, at the point given Point2PointConstraint ballJoint = new Point2P
-	 */
-	 /*
-	 * pointConstraint( object1, object2, point1, point2 );
-	 * physics.getDynamicsWorld().addConstraint(ballJoint); } public void
-	 * removeJoint(String constraint_name){ if(
-	 * constraints.containsKey(constraint_name) ){
-	 * physics.getDynamicsWorld().removeConstraint
-	 * (constraints.get(constraint_name)); constraints.remove(constraint_name);
-	 * } }
-	 */
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	public void fireActionEvent() {
@@ -189,5 +97,9 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	@Override
 	public Iterator<Entity> iterator() {
 		return new EntityIterator(this);
+	}
+	
+	public void addListener(EntityListListener listener){
+		listeners.add(listener);
 	}
 }

@@ -100,6 +100,7 @@ public class Physics implements PhysicsInterface{
 		frames++;
 		// step the simulation
 		if (dynamicsWorld != null) {
+			//TODO: This should be configurable
 			dynamicsWorld.stepSimulation(deltaT / 1000000000f);
 		}
 	}
@@ -199,9 +200,9 @@ public class Physics implements PhysicsInterface{
 	}
 	
 	public void parsePhysicsQueue() {
-		QueueItem[] itemArray = (QueueItem[]) physicsQueue.toArray();
-		for (QueueItem item : itemArray) {
-			
+		Object[] itemArray = (Object[]) physicsQueue.toArray();
+		for (Object obj_item : itemArray) {
+			QueueItem item = (QueueItem)obj_item;
 			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
 				if (item.getEnt().getCollisionObject() != null) {
 					dynamicsWorld.addCollisionObject(item.getEnt().getCollisionObject());
@@ -211,11 +212,21 @@ public class Physics implements PhysicsInterface{
 					}
 				}
 			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
-				removePhysicsItem(item.getEnt());
+				if (item.getEnt().getObjectType() == ObjectType.rigidbody){
+					dynamicsWorld.removeRigidBody((RigidBody) item.getEnt().getCollisionObject());
+				} else {
+					dynamicsWorld.removeCollisionObject(item.getEnt().getCollisionObject());
+				}
+				if(item.getEnt().getObjectType() == ObjectType.actor) {
+					dynamicsWorld.removeAction(((Actor)item.getEnt()).getActor());
+				}
 			}
 			physicsQueue.remove(item);
 		}
 	}
+
+	@Override
+	public void entityModelChanged(Entity ent) {/*Don't care*/}
 	
 	/*
 	public void reduceHull(Entity e) {

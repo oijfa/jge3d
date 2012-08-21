@@ -20,9 +20,11 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
+import engine.entity.Entity;
 import engine.entity.EntityList;
 import engine.window.WindowManager;
 
+//TODO: Doesn't have a render queue, so it basically doesn't work.  Add that if you want this.
 public class FixedRenderer implements RendererInterface {
 	private WindowManager window_manager;
 	private EntityList objectList;
@@ -72,7 +74,11 @@ public class FixedRenderer implements RendererInterface {
 		);
 
 		// Draw the 3d stuff
-		objectList.drawFixedPipeList();
+		// Have to change keySet into array so that a clone will be made
+		for (Entity ent : objectList.getEntities()){
+			if(ent.shouldDraw())
+				ent.drawFixedPipe();
+		}
 
 		// Draw the window manager stuff
 		if (window_manager != null) window_manager.draw();
@@ -229,5 +235,29 @@ public class FixedRenderer implements RendererInterface {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+	}
+
+	@Override
+	public void parseRenderQueue() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void entityAdded(Entity ent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void entityRemoved(Entity ent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void entityModelChanged(Entity ent) {
+		// TODO Auto-generated method stub
+		
 	}
 }

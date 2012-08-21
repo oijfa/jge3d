@@ -45,12 +45,15 @@ public class Engine {
 	}
 
 	public Engine() {
+		//TODO:  This is bad practice
 		resource_manager = new ResourceManager(this);
 		
 		finished = new AtomicBoolean(false);
+		
+		entity_list = new EntityList();
 		physics = new Physics();
-		System.out.println();
-		entity_list = new EntityList(physics);
+		
+		entity_list.addListener(physics);
 		
 		//Find out what GL capabilities we have
 		try {
@@ -62,10 +65,12 @@ public class Engine {
 		String gl_version = GL11.glGetString(GL11.GL_VERSION).split(" ")[0].substring(0, 1);
 		Display.destroy();
 		
-		if(Float.valueOf(gl_version) >= 2.0)
+		if(Float.valueOf(gl_version) >= 2.0){
 			renderer = new ProgrammableRenderer(entity_list);
-		else
+		}else{
 			renderer = new FixedRenderer(entity_list);
+		}
+		
 		renderer.initGL();
 		
 		setKeyMap("default");
@@ -164,7 +169,7 @@ public class Engine {
 	private void startPhysics() {
 		physics_thread = new Thread() {
 			public void run() {
-				entity_list.parsePhysicsQueue();
+				physics.parsePhysicsQueue();
 				while (!finished.get()) {
 					physicsOnce();
 				}
@@ -177,7 +182,7 @@ public class Engine {
 	private void render() {
 		try {
 			Display.makeCurrent();
-			entity_list.parseRenderQueue();
+			renderer.parseRenderQueue();
 
 			while (!finished.get()) {
 				renderOnce();
@@ -203,37 +208,35 @@ public class Engine {
 		// Check for close requests
 		if (Display.isCloseRequested()) {
 			finished.set(true);
-		} else if (entity_list != null && entity_list.renderQueueSize() > 0) {
-			entity_list.parseRenderQueue();
-		} else if (Display.isActive()) {
-			// The window is in the foreground, so we should play the
-			// game
-			renderer.draw();
-			// Display.sync(FRAMERATE);
-		} else {
-			// The window is not in the foreground, so we can allow
-			// other stuff to run and
-			// infrequently update
-			/*
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-			}
-			*/
-			// Only bother rendering if the window is visible or dirty
-			if (Display.isVisible() || Display.isDirty()) {
+		} else{ 
+			renderer.parseRenderQueue();
+			if (Display.isActive()) {
+				// The window is in the foreground, so we should play the
+				// game
 				renderer.draw();
+				// Display.sync(FRAMERATE);
+			} else {
+				// The window is not in the foreground, so we can allow
+				// other stuff to run and
+				// infrequently update
+				/*
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+				}
+				*/
+				// Only bother rendering if the window is visible or dirty
+				if (Display.isVisible() || Display.isDirty()) {
+					renderer.draw();
+				}
 			}
 		}
 		ai_manager.invokeAllMethodsForAllEnts(this);
 	}
 	public void physicsOnce(){
-		if (entity_list != null && entity_list.physicsQueueSize() > 0) 
-			entity_list.parsePhysicsQueue();
-		else {
-			physics.clientUpdate();
-			physics.handleGhostCollisions(entity_list);
-		}
+		physics.parsePhysicsQueue();
+		physics.clientUpdate();
+		physics.handleGhostCollisions(entity_list);
 	}
 
 	public Camera addCamera(float mass, boolean collidable, String model_name) {
