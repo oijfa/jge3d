@@ -25,7 +25,6 @@ public class ComboBox<E> extends de.matthiasmann.twl.ComboBox<E> implements Cell
 	}
 
 	public void addItem(E item) {
-		System.out.println(item);
 		SimpleChangableListModel<E> new_list_model = (SimpleChangableListModel<E>) this.getModel();
 		new_list_model.addElement(item);
 		this.setModel(new_list_model);

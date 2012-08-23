@@ -23,16 +23,12 @@ public class EntityIterator implements Iterator<Entity> {
 	
 	@Override
 	public boolean hasNext() {
-		System.out.println("hasNext");
 		return index < key_set.size();
 	}
 
 	@Override
 	public Entity next() {
-		System.out.println("next");
 		Object ret_key = key_set.get(index);
-		
-		System.out.println(ret_key.toString());
 		
 		index++;
 		return entity_list.get(ret_key);
