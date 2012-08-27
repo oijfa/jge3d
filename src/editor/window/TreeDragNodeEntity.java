@@ -74,7 +74,7 @@ public class TreeDragNodeEntity implements TableSelectionManager, ActionListener
 						}
 						dragging_name = null;
 					} else if (event.getMouseButton() != -1 && event.isMouseDragEnd() && dragging_name == null) {
-						
+						fireActionEvent("tree_node_clicked");
 					} else if (event.getMouseButton() != -1 && !event.isMouseDragEnd()) {
 						dragging_name = (String)table_data.getNodeFromRow(row).getData(0);
 					}
@@ -155,7 +155,7 @@ public class TreeDragNodeEntity implements TableSelectionManager, ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		fireActionEvent("tree_node_clicked");
+		
 	}
 	
 	public void addActionListener(ActionListener listener) {

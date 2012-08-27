@@ -79,6 +79,19 @@
             </grid>
             <alias ref="-table.frame.pixel"/>
         </grid>
+        <area name="panel.separator" xywh="6,19,1,2"/>
+        <grid name="collapsiblepanel.background" weightsX="1" weightsY="1,0" border="0,0,5,0">
+            <alias ref="none"/>
+            <alias ref="panel.separator"/>
+        </grid>
+        <select name="collapsiblepanel.arrow.background" center="true">
+            <area unless="expanded" xywh="47,37,12,12"/>
+            <area xywh="86,49,12,12"/>
+        </select>
+        <select name="collapsiblepanel.arrowH.background" center="true">
+            <area if="expanded" xywh="47,37,12,12"/>
+            <area xywh="47,50,12,12"/>
+        </select>
     </images>
     <images file="ignore/arrows.png">
         <area name="up" xywh="0,0,26,32" center="true" inset="10"/>
@@ -251,6 +264,7 @@
     		</map>
 		</param>
     </theme>
+    <theme name="*" ref="-defaults"/>
 	<theme name="dialoglayout" ref="-defaults" allowWildcard="true">
 		<param name="defaultGap"><dimension>5,5</dimension></param>
 		<param name="smallGap"><dimension>8,8</dimension></param>
@@ -404,7 +418,7 @@
         <param name="columns"><int>10</int></param>
         <param name="passwordChar"><int>0</int></param>
     </theme>
-    <theme name="valueadjuster" ref="-defaults">
+    <theme name="valueadjuster" allowWildcard="true" ref="-defaults">
         <theme name="valueDisplay" ref="hscrollbar">
             <param name="background"><image>border_square</image></param>
             <param name="alignment"><enum type="alignment">CENTER</enum></param>
@@ -939,8 +953,32 @@
 		</theme>
 	</theme>
 	<!-- /file selector -->
-	
-	
+	<theme name="-property-editors" ref="dialoglayout">
+        <theme name="rgbaadjuster" ref="rgbaadjuster"/>
+    	<theme name="xyzwadjuster" ref="xyzwadjuster"/>
+    	<theme name="xyzadjuster" ref="xyzadjuster"/>
+    	<theme name="label" ref="label"/>
+    	<theme name="valueadjuster" ref="valueadjuster"/>
+    	<theme name="editfield" ref="editfield"/>		    
+    	<theme name="combobox" ref="combobox"/>
+    	<theme name="togglebutton" ref="togglebutton"/>
+    	<theme name="checkbox" ref="checkbox"/>
+	</theme>
+	<theme name="splitpane" ref="-defaults"/>
+	<theme name="collapsiblepanel" ref="dialoglayout">
+        <param name=""><image>collapsiblepanel.*</image></param>
+        <param name="border"><border>background.border</border></param>
+        <theme name="arrow" ref="-defaults">
+            <param name=""><image>collapsiblepanel.arrow.*</image></param>
+        </theme>
+        <theme name="title" ref="label"/>
+        <theme name="active" ref="checkbox"/>
+        <param name="namedGaps"><map>
+            <param name="title-content"><gap>5</gap></param>
+        </map></param>
+        
+        <theme name="contentcontainer" ref="-property-editors"/>
+    </theme>	
 	
 	<theme name="materialmenu" ref="resizableframe">
     	<theme name="dialoglayout" ref="dialoglayout">
@@ -989,7 +1027,7 @@
 				</theme>
 	    	</theme>
     	-->
-        
+
         <theme name="gridwindow" ref="resizableframe">
         	<param name="minWidth"><int>100</int></param>
             <param name="maxWidth"><int>1000</int></param>
@@ -1098,15 +1136,27 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>300</int></param>
         	<param name="maxHeight"><int>1000</int></param>
-        	<theme name="dialoglayout" ref="-default-gaps">
-  				<theme name="" ref="*"/>
-				<theme name="textree" ref="tree">
-					<param name="minWidth"><int>200</int></param>
-            		<param name="maxWidth"><int>1000</int></param>
-       				<param name="minHeight"><int>200</int></param>
-        			<param name="maxHeight"><int>1000</int></param>
-        		</theme>		
-            </theme>
+        	
+        	<theme name="splitpane" ref="splitpane">
+        		<theme name="splitterVertical" ref="-defaults"/>
+        		<theme name="entitymenu" ref="dialoglayout">
+	  				<theme name="" ref="*"/>
+					<theme name="enttree" ref="tree">
+						<param name="minWidth"><int>200</int></param>
+	            		<param name="maxWidth"><int>1000</int></param>
+	       				<param name="minHeight"><int>200</int></param>
+	        			<param name="maxHeight"><int>1000</int></param>
+	        		</theme>		
+				</theme>
+				<theme name="propertymenu" ref="dialoglayout">
+					<theme name="" ref="*"/>
+					<theme name="collapsiblepanel" ref="collapsiblepanel">
+					<!--
+						
+	        	    -->
+	        	    </theme>
+				</theme>
+			</theme>
         </theme>
 		<theme name="toolmenu" ref="resizableframe">
 			<theme name="dialoglayout" ref="dialoglayout">

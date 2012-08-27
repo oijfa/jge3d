@@ -9,6 +9,8 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.Engine;
 import engine.entity.Entity;
+import engine.window.components.CollapsiblePanel;
+import engine.window.components.CollapsiblePanel.Direction;
 import engine.window.components.RGBAAdjuster;
 import engine.window.components.Tree;
 import engine.window.components.Window;
@@ -21,8 +23,10 @@ import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.SplitPane;
 import de.matthiasmann.twl.ToggleButton;
+import de.matthiasmann.twl.ValueAdjusterFloat;
 import de.matthiasmann.twl.ValueAdjusterInt;
 import de.matthiasmann.twl.Widget;
+import de.matthiasmann.twl.model.SimpleBooleanModel;
 
 public class EntityListMenu extends Window implements ActionListener {
 	private final Tree tree;
@@ -31,7 +35,7 @@ public class EntityListMenu extends Window implements ActionListener {
 	private TreeDragNodeEntity tsm;
 	private SplitPane split_pane;
 	private DialogLayout property_editor;
-	private ArrayList<Widget> widgets;
+	private ArrayList<CollapsiblePanel> properties;
 	private Entity ent;
 
 	public EntityListMenu(Engine engine) {
@@ -82,7 +86,7 @@ public class EntityListMenu extends Window implements ActionListener {
 		// update tree contents after it has been added.
 		//resource_window.createFromProjectResources();
 		createEntityList();
-		widgets = new ArrayList<Widget>();
+		properties = new ArrayList<CollapsiblePanel>();
 	}
 	
 	public void createEntityList() {
@@ -124,52 +128,49 @@ public class EntityListMenu extends Window implements ActionListener {
 	
 	public void createPropertyMenu() {
 		if(ent != null) {
-			widgets.clear();
+			properties.clear();
 			this.removeChild(property_editor);
+			Widget field;
+			CollapsiblePanel cp;
 			for(String prop: Entity.reqKeys) {
 				if(ent.getProperty(prop).getClass() == float.class
 						|| ent.getProperty(prop).getClass() == Float.class) { 
-					Widget field = new EditField();
-					widgets.add(field);
-					((EditField)field).setText((String)ent.getProperty(prop));
+					field = new ValueAdjusterFloat();
+					((ValueAdjusterFloat)field).setValue((Float)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == int.class
 						|| ent.getProperty(prop).getClass() == Integer.class) {
-					Widget field = new ValueAdjusterInt();
-					widgets.add(field);
+					field = new ValueAdjusterInt();
 					((ValueAdjusterInt)field).setValue((Integer)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == String.class) {
-					Widget field = new EditField();
-					widgets.add(field);
+					field = new EditField();
 					((EditField)field).setText((String)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == boolean.class ||
 						ent.getProperty(prop).getClass() == Boolean.class) {
-					Widget field = new ToggleButton();
-					widgets.add(field);
+					field = new ToggleButton();
 					((ToggleButton)field).getModel().setPressed((Boolean)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == Vector3f.class) {
-					Widget field = new XYZAdjuster(prop);
-					widgets.add(field);
+					field = new XYZAdjuster(prop);
 					((XYZAdjuster)field).setValue((Vector3f)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == Vector4f.class) {
-					Widget field = new RGBAAdjuster(prop);
-					widgets.add(field);
+					field = new RGBAAdjuster(prop);
 					((RGBAAdjuster)field).setValue((Vector4f)ent.getProperty(prop));
 				} else{
-					Widget field = new Label();
-					widgets.add(field);
+					field = new Label();
 					((Label)field).setText((String)ent.getProperty(prop));
 				}
+				cp = new CollapsiblePanel(Direction.VERTICAL, prop, field, new SimpleBooleanModel());
+				properties.add(cp);
 			}
 		}
 
 		// Reset temp row for vertical
 		Group h_grid = property_editor.createParallelGroup();
-		for(Widget widget: widgets) {
+		for(CollapsiblePanel widget: properties) {
 			h_grid.addWidget(widget);
 		}
 		
 		Group v_grid = property_editor.createSequentialGroup();
-		for(Widget widget: widgets) {
+		for(CollapsiblePanel widget: properties) {
 			v_grid.addWidget(widget);
 		}
 		
