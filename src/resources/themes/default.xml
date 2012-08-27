@@ -1132,9 +1132,8 @@
         	<param name="resizableAxis"><string>VERTICAL</string></param>
         	<param name="minWidth"><int>300</int></param>
             <param name="maxWidth"><int>300</int></param>
-       		<param name="minHeight"><int>300</int></param>
+       		<param name="minHeight"><int>450</int></param>
         	<param name="maxHeight"><int>1000</int></param>
-        	
         	<theme name="splitpane" ref="splitpane">
         		<theme name="splitterVertical" ref="-defaults"/>
         		<theme name="entitymenu" ref="dialoglayout">
@@ -1146,13 +1145,11 @@
 	        			<param name="maxHeight"><int>1000</int></param>
 	        		</theme>		
 				</theme>
-				<theme name="propertymenu" ref="dialoglayout">
-					<theme name="" ref="*"/>
-					<theme name="collapsiblepanel" ref="collapsiblepanel">
-					<!--
-						
-	        	    -->
-	        	    </theme>
+				<theme name="propertymenu" ref="scrollpane">
+					<theme name="dialoglayout" ref="dialoglayout">
+						<theme name="" ref="*"/>
+						<theme name="collapsiblepanel" ref="collapsiblepanel"/>
+					</theme>
 				</theme>
 			</theme>
         </theme>

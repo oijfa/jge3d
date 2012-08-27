@@ -16,11 +16,11 @@ import engine.window.components.Tree;
 import engine.window.components.Window;
 import engine.window.components.XYZAdjuster;
 import engine.window.tree.Model;
-import engine.window.tree.Node;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.Label;
+import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.SplitPane;
 import de.matthiasmann.twl.ToggleButton;
 import de.matthiasmann.twl.ValueAdjusterFloat;
@@ -34,7 +34,7 @@ public class EntityListMenu extends Window implements ActionListener {
 	private Engine engine;
 	private TreeDragNodeEntity tsm;
 	private SplitPane split_pane;
-	private DialogLayout property_editor;
+	private ScrollPane property_editor;
 	private ArrayList<CollapsiblePanel> properties;
 	private Entity ent;
 
@@ -47,7 +47,7 @@ public class EntityListMenu extends Window implements ActionListener {
 		tree.setTreeSelectionManager(tsm);
 		entity_tree = new DialogLayout();
 		entity_tree.setTheme("entitymenu");
-		property_editor = new DialogLayout();
+		property_editor = new ScrollPane();
 		property_editor.setTheme("propertymenu");
 		split_pane = new SplitPane();
 		split_pane.setDirection(SplitPane.Direction.VERTICAL);
@@ -92,11 +92,14 @@ public class EntityListMenu extends Window implements ActionListener {
 	public void createEntityList() {
 		for(Entity e : engine.getEntityList()) {
 			if(!tree.contains((String)e.getProperty("name"))) {
-				Node node = tree.createNode(
+				tree.createNode(
+						(String)e.getProperty("name"), e, tree.getBase()
+				);
+				/*
+			 	Node node = tree.createNode(
 						(String)e.getProperty("name"), e, tree.getBase()
 				);
 				Node subnode;
-				
 				for(String prop: Entity.reqKeys) {
 					if(e.getProperty(prop).getClass() == float.class
 							|| e.getProperty(prop).getClass() == Float.class) { 
@@ -118,6 +121,7 @@ public class EntityListMenu extends Window implements ActionListener {
 						node.insert("WTF is this shit?", new Label());
 					}
 				}
+				*/
 			}
 			
 			//for(ResourceManager.ResourceItem resource: entity_list.getResourcesInCategory(category)) {
@@ -163,24 +167,27 @@ public class EntityListMenu extends Window implements ActionListener {
 			}
 		}
 
+		
+		DialogLayout dialog_layout = new DialogLayout();
+		dialog_layout.setTheme("dialoglayout");
 		// Reset temp row for vertical
-		Group h_grid = property_editor.createParallelGroup();
+		Group h_grid = dialog_layout.createParallelGroup();
 		for(CollapsiblePanel widget: properties) {
 			h_grid.addWidget(widget);
 		}
 		
-		Group v_grid = property_editor.createSequentialGroup();
+		Group v_grid = dialog_layout.createSequentialGroup();
 		for(CollapsiblePanel widget: properties) {
 			v_grid.addWidget(widget);
 		}
 		
+		dialog_layout.setHorizontalGroup(h_grid);
+		dialog_layout.setVerticalGroup(v_grid);
+		
 		// All Dialog layout groups must have both a HorizontalGroup and
 		// VerticalGroup
 		// Otherwise "incomplete" exception is thrown and layout is not applied
-		property_editor.setHorizontalGroup(h_grid);
-		property_editor.setVerticalGroup(v_grid);
-		
-		//property_editor.setSize(350,800);
+		property_editor.setContent(dialog_layout);
 	}
 	
 	public void setEngine(Engine engine) {
