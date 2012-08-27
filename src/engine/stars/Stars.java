@@ -60,7 +60,7 @@ public class Stars {
 		}
 		
 		ent.setProperty("model",full_model);
-		ent.setGravity(new Vector3f(0,0,0));
+		ent.setProperty("gravity",new Vector3f(0,0,0));
 		ent.activate();
 	}
 

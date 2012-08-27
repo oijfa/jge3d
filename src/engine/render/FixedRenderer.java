@@ -11,6 +11,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -68,15 +70,19 @@ public class FixedRenderer extends RendererInterface {
 
 		
 		// Look at the camera's focus
-		GLU.gluLookAt(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, // Camera Location
-			camera.getFocus().getPosition().x, camera.getFocus().getPosition().y, camera.getFocus().getPosition().z, // Focus On Location
-			camera.getUp().x, camera.getUp().y, camera.getUp().z // Up Vector
+		Vector3f pos = (Vector3f)camera.getProperty(Entity.POSITION);
+		Vector3f foc = (Vector3f)camera.getFocus().getProperty(Entity.POSITION);
+		GLU.gluLookAt(
+				pos.x, pos.y, pos.z, // Camera Location
+				foc.x, foc.y, foc.z, // Focus On Location
+				camera.getUp().x, camera.getUp().y, camera.getUp().z // Up Vector
 		);
 
 		// Draw the 3d stuff
 		// Have to change keySet into array so that a clone will be made
 		for (Entity ent : objectList.getEntities()){
-			if(ent.shouldDraw())
+			Boolean should_draw = (Boolean)ent.getProperty(Entity.SHOULD_DRAW);
+			if(should_draw)
 				ent.drawFixedPipe();
 		}
 

@@ -14,8 +14,8 @@ public class AIFunctions {
 		if( player != null ){
 			//ent.clearForces();
 			Vector3f towards_pos = new Vector3f();
-			Vector3f player_pos = player.getPosition();
-			player_pos.sub(ent.getPosition());
+			Vector3f player_pos = (Vector3f) player.getProperty(Entity.POSITION);
+			player_pos.sub((Vector3f) ent.getProperty(Entity.POSITION));
 			ent.activate();
 			//ent.applyImpulse(player_pos, new Vector3f(0,0,0));
 			towards_pos.normalize(player_pos);

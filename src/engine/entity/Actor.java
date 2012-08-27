@@ -3,6 +3,7 @@ package engine.entity;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.dispatch.CollisionFlags;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.ConvexShape;
@@ -31,6 +32,7 @@ public class Actor extends Entity {
 	}
 
 	public void initActor(float step_height) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		actor = new KinematicCharacterController(
 			(PairCachingGhostObject) ((GhostObject) collision_object),
 			(ConvexShape) collision_object.getCollisionShape(), step_height

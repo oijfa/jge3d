@@ -119,7 +119,7 @@ public class Engine {
 	public Entity addEntity(Entity ent) {
 		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
 			renderer.setCamera((Camera)ent);
-			ent.setShouldDraw(false);
+			ent.setProperty(Entity.SHOULD_DRAW,false);
 		}
 		entity_list.addEntity(ent);
 		return ent;
@@ -280,6 +280,6 @@ public class Engine {
 	
 	public Entity pickEntity(int x, int y){
 		Vector3f ray_to = camera.getRayTo(x, y, camera.getFar());
-		return physics.pickEntityWithRay(camera.getPosition(),ray_to,entity_list);
+		return physics.pickEntityWithRay((Vector3f)camera.getProperty("position"),ray_to,entity_list);
 	}
 }

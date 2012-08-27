@@ -19,6 +19,8 @@ import org.lwjgl.opengl.ARBGeometryShader4;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
+
 import engine.entity.Entity;
 
 public class TextureBuffer implements Resource{
@@ -149,7 +151,7 @@ public class TextureBuffer implements Resource{
     		buf.clear();
     		buf = BufferUtils.createFloatBuffer(4);
     		
-    		Vector3f scalevec = ent.getCollisionObject().getCollisionShape().getLocalScaling(new Vector3f());
+    		Vector3f scalevec = ((CollisionObject)ent.getProperty("collision_object")).getCollisionShape().getLocalScaling(new Vector3f());
     		buf.put(scalevec.x);
     		buf.put(scalevec.y);
     		buf.put(scalevec.z);

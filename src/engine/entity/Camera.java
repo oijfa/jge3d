@@ -54,7 +54,7 @@ public class Camera extends Entity {
 		default_focus = defFocus;
 		focus = default_focus;
 		setProperty(Entity.NAME, "camera");
-		setPosition(new Vector3f(0, 0, 0));
+		setProperty(Entity.POSITION,new Vector3f(0, 0, 0));
 		declination = 0;
 		rotation = 0;
 		distance = 20.0f;
@@ -70,7 +70,7 @@ public class Camera extends Entity {
 	  		aspect, 
 	  		minimum_distance, 
 	  		maximum_distance, 
-	  		getPosition(), 
+	  		(Vector3f)getProperty(Entity.POSITION), 
 	  		getFocusPosition(), 
 	  		getUp()
 	  	);
@@ -92,7 +92,7 @@ public class Camera extends Entity {
 	public Vector3f getFocusPosition() {
 		Vector3f temp = new Vector3f();
 		if (focus != null) {
-			temp = focus.getPosition();
+			temp = (Vector3f)focus.getProperty(Entity.POSITION);
 		} else {
 			temp.set(0, 0, 0);
 		}
@@ -149,7 +149,7 @@ public class Camera extends Entity {
 	    position.x += Math.sin(yrotrad);
 	    position.z -= Math.cos(yrotrad);
 	    position.y -= Math.sin(xrotrad);
-	    setPosition(position);
+	    setProperty(Entity.POSITION,position);
 	}
 		
 	public double getDistance() {
@@ -225,10 +225,10 @@ public class Camera extends Entity {
 		position.x = (float) (a * Math.sin(rotation));
 		position.z = (float) (a * Math.cos(rotation));
 		position.add(focPos);
-		setPosition(position);
+		setProperty(Entity.POSITION,position);
 
 		if(matrices != null) {
-			matrices.buildModelViewMatrix(getPosition(), getFocusPosition(), getUp());
+			matrices.buildModelViewMatrix((Vector3f)getProperty(Entity.POSITION), getFocusPosition(), getUp());
 		  	matrices.buildProjectionMatrix(fov, aspect, minimum_distance, maximum_distance);
 		}
 	}
@@ -242,7 +242,7 @@ public class Camera extends Entity {
 		// Debug the camera
 		// System.out.print("Height:		" + height + "	Width:	" + width + "\n");
 		javax.vecmath.Vector3f position = new Vector3f();
-		position = this.getPosition();
+		position = (Vector3f)this.getProperty(Entity.POSITION);
 
 		Vector3f focpos = this.getFocusPosition();
 		System.out.print(

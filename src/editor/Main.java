@@ -102,8 +102,8 @@ public class Main implements ActionListener {
 		
 		edit_model = engine.addEntity("edit_model", 0f, true, "box", "default");
 		edit_model.setProperty(Entity.NAME, "edit_model");
-		edit_model.setPosition(new Vector3f(0,0,0));
-		edit_model.setGravity(new Vector3f(0,0,0));
+		edit_model.setProperty(Entity.POSITION, new Vector3f(0,0,0));
+		edit_model.setProperty("gravity",new Vector3f(0,0,0));
 
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(40.0f);

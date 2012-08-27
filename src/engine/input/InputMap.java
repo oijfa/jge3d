@@ -147,8 +147,8 @@ public class InputMap implements Resource {
 	public void playerForward(Event e){
 		Vector3f move_dir = new Vector3f();
 		move_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 			
 		);		
 		move_dir.normalize();
@@ -159,9 +159,8 @@ public class InputMap implements Resource {
 	public void playerBack(Event e){
 		Vector3f move_dir = new Vector3f();
 		move_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
-			
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 		);		
 		move_dir.normalize();
 		move_dir.scale(-0.15f);
@@ -173,8 +172,8 @@ public class InputMap implements Resource {
 		Vector3f cross_dir = new Vector3f();
 		
 		cross_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 		);
 		move_dir.cross(
 			cross_dir,
@@ -191,8 +190,8 @@ public class InputMap implements Resource {
 		Vector3f cross_dir = new Vector3f();
 		
 		cross_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 		);
 		move_dir.cross(
 			cross_dir,
@@ -210,8 +209,8 @@ public class InputMap implements Resource {
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			move_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
 			);		
 			move_dir.normalize();
@@ -224,8 +223,8 @@ public class InputMap implements Resource {
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			move_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
 			);		
 			move_dir.normalize();
@@ -239,8 +238,8 @@ public class InputMap implements Resource {
 			Vector3f cross_dir = new Vector3f();
 			
 			cross_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 			);
 			move_dir.cross(
 				cross_dir,
@@ -258,8 +257,8 @@ public class InputMap implements Resource {
 			Vector3f cross_dir = new Vector3f();
 			
 			cross_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 			);
 			move_dir.cross(
 				cross_dir,

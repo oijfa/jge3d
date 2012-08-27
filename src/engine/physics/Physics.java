@@ -10,6 +10,7 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.dispatch.GhostPairCallback;
@@ -19,6 +20,7 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.linearmath.Transform;
 
 import com.bulletphysics.collision.dispatch.GhostObject;
 
@@ -29,7 +31,7 @@ import engine.entity.QueueItem;
 import engine.entity.Entity.ObjectType;
 import engine.entity.EntityList;
 
-public class Physics implements PhysicsInterface{
+public class Physics extends PhysicsInterface{
 	// World Definitions
 	private DefaultCollisionConfiguration collisionConfiguration;
 	private CollisionDispatcher dispatcher;
@@ -120,38 +122,11 @@ public class Physics implements PhysicsInterface{
 	public void setGravity(Vector3f gravity) {
 		dynamicsWorld.setGravity(gravity);
 	}
-	
-	public boolean addEntity(Entity e) {
-		boolean ret = false;
 
-		if (e.keyExists("name")) {
-			if (e.getCollisionObject() != null) {
-				dynamicsWorld.addCollisionObject(e.getCollisionObject());
-				if(e.getObjectType() == ObjectType.actor) {
-					//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
-					dynamicsWorld.addAction(((Actor)e).getActor());
-				}
-			}
-			ret = true;
-		}
-		return ret;
-	}
-
-	public void removeEntity(Entity e) {
-		if (e.getObjectType() == ObjectType.rigidbody){
-			dynamicsWorld.removeRigidBody((RigidBody) e.getCollisionObject());
-		} else {
-			dynamicsWorld.removeCollisionObject(e.getCollisionObject());
-		}
-		if(e.getObjectType() == ObjectType.actor) {
-			dynamicsWorld.removeAction(((Actor)e).getActor());
-		}
-	}
-	
 	public void handleGhostCollisions(EntityList entity_list) {
 		for(Entity entity : entity_list.getEntities()){
 			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
-				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getCollisionObject();
+				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getProperty("collision_object");
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
 					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
 				}
@@ -181,7 +156,8 @@ public class Physics implements PhysicsInterface{
 		
 		if(resultCallback.collisionObject != null){
 			for(Entity ent : entity_list){
-				if(resultCallback.collisionObject == ent.getCollisionObject()){
+				
+				if(resultCallback.collisionObject == ent.getProperty("collision_object")){
 					return ent;
 				}
 			}
@@ -191,11 +167,13 @@ public class Physics implements PhysicsInterface{
 
 	@Override
 	public void entityAdded(Entity ent) {
+		ent.addListener(this);
 		physicsQueue.add(new QueueItem(ent, QueueItem.ADD));
 	}
 
 	@Override
 	public void entityRemoved(Entity ent) {
+		ent.removeListener(this);
 		physicsQueue.add(new QueueItem(ent, QueueItem.REMOVE));
 	}
 	
@@ -203,9 +181,11 @@ public class Physics implements PhysicsInterface{
 		Object[] itemArray = (Object[]) physicsQueue.toArray();
 		for (Object obj_item : itemArray) {
 			QueueItem item = (QueueItem)obj_item;
+			CollisionObject collision_object = (CollisionObject) item.getEnt().getProperty(Entity.COLLISION_OBJECT);
 			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
-				if (item.getEnt().getCollisionObject() != null) {
-					dynamicsWorld.addCollisionObject(item.getEnt().getCollisionObject());
+				
+				if (collision_object != null) {
+					dynamicsWorld.addCollisionObject(collision_object);
 					if(item.getEnt().getObjectType() == ObjectType.actor) {
 						//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
 						dynamicsWorld.addAction(((Actor)item.getEnt()).getActor());
@@ -213,15 +193,45 @@ public class Physics implements PhysicsInterface{
 				}
 			} else if (QueueItem.REMOVE == ((QueueItem) item).getAction()) {
 				if (item.getEnt().getObjectType() == ObjectType.rigidbody){
-					dynamicsWorld.removeRigidBody((RigidBody) item.getEnt().getCollisionObject());
+					dynamicsWorld.removeRigidBody((RigidBody) collision_object);
 				} else {
-					dynamicsWorld.removeCollisionObject(item.getEnt().getCollisionObject());
+					dynamicsWorld.removeCollisionObject(collision_object);
 				}
 				if(item.getEnt().getObjectType() == ObjectType.actor) {
 					dynamicsWorld.removeAction(((Actor)item.getEnt()).getActor());
 				}
 			}
 			physicsQueue.remove(item);
+		}
+	}
+
+	@Override
+	public void entityPropertyChanged(String property, Entity entity) {
+		switch(property){
+		case "gravity":
+			entityGravityChanged(entity);
+		case "position":
+			entityPositionChanged(entity);
+		}	
+	}
+
+	private void entityPositionChanged(Entity entity) {
+		//TODO: Unchecked casts
+		Vector3f pos = ((Vector3f) entity.getProperty("position"));
+		CollisionObject collision_object = (CollisionObject) entity.getProperty("collision_object");
+		Transform trans = collision_object.getWorldTransform(new Transform());
+		trans.setIdentity();
+		trans.origin.set(pos);
+		collision_object.setWorldTransform(trans);
+	}
+
+	private void entityGravityChanged(Entity entity) {
+		if (entity.getObjectType() == ObjectType.rigidbody){
+			//TODO:  Cast without check Dannngerous
+			CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
+			((RigidBody) collision_object).setGravity((Vector3f) entity.getProperty("gravity"));
+		}else {
+			System.out.println("Method [setGravity] not supported for ghost object");
 		}
 	}
 }

@@ -23,7 +23,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	/*************** QUEUE METHODS ***************/
 	public void addEntity(Entity ent) {
 		entities.put(ent.getProperty("name"), ent);
-		entities.put(ent.collision_object, ent);
 		fireActionEvent();
 		for(EntityListListener listener : listeners){
 			listener.entityAdded(ent);
@@ -34,7 +33,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 			Entity ent = (entities.get(key));
 
 			entities.remove(ent.getProperty(Entity.NAME));
-			entities.remove(ent.collision_object);
 
 			fireActionEvent();
 			for(EntityListListener listener : listeners){

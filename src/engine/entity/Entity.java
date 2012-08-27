@@ -31,11 +31,9 @@ import com.bulletphysics.linearmath.Transform;
 
 public class Entity{
 	// Properties
-	protected CollisionObject collision_object;
+	//protected CollisionObject collision_object;
 	private HashMap<String, Object> data;
 	private ArrayList<EntityListener> listeners;
-	//protected RenderObject model;
-	private boolean shouldDraw = true;
 	private Shader shader;
 
 	private ArrayList<Method> collision_functions = new ArrayList<Method>(); 
@@ -50,9 +48,11 @@ public class Entity{
 	public static final String NAME = "name";
 	public static final String COLLIDABLE = "collidable";
 	public static final String TIME_TO_LIVE = "TTL";
-
+	public static final String SHOULD_DRAW = "should_draw";
+	public static final String COLLISION_OBJECT = "collision_object";
+	public static final String POSITION = "position";
 	// Required keys
-	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE };
+	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -71,7 +71,8 @@ public class Entity{
 	
 	public Entity(Entity ent) {
 		String new_name = (String)ent.getProperty(Entity.NAME);
-		float mass = ((RigidBody)ent.getCollisionObject()).getInvMass();
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
+		float mass = ((RigidBody)collision_object).getInvMass();
 		boolean collide = (boolean)ent.getProperty(Entity.COLLIDABLE);
 		Shader shader = (Shader)ent.getProperty("shader");		
 				
@@ -91,9 +92,10 @@ public class Entity{
 
 		num_entities++;
 		data = new HashMap<String, Object>();
-		data.put("name", name);
-		data.put("collidable", c);
-		data.put("TTL", 0);
+		data.put(NAME, name);
+		data.put(COLLIDABLE, c);
+		data.put(TIME_TO_LIVE, 0);
+		data.put(SHOULD_DRAW, true);
 		//TODO: Generate this based on model instead
 		//this.model = model;
 		setProperty("model",model);
@@ -126,8 +128,7 @@ public class Entity{
 		RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass,
 			motion_state, shape, localInertia);
 
-		collision_object = new RigidBody(cInfo);
-
+		CollisionObject collision_object = new RigidBody(cInfo);
 		// This is extremely important; if you forget this
 		// then nothing will rotate
 		Transform identity = new Transform();
@@ -135,6 +136,9 @@ public class Entity{
 		((RigidBody) collision_object).setWorldTransform(identity);
 		((RigidBody) collision_object).setMassProps(mass, localInertia);
 		((RigidBody) collision_object).updateInertiaTensor();
+		
+		this.setProperty(Entity.COLLISION_OBJECT,collision_object);
+
 	}
 
 	protected void createGhostBody(float mass, CollisionShape shape) {
@@ -156,9 +160,11 @@ public class Entity{
 		// ghost.updateInertiaTensor();
 		Transform identity = new Transform();
 		identity.setIdentity();
-		collision_object = new CollisionObject();
+		
+		CollisionObject collision_object = new CollisionObject();
 		collision_object = ghost;
 		collision_object.setWorldTransform(identity);
+		this.setProperty(Entity.COLLISION_OBJECT, collision_object);
 	}
 
 	/*
@@ -166,28 +172,6 @@ public class Entity{
 	 * 
 	 * /* MUTATORS
 	 */
-	public void setPosition(Object p) {
-		/*
-		 * There's no straight-forward way to move a RigidBody to some location
-		 * So that's what this class does. It takes an Object because of skynet
-		 * code TODO: Remove skynet code
-		 */
-		try {
-			Vector3f pos = ((Vector3f) p);
-			Transform trans = collision_object.getWorldTransform(new Transform());
-			trans.setIdentity();
-			trans.origin.set(pos);
-			collision_object.setWorldTransform(trans);
-
-		} catch (Exception e) {
-			System.out.print(
-				p.toString()
-				+ "<< Possible Incorrect data type for position, must be Vector3f\n"
-			);
-			e.printStackTrace();
-		}
-	}
-
 	public void setProperty(String key, Object val) {
 		data.put(key, val);
 		for(EntityListener listener : listeners){
@@ -206,24 +190,7 @@ public class Entity{
 		}
 	}
 
-	/*
-	public void setModel(Model model) {
-		this.model = model;
-	}
-	*/
-
-	public void setShouldDraw(boolean shouldDraw) {
-		this.shouldDraw = shouldDraw;
-	}
-
 	/* ACCESSORS */
-	public Vector3f getPosition() {
-		Transform out = new Transform();
-		out = collision_object.getWorldTransform(new Transform());
-		return new Vector3f(out.origin);
-
-	}
-
 	public EntityList getSubEntities() {
 		return subEntities;
 	}
@@ -245,24 +212,14 @@ public class Entity{
 		return data.get(key);
 	}
 
-	/*
-	public Model getModel() {
-		return (Model)model;
-	}
-	*/
-
 	public Set<String> getKeySet() {
 		return data.keySet();
 	}
 
-	public boolean shouldDraw() {
-		return shouldDraw;
-	}
-
 	/* MISC */
 	public void drawFixedPipe() {
-		
-		if (shouldDraw) {
+		Boolean should_draw = (Boolean)getProperty(SHOULD_DRAW);
+		if (should_draw) {
 			//TODO: Error checking for model cast
 			Model model = (Model)getProperty("model");
 			if(model != null) {
@@ -273,7 +230,8 @@ public class Entity{
 	
 	
 	public void drawProgrammablePipe() {
-		if (shouldDraw) {
+		Boolean should_draw = (Boolean)getProperty(SHOULD_DRAW);
+		if (should_draw) {
 			//TODO: Error checking for model cast
 			Model model = (Model)getProperty("model");
 			if(model != null) {
@@ -286,18 +244,12 @@ public class Entity{
 	}
 
 	public void setCollisionFlags(int kinematic_object) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		collision_object.setCollisionFlags(kinematic_object);
 	}
 
-	public void setGravity(Vector3f gravity) {
-		if (object_type == ObjectType.rigidbody){ 
-			((RigidBody) collision_object).setGravity(gravity);
-		}else {
-			System.out.println("Method [setGravity] not supported for ghost object");
-		}
-	}
-
 	public void applyImpulse(Vector3f impulse, Vector3f position) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody){ 
 			((RigidBody) collision_object).applyImpulse(impulse, position);
 		} else {
@@ -306,6 +258,7 @@ public class Entity{
 	}
 	
 	public void applyTorqueImpulse(Vector3f impulse) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody){ 
 			((RigidBody) collision_object).applyTorqueImpulse(impulse);
 		} else {
@@ -314,6 +267,7 @@ public class Entity{
 	}
 	
 	public void clearForces() {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody){ 
 			((RigidBody) collision_object).clearForces();
 		} else {
@@ -321,11 +275,8 @@ public class Entity{
 		}
 	}
 
-	public CollisionObject getCollisionObject() {
-		return collision_object;
-	}
-
 	public void setMotionState(DefaultMotionState defaultMotionState) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody){ 
 			((RigidBody) collision_object).setMotionState(defaultMotionState);
 		} else { 
@@ -338,11 +289,13 @@ public class Entity{
 	}
 
 	public void activate() {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		collision_object.activate();
 	}
 
 	public void setCollisionShape(CollisionShape createCollisionShape) {
 		// Sets the new collision shape
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		Vector3f scalevec = collision_object.getCollisionShape().getLocalScaling(new Vector3f());
 		collision_object.setCollisionShape(createCollisionShape);
 		collision_object.getCollisionShape().setLocalScaling(scalevec);
@@ -357,11 +310,12 @@ public class Entity{
 		//Transform offset = new Transform();
 		//offset.origin.set(model.getCenter());
 		Transform position = new Transform();
-		position.origin.set(this.getPosition());
+		position.origin.set((Vector3f)this.getProperty(Entity.POSITION));
 		//this.setMotionState(new DefaultMotionState(position, offset));
 	}
 
 	public void setAngularFactor(float factor, Vector3f velocity) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody) {
 			((RigidBody) collision_object).setAngularFactor(factor);
 			((RigidBody) collision_object).setAngularVelocity(velocity);
@@ -371,6 +325,7 @@ public class Entity{
 	}
 
 	public void setDamping(float linear_damping, float angular_damping) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody) {
 			// ((RigidBody)
 			// collision_object).setInterpolationLinearVelocity(velocity);
@@ -383,6 +338,7 @@ public class Entity{
 	}
 
 	public void setAngularIdentity() {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		if (object_type == ObjectType.rigidbody) {
 			// ((RigidBody)
 			// collision_object).setInterpolationLinearVelocity(velocity);
@@ -401,7 +357,12 @@ public class Entity{
 		for(String method_name : names){
 			try {
 				collision_functions.add(
-					EntityCallbackFunctions.class.getMethod(method_name, Entity.class, Entity.class, Engine.class)
+					EntityCallbackFunctions.class.getMethod(
+							method_name, 
+							Entity.class, 
+							Entity.class, 
+							Engine.class
+					)
 				);
 			} catch (SecurityException e) {
 				e.printStackTrace();
@@ -425,38 +386,22 @@ public class Entity{
 		}
 	}
 
+	
 	public ArrayList<Method> getCollisionFunctions() {
 		return collision_functions;
 	}
-	
-	public void setScale(Vector3f scale) {
-		collision_object.getCollisionShape().setLocalScaling(scale);
-	}
-	
-	public Vector3f getScale() {
-		return collision_object.getCollisionShape().getLocalScaling(new Vector3f());
-	}
-
-	public double distanceFrom(Entity other_entity) {
-		Vector3f this_pos = this.getPosition();
-		Vector3f other_pos = other_entity.getPosition();
-		
-		return Math.abs(
-			Math.sqrt(
-				Math.pow(this_pos.x + other_pos.x, 2) +
-				Math.pow(this_pos.y + other_pos.y, 2) +
-				Math.pow(this_pos.z + other_pos.z, 2)
-			)
-		);
-	}
-
-	public boolean collidesWithRay(Vector3f position, Vector3f ray_to) {
-		return true; //TODO: Obvious
-	}
 
 	public void getTransformation(float[] body_matrix) {
+		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
 		Transform transform_matrix = new Transform();
-		transform_matrix = this.getCollisionObject().getWorldTransform(new Transform());
+		transform_matrix = collision_object.getWorldTransform(new Transform());
 		transform_matrix.getOpenGLMatrix(body_matrix);
+	}
+	
+	public void addListener(EntityListener listener){
+		listeners.add(listener);
+	}
+	public void removeListener(EntityListener listener){
+		listeners.remove(listener);
 	}
 }
