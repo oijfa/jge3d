@@ -27,6 +27,9 @@ import de.matthiasmann.twl.ValueAdjusterFloat;
 import de.matthiasmann.twl.ValueAdjusterInt;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.model.SimpleBooleanModel;
+import de.matthiasmann.twl.model.SimpleFloatModel;
+import de.matthiasmann.twl.model.SimpleIntegerModel;
+import de.matthiasmann.twl.model.SimpleStringModel;
 
 public class EntityListMenu extends Window implements ActionListener {
 	private final Tree tree;
@@ -140,18 +143,22 @@ public class EntityListMenu extends Window implements ActionListener {
 				if(ent.getProperty(prop).getClass() == float.class
 						|| ent.getProperty(prop).getClass() == Float.class) { 
 					field = new ValueAdjusterFloat();
-					((ValueAdjusterFloat)field).setValue((Float)ent.getProperty(prop));
+					//((ValueAdjusterFloat)field).setValue((Float)ent.getProperty(prop));
+					((ValueAdjusterFloat)field).setModel(new SimpleFloatModel(0, 100, (Float)ent.getProperty(prop)));
 				} else if (ent.getProperty(prop).getClass() == int.class
 						|| ent.getProperty(prop).getClass() == Integer.class) {
 					field = new ValueAdjusterInt();
-					((ValueAdjusterInt)field).setValue((Integer)ent.getProperty(prop));
+					//((ValueAdjusterInt)field).setValue((Integer)ent.getProperty(prop));
+					((ValueAdjusterInt)field).setModel(new SimpleIntegerModel(0, 100, (Integer)ent.getProperty(prop)));
 				} else if (ent.getProperty(prop).getClass() == String.class) {
 					field = new EditField();
-					((EditField)field).setText((String)ent.getProperty(prop));
+					//((EditField)field).setText((String)ent.getProperty(prop));
+					((EditField)field).setModel(new SimpleStringModel((String)ent.getProperty(prop)));
 				} else if (ent.getProperty(prop).getClass() == boolean.class ||
 						ent.getProperty(prop).getClass() == Boolean.class) {
 					field = new ToggleButton();
-					((ToggleButton)field).getModel().setPressed((Boolean)ent.getProperty(prop));
+					((ToggleButton)field).setModel(new SimpleBooleanModel((Boolean)ent.getProperty(prop)));
+					//getModel().setPressed((Boolean)ent.getProperty(prop));
 				} else if (ent.getProperty(prop).getClass() == Vector3f.class) {
 					field = new XYZAdjuster(prop);
 					((XYZAdjuster)field).setValue((Vector3f)ent.getProperty(prop));

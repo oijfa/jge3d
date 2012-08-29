@@ -69,7 +69,7 @@ public class Main {
 		);
 		terrain.setProperty
 		(Entity.NAME, "terrain");
-		terrain.setPosition(new Vector3f(0,-10, 0));
+		terrain.setProperty("position",new Vector3f(0,-10, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
 		
@@ -79,59 +79,59 @@ public class Main {
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
-		player.setPosition(new Vector3f(5, 15, 5));
-		player.setScale(new Vector3f(1,1,1));
+		player.setProperty("position",new Vector3f(5, 15, 5));
+		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
-		player.setGravity(10);
+		player.setProperty("gravity",10);
 		
 		//Heat seeking box (if box makes contact with player then model5 explodes)
 		model = engine.addActor("model1", 1.0f, "test", "default");
 		model.setProperty(Entity.NAME, "model1");
-		model.setPosition(new Vector3f(10, 15, 0));
+		model.setProperty("position",new Vector3f(10, 15, 0));
 		engine.addAIRoutine("model1", "followPlayer");
 		model.addCollisionFunctions("explodeOnPlayerContact");
-		model.setGravity(0);
+		model.setProperty("gravity",0);
 
 		//Box that moves to trigger box that launches pyramid
 		model2 = engine.addEntity("model2", 1f, true, "export", "default");
-		model2.setPosition(new Vector3f(-6, 0, 0));
+		model2.setProperty("position",new Vector3f(-6, 0, 0));
 		model2.applyImpulse(new Vector3f(2,0,0), new Vector3f(0,0,0));		
 
 		//Trigger box that launches pyramid
 		model3 = engine.addEntity("model3", 1f, false, "singlebox", "default");
-		model3.setPosition(new Vector3f(0, 0, 0));
+		model3.setProperty("position",new Vector3f(0, 0, 0));
 		//model3.getModel().setTransparent();
 		model3.addCollisionFunctions("explode");
 
 		//Pyramid that flies off when touched by model2
 		model4 = engine.addEntity("model4", 1f, true, "test", "default");
 		model4.setProperty(Entity.NAME, "model4");
-		model4.setPosition(new Vector3f(0, 0, -6));
+		model4.setProperty("position",new Vector3f(0, 0, -6));
 		
 		//Just a legoman (explodes if missle collides with player)
 		model5 = engine.addEntity("model5", 1f, true, "legoman", "default");
 		model5.setProperty(Entity.NAME, "model5");
-		model5.setPosition(new Vector3f(10, 0, 0));
-		model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
-		model5.setGravity(new Vector3f(0,0,0));
+		model5.setProperty("position",new Vector3f(10, 0, 0));
+		//model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
+		model5.setProperty("gravity",new Vector3f(0,0,0));
 		/*
 		//Test armadillo
 		Entity armadillo = engine.addEntity("armadillo", 0f, true, "armadillo", "default");
 		armadillo.setProperty(Entity.NAME, "armadillo");
-		armadillo.setPosition(new Vector3f(0, 0, 0));
+		armadillo.setProperty("position",new Vector3f(0, 0, 0));
 		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
 		*/
 		String name_to_use = "bunny";
 		Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
 		test.setProperty(Entity.NAME, name_to_use);
-		test.setPosition(new Vector3f(0, 30, 0));
+		test.setProperty("position",new Vector3f(0, 30, 0));
 		test.setAngularFactor(0, new Vector3f(0,1,0));
-		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
+		//test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);
-		camera.setPosition(new Vector3f(0, 0, 0));
+		camera.setProperty("position",new Vector3f(0, 0, 0));
 		camera.focusOn(player);
 		
 		addUBOsToDefaultShader();

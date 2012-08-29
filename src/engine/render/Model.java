@@ -371,7 +371,8 @@ public class Model implements RenderObject, Resource {
 		
 		// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 		GL11.glPushMatrix();
-		rotateAndScaleImmediate(ent.getCollisionObject());
+		//TODO: Uncheck cast
+		rotateAndScaleImmediate((CollisionObject)ent.getProperty("collision_object"));
 	
 		GL11.glEnable(GL11.GL_VERTEX_ARRAY);
 		GL11.glEnable(GL11.GL_NORMAL_ARRAY);
@@ -434,7 +435,8 @@ public class Model implements RenderObject, Resource {
 			// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
 			if (immediate_scale_rotate) {
 				GL11.glPushMatrix();
-				rotateAndScaleImmediate(ent.getCollisionObject());
+				//TODO: Unchecked cast
+				rotateAndScaleImmediate((CollisionObject)ent.getProperty("collision_object"));
 			}// else {
 				// do the shader using glUniform etc. here
 	

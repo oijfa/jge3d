@@ -11,6 +11,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -20,10 +22,12 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import engine.entity.Camera;
+import engine.entity.Entity;
 import engine.entity.EntityList;
 import engine.window.WindowManager;
 
-public class FixedRenderer implements RendererInterface {
+//TODO: Doesn't have a render queue, so it basically doesn't work.  Add that if you want this.
+public class FixedRenderer extends RendererInterface {
 	private WindowManager window_manager;
 	private EntityList objectList;
 	private Camera camera;
@@ -66,13 +70,21 @@ public class FixedRenderer implements RendererInterface {
 
 		
 		// Look at the camera's focus
-		GLU.gluLookAt(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, // Camera Location
-			camera.getFocus().getPosition().x, camera.getFocus().getPosition().y, camera.getFocus().getPosition().z, // Focus On Location
-			camera.getUp().x, camera.getUp().y, camera.getUp().z // Up Vector
+		Vector3f pos = (Vector3f)camera.getProperty(Entity.POSITION);
+		Vector3f foc = (Vector3f)camera.getFocus().getProperty(Entity.POSITION);
+		GLU.gluLookAt(
+				pos.x, pos.y, pos.z, // Camera Location
+				foc.x, foc.y, foc.z, // Focus On Location
+				camera.getUp().x, camera.getUp().y, camera.getUp().z // Up Vector
 		);
 
 		// Draw the 3d stuff
-		objectList.drawFixedPipeList();
+		// Have to change keySet into array so that a clone will be made
+		for (Entity ent : objectList.getEntities()){
+			Boolean should_draw = (Boolean)ent.getProperty(Entity.SHOULD_DRAW);
+			if(should_draw)
+				ent.drawFixedPipe();
+		}
 
 		// Draw the window manager stuff
 		if (window_manager != null) window_manager.draw();
@@ -229,5 +241,26 @@ public class FixedRenderer implements RendererInterface {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+	}
+
+	public void parseRenderQueue() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void entityAdded(Entity ent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void entityRemoved(Entity ent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void entityPropertyChanged(String property, Entity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 }

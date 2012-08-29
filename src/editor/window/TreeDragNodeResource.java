@@ -57,10 +57,10 @@ public class TreeDragNodeResource implements TableSelectionManager {
 						//item_class.newInstance()
 						try {
 							Entity ent = engine.addEntity(1f, true, dragging_name, "default");
-							ent.setPosition(new Vector3f(0, 0, 0));
+							ent.setProperty("position",new Vector3f(0, 0, 0));
 							ent.setAngularFactor(0, new Vector3f(0,1,0));
-							ent.setGravity(new Vector3f(0,0,0));
-							ent.setPosition(new_pos);
+							ent.setProperty("gravity",new Vector3f(0,0,0));
+							ent.setProperty("position",new_pos);
 						} catch (Exception e){
 							e.printStackTrace();
 						}

@@ -14,7 +14,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import engine.Engine;
 import engine.entity.Camera;
+import engine.entity.Entity;
 import engine.entity.EntityList;
 import engine.entity.Actor;
 import engine.input.components.KeyMapException;
@@ -28,6 +30,7 @@ public class InputMap implements Resource {
 	final HashMap<String, Integer> lwjgl_keyboard_enums;
 	final HashMap<String, String> enums_to_function;
 
+	Engine engine;
 	EntityList entity_list;
 
 	public InputMap() throws KeyMapException{
@@ -52,7 +55,7 @@ public class InputMap implements Resource {
 			String event = ((Element) n).getAttribute("EVENT");
 			
 			try {
-				if(this.getClass().getMethod(n.getTextContent()) != null){
+				if(this.getClass().getMethod(n.getTextContent(),Event.class) != null){
 					enums_to_function.put(
 						String.valueOf(lwjgl_keyboard_enums.get("KEY_" + id.toUpperCase())) + "KEY_" + event.toUpperCase(),
 						n.getTextContent()
@@ -69,7 +72,7 @@ public class InputMap implements Resource {
 			String event = ((Element) n).getAttribute("EVENT");
 			if(n.getTextContent() != ""){
 				try {
-					if(this.getClass().getMethod(n.getTextContent()) != null){
+					if(this.getClass().getMethod(n.getTextContent(),Event.class) != null){
 						enums_to_function.put(
 							"0MOUSE_" + event,  
 							n.getTextContent()
@@ -97,35 +100,35 @@ public class InputMap implements Resource {
 	}
   	
   	
-	public void rotateCamLeft(){
+	public void rotateCamLeft(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(-10,0,0));
 		stopMovement();
 	}
-	public void rotateCamRight(){
+	public void rotateCamRight(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(10,0,0));
 		stopMovement();
 	}
-	public void rotateCamUp(){
+	public void rotateCamUp(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,10,0));
 		stopMovement();
 	}
-	public void rotateCamDown(){
+	public void rotateCamDown(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,-10,0));
 		stopMovement();
 	}
-	public void stopCamLeft(){
+	public void stopCamLeft(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(-10,0,0));
 		stopMovement();
 	}
-	public void stopCamRight(){
+	public void stopCamRight(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(10,0,0));
 		stopMovement();
 	}
-	public void stopCamUp(){
+	public void stopCamUp(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,10,0));
 		stopMovement();
 	}
-	public void stopCamDown(){
+	public void stopCamDown(Event e){
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,-10,0));
 		stopMovement();
 	}
@@ -138,14 +141,14 @@ public class InputMap implements Resource {
 	public void moveCameraUp(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
 	public void moveCameraDown(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}*/
 	
-	public void zoomCameraIn(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
-	public void zoomCameraOut(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
+	public void zoomCameraIn(Event e){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
+	public void zoomCameraOut(Event e){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
 	
-	public void playerForward(){
+	public void playerForward(Event e){
 		Vector3f move_dir = new Vector3f();
 		move_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 			
 		);		
 		move_dir.normalize();
@@ -153,25 +156,24 @@ public class InputMap implements Resource {
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
 		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));
 	}
-	public void playerBack(){
+	public void playerBack(Event e){
 		Vector3f move_dir = new Vector3f();
 		move_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
-			
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 		);		
 		move_dir.normalize();
 		move_dir.scale(-0.15f);
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
 		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,0.1f));
 	}
-	public void playerLeft(){
+	public void playerLeft(Event e){
 		Vector3f move_dir = new Vector3f();
 		Vector3f cross_dir = new Vector3f();
 		
 		cross_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 		);
 		move_dir.cross(
 			cross_dir,
@@ -183,13 +185,13 @@ public class InputMap implements Resource {
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
 		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(-0.1f,0,0));
 	}
-	public void playerRight(){
+	public void playerRight(Event e){
 		Vector3f move_dir = new Vector3f();
 		Vector3f cross_dir = new Vector3f();
 		
 		cross_dir.sub(
-			entity_list.getItem("player").getPosition(),
-			entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 		);
 		move_dir.cross(
 			cross_dir,
@@ -203,12 +205,12 @@ public class InputMap implements Resource {
 	}
 
 	//STOP MOVEMENT CODE
-	public void playerStopForward(){
+	public void playerStopForward(Event e){
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			move_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
 			);		
 			move_dir.normalize();
@@ -217,12 +219,12 @@ public class InputMap implements Resource {
 		}
 	}
 	
-	public void playerStopBack(){
+	public void playerStopBack(Event e){
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			move_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()	
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
 			);		
 			move_dir.normalize();
@@ -230,14 +232,14 @@ public class InputMap implements Resource {
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
 		}
 	}
-	public void playerStopLeft(){
+	public void playerStopLeft(Event e){
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			Vector3f cross_dir = new Vector3f();
 			
 			cross_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 			);
 			move_dir.cross(
 				cross_dir,
@@ -249,14 +251,14 @@ public class InputMap implements Resource {
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
 		}
 	}
-	public void playerStopRight(){
+	public void playerStopRight(Event e){
 		if( !((Actor)entity_list.getItem("player")).getWalkDirection().equals(new Vector3f(0,0,0)) ) {
 			Vector3f move_dir = new Vector3f();
 			Vector3f cross_dir = new Vector3f();
 			
 			cross_dir.sub(
-				entity_list.getItem("player").getPosition(),
-				entity_list.getItem(Camera.CAMERA_NAME).getPosition()
+				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
+				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)
 			);
 			move_dir.cross(
 				cross_dir,
@@ -275,7 +277,17 @@ public class InputMap implements Resource {
 		//((Actor)entity_list.getItem("player")).moveActor(new Vector3f(0,0,-0.1f));
 	}
 	
-	public void playerJump(){((Actor)entity_list.getItem("player")).jump();}	
+	public void playerJump(Event e){((Actor)entity_list.getItem("player")).jump();}	
+	
+	
+	public void printPickedEntity(Event e){
+		Entity ent = engine.pickEntity(e.getMouseX(), e.getMouseY());
+		if(ent != null){
+			System.out.println("Picked:" + ent.getProperty(Entity.NAME));
+		}else{
+			System.out.println("Picked: Nothing");
+		}
+	}
   
   	public boolean handleEvent(Event e) throws KeyMapException{
 		String[] function_names = {
@@ -293,7 +305,9 @@ public class InputMap implements Resource {
 			*/
 			if( function_name != null){
 				try {
-					InputMap.class.getMethod(function_name).invoke(this,(Object[])null);
+					Object[] params = new Object[1];
+					params[0] = e;
+					InputMap.class.getMethod(function_name).invoke(this,params);
 				} catch (Exception ex) {
 					throwKeyMapException(ex);
 				}
@@ -324,6 +338,8 @@ public class InputMap implements Resource {
 
 	@Override
 	public void loadFromFile(ResourceManager resource_manager, InputStream is, String extension) throws Exception {
+		engine = resource_manager.getEngine();
+		
 		Document dom;
   		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     

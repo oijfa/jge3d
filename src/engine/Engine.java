@@ -1,22 +1,20 @@
 package engine;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import javax.vecmath.Vector3f;
 
 import engine.entity.AIManager;
 import engine.entity.Camera;
 import engine.entity.Entity;
-import engine.entity.EntityCallbackFunctions;
 import engine.entity.Actor;
 import engine.input.InputMap;
 import engine.entity.EntityList;
 import engine.physics.Physics;
+import engine.physics.PhysicsInterface;
 import engine.render.FixedRenderer;
 import engine.render.Model;
 import engine.render.ProgrammableRenderer;
@@ -26,19 +24,16 @@ import engine.resource.ResourceManager;
 import engine.window.WindowManager;
 import engine.window.components.Window;
 
-import com.bulletphysics.collision.dispatch.GhostObject;
-
 public class Engine {
 	public static final int FRAMERATE = 60; // fps
 	AtomicBoolean finished;
 
-	private final Physics physics;
+	private final PhysicsInterface physics;
 	private final RendererInterface renderer;
 
 	private Thread physics_thread;
 	private Thread render_thread;
 
-	@SuppressWarnings("unused")
 	private Camera camera;
 	private EntityList entity_list;
 	
@@ -50,12 +45,15 @@ public class Engine {
 	}
 
 	public Engine() {
-		resource_manager = new ResourceManager();
+		//TODO:  This is bad practice
+		resource_manager = new ResourceManager(this);
 		
 		finished = new AtomicBoolean(false);
+		
+		entity_list = new EntityList();
 		physics = new Physics();
-		System.out.println();
-		entity_list = new EntityList(physics);
+		
+		entity_list.addListener(physics);
 		
 		//Find out what GL capabilities we have
 		try {
@@ -67,10 +65,12 @@ public class Engine {
 		String gl_version = GL11.glGetString(GL11.GL_VERSION).split(" ")[0].substring(0, 1);
 		Display.destroy();
 		
-		if(Float.valueOf(gl_version) >= 2.0)
+		if(Float.valueOf(gl_version) >= 2.0){
 			renderer = new ProgrammableRenderer(entity_list);
-		else
+		}else{
 			renderer = new FixedRenderer(entity_list);
+		}
+		
 		renderer.initGL();
 		
 		setKeyMap("default");
@@ -119,14 +119,10 @@ public class Engine {
 	public Entity addEntity(Entity ent) {
 		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
 			renderer.setCamera((Camera)ent);
-			ent.setShouldDraw(false);
+			ent.setProperty(Entity.SHOULD_DRAW,false);
 		}
 		entity_list.addEntity(ent);
 		return ent;
-	}
-
-	public void updateEntity(Entity ent) {
-		entity_list.updateEntity(ent);
 	}
 
 	public Entity getEntity(String name) {
@@ -169,7 +165,7 @@ public class Engine {
 	private void startPhysics() {
 		physics_thread = new Thread() {
 			public void run() {
-				entity_list.parsePhysicsQueue();
+				physics.parsePhysicsQueue();
 				while (!finished.get()) {
 					physicsOnce();
 				}
@@ -182,7 +178,7 @@ public class Engine {
 	private void render() {
 		try {
 			Display.makeCurrent();
-			entity_list.parseRenderQueue();
+			renderer.parseRenderQueue();
 
 			while (!finished.get()) {
 				renderOnce();
@@ -204,67 +200,39 @@ public class Engine {
 		return ret;
 	}
 	
-	private void handleGhostCollisions() {
-		for(Entity entity : entity_list.getEntities()){
-			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
-				GhostObject ghost = (GhostObject) entity.getCollisionObject();
-				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
-					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
-				}
-			}
-		}
-	}
-	
-	private void entCollidedWith(Entity source, Entity collided_with){
-		ArrayList<Method> methods = source.getCollisionFunctions();
-		for(Method method : methods){
-			try {
-				method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public void renderOnce(){
 		// Check for close requests
 		if (Display.isCloseRequested()) {
 			finished.set(true);
-		} else if (entity_list != null && entity_list.renderQueueSize() > 0) {
-			entity_list.parseRenderQueue();
-		} else if (Display.isActive()) {
-			// The window is in the foreground, so we should play the
-			// game
-			renderer.draw();
-			// Display.sync(FRAMERATE);
-		} else {
-			// The window is not in the foreground, so we can allow
-			// other stuff to run and
-			// infrequently update
-			/*
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-			}
-			*/
-			// Only bother rendering if the window is visible or dirty
-			if (Display.isVisible() || Display.isDirty()) {
+		} else{ 
+			renderer.parseRenderQueue();
+			if (Display.isActive()) {
+				// The window is in the foreground, so we should play the
+				// game
 				renderer.draw();
+				// Display.sync(FRAMERATE);
+			} else {
+				// The window is not in the foreground, so we can allow
+				// other stuff to run and
+				// infrequently update
+				/*
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+				}
+				*/
+				// Only bother rendering if the window is visible or dirty
+				if (Display.isVisible() || Display.isDirty()) {
+					renderer.draw();
+				}
 			}
 		}
 		ai_manager.invokeAllMethodsForAllEnts(this);
 	}
 	public void physicsOnce(){
-		if (entity_list != null && entity_list.physicsQueueSize() > 0) 
-			entity_list.parsePhysicsQueue();
-		else {
-			physics.clientUpdate();
-			handleGhostCollisions();
-		}
+		physics.parsePhysicsQueue();
+		physics.clientUpdate();
+		physics.handleGhostCollisions(entity_list);
 	}
 
 	public Camera addCamera(float mass, boolean collidable, String model_name) {
@@ -308,5 +276,10 @@ public class Engine {
 	  
 	public void removeAIRoutine(String ent_name, String script_name) {
 		ai_manager.unassignScript(ent_name, script_name);
+	}
+	
+	public Entity pickEntity(int x, int y){
+		Vector3f ray_to = camera.getRayTo(x, y, camera.getFar());
+		return physics.pickEntityWithRay((Vector3f)camera.getProperty("position"),ray_to,entity_list);
 	}
 }

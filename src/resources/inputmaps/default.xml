@@ -22,6 +22,6 @@
 	</keyboard>
 	<mouse>
 		<event EVENT="MOVED"></event>
-		<event EVENT="CLICKED"></event>
+		<event EVENT="CLICKED">printPickedEntity</event>
 	</mouse>
 </keymap>
