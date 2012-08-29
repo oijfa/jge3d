@@ -72,7 +72,7 @@ public class Entity{
 	
 	public Entity(Entity ent) {
 		String new_name = (String)ent.getProperty(Entity.NAME);
-		CollisionObject collision_object = (CollisionObject) this.getProperty(Entity.COLLISION_OBJECT);
+		CollisionObject collision_object = (CollisionObject) ent.getProperty(Entity.COLLISION_OBJECT);
 		float mass = ((RigidBody)collision_object).getInvMass();
 		boolean collide = (boolean)ent.getProperty(Entity.COLLIDABLE);
 		Shader shader = (Shader)ent.getProperty("shader");		
@@ -210,7 +210,7 @@ public class Entity{
 	}
 
 	public Object getProperty(String key) {
-		System.out.println(key + "||" + data.containsKey(key));
+		//System.out.println(key + "||" + data.containsKey(key));
 		if(key != null  && data.containsKey(key))
 			return data.get(key);
 		else
