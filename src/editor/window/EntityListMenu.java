@@ -1,7 +1,5 @@
 package editor.window;
 
-import java.util.ArrayList;
-
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
@@ -15,6 +13,10 @@ import engine.window.components.RGBAAdjuster;
 import engine.window.components.Tree;
 import engine.window.components.Window;
 import engine.window.components.XYZAdjuster;
+import engine.window.components.datamodel.BooleanModelWithEntCallbacks;
+import engine.window.components.datamodel.FloatModelWithEntCallbacks;
+import engine.window.components.datamodel.IntegerModelWithEntCallbacks;
+import engine.window.components.datamodel.StringModelWithEntCallbacks;
 import engine.window.tree.Model;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
@@ -27,9 +29,6 @@ import de.matthiasmann.twl.ValueAdjusterFloat;
 import de.matthiasmann.twl.ValueAdjusterInt;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.model.SimpleBooleanModel;
-import de.matthiasmann.twl.model.SimpleFloatModel;
-import de.matthiasmann.twl.model.SimpleIntegerModel;
-import de.matthiasmann.twl.model.SimpleStringModel;
 
 public class EntityListMenu extends Window implements ActionListener {
 	private final Tree tree;
@@ -38,7 +37,6 @@ public class EntityListMenu extends Window implements ActionListener {
 	private TreeDragNodeEntity tsm;
 	private SplitPane split_pane;
 	private ScrollPane property_editor;
-	private ArrayList<CollapsiblePanel> properties;
 	private Entity ent;
 
 	public EntityListMenu(Engine engine) {
@@ -89,7 +87,6 @@ public class EntityListMenu extends Window implements ActionListener {
 		// update tree contents after it has been added.
 		//resource_window.createFromProjectResources();
 		createEntityList();
-		properties = new ArrayList<CollapsiblePanel>();
 	}
 	
 	public void createEntityList() {
@@ -98,103 +95,61 @@ public class EntityListMenu extends Window implements ActionListener {
 				tree.createNode(
 					(String)e.getProperty("name"), e, tree.getBase()
 				);
-				/*
-			 	Node node = tree.createNode(
-						(String)e.getProperty("name"), e, tree.getBase()
-				);
-				Node subnode;
-				for(String prop: Entity.reqKeys) {
-					if(e.getProperty(prop).getClass() == float.class
-							|| e.getProperty(prop).getClass() == Float.class) { 
-						subnode = node.insert(prop, new EditField());
-						((EditField)subnode.getData(1)).setText((String)e.getProperty(prop));
-						
-					} else if (e.getProperty(prop).getClass() == int.class
-							|| e.getProperty(prop).getClass() == Integer.class) {
-						subnode = node.insert(prop, new ValueAdjusterInt());
-						((ValueAdjusterInt)subnode.getData(1)).setValue((int)e.getProperty(prop));
-					} else if (e.getProperty(prop).getClass() == String.class) {
-						subnode = node.insert(prop, new EditField());
-						((EditField)subnode.getData(1)).setText((String)e.getProperty(prop));
-					} else if (e.getProperty(prop).getClass() == boolean.class ||
-							e.getProperty(prop).getClass() == Boolean.class) {
-						subnode = node.insert(prop, new ToggleButton());
-						((ToggleButton)subnode.getData(1)).getModel().setPressed((Boolean)e.getProperty(prop));
-					} else{
-						node.insert("WTF is this shit?", new Label());
-					}
-				}
-				*/
 			}
-			
-			//for(ResourceManager.ResourceItem resource: entity_list.getResourcesInCategory(category)) {
-			//	resource_window.createNode(resource.name, resource, found_node);
-			//}
 		}
 	}
 	
 	public void createPropertyMenu() {
 		if(ent != null) {
-			properties.clear();
-			this.removeChild(property_editor);
+			DialogLayout dialog_layout = new DialogLayout();
+			dialog_layout.setTheme("dialoglayout");
+			
+			dialog_layout.setHorizontalGroup(dialog_layout.createParallelGroup());
+			dialog_layout.setVerticalGroup(dialog_layout.createSequentialGroup());
+
 			Widget field;
 			CollapsiblePanel cp;
+			
 			for(String prop: Entity.reqKeys) {
 				if(ent.getProperty(prop).getClass() == float.class
 						|| ent.getProperty(prop).getClass() == Float.class) { 
 					field = new ValueAdjusterFloat();
-					//((ValueAdjusterFloat)field).setValue((Float)ent.getProperty(prop));
-					((ValueAdjusterFloat)field).setModel(new SimpleFloatModel(0, 100, (Float)ent.getProperty(prop)));
+					((ValueAdjusterFloat)field).setModel(new FloatModelWithEntCallbacks(0, 100, ent, prop));
+					((ValueAdjusterInt)field).setTheme("valueadjuster");
 				} else if (ent.getProperty(prop).getClass() == int.class
 						|| ent.getProperty(prop).getClass() == Integer.class) {
 					field = new ValueAdjusterInt();
-					//((ValueAdjusterInt)field).setValue((Integer)ent.getProperty(prop));
-					((ValueAdjusterInt)field).setModel(new SimpleIntegerModel(0, 100, (Integer)ent.getProperty(prop)));
+					((ValueAdjusterInt)field).setModel(new IntegerModelWithEntCallbacks(0, 100, ent, prop));
+					((ValueAdjusterInt)field).setTheme("valueadjuster");
 				} else if (ent.getProperty(prop).getClass() == String.class) {
 					field = new EditField();
-					//((EditField)field).setText((String)ent.getProperty(prop));
-					((EditField)field).setModel(new SimpleStringModel((String)ent.getProperty(prop)));
-				} else if (ent.getProperty(prop).getClass() == boolean.class ||
-						ent.getProperty(prop).getClass() == Boolean.class) {
+					((EditField)field).setModel(new StringModelWithEntCallbacks(ent,prop));
+					((EditField)field).setTheme("editfield");
+				} else if (ent.getProperty(prop).getClass() == boolean.class 
+						|| ent.getProperty(prop).getClass() == Boolean.class) {
 					field = new ToggleButton();
-					((ToggleButton)field).setModel(new SimpleBooleanModel((Boolean)ent.getProperty(prop)));
-					//getModel().setPressed((Boolean)ent.getProperty(prop));
+					((ToggleButton)field).setModel(new BooleanModelWithEntCallbacks(ent,prop));
+					((ToggleButton)field).setTheme("togglebutton");
 				} else if (ent.getProperty(prop).getClass() == Vector3f.class) {
 					field = new XYZAdjuster(prop);
 					((XYZAdjuster)field).setValue((Vector3f)ent.getProperty(prop));
+					((XYZAdjuster)field).setTheme("xyzadjuster");
 				} else if (ent.getProperty(prop).getClass() == Vector4f.class) {
 					field = new RGBAAdjuster(prop);
 					((RGBAAdjuster)field).setValue((Vector4f)ent.getProperty(prop));
+					((RGBAAdjuster)field).setTheme("rgbaadjuster");
 				} else{
 					field = new Label();
 					((Label)field).setText((String)ent.getProperty(prop));
+					((Label)field).setTheme("label");
 				}
 				cp = new CollapsiblePanel(Direction.VERTICAL, prop, field, new SimpleBooleanModel());
-				properties.add(cp);
+				cp.setTheme("collapsiblepanel");
+				dialog_layout.getHorizontalGroup().addWidget(cp);
+				dialog_layout.getVerticalGroup().addWidget(cp);
 			}
+			property_editor.setContent(dialog_layout);
 		}
-
-		
-		DialogLayout dialog_layout = new DialogLayout();
-		dialog_layout.setTheme("dialoglayout");
-		// Reset temp row for vertical
-		Group h_grid = dialog_layout.createParallelGroup();
-		for(CollapsiblePanel widget: properties) {
-			h_grid.addWidget(widget);
-		}
-		
-		Group v_grid = dialog_layout.createSequentialGroup();
-		for(CollapsiblePanel widget: properties) {
-			v_grid.addWidget(widget);
-		}
-		
-		dialog_layout.setHorizontalGroup(h_grid);
-		dialog_layout.setVerticalGroup(v_grid);
-		
-		// All Dialog layout groups must have both a HorizontalGroup and
-		// VerticalGroup
-		// Otherwise "incomplete" exception is thrown and layout is not applied
-		property_editor.setContent(dialog_layout);
 	}
 	
 	public void setEngine(Engine engine) {

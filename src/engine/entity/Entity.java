@@ -45,7 +45,7 @@ public class Entity{
 	protected ObjectType object_type;
 
 	/* Properties the engine uses a lot */
-	public static String NAME = "name";
+	public static final String NAME = "name";
 	public static final String COLLIDABLE = "collidable";
 	public static final String TIME_TO_LIVE = "TTL";
 	public static final String SHOULD_DRAW = "should_draw";
