@@ -183,7 +183,6 @@ public class Physics extends PhysicsInterface{
 			QueueItem item = (QueueItem)obj_item;
 			CollisionObject collision_object = (CollisionObject) item.getEnt().getProperty(Entity.COLLISION_OBJECT);
 			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
-				
 				if (collision_object != null) {
 					dynamicsWorld.addCollisionObject(collision_object);
 					if(item.getEnt().getObjectType() == ObjectType.actor) {
@@ -208,11 +207,25 @@ public class Physics extends PhysicsInterface{
 	@Override
 	public void entityPropertyChanged(String property, Entity entity) {
 		switch(property){
-		case "gravity":
-			entityGravityChanged(entity);
-		case "position":
-			entityPositionChanged(entity);
+			case "gravity":
+				entityGravityChanged(entity);
+			case "position":
+				entityPositionChanged(entity);
+			case "collidable":
+				entityCollisionChanged(entity);
 		}	
+	}
+
+	private void entityCollisionChanged(Entity entity) {
+		/*
+		entity.initialSetup(
+			entity.getProperty("name"), 
+			entity.getProperty("mass"), 
+			entity.getProperty("collidable"),
+			entity.getProperty("model"), 
+			entity.getProperty("shader")
+		);
+		*/
 	}
 
 	private void entityPositionChanged(Entity entity) {

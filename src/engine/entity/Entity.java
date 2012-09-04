@@ -87,7 +87,7 @@ public class Entity{
 		initialSetup("ent" + String.valueOf(num_entities), mass, c, model, shader);
 	}
 
-	private void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
+	public void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
 		
 		listeners = new ArrayList<EntityListener>();
 
@@ -314,8 +314,8 @@ public class Entity{
 		// offset problem
 		//Transform offset = new Transform();
 		//offset.origin.set(model.getCenter());
-		Transform position = new Transform();
-		position.origin.set((Vector3f)this.getProperty(Entity.POSITION));
+		//Transform position = new Transform();
+		//position.origin.set((Vector3f)this.getProperty(Entity.POSITION));
 		//this.setMotionState(new DefaultMotionState(position, offset));
 	}
 

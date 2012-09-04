@@ -432,14 +432,6 @@ public class Model implements RenderObject, Resource {
 			shader = this.shader;
 		}
 		if(shader != null) {
-			// http://www.solariad.com/blog/8-posts/37-preparing-an-lwjgl-application-for-opengl-core-spec
-			if (immediate_scale_rotate) {
-				GL11.glPushMatrix();
-				//TODO: Unchecked cast
-				rotateAndScaleImmediate((CollisionObject)ent.getProperty("collision_object"));
-			}// else {
-				// do the shader using glUniform etc. here
-	
 			int vertex = GL20.glGetAttribLocation(
 				shader.getShaderID(),
 				new String("vertex")

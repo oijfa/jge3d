@@ -185,6 +185,7 @@ public class ProgrammableRenderer extends RendererInterface {
 					ent_model.verify();
 					ent_model.createVBO();
 					ent_model.reduceHull();
+					
 					e.setCollisionShape(ent_model.getCollisionShape());
 				} else {
 					System.out.println("Trying to add/update render object of NULL model");

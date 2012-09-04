@@ -73,8 +73,9 @@ public class InputMap implements Resource {
 			if(n.getTextContent() != ""){
 				try {
 					if(this.getClass().getMethod(n.getTextContent(),Event.class) != null){
+						System.out.println(event);
 						enums_to_function.put(
-							"0MOUSE_" + event,  
+							"MOUSE_" + event,  
 							n.getTextContent()
 						);
 					}
@@ -292,22 +293,15 @@ public class InputMap implements Resource {
   	public boolean handleEvent(Event e) throws KeyMapException{
 		String[] function_names = {
 		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
-		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType())
+		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType()),
+		    enums_to_function.get(String.valueOf(e.getType()))
   		};
-		//System.out.println(String.valueOf(e.getKeyCode()) + String.valueOf(e.getType()));
 		for(String function_name : function_names){
-			/*
-			System.out.println(
-				function_name + " == " +
-				String.valueOf(e.getKeyCode()) + " == " +
-				e.getType()
-			);
-			*/
 			if( function_name != null){
 				try {
 					Object[] params = new Object[1];
 					params[0] = e;
-					InputMap.class.getMethod(function_name).invoke(this,params);
+					InputMap.class.getMethod(function_name,Event.class).invoke(this,params);
 				} catch (Exception ex) {
 					throwKeyMapException(ex);
 				}

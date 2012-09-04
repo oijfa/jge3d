@@ -50,7 +50,7 @@ public class Main implements ActionListener {
 	private Light light;
 	private Light light2;
 	
-	private boolean multiThreaded = false;
+	private boolean multiThreaded = true;
 
 	public static void main(String args[]) {
 		Main m = new Main();

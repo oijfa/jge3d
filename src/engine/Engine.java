@@ -239,6 +239,8 @@ public class Engine {
 		Camera camera = new Camera(mass, collidable, (Model) resource_manager.getResource(model_name,"models"));
 		addEntity(camera);
 		renderer.setCamera(camera);
+		this.camera = camera;
+		
 		return camera;
 	}
 
