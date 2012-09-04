@@ -213,10 +213,12 @@ public class ProgrammableRenderer extends RendererInterface {
 		
 	public void entityAdded(Entity ent) {
 		render_queue.add(new QueueItem(ent, QueueItem.ADD));
+		ent.addListener(this);
 	}
 
 	public void entityRemoved(Entity ent) {
 		render_queue.add(new QueueItem(ent, QueueItem.REMOVE));
+		ent.removeListener(this);
 	}
 
 	@Override

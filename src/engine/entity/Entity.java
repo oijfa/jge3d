@@ -76,7 +76,7 @@ public class Entity{
 		float mass = ((RigidBody)collision_object).getInvMass();
 		boolean collide = (boolean)ent.getProperty(Entity.COLLIDABLE);
 		Shader shader = (Shader)ent.getProperty("shader");		
-				
+
 		//TODO: Error checking for model cast
 		initialSetup(new_name, mass, collide, (Model)ent.getProperty("model"), shader);
 	}

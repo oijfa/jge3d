@@ -22,12 +22,13 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	
 	/*************** QUEUE METHODS ***************/
 	public void addEntity(Entity ent) {
-		entities.put(ent.getProperty("name"), ent);
-
 		fireActionEvent();
 		for(EntityListListener listener : listeners){
 			listener.entityAdded(ent);
 		}
+		entities.put(ent.getProperty("name"), ent);
+
+		
 	}
 	public void removeEntity(Object key) {
 		if (entities.containsKey(key)) {

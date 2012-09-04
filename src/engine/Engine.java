@@ -72,6 +72,7 @@ public class Engine {
 		}
 		
 		renderer.initGL();
+		entity_list.addListener(renderer);
 		
 		setKeyMap("default");
 		
