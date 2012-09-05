@@ -21,6 +21,7 @@ import engine.window.tree.Model;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.EditField;
+import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.SplitPane;
@@ -55,9 +56,20 @@ public class EntityListMenu extends Window implements ActionListener {
 		split_pane.setTheme("splitpane");
 		split_pane.add(entity_tree);
 		split_pane.add(property_editor);
-		this.add(split_pane);
+		//this.add(split_pane);
+		
+		DialogLayout dialog_layout = new DialogLayout();
+		dialog_layout.setTheme("dialoglayout");
+		dialog_layout.setHorizontalGroup(dialog_layout.createParallelGroup());
+		dialog_layout.setVerticalGroup(dialog_layout.createSequentialGroup());
+		EditField dicks = new EditField();
+		dicks.setTheme("editfield");
+		dialog_layout.getHorizontalGroup().addWidget(dicks);
+		dialog_layout.getVerticalGroup().addWidget(dicks);
+		this.add(dialog_layout);
+		
 		setEngine(engine);
-		resourceMenuInit();
+		//resourceMenuInit();
 		engine.getEntityList().addActionListener(this);
 	}
 
@@ -167,4 +179,11 @@ public class EntityListMenu extends Window implements ActionListener {
 		createEntityList();
 		createPropertyMenu();
 	}
+/*
+	protected boolean handleEvent(Event evt) {
+		System.out.println("ShitDick" + evt.getType());
+		
+		return true;
+	}
+*/
 }

@@ -47,7 +47,7 @@ public class Model implements RenderObject, Resource {
 	private CollisionShape shape;
 	private int total_vertices=0;
 
-	private Boolean immediate_scale_rotate = false;
+	//private Boolean immediate_scale_rotate = false;
 
 	public Model() {
 		meshes = new ArrayList<Mesh>();

@@ -1134,6 +1134,10 @@
             <param name="maxWidth"><int>300</int></param>
        		<param name="minHeight"><int>450</int></param>
         	<param name="maxHeight"><int>1000</int></param>
+        	
+        	<theme name="dialoglayout" ref="dialoglayout">
+        		<theme name="editfield" ref="editfield"/>
+        	</theme>
         	<theme name="splitpane" ref="splitpane">
         		<theme name="splitterVertical" ref="-defaults"/>
         		<theme name="entitymenu" ref="dialoglayout">
