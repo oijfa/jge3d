@@ -178,6 +178,7 @@ public class Entity{
 		for(EntityListener listener : listeners){
 			listener.entityPropertyChanged(key, this);
 		}
+		
 	}
 
 	public void removeProperty(String key) {

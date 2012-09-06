@@ -9,7 +9,7 @@ import java.util.Set;
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
-public class EntityList implements ActionListener, Iterable<Entity> {
+public class EntityList implements EntityListener, Iterable<Entity> {
 	private HashMap<Object, Entity> entities;
 	private ArrayList<ActionListener> action_listeners;
 	private ArrayList<EntityListListener> listeners;
@@ -27,7 +27,7 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 			listener.entityAdded(ent);
 		}
 		entities.put(ent.getProperty("name"), ent);
-
+		ent.addListener(this);
 		
 	}
 	public void removeEntity(Object key) {
@@ -40,6 +40,7 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 			for(EntityListListener listener : listeners){
 				listener.entityRemoved(ent);
 			}
+			ent.removeListener(this);
 		}
 	}
 	/**********************************************/
@@ -65,11 +66,6 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 		return new ArrayList<Entity>(ents);
 	}
 	/******************************************/	
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		// TODO Auto-generated method stub
-	}
 	
 	public void fireActionEvent() {
 		for (ActionListener al : action_listeners) {
@@ -97,5 +93,14 @@ public class EntityList implements ActionListener, Iterable<Entity> {
 	
 	public void addListener(EntityListListener listener){
 		listeners.add(listener);
+	}
+
+	@Override
+	public void entityPropertyChanged(String property, Entity entity) {
+		if(property.equals("name")) {
+			String name = (String) entity.getProperty("name");
+			entities.values().remove(entity);
+			entities.put(name,entity);
+		}		
 	}
 }

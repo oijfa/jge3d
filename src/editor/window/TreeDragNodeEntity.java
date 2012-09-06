@@ -13,7 +13,6 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.Engine;
 import engine.entity.Camera;
-import engine.entity.Entity;
 import engine.window.tree.Node;
 
 public class TreeDragNodeEntity implements TableSelectionManager, ActionListener{
@@ -60,18 +59,8 @@ public class TreeDragNodeEntity implements TableSelectionManager, ActionListener
 					if(event.getMouseButton() != -1 && event.isMouseDragEnd() && dragging_name != null && !dragging_name.equals("camera")) {
 						Camera cam = (Camera)engine.getEntityList().getItem("camera");
 						Vector3f new_pos = cam.getRayTo(event.getMouseX(), event.getMouseY(), cam.getDistance());
-						
-						//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
-						//item_class.newInstance()
-						try {
-							Entity ent = engine.addEntity(new Entity(engine.getEntity(dragging_name)));
-							ent.setProperty("position",new Vector3f(0, 0, 0));
-							ent.setAngularFactor(0, new Vector3f(0,1,0));
-							ent.setProperty("gravity",new Vector3f(0,0,0));
-							ent.setProperty("position",new_pos);
-						} catch (Exception e){
-							e.printStackTrace();
-						}
+
+						engine.getEntity(dragging_name).setProperty("position",new_pos);
 						dragging_name = null;
 					} else if (event.getMouseButton() != -1 && event.isMouseDragEnd() && dragging_name == null) {
 						fireActionEvent("tree_node_clicked");
