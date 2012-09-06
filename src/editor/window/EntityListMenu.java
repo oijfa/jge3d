@@ -21,7 +21,7 @@ import engine.window.tree.Model;
 import de.matthiasmann.twl.DialogLayout;
 import de.matthiasmann.twl.DialogLayout.Group;
 import de.matthiasmann.twl.EditField;
-import de.matthiasmann.twl.Event;
+import de.matthiasmann.twl.EditField.Callback;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.SplitPane;
@@ -56,20 +56,10 @@ public class EntityListMenu extends Window implements ActionListener {
 		split_pane.setTheme("splitpane");
 		split_pane.add(entity_tree);
 		split_pane.add(property_editor);
-		//this.add(split_pane);
-		
-		DialogLayout dialog_layout = new DialogLayout();
-		dialog_layout.setTheme("dialoglayout");
-		dialog_layout.setHorizontalGroup(dialog_layout.createParallelGroup());
-		dialog_layout.setVerticalGroup(dialog_layout.createSequentialGroup());
-		EditField dicks = new EditField();
-		dicks.setTheme("editfield");
-		dialog_layout.getHorizontalGroup().addWidget(dicks);
-		dialog_layout.getVerticalGroup().addWidget(dicks);
-		this.add(dialog_layout);
-		
+		this.add(split_pane);
+
 		setEngine(engine);
-		//resourceMenuInit();
+		resourceMenuInit();
 		engine.getEntityList().addActionListener(this);
 	}
 
@@ -92,22 +82,16 @@ public class EntityListMenu extends Window implements ActionListener {
 		entity_tree.setHorizontalGroup(hgroup);
 		entity_tree.setVerticalGroup(vgroup);
 
-		// textree.setSize(getWidth()/3, getHeight()/3);
-
-		//add(entity_tree);
-		
-		// update tree contents after it has been added.
-		//resource_window.createFromProjectResources();
 		createEntityList();
+		createPropertyMenu();
 	}
 	
 	public void createEntityList() {
+		tree.removeAllNodes();
 		for(Entity e : engine.getEntityList()) {
-			if(!tree.contains((String)e.getProperty("name"))) {
-				tree.createNode(
-					(String)e.getProperty("name"), e, tree.getBase()
-				);
-			}
+			tree.createNode(
+				(String)e.getProperty("name"), e, tree.getBase()
+			);
 		}
 	}
 	
@@ -137,6 +121,13 @@ public class EntityListMenu extends Window implements ActionListener {
 					field = new EditField();
 					((EditField)field).setModel(new StringModelWithEntCallbacks(ent,prop));
 					((EditField)field).setTheme("editfield");
+					((EditField)field).setForwardUnhandledKeysToCallback(true);
+					((EditField)field).addCallback(new Callback() {
+						@Override
+						public void callback(int key) {
+							createEntityList();
+						}
+					});
 				} else if (ent.getProperty(prop).getClass() == boolean.class 
 						|| ent.getProperty(prop).getClass() == Boolean.class) {
 					field = new ToggleButton();
@@ -175,15 +166,7 @@ public class EntityListMenu extends Window implements ActionListener {
 			if(ae.getAction().equals("tree_node_clicked"))
 				ent = (Entity)((TreeDragNodeEntity)ae.getSource()).getLastClickedNode().getData(1);
 
-		tree.removeAllNodes();
 		createEntityList();
 		createPropertyMenu();
 	}
-/*
-	protected boolean handleEvent(Event evt) {
-		System.out.println("ShitDick" + evt.getType());
-		
-		return true;
-	}
-*/
 }

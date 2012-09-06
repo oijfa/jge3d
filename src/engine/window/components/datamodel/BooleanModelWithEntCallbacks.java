@@ -14,6 +14,7 @@ public class BooleanModelWithEntCallbacks extends HasCallback implements Boolean
         setValue(getValue());
     }
 
+    @Override
     public boolean getValue() {
         return (Boolean)ent.getProperty(property);
     }
@@ -21,5 +22,6 @@ public class BooleanModelWithEntCallbacks extends HasCallback implements Boolean
 	@Override
 	public void setValue(boolean value) {
 		ent.setProperty(property, value);
+		doCallback();
 	}
 }

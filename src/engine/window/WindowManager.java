@@ -73,13 +73,11 @@ public class WindowManager extends DesktopArea {
 		// Our event handling
 		//gui.handleKeyRepeat();
 		try {
-			if(super.isMouseInside(evt))
-				System.out.println("true");
 			if( super.handleEvent(evt)) {
-				System.out.println("TWL handled the fuck out of: " + evt.getType() + "|" + evt.getKeyChar());
+				//System.out.println("TWL handled the fuck out of: " + evt.getType() + "|" + evt.getKeyChar());
 				return true;
 			}else if (key_map != null && !evt.isKeyRepeated() && key_map.handleEvent(evt)) {
-				System.out.println("WE handled the fuck out of: " + evt.getType() + "|" + evt.getKeyChar());
+				//System.out.println("JGE handled the fuck out of: " + evt.getType() + "|" + evt.getKeyChar());
 				return true; 
 			}
 		} catch (KeyMapException e) {

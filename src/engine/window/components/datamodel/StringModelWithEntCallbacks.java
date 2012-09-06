@@ -14,20 +14,15 @@ public class StringModelWithEntCallbacks extends HasCallback implements StringMo
     }
 
     public String getValue() {
-    	System.out.println("getting");
     	return (String)ent.getProperty(property);
     }
 
     public void setValue(String value) {
-    	System.out.println("getting");
         if(value == null) {
             throw new NullPointerException("value");
         }
-        if(!ent.getProperty(property).equals(value)) {
-        	ent.setProperty(property, value);
-            doCallback();
-        } else {
-        	System.out.println("fuckbeans");
-        }
+
+    	ent.setProperty(property, value);
+        doCallback();
     }    
 }
