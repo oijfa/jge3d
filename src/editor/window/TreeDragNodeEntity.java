@@ -64,7 +64,8 @@ public class TreeDragNodeEntity implements TableSelectionManager, ActionListener
 						//Class item_class = ((ResourceItem)table_data.getNodeFromRow(row).getData(1)).item_class.getClass();
 						//item_class.newInstance()
 						try {
-							Entity ent = engine.addEntity(new Entity(engine.getEntity(dragging_name)));
+							//Entity ent = engine.addEntity(new Entity(engine.getEntity(dragging_name)));
+							Entity ent = engine.getEntity(dragging_name);
 							ent.setProperty("position",new Vector3f(0, 0, 0));
 							ent.setAngularFactor(0, new Vector3f(0,1,0));
 							ent.setProperty("gravity",new Vector3f(0,0,0));
