@@ -55,9 +55,9 @@ public class TreeDragNodeEntity implements TableSelectionManager, ActionListener
 	@Override
 	public boolean handleMouseEvent(int row, int column, Event event) {
 		if(engine != null) {
-			if(engine.getEntityList().getItem("camera") != null) {
+			if(engine.getEntityList().getItem("camera") != null ) {
 				if(table != null) {
-					if(event.getMouseButton() != -1 && event.isMouseDragEnd() && dragging_name != null) {
+					if(event.getMouseButton() != -1 && event.isMouseDragEnd() && dragging_name != null && !dragging_name.equals("camera")) {
 						Camera cam = (Camera)engine.getEntityList().getItem("camera");
 						Vector3f new_pos = cam.getRayTo(event.getMouseX(), event.getMouseY(), cam.getDistance());
 						

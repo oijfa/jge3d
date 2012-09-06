@@ -21,7 +21,7 @@ public class StringModelWithEntCallbacks extends HasCallback implements StringMo
         if(value == null) {
             throw new NullPointerException("value");
         }
-
+        
     	ent.setProperty(property, value);
         doCallback();
     }    
