@@ -53,7 +53,7 @@ public class Entity{
 	public static final String POSITION = "position";
 	
 	// Required keys
-	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW };
+	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -114,7 +114,7 @@ public class Entity{
 	/* Initializing segments */
 	// Creates the initial settings for a rigidbody
 	// This function is what we use to make things rotate over multiple axes
-	private void createRigidBody(float mass, CollisionShape shape) {
+	protected RigidBody createRigidBody(float mass, CollisionShape shape) {
 		// rigid body is dynamic if and only if mass is non zero,
 		// otherwise static
 		boolean isDynamic = (mass != 0f);
@@ -139,10 +139,12 @@ public class Entity{
 		((RigidBody) collision_object).updateInertiaTensor();
 		
 		this.setProperty(Entity.COLLISION_OBJECT,collision_object);
+		
+		return (RigidBody)collision_object;
 
 	}
 
-	protected void createGhostBody(float mass, CollisionShape shape) {
+	protected CollisionObject createGhostBody(float mass, CollisionShape shape) {
 		// rigid body is dynamic if and only if mass is non zero,
 		// otherwise static
 		PairCachingGhostObject ghost = new PairCachingGhostObject();
@@ -166,6 +168,8 @@ public class Entity{
 		collision_object = ghost;
 		collision_object.setWorldTransform(identity);
 		this.setProperty(Entity.COLLISION_OBJECT, collision_object);
+		
+		return collision_object;
 	}
 
 	/*
