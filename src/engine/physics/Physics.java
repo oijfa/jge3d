@@ -124,26 +124,28 @@ public class Physics extends PhysicsInterface{
 	}
 
 	public void handleGhostCollisions(EntityList entity_list) {
-		for(Entity entity : entity_list.getEntities()){
+		for(Entity entity : entity_list.getEntitiesAndSubEntities()){
 			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
-				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getProperty("collision_object");
+				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getProperty(Entity.COLLISION_OBJECT);
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
-					entCollidedWith(entity, entity_list.getItem(ghost.getOverlappingObject(i)));
+					entCollidedWith(entity, entity_list.getEntityByCollisionObject(ghost.getOverlappingObject(i)));
 				}
 			}
 		}
 	}
 	private void entCollidedWith(Entity source, Entity collided_with){
-		ArrayList<Method> methods = source.getCollisionFunctions();
-		for(Method method : methods){
-			try {
-				method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		if(collided_with == null) {	
+			ArrayList<Method> methods = source.getCollisionFunctions();
+			for(Method method : methods){
+				try {
+					method.invoke(EntityCallbackFunctions.class, source, collided_with, this);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -242,7 +244,7 @@ public class Physics extends PhysicsInterface{
 		if (entity.getObjectType() == ObjectType.rigidbody){
 			//TODO:  Cast without check Dannngerous
 			CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
-			((RigidBody) collision_object).setGravity((Vector3f) entity.getProperty("gravity"));
+			((RigidBody) collision_object).setGravity((Vector3f) entity.getProperty(Entity.GRAVITY));
 		}else {
 			System.out.println("Method [setGravity] not supported for ghost object");
 		}

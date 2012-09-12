@@ -147,9 +147,9 @@ public class Main implements ActionListener {
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		light = new Light(
 			new Vector4f(0.0f,2.0f,10.0f,1.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
-			new Vector4f(5.0f,0.0f,0.0f,255.0f),
+			new Vector4f(10.0f,0.0f,0.0f,255.0f),
+			new Vector4f(10.0f,0.0f,0.0f,255.0f),
+			new Vector4f(10.0f,0.0f,0.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
@@ -159,9 +159,9 @@ public class Main implements ActionListener {
 		);
         light2 = new Light(
 			new Vector4f(0.0f,2.0f,-10.0f,1.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
-			new Vector4f(0.0f,0.0f,5.0f,255.0f),
+			new Vector4f(0.0f,0.0f,10.0f,255.0f),
+			new Vector4f(0.0f,0.0f,10.0f,255.0f),
+			new Vector4f(0.0f,0.0f,10.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,

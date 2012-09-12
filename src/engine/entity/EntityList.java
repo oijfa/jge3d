@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
+
 import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 
@@ -65,6 +67,27 @@ public class EntityList implements EntityListener, Iterable<Entity> {
 		}
 		return new ArrayList<Entity>(ents);
 	}
+	
+	public ArrayList<Entity> getSubEntities(Entity ent) {
+		ArrayList<Entity> ents = new ArrayList<Entity>();
+		if(ent.getSubEntities().entityCount() > 0) {
+			for(Entity sub_ent: ent.getSubEntities()) {
+				ents.add(sub_ent);
+				ents.addAll(getSubEntities(sub_ent));
+			}
+		}
+			
+		return ents;
+	}
+	
+	public ArrayList<Entity> getEntitiesAndSubEntities() {
+		Set<Entity> ents = new HashSet<Entity>();
+		for(Entity e : entities.values()){
+			ents.add(e);
+			ents.addAll(getSubEntities(e));
+		}
+		return new ArrayList<Entity>(ents);
+	}
 	/******************************************/	
 	
 	public void fireActionEvent() {
@@ -102,5 +125,14 @@ public class EntityList implements EntityListener, Iterable<Entity> {
 			entities.values().remove(entity);
 			entities.put(name,entity);
 		}		
+	}
+	
+	public Entity getEntityByCollisionObject(CollisionObject co) {
+		for(Entity ent: getEntitiesAndSubEntities()){
+			if(ent.getProperty(Entity.COLLISION_OBJECT).equals(co)) {
+				return ent;
+			}
+		}
+		return null;
 	}
 }

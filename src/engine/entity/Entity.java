@@ -51,9 +51,11 @@ public class Entity{
 	public static final String SHOULD_DRAW = "should_draw";
 	public static final String COLLISION_OBJECT = "collision_object";
 	public static final String POSITION = "position";
+	public static final String MODEL = "model";
+	public static final String GRAVITY = "gravity";
 	
 	// Required keys
-	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION };
+	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION, MODEL, GRAVITY };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -62,12 +64,23 @@ public class Entity{
 	private EntityList subEntities;
 
 	/* Constructors */
+	protected Entity() {
+		data = new HashMap<String, Object>();
+		collision_functions = new ArrayList<Method>(); 
+		subEntities = new EntityList();
+		listeners = new ArrayList<EntityListener>();
+	}
+	
 	public Entity(float mass, boolean collide, Model model, Shader shader) {
 		initialSetup(mass, collide, model, shader);
 	}
 
 	public Entity(String name, float mass, boolean collide, Model model, Shader shader) {
 		initialSetup(name, mass, collide, model, shader);
+	}
+
+	public Entity(String name, float mass, boolean collide, Model model) {
+		initialSetup(name, mass, collide, model, model.getShader());
 	}
 	
 	public Entity(Entity ent) {
@@ -88,7 +101,7 @@ public class Entity{
 	}
 
 	public void initialSetup(String name, float mass, boolean c, Model model, Shader shader) {
-		
+		subEntities = new EntityList();
 		listeners = new ArrayList<EntityListener>();
 
 		num_entities++;
@@ -197,10 +210,6 @@ public class Entity{
 	}
 
 	/* ACCESSORS */
-	public EntityList getSubEntities() {
-		return subEntities;
-	}
-
 	public Set<String> getKeys() {
 		return data.keySet();
 	}
@@ -413,5 +422,24 @@ public class Entity{
 	}
 	public void removeListener(EntityListener listener){
 		listeners.remove(listener);
+	}
+	
+	public void addSubEntity(Entity ent) {
+		for(EntityListener el: listeners) {
+			ent.addListener(el);
+		}
+		subEntities.addEntity(ent);
+	}
+	
+	public void addRemoveSubEntity(String name) {
+		subEntities.removeEntity(name);
+	}
+	
+	public EntityList getSubEntities() {
+		return subEntities;
+	}
+	
+	public Entity getSubEntity(String name) {
+		return subEntities.getItem(name);
 	}
 }

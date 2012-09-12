@@ -54,7 +54,7 @@ public class Face {
 	}
 
 	public Face(Vector3f[] verts) {
-		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
+		vertices = new ArrayList<Vector3f>(Arrays.asList(verts));
 		init();
 	}
 	

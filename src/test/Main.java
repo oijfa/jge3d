@@ -12,7 +12,6 @@ import engine.render.Shader;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
-import engine.stars.Stars;
 import engine.terrain.Terrain;
 
 public class Main {
@@ -70,27 +69,28 @@ public class Main {
 		terrain.setProperty
 		(Entity.NAME, "terrain");
 		terrain.setProperty("position",new Vector3f(0,-10, 0));
+		terrain.setProperty("gravity",new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
 		
 		//Make some parallax stars
-		Stars stars = new Stars(engine,1000,10000,200,5,400);
-		stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+		//Stars stars = new Stars(engine,1000,10000,200,5,400);
+		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
 		player.setProperty("position",new Vector3f(5, 15, 5));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
-		player.setProperty("gravity",10);
+		player.setProperty("gravity",new Vector3f(0,0,0));
 		
 		//Heat seeking box (if box makes contact with player then model5 explodes)
 		model = engine.addActor("model1", 1.0f, "test", "default");
 		model.setProperty(Entity.NAME, "model1");
-		model.setProperty("position",new Vector3f(10, 15, 0));
+		model.setProperty("position", new Vector3f(10, 15, 0));
 		engine.addAIRoutine("model1", "followPlayer");
 		model.addCollisionFunctions("explodeOnPlayerContact");
-		model.setProperty("gravity",0);
+		model.setProperty("gravity", new Vector3f(0,0,0));
 
 		//Box that moves to trigger box that launches pyramid
 		model2 = engine.addEntity("model2", 1f, true, "export", "default");
@@ -121,17 +121,31 @@ public class Main {
 		armadillo.setProperty("position",new Vector3f(0, 0, 0));
 		armadillo.setScale(new Vector3f(0.01f,0.01f,0.01f));
 		*/
+		/*
 		String name_to_use = "bunny";
 		Entity test = engine.addEntity(name_to_use, 1f, true, name_to_use, "default");
 		test.setProperty(Entity.NAME, name_to_use);
 		test.setProperty("position",new Vector3f(0, 30, 0));
 		test.setAngularFactor(0, new Vector3f(0,1,0));
-		//test.setScale(new Vector3f(100.00f,100.00f,100.00f));
+		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
+		 */
+		/*
+		RagDoll ragdoll = new RagDoll(
+			1.0f, 
+			false, 
+			(Model)engine.resource_manager.getResource("box", "models"), 
+			(Shader)engine.resource_manager.getResource("default", "shaders")
+		);
+		ragdoll.setProperty(Entity.NAME, "ragdoll");
+		ragdoll.setProperty("position",new Vector3f(0, 8, -5));
+		engine.addEntity(ragdoll);
+		 */
 		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);
-		camera.setProperty("position",new Vector3f(0, 0, 0));
+		camera.setProperty("position",new Vector3f(0, 10, 0));
+		camera.setProperty("gravity",new Vector3f(0, 0, 0));
 		camera.focusOn(player);
 		
 		addUBOsToDefaultShader();
