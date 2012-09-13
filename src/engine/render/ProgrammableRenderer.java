@@ -59,7 +59,7 @@ public class ProgrammableRenderer extends RendererInterface {
 			camera = (Camera) object_list.getItem(Camera.NAME);
 			camera.updatePosition();
 		}
-
+		
 		// Draw the 3d stuff
 		for (Entity ent : object_list.getEntitiesAndSubEntities()){
 			Boolean should_draw = (Boolean)ent.getProperty(Entity.SHOULD_DRAW);

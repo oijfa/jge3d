@@ -60,6 +60,7 @@ public class Main {
 		Model export_model = import_model.createModel();
 		export_model.saveXGL("/home/adam/workspace/jge3d/src/resources/models/misc/armadillo.xgl");
 		*/
+		
 		//Create the ground to stand on
 		Terrain terrain = new Terrain(
 			0,
@@ -73,6 +74,7 @@ public class Main {
 		terrain.setProperty("gravity",new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
+		
 		
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);

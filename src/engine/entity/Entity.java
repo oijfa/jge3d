@@ -191,6 +191,8 @@ public class Entity{
 	 * /* MUTATORS
 	 */
 	public void setProperty(String key, Object val) {
+		
+		
 		data.put(key, val);
 		for(EntityListener listener : listeners){
 			listener.entityPropertyChanged(key, this);
@@ -224,16 +226,21 @@ public class Entity{
 	}
 
 	public Object getProperty(String key) {
+		//String name = (String) data.get("name");
+		Object ret = null;
 		//System.out.println(key + "||" + data.containsKey(key));
-		if( key.equals(Entity.POSITION) ){
+		//TODO: Get rid of this mess
+		if( key.equals(Entity.POSITION) && !data.get("name").equals(Camera.CAMERA_NAME)){
 			Transform out = new Transform();
 			CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
 			out = collision_object.getWorldTransform(new Transform());
-			return out.origin;
-		}else if(key != null  && data.containsKey(key))
-			return data.get(key);
-		else
-			return null;
+			ret = out.origin;
+		}else if(key != null  && data.containsKey(key)){
+			ret = data.get(key);
+		}
+		
+		//System.out.println(name + " " + key + " " + ret.toString());
+		return ret;
 	}
 
 	public Set<String> getKeySet() {
