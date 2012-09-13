@@ -24,6 +24,7 @@ public class Obj_Parser extends Parser {
 																			// Coordinates
 																			// Normals
 	private ArrayList<String> comments = new ArrayList<String>(); // Vertex
+	private ArrayList<String> objects = new ArrayList<String>(); 
 	// Coordinates
 	// Normals
 	// private ArrayList<Vector3f> vertexTextures = new ArrayList<Vector3f>();
@@ -61,6 +62,9 @@ public class Obj_Parser extends Parser {
 		
 		while(currentLine != null) {
 			switch(currentLine.split("\\s+")[0]) {
+				case "o":
+					objects.add(currentLine.split("\\s+")[1]);
+					break;
 				case "v":
 					vertices.add(parseVector(currentLine));
 					break;
@@ -73,6 +77,9 @@ public class Obj_Parser extends Parser {
 				case "#":
 					comments.add(currentLine);
 					break;
+				case "s":
+					//I know this exists, but I really don't care about it
+					break;					
 				default:
 					System.out.println("Unknown def encountered while parsing obj");
 					System.out.println("\t"+currentLine);

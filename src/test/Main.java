@@ -83,7 +83,6 @@ public class Main {
 		player.setProperty("position",new Vector3f(0, 15, 0));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
-		player.setProperty("gravity",new Vector3f(0,0,0));
 		/*
 		//Heat seeking box (if box makes contact with player then model5 explodes)
 		model = engine.addActor("model1", 1.0f, "test", "default");
