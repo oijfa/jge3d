@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import engine.Engine;
 import engine.entity.*;
 
+import engine.render.Model;
 import engine.render.Shader;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
@@ -68,7 +69,7 @@ public class Main {
 		);
 		terrain.setProperty
 		(Entity.NAME, "terrain");
-		terrain.setProperty("position",new Vector3f(0,-10, 0));
+		terrain.setProperty("position",new Vector3f(0,0, 0));
 		terrain.setProperty("gravity",new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
@@ -79,11 +80,11 @@ public class Main {
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
-		player.setProperty("position",new Vector3f(5, 15, 5));
+		player.setProperty("position",new Vector3f(0, 15, 0));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		player.setProperty("gravity",new Vector3f(0,0,0));
-		
+		/*
 		//Heat seeking box (if box makes contact with player then model5 explodes)
 		model = engine.addActor("model1", 1.0f, "test", "default");
 		model.setProperty(Entity.NAME, "model1");
@@ -114,6 +115,7 @@ public class Main {
 		model5.setProperty("position",new Vector3f(10, 0, 0));
 		//model5.setScale(new Vector3f(0.1f,0.1f,0.1f));
 		model5.setProperty("gravity",new Vector3f(0,0,0));
+		*/
 		/*
 		//Test armadillo
 		Entity armadillo = engine.addEntity("armadillo", 0f, true, "armadillo", "default");
@@ -144,8 +146,8 @@ public class Main {
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);
-		camera.setProperty("position",new Vector3f(0, 10, 0));
-		camera.setProperty("gravity",new Vector3f(0, 0, 0));
+		//camera.setProperty("position",new Vector3f(0, 10, 0));
+		//camera.setProperty("gravity",new Vector3f(0, 0, 0));
 		camera.focusOn(player);
 		
 		addUBOsToDefaultShader();

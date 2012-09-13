@@ -108,6 +108,7 @@ public class Main implements ActionListener {
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(40.0f);
 		camera.focusOn(edit_model);
+		
 		resource_window.setEngine(engine);
 		
 		engine.getWindowManager().getWindows().hideAll();

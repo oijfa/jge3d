@@ -23,6 +23,7 @@ public class RagDoll extends Entity {
     
 	public RagDoll(float mass, boolean collide, Model model, Shader shader) {
 		//super(mass, collide, model, shader);
+		setProperty(Entity.COLLIDABLE, false);
 		setLimbs(new HashMap<String,Entity>());
 		setConstraints(new HashMap<String,ConeTwistConstraint>());
 		createRagDoll();
@@ -35,8 +36,8 @@ public class RagDoll extends Entity {
     	limbs.put("uArmR",createLimb("uArmR",     1.0f, 0.2f, 0.5f, new Vector3f(0.75f,  0.8f, 0), false));
     	limbs.put("lArmL",createLimb("lArmL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.75f,-0.2f, 0), false));
     	limbs.put("lArmR",createLimb("lArmR",     1.0f, 0.2f, 0.5f, new Vector3f(0.75f, -0.2f, 0), false));
-    	limbs.put("body",createLimb("body",      1.0f, 0.2f, 1.0f, new Vector3f(0.00f,  0.5f, 0), false));
-    	limbs.put("hips",createLimb("hips",      1.0f, 0.2f, 0.5f, new Vector3f(0.00f, -0.5f, 0), true));
+    	limbs.put("body", createLimb("body",      1.0f, 0.2f, 1.0f, new Vector3f(0.00f,  0.5f, 0), false));
+    	limbs.put("hips", createLimb("hips",      1.0f, 0.2f, 0.5f, new Vector3f(0.00f, -0.5f, 0), true));
     	limbs.put("uLegL",createLimb("uLegL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-1.2f, 0), false));
     	limbs.put("uLegR",createLimb("uLegR",     1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -1.2f, 0), false));
     	limbs.put("lLegL",createLimb("lLegL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-2.2f, 0), false));
