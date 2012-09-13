@@ -69,7 +69,7 @@ public class Main {
 		);
 		terrain.setProperty
 		(Entity.NAME, "terrain");
-		terrain.setProperty("position",new Vector3f(0,0, 0));
+		terrain.setProperty("position",new Vector3f(0,-200, 0));
 		terrain.setProperty("gravity",new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);

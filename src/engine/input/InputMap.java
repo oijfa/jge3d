@@ -2,6 +2,7 @@ package engine.input;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -298,13 +299,26 @@ public class InputMap implements Resource {
   		};
 		for(String function_name : function_names){
 			if( function_name != null){
-				try {
-					Object[] params = new Object[1];
-					params[0] = e;
-					InputMap.class.getMethod(function_name,Event.class).invoke(this,params);
+				
+				Object[] params = new Object[1];
+				params[0] = e;
+				//try {
+				Method m = null;
+				try{
+					m = InputMap.class.getMethod(function_name,Event.class);
+				}catch(Exception ex){
+					throwKeyMapException(ex);
+				}
+				try{
+					m.invoke(this,params);
+				}catch(Exception ex){
+					throwKeyMapException(ex);
+				}
+					/*
 				} catch (Exception ex) {
 					throwKeyMapException(ex);
 				}
+				*/
 			}
 		}
 		return true;

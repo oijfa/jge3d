@@ -225,7 +225,12 @@ public class Entity{
 
 	public Object getProperty(String key) {
 		//System.out.println(key + "||" + data.containsKey(key));
-		if(key != null  && data.containsKey(key))
+		if( key.equals(Entity.POSITION) ){
+			Transform out = new Transform();
+			CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
+			out = collision_object.getWorldTransform(new Transform());
+			return out.origin;
+		}else if(key != null  && data.containsKey(key))
 			return data.get(key);
 		else
 			return null;
