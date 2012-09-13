@@ -74,7 +74,6 @@ public class InputMap implements Resource {
 			if(n.getTextContent() != ""){
 				try {
 					if(this.getClass().getMethod(n.getTextContent(),Event.class) != null){
-						System.out.println(event);
 						enums_to_function.put(
 							"MOUSE_" + event,  
 							n.getTextContent()
