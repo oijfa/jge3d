@@ -191,13 +191,10 @@ public class Entity{
 	 * /* MUTATORS
 	 */
 	public void setProperty(String key, Object val) {
-		
-		
 		data.put(key, val);
 		for(EntityListener listener : listeners){
 			listener.entityPropertyChanged(key, this);
 		}
-		
 	}
 
 	public void removeProperty(String key) {
@@ -212,10 +209,6 @@ public class Entity{
 	}
 
 	/* ACCESSORS */
-	public Set<String> getKeys() {
-		return data.keySet();
-	}
-
 	public boolean keyExists(String prop_name) {
 		for (int i = 0; i < data.keySet().size(); i++) {
 			// TODO: Probably a better way to loop through the keys, but I'm
@@ -225,22 +218,31 @@ public class Entity{
 		return false;
 	}
 
-	public Object getProperty(String key) {
+	public Object getProperty(String key, Boolean fromPhysics) {
 		//String name = (String) data.get("name");
 		Object ret = null;
 		//System.out.println(key + "||" + data.containsKey(key));
 		//TODO: Get rid of this mess
-		if( key.equals(Entity.POSITION) && !data.get("name").equals(Camera.CAMERA_NAME)){
-			Transform out = new Transform();
-			CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
-			out = collision_object.getWorldTransform(new Transform());
-			ret = out.origin;
-		}else if(key != null  && data.containsKey(key)){
-			ret = data.get(key);
+		if(fromPhysics) {	
+			if( key.equals(Entity.POSITION) && !data.get(Entity.NAME).equals(Camera.CAMERA_NAME)){
+				Transform out = new Transform();
+				CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
+				out = collision_object.getWorldTransform(new Transform());
+				ret = out.origin;
+			}else if(key != null  && data.containsKey(key)){
+				ret = data.get(key);
+			}
+		} else {
+			if( key.equals(Entity.POSITION) && !data.get(Entity.NAME).equals(Camera.CAMERA_NAME))
+				ret = data.get(key);				
 		}
 		
 		//System.out.println(name + " " + key + " " + ret.toString());
 		return ret;
+	}
+	
+	public Object getProperty(String key) {
+		return getProperty(key, true);
 	}
 
 	public Set<String> getKeySet() {

@@ -63,6 +63,8 @@ public class ProgrammableRenderer extends RendererInterface {
 		// Draw the 3d stuff
 		for (Entity ent : object_list.getEntitiesAndSubEntities()){
 			Boolean should_draw = (Boolean)ent.getProperty(Entity.SHOULD_DRAW);
+			if(should_draw == null)
+				should_draw = false;
 			if(should_draw)
 				ent.drawProgrammablePipe();
 		}

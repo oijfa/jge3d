@@ -68,13 +68,11 @@ public class Main {
 			(engine.render.Model) engine.resource_manager.getResource("subdivided_cube","models"),
 			(engine.render.Shader) engine.resource_manager.getResource("default","shaders")
 		);
-		terrain.setProperty
-		(Entity.NAME, "terrain");
-		terrain.setProperty("position",new Vector3f(0,-200, 0));
-		terrain.setProperty("gravity",new Vector3f(0, 0, 0));
+		terrain.setProperty(Entity.NAME, "terrain");
+		terrain.setProperty(Entity.POSITION,new Vector3f(0,10,0));
+		terrain.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
-		
 		
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
@@ -82,7 +80,7 @@ public class Main {
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
-		player.setProperty("position",new Vector3f(0, 15, 0));
+		player.setProperty(Entity.POSITION,new Vector3f(5, 25, 5));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		/*
@@ -140,10 +138,9 @@ public class Main {
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);
 		ragdoll.setProperty(Entity.NAME, "ragdoll");
-		ragdoll.setProperty("position",new Vector3f(0, 8, -5));
+		ragdoll.setProperty(Entity.POSITION,new Vector3f(0, 8, 0));
 		engine.addEntity(ragdoll);
-		 */
-		
+			*/	
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);

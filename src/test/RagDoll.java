@@ -24,6 +24,7 @@ public class RagDoll extends Entity {
 	public RagDoll(float mass, boolean collide, Model model, Shader shader) {
 		//super(mass, collide, model, shader);
 		setProperty(Entity.COLLIDABLE, false);
+		setProperty(Entity.SHOULD_DRAW, false);
 		setLimbs(new HashMap<String,Entity>());
 		setConstraints(new HashMap<String,ConeTwistConstraint>());
 		createRagDoll();

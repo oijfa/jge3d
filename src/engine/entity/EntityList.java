@@ -28,9 +28,16 @@ public class EntityList implements EntityListener, Iterable<Entity> {
 		for(EntityListListener listener : listeners){
 			listener.entityAdded(ent);
 		}
-		entities.put(ent.getProperty("name"), ent);
+		entities.put(ent.getProperty(Entity.NAME), ent);
 		ent.addListener(this);
-		
+		for(String key: ent.getKeySet()) {
+			if(!ent.getProperty(Entity.NAME).equals(Camera.NAME)) {
+				if(key.equals(Entity.POSITION))
+					ent.setProperty(key,ent.getProperty(key,false));
+				else
+					ent.setProperty(key,ent.getProperty(key,true));
+			}
+		}
 	}
 	public void removeEntity(Object key) {
 		if (entities.containsKey(key)) {

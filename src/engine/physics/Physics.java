@@ -125,7 +125,8 @@ public class Physics extends PhysicsInterface{
 
 	public void handleGhostCollisions(EntityList entity_list) {
 		for(Entity entity : entity_list.getEntitiesAndSubEntities()){
-			if( (Boolean)entity.getProperty(Entity.COLLIDABLE) == false){
+			if(entity.getProperty(Entity.COLLISION_OBJECT).getClass() != RigidBody.class &&
+				(Boolean)entity.getProperty(Entity.COLLIDABLE) == false) {
 				com.bulletphysics.collision.dispatch.GhostObject ghost = (GhostObject) entity.getProperty(Entity.COLLISION_OBJECT);
 				for(int i=0;i<ghost.getNumOverlappingObjects();i++){
 					entCollidedWith(entity, entity_list.getEntityByCollisionObject(ghost.getOverlappingObject(i)));
@@ -232,10 +233,11 @@ public class Physics extends PhysicsInterface{
 
 	private void entityPositionChanged(Entity entity) {
 		//TODO: Unchecked casts
-		Vector3f pos = ((Vector3f) entity.getProperty("position"));
-		CollisionObject collision_object = (CollisionObject) entity.getProperty("collision_object");
+		Vector3f pos = ((Vector3f) entity.getProperty(Entity.POSITION));
+		System.out.println(entity.getProperty(Entity.NAME) + ": " + pos);
+		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());
-		trans.setIdentity();
+		//trans.setIdentity();
 		trans.origin.set(pos);
 		collision_object.setWorldTransform(trans);
 	}
@@ -244,7 +246,8 @@ public class Physics extends PhysicsInterface{
 		if (entity.getObjectType() == ObjectType.rigidbody){
 			//TODO:  Cast without check Dannngerous
 			CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
-			((RigidBody) collision_object).setGravity((Vector3f) entity.getProperty(Entity.GRAVITY));
+			if(collision_object != null)
+				((RigidBody) collision_object).setGravity((Vector3f) entity.getProperty(Entity.GRAVITY));
 		}else {
 			System.out.println("Method [setGravity] not supported for ghost object");
 		}
