@@ -69,7 +69,7 @@ public class Main {
 			(engine.render.Shader) engine.resource_manager.getResource("default","shaders")
 		);
 		terrain.setProperty(Entity.NAME, "terrain");
-		terrain.setProperty(Entity.POSITION,new Vector3f(0,10,0));
+		terrain.setProperty(Entity.POSITION,new Vector3f(0,-10,0));
 		terrain.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);

@@ -233,8 +233,12 @@ public class Physics extends PhysicsInterface{
 
 	private void entityPositionChanged(Entity entity) {
 		//TODO: Unchecked casts
-		Vector3f pos = ((Vector3f) entity.getProperty(Entity.POSITION));
-		System.out.println(entity.getProperty(Entity.NAME) + ": " + pos);
+		Vector3f pos;
+		if(entity.getProperty(Entity.POSITION,false) != entity.getProperty(Entity.POSITION,true)) 
+			pos = ((Vector3f) entity.getProperty(Entity.POSITION,false));
+		else
+			pos = ((Vector3f) entity.getProperty(Entity.POSITION,true));
+		
 		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());
 		//trans.setIdentity();

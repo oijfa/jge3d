@@ -229,12 +229,13 @@ public class Entity{
 				CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
 				out = collision_object.getWorldTransform(new Transform());
 				ret = out.origin;
-			}else if(key != null  && data.containsKey(key)){
+			}else { //if(key != null  && data.containsKey(key)){
 				ret = data.get(key);
 			}
 		} else {
-			if( key.equals(Entity.POSITION) && !data.get(Entity.NAME).equals(Camera.CAMERA_NAME))
-				ret = data.get(key);				
+			if(key.equals(Entity.POSITION)) {
+				ret = data.get(key);
+			}
 		}
 		
 		//System.out.println(name + " " + key + " " + ret.toString());
