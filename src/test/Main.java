@@ -130,7 +130,7 @@ public class Main {
 		test.setAngularFactor(0, new Vector3f(0,1,0));
 		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		 */
-		/*
+		
 		RagDoll ragdoll = new RagDoll(
 			1.0f, 
 			false, 
@@ -140,7 +140,7 @@ public class Main {
 		ragdoll.setProperty(Entity.NAME, "ragdoll");
 		ragdoll.setProperty(Entity.POSITION,new Vector3f(0, 8, 0));
 		engine.addEntity(ragdoll);
-			*/	
+		
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);

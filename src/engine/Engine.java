@@ -123,6 +123,7 @@ public class Engine {
 			ent.setProperty(Entity.SHOULD_DRAW,false);
 		}
 		entity_list.addEntity(ent);
+		
 		return ent;
 	}
 
