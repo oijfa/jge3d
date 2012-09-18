@@ -55,6 +55,8 @@ public class Face {
 
 	public Face(Vector3f[] verts) {
 		vertices = new ArrayList<Vector3f>(Arrays.asList(verts));
+		vertexNormals = new ArrayList<Vector3f>();
+		normal = new Vector3f(0.0f, 0.0f, 1.0f);
 		init();
 	}
 	

@@ -277,7 +277,7 @@ public class Mesh implements Cloneable {
 		//other wise bailout
 		if(overwrite_existing) {
 			for(Face f : faces) {
-				for(int i=0; i < (f.getVertices().size()-f.getNormals().size()) ; i++) {
+				for(int i=0; i < (f.getVertices().size() - f.getNormals().size()) ; i++) {
 					f.addVertexNorm(new Vector3f(0,0,0));
 				}
 				for(Vector3f normal: f.getNormals()) {
