@@ -61,7 +61,7 @@ public class Entity{
 	private static int num_entities = 0;
 
 	// For making entity groups (complex bodies)
-	private EntityList subEntities;
+	protected EntityList subEntities;
 
 	/* Constructors */
 	protected Entity() {
@@ -439,14 +439,15 @@ public class Entity{
 		listeners.remove(listener);
 	}
 	
-	public void addSubEntity(Entity ent) {
+	protected void addSubEntity(String name, Entity ent) {
 		for(EntityListener el: listeners) {
 			ent.addListener(el);
 		}
+		ent.setProperty(Entity.NAME, name);
 		subEntities.addEntity(ent);
 	}
 	
-	public void addRemoveSubEntity(String name) {
+	protected void removeSubEntity(String name) {
 		subEntities.removeEntity(name);
 	}
 	

@@ -87,6 +87,9 @@ public class Box extends Model {
 			vertices[2] = new Vector3f(-dimensions.x/2,-dimensions.y/2,-dimensions.z/2);
 			mesh.addFace(new Face(vertices));
 			mesh.setMaterial(new Material());
+			
+			mesh.calcNormals(true);
+			
 			this.addMesh(mesh);
 		}
 		

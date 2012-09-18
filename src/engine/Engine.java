@@ -117,13 +117,25 @@ public class Engine {
 		return ent;
 	}
 	
-	public Entity addEntity(Entity ent) {
-		if( ent.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
-			renderer.setCamera((Camera)ent);
-			ent.setProperty(Entity.SHOULD_DRAW,false);
+	public Entity addEntity(Entity entity) {
+		if( entity.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
+			renderer.setCamera((Camera)entity);
+			entity.setProperty(Entity.SHOULD_DRAW,false);
 		}
-		entity_list.addEntity(ent);
-		return ent;
+		entity_list.addEntity(entity);
+		
+		addSubEntities(entity);
+		
+		return entity;
+	}
+	
+	public void addSubEntities(Entity entity) {
+		for(Entity ent: entity.getSubEntities()) {
+			entity_list.addEntity(ent);
+			if(ent.getSubEntities().entityCount() > 0) {
+				addSubEntities(ent);
+			}
+		}
 	}
 
 	public Entity getEntity(String name) {
