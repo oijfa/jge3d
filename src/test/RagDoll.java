@@ -99,19 +99,20 @@ public class RagDoll extends Entity {
     }
 
     private  HashMap<String, ConeTwistConstraint> join(Entity A, Entity B, Vector3f connectionPoint) {
-    	Matrix3f mat = new Matrix3f();
-    	mat.m00 = connectionPoint.x;
-    	mat.m11 = connectionPoint.y;
-    	mat.m22 = connectionPoint.z;
+    	Vector3f adjusted_pos = new Vector3f(position);
+    	adjusted_pos.add(connectionPoint);
+
+    	Transform transform = new Transform();
+    	transform.setIdentity();
+    	transform.origin.set(adjusted_pos);
     	
-    	Transform transform = new Transform(mat);
         ConeTwistConstraint joint = new ConeTwistConstraint(
         	(RigidBody)A.getProperty(Entity.COLLISION_OBJECT), 
         	(RigidBody)B.getProperty(Entity.COLLISION_OBJECT), 
         	transform, 
         	transform
         );
-        joint.setLimit(1f, 1f, 0);
+        joint.setLimit(10f, 10f, 0);
         
         HashMap<String, ConeTwistConstraint> join = new HashMap<String, ConeTwistConstraint>();
         join.put(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME),joint);
