@@ -3,6 +3,7 @@ package engine.physics;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.vecmath.Vector3f;
@@ -20,6 +21,7 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.Transform;
 
 import com.bulletphysics.collision.dispatch.GhostObject;
@@ -41,6 +43,7 @@ public class Physics extends PhysicsInterface{
 	//private DbvtBroadphase broadphase;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
+	private HashMap<String,TypedConstraint> constraints;
 
 	// Used for mouse movement
 	//private TypedConstraint pickedConstraint = null;
@@ -89,6 +92,8 @@ public class Physics extends PhysicsInterface{
 
 		// Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();
+		
+		constraints = new HashMap<String,TypedConstraint>();
 	}
 
 	public DynamicsWorld getDynamicsWorld() {
@@ -210,13 +215,30 @@ public class Physics extends PhysicsInterface{
 	@Override
 	public void entityPropertyChanged(String property, Entity entity) {
 		switch(property){
-			case "gravity":
+			case Entity.GRAVITY:
 				entityGravityChanged(entity);
-			case "position":
+			case Entity.POSITION:
 				entityPositionChanged(entity);
-			case "collidable":
+			case Entity.COLLIDABLE:
 				entityCollisionChanged(entity);
+			case Entity.CONSTRAINTS:
+				entityConstraintChanged(entity);
 		}	
+	}
+
+	private void entityConstraintChanged(Entity entity) {
+		@SuppressWarnings("unchecked")
+		HashMap<String,TypedConstraint> ent_constraints = (HashMap<String,TypedConstraint>)entity.getProperty(Entity.CONSTRAINTS);
+		for(String constraint: ent_constraints.keySet()) {
+			if(constraints.containsKey(constraint)) {
+				//TODO: I thought about this
+				//Do nothing
+			} else {
+				System.out.println("Adding constraint: " + constraint);
+				constraints.put(constraint, ent_constraints.get(constraint));
+				dynamicsWorld.addConstraint(ent_constraints.get(constraint), false);
+			}
+		}
 	}
 
 	private void entityCollisionChanged(Entity entity) {

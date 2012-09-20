@@ -5,7 +5,6 @@ import java.util.HashMap;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CapsuleShapeX;
 import com.bulletphysics.dynamics.RigidBody;
@@ -18,7 +17,6 @@ import engine.render.Shader;
 import engine.render.primitives.Box;
 
 public class RagDoll extends Entity {
-    private HashMap<String, ConeTwistConstraint> constraints;
     private Shader shader;
     private Vector3f position;
     
@@ -27,7 +25,6 @@ public class RagDoll extends Entity {
 		setProperty(Entity.SHOULD_DRAW, false);
 		setProperty(Entity.POSITION, location);
 		position = location;
-		setConstraints(new HashMap<String,ConeTwistConstraint>());
 		this.shader = shader;
 		createRagDoll();
 	}
@@ -45,6 +42,8 @@ public class RagDoll extends Entity {
     	this.addSubEntity("lLegL",createLimb("lLegL",     	  1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-2.2f, 0), false));
     	this.addSubEntity("lLegR",createLimb("lLegR",     	  1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -2.2f, 0), false));
         
+    	HashMap<String, ConeTwistConstraint> constraints = new HashMap<String, ConeTwistConstraint>();
+    	
         constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("shoulders"), new Vector3f(0f, 1.4f, 0)));
         constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("hips"), new Vector3f(0f, -0.5f, 0)));
 
@@ -57,10 +56,13 @@ public class RagDoll extends Entity {
         constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("body"), new Vector3f(.25f, -0.5f, 0)));
         constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("lLegL"), new Vector3f(-.25f, -1.7f, 0)));
         constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("lLegR"), new Vector3f(.25f, -1.7f, 0)));
+        
+        setProperty(Entity.CONSTRAINTS, constraints);
     }
 
-    private Entity createLimb(String name, float width, float height, float mass, Vector3f location, boolean rotate) {
+    private Entity createLimb(String name, float height, float width, float mass, Vector3f location, boolean rotate) {
     	RigidBody node;
+    	//mass=0;
         int axis = rotate ? 1 : 0;
         switch(axis) {
         	case 0: node = createRigidBody(mass,  new CapsuleShapeX(width, height));break;
@@ -109,7 +111,7 @@ public class RagDoll extends Entity {
         	transform, 
         	transform
         );
-        joint.setLimit(100f, 100f, 0);
+        joint.setLimit(1f, 1f, 0);
         
         HashMap<String, ConeTwistConstraint> join = new HashMap<String, ConeTwistConstraint>();
         join.put(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME),joint);
@@ -124,12 +126,4 @@ public class RagDoll extends Entity {
         }
     }
 */
-
-	public HashMap<String, ConeTwistConstraint> getConstraints() {
-		return constraints;
-	}
-
-	public void setConstraints(HashMap<String, ConeTwistConstraint> constraints) {
-		this.constraints = constraints;
-	}
 }

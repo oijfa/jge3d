@@ -26,6 +26,7 @@ import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
@@ -53,9 +54,10 @@ public class Entity{
 	public static final String POSITION = "position";
 	public static final String MODEL = "model";
 	public static final String GRAVITY = "gravity";
+	public static final String CONSTRAINTS = "constraints";
 	
 	// Required keys
-	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION, MODEL, GRAVITY };
+	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION, MODEL, GRAVITY, CONSTRAINTS };
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -110,6 +112,7 @@ public class Entity{
 		data.put(COLLIDABLE, c);
 		data.put(TIME_TO_LIVE, 0);
 		data.put(SHOULD_DRAW, true);
+		data.put(CONSTRAINTS, new HashMap<String,TypedConstraint>());
 		//TODO: Generate this based on model instead
 		//this.model = model;
 		setProperty("model",model);
