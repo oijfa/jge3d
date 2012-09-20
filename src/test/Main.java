@@ -10,6 +10,7 @@ import engine.entity.*;
 
 import engine.render.Model;
 import engine.render.Shader;
+import engine.render.primitives.Box;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
@@ -62,6 +63,7 @@ public class Main {
 		*/
 		
 		//Create the ground to stand on
+		/*
 		Terrain terrain = new Terrain(
 			0,
 			true,
@@ -73,14 +75,37 @@ public class Main {
 		terrain.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		terrain.createTerrain(10);
 		engine.addEntity(terrain);
+		*/
 		
+		Box land = new Box(
+			0,
+			true,
+			new Vector3f(100,5,100)
+			,(Shader) engine.resource_manager.getResource("default","shaders")
+		);
+		land.setProperty(Entity.NAME, "land");
+		land.setProperty(Entity.POSITION, new Vector3f(0,0,0));
+		land.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
+		engine.addEntity(land);
+		
+		Box shitbox = new Box(
+			2,
+			true,
+			new Vector3f(1,1,1)
+			,(Shader) engine.resource_manager.getResource("default","shaders")
+		);
+		shitbox.setProperty(Entity.NAME, "shitbox");
+		shitbox.setProperty(Entity.POSITION, new Vector3f(0,5,0));
+		shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -10, 0));
+		engine.addEntity(shitbox);
+	
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
 		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
 		//Create the player
-		player = (Actor) engine.addActor("player", 1.0f, 0.5f, "box", "default");
-		player.setProperty(Entity.POSITION,new Vector3f(5, 25, 5));
+		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
+		player.setProperty(Entity.POSITION,new Vector3f(0, 10, 0));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		/*
@@ -129,18 +154,18 @@ public class Main {
 		test.setProperty("position",new Vector3f(0, 30, 0));
 		test.setAngularFactor(0, new Vector3f(0,1,0));
 		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
-		 */
+		*/
 		
 		RagDoll ragdoll = new RagDoll(
 			1.0f, 
-			false, 
+			true, 
+			new Vector3f(0,5,-5),
 			(Model)engine.resource_manager.getResource("box", "models"), 
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);
 		ragdoll.setProperty(Entity.NAME, "ragdoll");
-		ragdoll.setProperty(Entity.POSITION,new Vector3f(0, 8, 0));
 		engine.addEntity(ragdoll);
-		
+
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);
@@ -170,10 +195,10 @@ public class Main {
 		
 		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
 		light = new Light(
-			new Vector4f(10.0f,10.0f,10.0f,1.0f),
-			new Vector4f(2.0f,2.0f,1.0f,255.0f),
-			new Vector4f(2.0f,2.0f,1.0f,255.0f),
-			new Vector4f(2.0f,2.0f,1.0f,255.0f),
+			new Vector4f(10.0f,5.0f,0.0f,1.0f),
+			new Vector4f(5.0f,5.0f,1.0f,255.0f),
+			new Vector4f(5.0f,5.0f,1.0f,255.0f),
+			new Vector4f(5.0f,5.0f,1.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,
@@ -182,10 +207,10 @@ public class Main {
 			0.1f
 		);
         light2 = new Light(
-			new Vector4f(-10.0f,10.0f,10.0f,1.0f),
-			new Vector4f(1.0f,2.0f,2.0f,255.0f),
-			new Vector4f(1.0f,2.0f,2.0f,255.0f),
-			new Vector4f(1.0f,2.0f,2.0f,255.0f),
+			new Vector4f(-10.0f,5.0f,0.0f,1.0f),
+			new Vector4f(1.0f,5.0f,5.0f,255.0f),
+			new Vector4f(1.0f,5.0f,5.0f,255.0f),
+			new Vector4f(1.0f,5.0f,5.0f,255.0f),
 			0.1f,
 			1.0f,
 			0.1f,

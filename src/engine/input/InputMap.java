@@ -102,35 +102,35 @@ public class InputMap implements Resource {
   	
   	
 	public void rotateCamLeft(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(-10,0,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(-1,0,0));
 		stopMovement();
 	}
 	public void rotateCamRight(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(10,0,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(1,0,0));
 		stopMovement();
 	}
 	public void rotateCamUp(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,10,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,1,0));
 		stopMovement();
 	}
 	public void rotateCamDown(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,-10,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addMovement(new Vector3f(0,-1,0));
 		stopMovement();
 	}
 	public void stopCamLeft(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(-10,0,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(-1,0,0));
 		stopMovement();
 	}
 	public void stopCamRight(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(10,0,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(1,0,0));
 		stopMovement();
 	}
 	public void stopCamUp(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,10,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,1,0));
 		stopMovement();
 	}
 	public void stopCamDown(Event e){
-		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,-10,0));
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,-1,0));
 		stopMovement();
 	}
 	
