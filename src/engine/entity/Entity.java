@@ -115,7 +115,7 @@ public class Entity{
 		data.put(CONSTRAINTS, new HashMap<String,TypedConstraint>());
 		//TODO: Generate this based on model instead
 		//this.model = model;
-		setProperty("model",model);
+		setProperty(Entity.MODEL,model);
 				
 		CollisionShape shape = model.getCollisionShape();
 		if(c){
@@ -198,11 +198,13 @@ public class Entity{
 		for(EntityListener listener : listeners){
 			listener.entityPropertyChanged(key, this);
 		}
-		if(key == Entity.POSITION) {
+		
+		if(key == Entity.GRAVITY) {
 			for(Entity ent: subEntities.getEntitiesAndSubEntities()) {
-				//ent.setProperty(key, val);
+				ent.setProperty(key, val);
 			}
 		}
+		
 	}
 
 	public void removeProperty(String key) {

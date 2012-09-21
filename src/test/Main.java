@@ -14,18 +14,18 @@ import engine.render.primitives.Box;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
-import engine.terrain.Terrain;
 
 public class Main {
 	private Engine engine;
 	
 	private Actor player;
+	/*
 	private Actor model;
 	private Entity model2;
 	private Entity model3;
 	private Entity model4;
 	private Entity model5;
-	
+	*/
 	private Lights lights;
     private Light light;
     private Light light2;
@@ -96,7 +96,7 @@ public class Main {
 		);
 		shitbox.setProperty(Entity.NAME, "shitbox");
 		shitbox.setProperty(Entity.POSITION, new Vector3f(0,5,0));
-		shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -10, 0));
+		shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		engine.addEntity(shitbox);
 	
 		//Make some parallax stars
@@ -159,7 +159,7 @@ public class Main {
 		RagDoll ragdoll = new RagDoll(
 			1.0f, 
 			true, 
-			new Vector3f(0,5,-5),
+			new Vector3f(0,5,5),
 			(Model)engine.resource_manager.getResource("box", "models"), 
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);
@@ -171,7 +171,7 @@ public class Main {
 		camera.setDistance(20f);
 		//camera.setProperty("position",new Vector3f(0, 10, 0));
 		//camera.setProperty("gravity",new Vector3f(0, 0, 0));
-		camera.focusOn(player);
+		camera.focusOn(ragdoll.getSubEntity("shoulders"));
 		
 		addUBOsToDefaultShader();
 		/*

@@ -234,7 +234,6 @@ public class Physics extends PhysicsInterface{
 				//TODO: I thought about this
 				//Do nothing
 			} else {
-				System.out.println("Adding constraint: " + constraint);
 				constraints.put(constraint, ent_constraints.get(constraint));
 				dynamicsWorld.addConstraint(ent_constraints.get(constraint), false);
 			}
@@ -263,7 +262,7 @@ public class Physics extends PhysicsInterface{
 		
 		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());
-		//trans.setIdentity();
+		trans.setIdentity();
 		trans.origin.set(pos);
 		collision_object.setWorldTransform(trans);
 	}
