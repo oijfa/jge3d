@@ -259,7 +259,11 @@ public class Camera extends Entity {
 		);
 	}
 
-	public Vector3f getRayTo(int x, int y, double farDistance) {
+	public Vector3f getRayTo(int x, int y) {
+		return getRayTo(x, y, (float)((distance-minimum_distance)/distance));
+	}
+	
+	public Vector3f getRayTo(int x, int y, float farDistance) {
 		FloatBuffer position = BufferUtils.createFloatBuffer(3);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		Vector3f pos = new Vector3f();
@@ -276,7 +280,7 @@ public class Camera extends Entity {
 		GLU.gluUnProject(
 			x,
 			Display.getWidth()-y, 
-			(float)((distance-minimum_distance)/distance),
+			farDistance,
 			matrices.getModelviewBuffer(),
 			matrices.getProjectionBuffer(),
 			viewport,
@@ -286,6 +290,14 @@ public class Camera extends Entity {
 		pos.set(position.get(0), position.get(1), position.get(2));
 
 		return pos;
+	}
+	
+	public float getDistanceTo(Entity ent) {
+		Vector3f target = new Vector3f((Vector3f)ent.getProperty(Entity.POSITION));
+		Vector3f camera = new Vector3f((Vector3f)this.getProperty(Camera.POSITION));
+		camera.sub(target);
+
+		return camera.length();
 	}
 	
 	public void debugViewport() {

@@ -293,11 +293,18 @@ public class InputMap implements Resource {
 		}
 	}
 	
-	public boolean movePicked(Event e){
-		picked.setProperty(Entity.POSITION,);
+	public void movePicked(Event e){
+		if(picked != null) {
+			Camera camera = (Camera)entity_list.getItem(Camera.CAMERA_NAME);
+			picked.activate();
+			picked.setProperty(Entity.POSITION,camera.getRayTo(e.getMouseX(), e.getMouseY()));
+			System.out.println("Dragging: " + (String)picked.getProperty(Entity.NAME));
+		}
 	}
 	
-	public void releasedPicked(Event e){
+	public void releasePicked(Event e){
+		if(picked != null)
+			System.out.println("Released: " + (String)picked.getProperty(Entity.NAME));	
 		picked = null;
 	}
 	
@@ -307,7 +314,6 @@ public class InputMap implements Resource {
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType()),
 		    enums_to_function.get(String.valueOf(e.getType()))
   		};
-		System.out.println(e.getType());
 		
 		for(String function_name : function_names){
 			if( function_name != null){

@@ -294,7 +294,7 @@ public class Engine {
 	}
 	
 	public Entity pickEntity(int x, int y){
-		Vector3f ray_to = camera.getRayTo(x, y, camera.getFar());
-		return physics.pickEntityWithRay((Vector3f)camera.getProperty("position"),ray_to,entity_list);
+		Vector3f ray_to = camera.getRayTo(x, y, 1f);
+		return physics.pickEntityWithRay((Vector3f)camera.getProperty(Entity.POSITION),ray_to,entity_list);
 	}
 }

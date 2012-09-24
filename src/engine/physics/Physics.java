@@ -161,11 +161,9 @@ public class Physics extends PhysicsInterface{
 		ClosestRayResultCallback resultCallback = new ClosestRayResultCallback(ray_from, ray_to);
 		
 		dynamicsWorld.rayTest(ray_from, ray_to, resultCallback);
-		
 		if(resultCallback.collisionObject != null){
 			for(Entity ent : entity_list){
-				
-				if(resultCallback.collisionObject == ent.getProperty("collision_object")){
+				if(resultCallback.collisionObject == ent.getProperty(Entity.COLLISION_OBJECT)){
 					return ent;
 				}
 			}
@@ -234,6 +232,7 @@ public class Physics extends PhysicsInterface{
 				//TODO: I thought about this
 				//Do nothing
 			} else {
+				System.out.println("Constraint added: "+ constraint);
 				constraints.put(constraint, ent_constraints.get(constraint));
 				dynamicsWorld.addConstraint(ent_constraints.get(constraint), false);
 			}

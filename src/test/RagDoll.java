@@ -87,7 +87,7 @@ public class RagDoll extends Entity {
         			true,
         			new Vector3f(
     					width, 
-    					height, 
+    					2*height, 
     					width
         			),
         			shader
@@ -154,8 +154,19 @@ public class RagDoll extends Entity {
         	(RigidBody)B.getProperty(Entity.COLLISION_OBJECT), 
         	posA, 
         	posB,
-        	false        	
+        	true        	
         );
+        
+        joint.getTranslationalLimitMotor().limitSoftness = 1.0f;
+        joint.getTranslationalLimitMotor().damping = 1.0f;
+		joint.getTranslationalLimitMotor().restitution = 1.0f;
+        
+        joint.setLimit(0, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(1, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(2, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(3, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
+        joint.setLimit(4, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
+        joint.setLimit(5, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         
         joint.setAngularLowerLimit(
         	new Vector3f(
@@ -191,7 +202,6 @@ public class RagDoll extends Entity {
         
         HashMap<String, TypedConstraint> join = new HashMap<String, TypedConstraint>();
         join.put(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME),joint);
-        
         return join;
     }
 /*

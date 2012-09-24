@@ -22,7 +22,7 @@
 	</keyboard>
 	<mouse>
 		<event EVENT="MOVED"></event>
-		<event EVENT="CLICKED">pickedEntity</event>
+		<event EVENT="BTNDOWN">pickedEntity</event>
 		<event EVENT="DRAGGED">movePicked</event>
 		<event EVENT="BTNUP">releasePicked</event>
 	</mouse>
