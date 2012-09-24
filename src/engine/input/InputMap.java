@@ -31,6 +31,8 @@ public class InputMap implements Resource {
 	final HashMap<String, Integer> lwjgl_keyboard_enums;
 	final HashMap<String, String> enums_to_function;
 
+	Entity picked;
+	
 	Engine engine;
 	EntityList entity_list;
 
@@ -281,21 +283,32 @@ public class InputMap implements Resource {
 	public void playerJump(Event e){((Actor)entity_list.getItem("player")).jump();}	
 	
 	
-	public void printPickedEntity(Event e){
-		Entity ent = engine.pickEntity(e.getMouseX(), e.getMouseY());
-		if(ent != null){
-			System.out.println("Picked:" + ent.getProperty(Entity.NAME));
+	public boolean pickedEntity(Event e){
+		picked = engine.pickEntity(e.getMouseX(), e.getMouseY());
+		if(picked != null){
+			System.out.println("Picked:" + picked.getProperty(Entity.NAME));
+			return true;
 		}else{
-			System.out.println("Picked: Nothing");
+			return false;
 		}
 	}
-  
+	
+	public boolean movePicked(Event e){
+		picked.setProperty(Entity.POSITION,);
+	}
+	
+	public void releasedPicked(Event e){
+		picked = null;
+	}
+	
   	public boolean handleEvent(Event e) throws KeyMapException{
 		String[] function_names = {
 		    enums_to_function.get(String.valueOf(e.getKeyCode())), 
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType()),
 		    enums_to_function.get(String.valueOf(e.getType()))
   		};
+		System.out.println(e.getType());
+		
 		for(String function_name : function_names){
 			if( function_name != null){
 				
