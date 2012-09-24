@@ -8,7 +8,6 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CapsuleShapeX;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.constraintsolver.ConeTwistConstraint;
 import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.Transform;
@@ -128,12 +127,18 @@ public class RagDoll extends Entity {
     }
 
     private  HashMap<String, TypedConstraint> join(Entity A, Entity B, Vector3f connectionPoint) {
-    	//Vector3f adjusted_pos = new Vector3f(position);
-    	//adjusted_pos.add(connectionPoint);
-
-    	Transform transform = new Transform();
-    	transform.setIdentity();
-    	transform.origin.set(connectionPoint);
+    	Transform posA = new Transform();
+    	posA.setIdentity();
+    	posA.origin.set((Vector3f)A.getProperty(Entity.POSITION));
+    	posA.invXform(connectionPoint, posA.origin);
+    	//posA.origin.set(connectionPoint);
+ 	
+    	Transform posB = new Transform();
+    	posB.setIdentity();
+    	posB.origin.set((Vector3f)A.getProperty(Entity.POSITION));
+    	posB.invXform(connectionPoint, posB.origin);
+    	//posB.origin.set(connectionPoint);
+    	
     	/*
     	ConeTwistConstraint joint = new ConeTwistConstraint(
         	(RigidBody)A.getProperty(Entity.COLLISION_OBJECT), 
@@ -147,9 +152,9 @@ public class RagDoll extends Entity {
         Generic6DofConstraint joint = new Generic6DofConstraint(
         	(RigidBody)A.getProperty(Entity.COLLISION_OBJECT), 
         	(RigidBody)B.getProperty(Entity.COLLISION_OBJECT), 
-        	transform, 
-        	transform,
-        	true        	
+        	posA, 
+        	posB,
+        	false        	
         );
         
         joint.setAngularLowerLimit(

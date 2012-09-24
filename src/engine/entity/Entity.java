@@ -199,6 +199,7 @@ public class Entity{
 			listener.entityPropertyChanged(key, this);
 		}
 		
+		//for props that need to propogate down to all subents as well
 		if(key == Entity.GRAVITY) {
 			for(Entity ent: subEntities.getEntitiesAndSubEntities()) {
 				ent.setProperty(key, val);
@@ -243,9 +244,9 @@ public class Entity{
 				ret = data.get(key);
 			}
 		} else {
-			if(key.equals(Entity.POSITION)) {
+			//if(key.equals(Entity.POSITION)) {
 				ret = data.get(key);
-			}
+			//}
 		}
 		
 		//System.out.println(name + " " + key + " " + ret.toString());
@@ -253,7 +254,7 @@ public class Entity{
 	}
 	
 	public Object getProperty(String key) {
-		return getProperty(key, true);
+		return getProperty(key, false);
 	}
 
 	public Set<String> getKeySet() {
