@@ -164,6 +164,7 @@ public class Main {
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);
 		ragdoll.setProperty(Entity.NAME, "ragdoll");
+		ragdoll.setProperty(Entity.GRAVITY, new Vector3f(0,-5,0));
 		engine.addEntity(ragdoll);
 
 		//Create a camera

@@ -32,31 +32,31 @@ public class RagDoll extends Entity {
 
 	private void createRagDoll() {
     	this.addSubEntity("shoulders",createLimb("shoulders", 1.0f, 0.2f, 1.0f, new Vector3f(0.00f,  1.5f, 0), true));
-    	//this.addSubEntity("uArmL",	  createLimb("uArmL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.75f, 0.8f, 0), false));
-    	//this.addSubEntity("uArmR",	  createLimb("uArmR",     1.0f, 0.2f, 0.5f, new Vector3f(0.75f,  0.8f, 0), false));
-    	//this.addSubEntity("lArmL",	  createLimb("lArmL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.75f,-0.2f, 0), false));
-    	//this.addSubEntity("lArmR",	  createLimb("lArmR",	  1.0f, 0.2f, 0.5f, new Vector3f(0.75f, -0.2f, 0), false));
+    	this.addSubEntity("uArmL",	  createLimb("uArmL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.75f, 0.8f, 0), false));
+    	this.addSubEntity("uArmR",	  createLimb("uArmR",     1.0f, 0.2f, 0.5f, new Vector3f(0.75f,  0.8f, 0), false));
+    	this.addSubEntity("lArmL",	  createLimb("lArmL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.75f,-0.2f, 0), false));
+    	this.addSubEntity("lArmR",	  createLimb("lArmR",	  1.0f, 0.2f, 0.5f, new Vector3f(0.75f, -0.2f, 0), false));
     	this.addSubEntity("body", 	  createLimb("body",	  1.0f, 0.2f, 1.0f, new Vector3f(0.00f,  0.5f, 0), false));
-    	//this.addSubEntity("hips", 	  createLimb("hips",      1.0f, 0.2f, 0.5f, new Vector3f(0.00f, -0.5f, 0), true));
-    	//this.addSubEntity("uLegL",	  createLimb("uLegL",  	  1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-1.2f, 0), false));
-    	//this.addSubEntity("uLegR",	  createLimb("uLegR",	  1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -1.2f, 0), false));
-    	//this.addSubEntity("lLegL",	  createLimb("lLegL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-2.2f, 0), false));
-    	//this.addSubEntity("lLegR",	  createLimb("lLegR",     1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -2.2f, 0), false));
+    	this.addSubEntity("hips", 	  createLimb("hips",      1.0f, 0.2f, 0.5f, new Vector3f(0.00f, -0.5f, 0), true));
+    	this.addSubEntity("uLegL",	  createLimb("uLegL",  	  1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-1.2f, 0), false));
+    	this.addSubEntity("uLegR",	  createLimb("uLegR",	  1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -1.2f, 0), false));
+    	this.addSubEntity("lLegL",	  createLimb("lLegL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-2.2f, 0), false));
+    	this.addSubEntity("lLegR",	  createLimb("lLegR",     1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -2.2f, 0), false));
         
     	HashMap<String, TypedConstraint> constraints = new HashMap<String, TypedConstraint>();
     	
         constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("shoulders"), new Vector3f(0f, 1.4f, 0)));
-        //constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("hips"), new Vector3f(0f, -0.5f, 0)));
+        constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("hips"), new Vector3f(0f, -0.5f, 0)));
 
-        //constraints.putAll(join(subEntities.getItem("uArmL"), subEntities.getItem("shoulders"), new Vector3f(-0.75f, 1.4f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uArmR"), subEntities.getItem("shoulders"), new Vector3f(0.75f, 1.4f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uArmL"), subEntities.getItem("lArmL"), new Vector3f(-0.75f, .4f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uArmR"), subEntities.getItem("lArmR"), new Vector3f(0.75f, .4f, 0)));
+        constraints.putAll(join(subEntities.getItem("uArmL"), subEntities.getItem("shoulders"), new Vector3f(-0.75f, 1.4f, 0)));
+        constraints.putAll(join(subEntities.getItem("uArmR"), subEntities.getItem("shoulders"), new Vector3f(0.75f, 1.4f, 0)));
+        constraints.putAll(join(subEntities.getItem("uArmL"), subEntities.getItem("lArmL"), new Vector3f(-0.75f, .4f, 0)));
+        constraints.putAll(join(subEntities.getItem("uArmR"), subEntities.getItem("lArmR"), new Vector3f(0.75f, .4f, 0)));
 
-        //constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("body"), new Vector3f(-.25f, -0.5f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("body"), new Vector3f(.25f, -0.5f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("lLegL"), new Vector3f(-.25f, -1.7f, 0)));
-        //constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("lLegR"), new Vector3f(.25f, -1.7f, 0)));
+        constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("body"), new Vector3f(-.25f, -0.5f, 0)));
+        constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("body"), new Vector3f(.25f, -0.5f, 0)));
+        constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("lLegL"), new Vector3f(-.25f, -1.7f, 0)));
+        constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("lLegR"), new Vector3f(.25f, -1.7f, 0)));
         
         setProperty(Entity.CONSTRAINTS, constraints);
     }
@@ -129,14 +129,14 @@ public class RagDoll extends Entity {
     private  HashMap<String, TypedConstraint> join(Entity A, Entity B, Vector3f connectionPoint) {
     	Transform posA = new Transform();
     	posA.setIdentity();
-    	posA.origin.set((Vector3f)A.getProperty(Entity.POSITION));
-    	posA.invXform(connectionPoint, posA.origin);
+    	posA.origin.set(connectionPoint);
+    	posA.invXform((Vector3f)A.getProperty(Entity.POSITION), posA.origin);
     	//posA.origin.set(connectionPoint);
  	
     	Transform posB = new Transform();
     	posB.setIdentity();
-    	posB.origin.set((Vector3f)A.getProperty(Entity.POSITION));
-    	posB.invXform(connectionPoint, posB.origin);
+    	posB.origin.set(connectionPoint);
+    	posB.invXform((Vector3f)B.getProperty(Entity.POSITION), posB.origin);
     	//posB.origin.set(connectionPoint);
     	
     	/*
