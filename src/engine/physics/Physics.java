@@ -188,6 +188,7 @@ public class Physics extends PhysicsInterface{
 		for (Object obj_item : itemArray) {
 			QueueItem item = (QueueItem)obj_item;
 			CollisionObject collision_object = (CollisionObject) item.getEnt().getProperty(Entity.COLLISION_OBJECT);
+			item.getEnt().setProperty(Entity.ADDED_TO_PHYSICS, true);
 			if (QueueItem.ADD == ((QueueItem) item).getAction()) {
 				if (collision_object != null) {
 					dynamicsWorld.addCollisionObject(collision_object);
@@ -234,7 +235,7 @@ public class Physics extends PhysicsInterface{
 			} else {
 				System.out.println("Constraint added: "+ constraint);
 				constraints.put(constraint, ent_constraints.get(constraint));
-				dynamicsWorld.addConstraint(ent_constraints.get(constraint), false);
+				dynamicsWorld.addConstraint(ent_constraints.get(constraint), true);
 			}
 		}
 	}
@@ -254,10 +255,8 @@ public class Physics extends PhysicsInterface{
 	private void entityPositionChanged(Entity entity) {
 		//TODO: Unchecked casts
 		Vector3f pos;
-		if(entity.getProperty(Entity.POSITION,false) != entity.getProperty(Entity.POSITION,true)) 
-			pos = ((Vector3f) entity.getProperty(Entity.POSITION,false));
-		else
-			pos = ((Vector3f) entity.getProperty(Entity.POSITION,true));
+
+		pos = ((Vector3f) entity.getProperty(Entity.POSITION));
 		
 		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());

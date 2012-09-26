@@ -64,7 +64,7 @@ public class RagDoll extends Entity {
     private Entity createLimb(String name, float mass, float width, float height, Vector3f location, boolean rotate) {
     	RigidBody node;
     	Box box;
-    	//mass=0;
+    	mass=0;
         int axis = rotate ? 0 : 1;
         switch(axis) {
         	case 0: //X axis
@@ -73,7 +73,7 @@ public class RagDoll extends Entity {
         			mass,
         			true,
         			new Vector3f(
-    					height, 
+    					2*height, 
     					width, 
         				width
         			),
@@ -157,13 +157,13 @@ public class RagDoll extends Entity {
         	true        	
         );
         
-        joint.getTranslationalLimitMotor().limitSoftness = 1.0f;
+        joint.getTranslationalLimitMotor().limitSoftness = 0.1f;
         joint.getTranslationalLimitMotor().damping = 1.0f;
-		joint.getTranslationalLimitMotor().restitution = 1.0f;
+		joint.getTranslationalLimitMotor().restitution = 2.0f;
         
-        joint.setLimit(0, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
-        joint.setLimit(1, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
-        joint.setLimit(2, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(0, 0, 0);
+        joint.setLimit(1, 0, 0);
+        joint.setLimit(2, 0, 0);
         joint.setLimit(3, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(4, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(5, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);

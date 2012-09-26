@@ -55,9 +55,20 @@ public class Entity{
 	public static final String MODEL = "model";
 	public static final String GRAVITY = "gravity";
 	public static final String CONSTRAINTS = "constraints";
+	public static final String ADDED_TO_PHYSICS = "added_to_physics";
 	
 	// Required keys
-	public static String[] reqKeys = { NAME, COLLIDABLE, TIME_TO_LIVE, SHOULD_DRAW, POSITION, MODEL, GRAVITY, CONSTRAINTS };
+	public static String[] reqKeys = {
+		NAME, 
+		COLLIDABLE, 
+		TIME_TO_LIVE, 
+		SHOULD_DRAW, 
+		POSITION, 
+		MODEL, 
+		GRAVITY, 
+		CONSTRAINTS,
+		ADDED_TO_PHYSICS
+	};
 
 	// Keep track of number of entities for naming purposes
 	private static int num_entities = 0;
@@ -68,6 +79,7 @@ public class Entity{
 	/* Constructors */
 	protected Entity() {
 		data = new HashMap<String, Object>();
+		data.put(ADDED_TO_PHYSICS, false);
 		collision_functions = new ArrayList<Method>(); 
 		subEntities = new EntityList();
 		listeners = new ArrayList<EntityListener>();
@@ -86,6 +98,7 @@ public class Entity{
 	}
 	
 	public Entity(Entity ent) {
+		data.put(ADDED_TO_PHYSICS, false);
 		String new_name = (String)ent.getProperty(Entity.NAME);
 		CollisionObject collision_object = (CollisionObject) ent.getProperty(Entity.COLLISION_OBJECT);
 		float mass = ((RigidBody)collision_object).getInvMass();
@@ -112,6 +125,7 @@ public class Entity{
 		data.put(COLLIDABLE, c);
 		data.put(TIME_TO_LIVE, 0);
 		data.put(SHOULD_DRAW, true);
+		data.put(ADDED_TO_PHYSICS, false);
 		data.put(CONSTRAINTS, new HashMap<String,TypedConstraint>());
 		//TODO: Generate this based on model instead
 		//this.model = model;
@@ -205,7 +219,6 @@ public class Entity{
 				ent.setProperty(key, val);
 			}
 		}
-		
 	}
 
 	public void removeProperty(String key) {
@@ -229,12 +242,12 @@ public class Entity{
 		return false;
 	}
 
-	public Object getProperty(String key, Boolean fromPhysics) {
+	public Object getProperty(String key) {
 		//String name = (String) data.get("name");
 		Object ret = null;
 		//System.out.println(key + "||" + data.containsKey(key));
 		//TODO: Get rid of this mess
-		if(fromPhysics) {	
+		if((boolean) data.get(ADDED_TO_PHYSICS)) {	
 			if( key.equals(Entity.POSITION) && !data.get(Entity.NAME).equals(Camera.CAMERA_NAME)){
 				Transform out = new Transform();
 				CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
@@ -248,13 +261,11 @@ public class Entity{
 				ret = data.get(key);
 			//}
 		}
+		if(data.get(Entity.NAME)=="shitbox" && key == "position")
+			System.out.println(data.get(Entity.NAME) + "|" + key +": Physics:"+ret+"  Hashmap:"+data.get(key));
 		
 		//System.out.println(name + " " + key + " " + ret.toString());
 		return ret;
-	}
-	
-	public Object getProperty(String key) {
-		return getProperty(key, false);
 	}
 
 	public Set<String> getKeySet() {

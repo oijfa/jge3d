@@ -153,7 +153,8 @@ public class InputMap implements Resource {
 			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
 			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 			
-		);		
+		);	
+		move_dir.y = 0;
 		move_dir.normalize();
 		move_dir.scale(0.15f);
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -165,6 +166,7 @@ public class InputMap implements Resource {
 			(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
 			(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 		);		
+		move_dir.y = 0;
 		move_dir.normalize();
 		move_dir.scale(-0.15f);
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -182,7 +184,7 @@ public class InputMap implements Resource {
 			cross_dir,
 			((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
 		);		
-				
+		move_dir.y = 0;
 		move_dir.normalize();
 		move_dir.scale(-0.15f);
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -200,7 +202,7 @@ public class InputMap implements Resource {
 			cross_dir,
 			((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
 		);		
-				
+		move_dir.y = 0;
 		move_dir.normalize();
 		move_dir.scale(0.15f);
 		((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -216,6 +218,7 @@ public class InputMap implements Resource {
 				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
 			);		
+			move_dir.y = 0;
 			move_dir.normalize();
 			move_dir.scale(-0.15f);
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -229,7 +232,8 @@ public class InputMap implements Resource {
 				(Vector3f)entity_list.getItem("player").getProperty(Entity.POSITION),
 				(Vector3f)entity_list.getItem(Camera.CAMERA_NAME).getProperty(Entity.POSITION)	
 				
-			);		
+			);	
+			move_dir.y = 0;
 			move_dir.normalize();
 			move_dir.scale(0.15f);
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -248,7 +252,7 @@ public class InputMap implements Resource {
 				cross_dir,
 				((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
 			);		
-					
+			move_dir.y = 0;	
 			move_dir.normalize();
 			move_dir.scale(0.15f);
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
@@ -267,7 +271,7 @@ public class InputMap implements Resource {
 				cross_dir,
 				((Camera)entity_list.getItem(Camera.CAMERA_NAME)).getUp()
 			);		
-					
+			move_dir.y = 0;
 			move_dir.normalize();
 			move_dir.scale(-0.15f);
 			((Actor)entity_list.getItem("player")).moveActor(move_dir);
