@@ -88,17 +88,18 @@ public class Main {
 		land.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		engine.addEntity(land);
 		
-		Box shitbox = new Box(
-			2,
-			true,
-			new Vector3f(1,1,1)
-			,(Shader) engine.resource_manager.getResource("default","shaders")
-		);
-		shitbox.setProperty(Entity.NAME, "shitbox");
-		shitbox.setProperty(Entity.POSITION, new Vector3f(-5,5,-20));
-		shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
-		engine.addEntity(shitbox);
-	
+		for(int i=4;i<10;i++) {
+			Box shitbox = new Box(
+				1,
+				true,
+				new Vector3f(1,1,1)
+				,(Shader) engine.resource_manager.getResource("default","shaders")
+			);
+			shitbox.setProperty(Entity.NAME, "shitbox" + i);
+			shitbox.setProperty(Entity.POSITION, new Vector3f(-5,i,-5));
+			shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -5, 0));
+			engine.addEntity(shitbox);
+		}
 		//Make some parallax stars
 		//Stars stars = new Stars(engine,1000,10000,200,5,400);
 		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
@@ -155,23 +156,21 @@ public class Main {
 		test.setAngularFactor(0, new Vector3f(0,1,0));
 		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		*/
-		/*
+		
 		RagDoll ragdoll = new RagDoll(
 			1.0f, 
 			true, 
-			new Vector3f(8,5,5),
+			new Vector3f(4,5,0),
 			(Model)engine.resource_manager.getResource("box", "models"), 
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);
 		ragdoll.setProperty(Entity.NAME, "ragdoll");
 		ragdoll.setProperty(Entity.GRAVITY, new Vector3f(0,-5,0));
 		engine.addEntity(ragdoll);
-*/
+
 		//Create a camera
 		camera = engine.addCamera(1f, false, "box2");
 		camera.setDistance(20f);
-		//camera.setProperty("position",new Vector3f(0, 10, 0));
-		//camera.setProperty("gravity",new Vector3f(0, 0, 0));
 		camera.focusOn(player);
 		
 		addUBOsToDefaultShader();

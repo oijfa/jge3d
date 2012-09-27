@@ -157,29 +157,32 @@ public class RagDoll extends Entity {
         	true        	
         );
         
+        /*
         joint.getTranslationalLimitMotor().limitSoftness = 0.1f;
-        joint.getTranslationalLimitMotor().damping = 1.0f;
-		joint.getTranslationalLimitMotor().restitution = 2.0f;
-        
-        joint.setLimit(0, 0, 0);
-        joint.setLimit(1, 0, 0);
-        joint.setLimit(2, 0, 0);
+        joint.getTranslationalLimitMotor().damping = 0.1f;
+		joint.getTranslationalLimitMotor().restitution = 2f;
+        */
+        /*
+        joint.setLimit(0, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(1, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
+        joint.setLimit(2, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(3, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(4, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(5, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
+        */
         
         joint.setAngularLowerLimit(
         	new Vector3f(
-        		-BulletGlobals.SIMD_EPSILON,
-        		-BulletGlobals.SIMD_EPSILON,
-        		-BulletGlobals.SIMD_EPSILON
+        		-BulletGlobals.SIMD_PI,
+        		-BulletGlobals.SIMD_PI,
+        		-BulletGlobals.SIMD_PI
         	)
         );
         joint.setAngularUpperLimit(
         	new Vector3f(
-        		BulletGlobals.SIMD_EPSILON,
-        		BulletGlobals.SIMD_EPSILON,
-        		BulletGlobals.SIMD_EPSILON
+        		BulletGlobals.SIMD_PI,
+        		BulletGlobals.SIMD_PI,
+        		BulletGlobals.SIMD_PI
         	)
         );
         

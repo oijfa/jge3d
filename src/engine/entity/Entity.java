@@ -33,7 +33,7 @@ import com.bulletphysics.linearmath.Transform;
 public class Entity{
 	// Properties
 	//protected CollisionObject collision_object;
-	private HashMap<String, Object> data;
+	protected HashMap<String, Object> data;
 	private ArrayList<EntityListener> listeners;
 	private Shader shader;
 
@@ -243,31 +243,29 @@ public class Entity{
 	}
 
 	public Object getProperty(String key) {
-		//String name = (String) data.get("name");
+		return getProperty(key, true);
+	}
+
+	public Object getProperty(String key, boolean fromPhysics) {
 		Object ret = null;
-		//System.out.println(key + "||" + data.containsKey(key));
+		
 		//TODO: Get rid of this mess
-		if((boolean) data.get(ADDED_TO_PHYSICS)) {	
+		if((boolean) data.get(ADDED_TO_PHYSICS) && fromPhysics) {	
 			if( key.equals(Entity.POSITION) && !data.get(Entity.NAME).equals(Camera.CAMERA_NAME)){
 				Transform out = new Transform();
 				CollisionObject collision_object = (CollisionObject) getProperty(Entity.COLLISION_OBJECT);
 				out = collision_object.getWorldTransform(new Transform());
 				ret = out.origin;
-			}else { //if(key != null  && data.containsKey(key)){
+			}else { 
 				ret = data.get(key);
 			}
 		} else {
-			//if(key.equals(Entity.POSITION)) {
-				ret = data.get(key);
-			//}
+			ret = data.get(key);
 		}
-		if(data.get(Entity.NAME)=="shitbox" && key == "position")
-			System.out.println(data.get(Entity.NAME) + "|" + key +": Physics:"+ret+"  Hashmap:"+data.get(key));
 		
-		//System.out.println(name + " " + key + " " + ret.toString());
 		return ret;
 	}
-
+	
 	public Set<String> getKeySet() {
 		return data.keySet();
 	}
@@ -456,6 +454,8 @@ public class Entity{
 	
 	public void addListener(EntityListener listener){
 		listeners.add(listener);
+		for(String key: data.keySet())
+			listener.entityPropertyChanged(key, this);
 	}
 	public void removeListener(EntityListener listener){
 		listeners.remove(listener);

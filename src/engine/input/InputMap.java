@@ -15,6 +15,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
+
 import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Entity;
@@ -26,15 +30,16 @@ import engine.resource.ResourceManager;
 import de.matthiasmann.twl.Event;
 
 public class InputMap implements Resource {
-	HashMap<String,String> key_map;
+	private HashMap<String,String> key_map;
 
 	final HashMap<String, Integer> lwjgl_keyboard_enums;
 	final HashMap<String, String> enums_to_function;
 
-	Entity picked;
+	private Entity picked;
+	private Point2PointConstraint p2p;
 	
-	Engine engine;
-	EntityList entity_list;
+	private Engine engine;
+	private EntityList entity_list;
 
 	public InputMap() throws KeyMapException{
 		key_map = new HashMap<String,String>();
@@ -289,10 +294,22 @@ public class InputMap implements Resource {
 	
 	public boolean pickedEntity(Event e){
 		picked = engine.pickEntity(e.getMouseX(), e.getMouseY());
-		if(picked != null){
-			System.out.println("Picked:" + picked.getProperty(Entity.NAME));
+		
+		if(picked != null &&
+			picked.getProperty(Entity.COLLISION_OBJECT).getClass() == RigidBody.class) {
+			
+			p2p = new Point2PointConstraint(
+				(RigidBody)picked.getProperty(Entity.COLLISION_OBJECT),
+				new Vector3f(0,0,0)				
+			);
+			p2p.setting.impulseClamp = 3.0f;
+			p2p.setting.tau = 0.1f;
+			HashMap<String,TypedConstraint> constraint = new HashMap<String,TypedConstraint>();
+			constraint.put("mouse_constraint", p2p);
+			picked.setProperty(Entity.CONSTRAINTS, constraint);
 			return true;
 		}else{
+			picked = null;
 			return false;
 		}
 	}
@@ -301,15 +318,18 @@ public class InputMap implements Resource {
 		if(picked != null) {
 			Camera camera = (Camera)entity_list.getItem(Camera.CAMERA_NAME);
 			picked.activate();
-			picked.setProperty(Entity.POSITION,camera.getRayTo(e.getMouseX(), e.getMouseY()));
-			System.out.println("Dragging: " + (String)picked.getProperty(Entity.NAME));
+			p2p.setPivotB(camera.getRayTo(e.getMouseX(), e.getMouseY()));
 		}
 	}
 	
 	public void releasePicked(Event e){
-		if(picked != null)
-			System.out.println("Released: " + (String)picked.getProperty(Entity.NAME));	
-		picked = null;
+		if(picked != null) {
+			HashMap<String,TypedConstraint> constraint = new HashMap<String,TypedConstraint>();
+			p2p = null;
+			constraint.put("mouse_constraint", p2p);
+			picked.setProperty(Entity.CONSTRAINTS, constraint);
+			picked = null;
+		}
 	}
 	
   	public boolean handleEvent(Event e) throws KeyMapException{

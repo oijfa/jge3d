@@ -40,17 +40,10 @@ public class Physics extends PhysicsInterface{
 	private Vector3f worldAabbMin;
 	private Vector3f worldAabbMax;
 	private BroadphaseInterface overlappingPairCache;
-	//private DbvtBroadphase broadphase;
 	private ConstraintSolver solver;
 	private DynamicsWorld dynamicsWorld;
 	private HashMap<String,TypedConstraint> constraints;
 
-	// Used for mouse movement
-	//private TypedConstraint pickedConstraint = null;
-	//private CollisionObject pickedEntity = null;
-
-	// private List<CollisionShape> collisionShapes = new
-	// ArrayList<CollisionShape>();
 	float deltaT;
 	long frames = 0;
 
@@ -71,24 +64,24 @@ public class Physics extends PhysicsInterface{
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 
 		// Min and Max collision boundaries for world (needs changing)
-		worldAabbMin = new Vector3f(-10000, -10000, -10000);
-		worldAabbMax = new Vector3f(10000, 10000, 10000);
+		worldAabbMin = new Vector3f(-1000, -1000, -1000);
+		worldAabbMax = new Vector3f(1000, 1000, 1000);
 
 		// algorithm for finding collision proximity (there are better ones)
 		overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+		//overlappingPairCache = new DbvtBroadphase();
 		overlappingPairCache.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
-		//broadphase = new DbvtBroadphase();
 
 		// Type of solver to be used for solving physics (look into threading
 		// for parallel)
 		solver = new SequentialImpulseConstraintSolver();
-
+		
 		// Create the dynamics world and set default options
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
+		dynamicsWorld.getSolverInfo().numIterations = 20;
 		dynamicsWorld.setGravity(new Vector3f(0, 0, 0));
-		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0.1f;
-
+		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0.04f;
 
 		// Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();
@@ -108,7 +101,7 @@ public class Physics extends PhysicsInterface{
 		// step the simulation
 		if (dynamicsWorld != null) {
 			//TODO: This should be configurable
-			dynamicsWorld.stepSimulation(deltaT / 1000000000f);
+			dynamicsWorld.stepSimulation(deltaT / 1000000000f, 10, 1/60f); 
 		}
 	}
 
@@ -229,11 +222,14 @@ public class Physics extends PhysicsInterface{
 		@SuppressWarnings("unchecked")
 		HashMap<String,TypedConstraint> ent_constraints = (HashMap<String,TypedConstraint>)entity.getProperty(Entity.CONSTRAINTS);
 		for(String constraint: ent_constraints.keySet()) {
-			if(constraints.containsKey(constraint)) {
-				//TODO: I thought about this
-				//Do nothing
+			if(constraints.containsKey(constraint) && ent_constraints.get(constraint) != null) {
+				dynamicsWorld.removeConstraint(constraints.get(constraint));
+				dynamicsWorld.addConstraint(ent_constraints.get(constraint), true);
+				constraints.put(constraint, ent_constraints.get(constraint));
+			} else if(constraints.containsKey(constraint) && ent_constraints.get(constraint) == null) {
+				dynamicsWorld.removeConstraint(constraints.get(constraint));
+				constraints.remove(constraint);
 			} else {
-				System.out.println("Constraint added: "+ constraint);
 				constraints.put(constraint, ent_constraints.get(constraint));
 				dynamicsWorld.addConstraint(ent_constraints.get(constraint), true);
 			}
@@ -256,7 +252,7 @@ public class Physics extends PhysicsInterface{
 		//TODO: Unchecked casts
 		Vector3f pos;
 
-		pos = ((Vector3f) entity.getProperty(Entity.POSITION));
+		pos = ((Vector3f) entity.getProperty(Entity.POSITION, false));
 		
 		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());
