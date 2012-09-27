@@ -259,7 +259,7 @@ public class FixedRenderer extends RendererInterface {
 	}
 
 	@Override
-	public void entityPropertyChanged(String property, Entity entity) {
+	public void entityPropertyChanged(String property, Entity entity, Object old_value) {
 		// TODO Auto-generated method stub
 		
 	}

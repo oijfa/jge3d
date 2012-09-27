@@ -8,6 +8,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CapsuleShapeX;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.constraintsolver.ConeTwistConstraint;
 import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.Transform;
@@ -64,7 +65,7 @@ public class RagDoll extends Entity {
     private Entity createLimb(String name, float mass, float width, float height, Vector3f location, boolean rotate) {
     	RigidBody node;
     	Box box;
-    	mass=0;
+    	//mass=0;
         int axis = rotate ? 0 : 1;
         switch(axis) {
         	case 0: //X axis
@@ -118,8 +119,8 @@ public class RagDoll extends Entity {
     	ent.setProperty(Entity.COLLISION_OBJECT, node);
     	//ent.setProperty(Entity.GRAVITY, new Vector3f(0,-10f,0));
     	
-    	Vector3f adjusted_pos = new Vector3f(position);
-    	adjusted_pos.add(location);
+    	Vector3f adjusted_pos = new Vector3f(location);
+    	//adjusted_pos.add(location);
     	
     	ent.setProperty(Entity.POSITION, adjusted_pos);
     	
@@ -128,27 +129,30 @@ public class RagDoll extends Entity {
 
     private  HashMap<String, TypedConstraint> join(Entity A, Entity B, Vector3f connectionPoint) {
     	Transform posA = new Transform();
-    	posA.setIdentity();
-    	posA.origin.set(connectionPoint);
-    	posA.invXform((Vector3f)A.getProperty(Entity.POSITION), posA.origin);
-    	//posA.origin.set(connectionPoint);
- 	
+    	posA.origin.set((Vector3f)A.getProperty(Entity.POSITION));
     	Transform posB = new Transform();
+    	posB.origin.set((Vector3f)B.getProperty(Entity.POSITION));
+
+    	posA.setIdentity();
+    	posA.invXform(connectionPoint, posA.origin);
+    	//posA.origin.set(connectionPoint);
     	posB.setIdentity();
-    	posB.origin.set(connectionPoint);
-    	posB.invXform((Vector3f)B.getProperty(Entity.POSITION), posB.origin);
+    	posB.invXform(connectionPoint, posB.origin);
     	//posB.origin.set(connectionPoint);
+
+    	System.out.println(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME)+"|"+posA.origin+":"+posB.origin);
     	
     	/*
     	ConeTwistConstraint joint = new ConeTwistConstraint(
         	(RigidBody)A.getProperty(Entity.COLLISION_OBJECT), 
         	(RigidBody)B.getProperty(Entity.COLLISION_OBJECT), 
-        	transform, 
-        	transform      	
+        	posA, 
+        	posB      	
         );
-    	joint.setLimit(1, 1, 0);
-    	*/
-    	
+        */
+        
+    	//joint.setLimit(1, 1, 0);
+    		
         Generic6DofConstraint joint = new Generic6DofConstraint(
         	(RigidBody)A.getProperty(Entity.COLLISION_OBJECT), 
         	(RigidBody)B.getProperty(Entity.COLLISION_OBJECT), 
@@ -156,20 +160,20 @@ public class RagDoll extends Entity {
         	posB,
         	true        	
         );
-        
+        	
         /*
         joint.getTranslationalLimitMotor().limitSoftness = 0.1f;
         joint.getTranslationalLimitMotor().damping = 0.1f;
-		joint.getTranslationalLimitMotor().restitution = 2f;
+		joint.getTranslationalLimitMotor().restitution = 2.0f;
         */
-        /*
+        
         joint.setLimit(0, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(1, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(2, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(3, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(4, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(5, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
-        */
+       
         
         joint.setAngularLowerLimit(
         	new Vector3f(
@@ -185,23 +189,8 @@ public class RagDoll extends Entity {
         		BulletGlobals.SIMD_PI
         	)
         );
+
         
-        /*
-        joint.setAngularLowerLimit(
-        	new Vector3f(
-        		-BulletGlobals.SIMD_PI*0.8f,
-        		-BulletGlobals.SIMD_EPSILON,
-        		-BulletGlobals.SIMD_PI*0.5f
-        	)
-        );
-        joint.setAngularLowerLimit(
-        	new Vector3f(
-        		BulletGlobals.SIMD_PI*0.8f,
-        		BulletGlobals.SIMD_EPSILON,
-        		BulletGlobals.SIMD_PI*0.5f
-        	)
-        );
-        */
         
         HashMap<String, TypedConstraint> join = new HashMap<String, TypedConstraint>();
         join.put(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME),joint);

@@ -81,7 +81,7 @@ public class Physics extends PhysicsInterface{
 
 		dynamicsWorld.getSolverInfo().numIterations = 20;
 		dynamicsWorld.setGravity(new Vector3f(0, 0, 0));
-		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0.04f;
+		dynamicsWorld.getDispatchInfo().allowedCcdPenetration = 0.1f;
 
 		// Preset the previous time so deltaT isn't enormous on first run
 		prev_time = System.nanoTime();
@@ -205,14 +205,14 @@ public class Physics extends PhysicsInterface{
 	}
 
 	@Override
-	public void entityPropertyChanged(String property, Entity entity) {
+	public void entityPropertyChanged(String property, Entity entity, Object old_value) {
 		switch(property){
 			case Entity.GRAVITY:
 				entityGravityChanged(entity);
 			case Entity.POSITION:
 				entityPositionChanged(entity);
-			case Entity.COLLIDABLE:
-				entityCollisionChanged(entity);
+			case Entity.COLLISION_OBJECT:
+				entityCollisionChanged(entity, old_value);
 			case Entity.CONSTRAINTS:
 				entityConstraintChanged(entity);
 		}	
@@ -236,16 +236,20 @@ public class Physics extends PhysicsInterface{
 		}
 	}
 
-	private void entityCollisionChanged(Entity entity) {
-		/*
-		entity.initialSetup(
-			entity.getProperty("name"), 
-			entity.getProperty("mass"), 
-			entity.getProperty("collidable"),
-			entity.getProperty("model"), 
-			entity.getProperty("shader")
-		);
-		*/
+	private void entityCollisionChanged(Entity entity, Object old_value) {
+		if(old_value != null && (old_value.getClass() == CollisionObject.class ||
+			old_value.getClass() == RigidBody.class)	) {	
+			dynamicsWorld.removeCollisionObject((CollisionObject)old_value);
+			if(entity.getObjectType() == ObjectType.actor) {
+				//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
+				dynamicsWorld.removeAction(((Actor)entity).getActor());
+			}
+			dynamicsWorld.addCollisionObject((CollisionObject)entity.getProperty(Entity.COLLISION_OBJECT));
+			if(entity.getObjectType() == ObjectType.actor) {
+				//TODO: I'm not sure why this line isn't necessary; leave it until we figure that out
+				dynamicsWorld.addAction(((Actor)entity).getActor());
+			}
+		}
 	}
 
 	private void entityPositionChanged(Entity entity) {

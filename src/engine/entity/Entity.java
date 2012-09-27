@@ -208,9 +208,10 @@ public class Entity{
 	 * /* MUTATORS
 	 */
 	public void setProperty(String key, Object val) {
+		Object old_value = data.get(key);
 		data.put(key, val);
 		for(EntityListener listener : listeners){
-			listener.entityPropertyChanged(key, this);
+			listener.entityPropertyChanged(key, this, old_value);
 		}
 		
 		//for props that need to propogate down to all subents as well
@@ -455,7 +456,7 @@ public class Entity{
 	public void addListener(EntityListener listener){
 		listeners.add(listener);
 		for(String key: data.keySet())
-			listener.entityPropertyChanged(key, this);
+			listener.entityPropertyChanged(key, this, data.get(key));
 	}
 	public void removeListener(EntityListener listener){
 		listeners.remove(listener);

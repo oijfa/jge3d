@@ -224,7 +224,7 @@ public class ProgrammableRenderer extends RendererInterface {
 	}
 
 	@Override
-	public void entityPropertyChanged(String property, Entity entity) {
+	public void entityPropertyChanged(String property, Entity entity, Object old_value) {
 		if(property == "model"){
 			render_queue.add(new QueueItem(entity, QueueItem.ADD));
 		}

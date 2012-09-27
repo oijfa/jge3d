@@ -120,7 +120,7 @@ public class EntityList implements EntityListener, Iterable<Entity> {
 	}
 
 	@Override
-	public void entityPropertyChanged(String property, Entity entity) {
+	public void entityPropertyChanged(String property, Entity entity, Object old_value) {
 		if(property.equals("name")) {
 			String name = (String) entity.getProperty("name");
 			entities.values().remove(entity);

@@ -97,7 +97,7 @@ public class Main {
 			);
 			shitbox.setProperty(Entity.NAME, "shitbox" + i);
 			shitbox.setProperty(Entity.POSITION, new Vector3f(-5,i,-5));
-			shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -5, 0));
+			shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -1, 0));
 			engine.addEntity(shitbox);
 		}
 		//Make some parallax stars
