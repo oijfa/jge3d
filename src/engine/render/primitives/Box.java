@@ -3,6 +3,7 @@ package engine.render.primitives;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.shapes.CollisionShape;
 
 import engine.entity.Entity;
 import engine.render.Model;
@@ -20,7 +21,9 @@ public class Box extends Entity {
 		halfExtent.scale(0.5f);
 		model = new Model(shader);
 		createModel();
-		model.setCollisionShape(new BoxShape(halfExtent));
+		CollisionShape shape = new BoxShape(halfExtent);
+		shape.setMargin(0.04f);
+		model.setCollisionShape(shape);
 		this.setProperty(Entity.MODEL, model);
 		initialSetup((String)data.get(Entity.NAME), mass, collidable, model, shader);
 	}

@@ -84,11 +84,11 @@ public class Main {
 			,(Shader) engine.resource_manager.getResource("default","shaders")
 		);
 		land.setProperty(Entity.NAME, "land");
-		land.setProperty(Entity.POSITION, new Vector3f(0,0,0));
+		land.setProperty(Entity.POSITION, new Vector3f(0,-5f,0));
 		land.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
 		engine.addEntity(land);
 		
-		for(int i=4;i<10;i++) {
+		for(int i=0;i<10;i++) {
 			Box shitbox = new Box(
 				1,
 				true,
@@ -106,7 +106,7 @@ public class Main {
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
-		player.setProperty(Entity.POSITION,new Vector3f(0, 10, 0));
+		player.setProperty(Entity.POSITION,new Vector3f(0, 1, 5));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		/*
@@ -160,7 +160,7 @@ public class Main {
 		RagDoll ragdoll = new RagDoll(
 			1.0f, 
 			true, 
-			new Vector3f(4,5,0),
+			new Vector3f(4,2,0),
 			(Model)engine.resource_manager.getResource("box", "models"), 
 			(Shader)engine.resource_manager.getResource("default", "shaders")
 		);

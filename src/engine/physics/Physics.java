@@ -101,7 +101,7 @@ public class Physics extends PhysicsInterface{
 		// step the simulation
 		if (dynamicsWorld != null) {
 			//TODO: This should be configurable
-			dynamicsWorld.stepSimulation(deltaT / 1000000000f, 1, 1/60f); 
+			dynamicsWorld.stepSimulation(deltaT / 1000000000f, 10, 1/60f); 
 		}
 	}
 
@@ -254,12 +254,10 @@ public class Physics extends PhysicsInterface{
 
 	private void entityPositionChanged(Entity entity) {
 		//TODO: Unchecked casts
-		Vector3f pos;
-
-		pos = ((Vector3f) entity.getProperty(Entity.POSITION, false));
-		
+		Vector3f pos = ((Vector3f) entity.getProperty(Entity.POSITION, false));
 		CollisionObject collision_object = (CollisionObject) entity.getProperty(Entity.COLLISION_OBJECT);
 		Transform trans = collision_object.getWorldTransform(new Transform());
+
 		trans.setIdentity();
 		trans.origin.set(pos);
 		collision_object.setWorldTransform(trans);

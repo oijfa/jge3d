@@ -28,7 +28,6 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
-import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class Entity{
@@ -209,18 +208,12 @@ public class Entity{
 	 * /* MUTATORS
 	 */
 	public void setProperty(String key, Object val) {
-		Object old_value;
-		//TODO: This is a fucking filthy dirty hack to get around java's horrible
-		//bullshit cloneable interface and jbullet's lack of copy constructors
-		//replace at all cost. That is all.
-		if(val.getClass() == RigidBody.class && ((RigidBody)data.get(key)) != null     ) {
-			float mass = ((RigidBody)data.get(key)).getInvMass();
-			MotionState motionstate = ((RigidBody)data.get(key)).getMotionState();
-			CollisionShape collisionshape = ((RigidBody)data.get(key)).getCollisionShape();
-			
-			old_value = new RigidBody(mass,motionstate,collisionshape);
-		} else {
-			 old_value = data.get(key);
+		Object old_value = data.get(key);
+		//TODO: This is a fucking filthy dirty hack to get around positioning
+		//replaced collision objects
+		if(val.getClass() == RigidBody.class && ((RigidBody)data.get(key)) != null) {
+			Transform trans = ((RigidBody)old_value).getWorldTransform(new Transform());
+			((RigidBody)val).setWorldTransform(trans);
 		}
 		data.put(key, val);
 		for(EntityListener listener : listeners){
