@@ -101,7 +101,7 @@ public class Physics extends PhysicsInterface{
 		// step the simulation
 		if (dynamicsWorld != null) {
 			//TODO: This should be configurable
-			dynamicsWorld.stepSimulation(deltaT / 1000000000f, 10, 1/60f); 
+			dynamicsWorld.stepSimulation(deltaT / 1000000000f, 1, 1/60f); 
 		}
 	}
 

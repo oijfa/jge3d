@@ -167,6 +167,7 @@ public class RagDoll extends Entity {
 		joint.getTranslationalLimitMotor().restitution = 2.0f;
         */
         
+        /*
         joint.setLimit(0, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(1, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
         joint.setLimit(2, -BulletGlobals.SIMD_EPSILON, BulletGlobals.SIMD_EPSILON);
@@ -189,7 +190,7 @@ public class RagDoll extends Entity {
         		BulletGlobals.SIMD_PI
         	)
         );
-
+         */
         
         
         HashMap<String, TypedConstraint> join = new HashMap<String, TypedConstraint>();
