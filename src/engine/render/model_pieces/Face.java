@@ -5,6 +5,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class Face {
 	private ArrayList<Vector3f> vertices;
 	private ArrayList<Vector3f> vertexNormals;
+	private Vector2f UVcoords;
 
 	private Vector3f normal;
 
@@ -22,18 +24,21 @@ public class Face {
 		vertices = new ArrayList<Vector3f>();
 		vertexNormals = new ArrayList<Vector3f>();
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
+		UVcoords = new Vector2f(0,1);
 		init();
 	}
 
 	public Face(Vector3f[] verts, Vector3f[] vertnorms, Vector3f norm) {
 		vertices = new ArrayList<Vector3f>();
 		vertexNormals = new ArrayList<Vector3f>();
+		
 		for (int i = 0; i < verts.length; i++) {
 			vertices.add(verts[i]);
 		}
 		for (int i = 0; i < vertnorms.length; i++) {
 			vertexNormals.add(vertnorms[i]);
 		}
+		UVcoords = new Vector2f(0,1);
 		normal = norm;
 		init();
 	}
@@ -43,6 +48,7 @@ public class Face {
 		vertices = verts;
 		vertexNormals = vertnorms;
 		normal = norm;
+		UVcoords = new Vector2f(0,1);
 		init();
 	}
 
@@ -50,6 +56,7 @@ public class Face {
 		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
 		vertexNormals = (ArrayList<Vector3f>) Arrays.asList(vertnorms);
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
+		UVcoords = new Vector2f(0,1);
 		init();
 	}
 
@@ -57,6 +64,7 @@ public class Face {
 		vertices = new ArrayList<Vector3f>(Arrays.asList(verts));
 		vertexNormals = new ArrayList<Vector3f>();
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
+		UVcoords = new Vector2f(0,1);
 		init();
 	}
 	
@@ -71,6 +79,7 @@ public class Face {
 		for (Vector3f fa : f.vertexNormals) {
 			this.vertexNormals.add(fa);
 		}
+		this.UVcoords = new Vector2f(f.UVcoords);
 
 		init();
 	}
@@ -105,6 +114,10 @@ public class Face {
 		vertexNormals = vertnorms;
 	}
 
+	public void setVertexNormals(Vector2f UVcoords) {
+		this.UVcoords = UVcoords;
+	}
+	
 	public void setNorm(Vector3f norm) {
 		normal = new Vector3f(norm.x, norm.y, norm.z);
 	}
@@ -231,35 +244,35 @@ public class Face {
 
 	// *************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC(Mesh mesh) {
-		float faceVNT[] = new float[36];
+		float faceVNTC[] = new float[36];
 		// Make sure that the face is at least a triangle
 		if (vertices.size() >= 3) {
 			for (int i = 0; i < vertices.size() * 12; i += 12) {
-				faceVNT[i] = vertices.get(i / 12).x + mesh.getTransform().x;
-				faceVNT[1 + i] = vertices.get(i / 12).y + mesh.getTransform().y;
-				faceVNT[2 + i] = vertices.get(i / 12).z + mesh.getTransform().z;
+				faceVNTC[i] = vertices.get(i / 12).x + mesh.getTransform().x;
+				faceVNTC[1 + i] = vertices.get(i / 12).y + mesh.getTransform().y;
+				faceVNTC[2 + i] = vertices.get(i / 12).z + mesh.getTransform().z;
 				try{
-					faceVNT[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
-					faceVNT[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;
-					faceVNT[5 + i] = vertexNormals.get(i / 12).z;// + mesh.location.z;
+					faceVNTC[3 + i] = vertexNormals.get(i / 12).x;// + mesh.location.x;
+					faceVNTC[4 + i] = vertexNormals.get(i / 12).y;// + mesh.location.y;
+					faceVNTC[5 + i] = vertexNormals.get(i / 12).z;// + mesh.location.z;
 				}catch(Exception e){
 					Vector3f normal = calculateNormal(
 						vertices.get(0),
 						vertices.get(1),
 						vertices.get(2)
 					);
-					faceVNT[3 + i] = normal.x;// + mesh.location.x;
-					faceVNT[4 + i] = normal.y;// + mesh.location.y;
-					faceVNT[5 + i] = normal.z;// + mesh.location.z;
+					faceVNTC[3 + i] = normal.x;// + mesh.location.x;
+					faceVNTC[4 + i] = normal.y;// + mesh.location.y;
+					faceVNTC[5 + i] = normal.z;// + mesh.location.z;
 				}
 				
-				faceVNT[6 + i] = 0.0f;
-				faceVNT[7 + i] = 1.0f;
+				faceVNTC[6 + i] = UVcoords.x;
+				faceVNTC[7 + i] = UVcoords.y;
 
-				faceVNT[8 + i] = mesh.getMaterial().getFloatColor().get(0);
-				faceVNT[9 + i] = mesh.getMaterial().getFloatColor().get(1);
-				faceVNT[10 + i] = mesh.getMaterial().getFloatColor().get(2);
-				faceVNT[11 + i] = mesh.getMaterial().getAlpha();
+				faceVNTC[8 + i] = mesh.getMaterial().getFloatColor().get(0);
+				faceVNTC[9 + i] = mesh.getMaterial().getFloatColor().get(1);
+				faceVNTC[10 + i] = mesh.getMaterial().getFloatColor().get(2);
+				faceVNTC[11 + i] = mesh.getMaterial().getAlpha();
 			}
 		} else {
 			System.out.println(
@@ -269,7 +282,7 @@ public class Face {
 			return null;
 		}
 
-		return FloatBuffer.wrap(faceVNT);
+		return FloatBuffer.wrap(faceVNTC);
 	}
 
 	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
