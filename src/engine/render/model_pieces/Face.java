@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class Face {
 	private ArrayList<Vector3f> vertices;
 	private ArrayList<Vector3f> vertexNormals;
-	private Vector2f UVcoords;
+	private ArrayList<Vector2f> UVcoords;
 
 	private Vector3f normal;
 
@@ -24,7 +24,7 @@ public class Face {
 		vertices = new ArrayList<Vector3f>();
 		vertexNormals = new ArrayList<Vector3f>();
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
-		UVcoords = new Vector2f(0,1);
+		UVcoords = new ArrayList<Vector2f>();
 		init();
 	}
 
@@ -38,7 +38,7 @@ public class Face {
 		for (int i = 0; i < vertnorms.length; i++) {
 			vertexNormals.add(vertnorms[i]);
 		}
-		UVcoords = new Vector2f(0,1);
+
 		normal = norm;
 		init();
 	}
@@ -48,7 +48,7 @@ public class Face {
 		vertices = verts;
 		vertexNormals = vertnorms;
 		normal = norm;
-		UVcoords = new Vector2f(0,1);
+		UVcoords = new ArrayList<Vector2f>();
 		init();
 	}
 
@@ -56,7 +56,7 @@ public class Face {
 		vertices = (ArrayList<Vector3f>) Arrays.asList(verts);
 		vertexNormals = (ArrayList<Vector3f>) Arrays.asList(vertnorms);
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
-		UVcoords = new Vector2f(0,1);
+		UVcoords = new ArrayList<Vector2f>();
 		init();
 	}
 
@@ -64,7 +64,7 @@ public class Face {
 		vertices = new ArrayList<Vector3f>(Arrays.asList(verts));
 		vertexNormals = new ArrayList<Vector3f>();
 		normal = new Vector3f(0.0f, 0.0f, 1.0f);
-		UVcoords = new Vector2f(0,1);
+		UVcoords = new ArrayList<Vector2f>();
 		init();
 	}
 	
@@ -79,7 +79,7 @@ public class Face {
 		for (Vector3f fa : f.vertexNormals) {
 			this.vertexNormals.add(fa);
 		}
-		this.UVcoords = new Vector2f(f.UVcoords);
+		this.UVcoords = new ArrayList<Vector2f>(f.UVcoords);
 
 		init();
 	}
@@ -114,8 +114,8 @@ public class Face {
 		vertexNormals = vertnorms;
 	}
 
-	public void setVertexNormals(Vector2f UVcoords) {
-		this.UVcoords = UVcoords;
+	public void setUVCoords(ArrayList<Vector2f> UVCoords) {
+		this.UVcoords = new ArrayList<Vector2f>(UVcoords);
 	}
 	
 	public void setNorm(Vector3f norm) {
@@ -265,9 +265,14 @@ public class Face {
 					faceVNTC[4 + i] = normal.y;// + mesh.location.y;
 					faceVNTC[5 + i] = normal.z;// + mesh.location.z;
 				}
-				
-				faceVNTC[6 + i] = UVcoords.x;
-				faceVNTC[7 + i] = UVcoords.y;
+				try {
+					faceVNTC[6 + i] = UVcoords.get(i/12).x;
+					faceVNTC[7 + i] = UVcoords.get(i/12).y;
+				} catch(Exception e) {
+					calculateTextureCoords();
+					faceVNTC[6 + i] = UVcoords.get(i/12).x;
+					faceVNTC[7 + i] = UVcoords.get(i/12).y;
+				}
 
 				faceVNTC[8 + i] = mesh.getMaterial().getFloatColor().get(0);
 				faceVNTC[9 + i] = mesh.getMaterial().getFloatColor().get(1);
@@ -285,6 +290,21 @@ public class Face {
 		return FloatBuffer.wrap(faceVNTC);
 	}
 
+	private static boolean last_coord = false;
+	public void calculateTextureCoords() {
+		if(last_coord) {
+			UVcoords.add(new Vector2f(0,1));
+			UVcoords.add(new Vector2f(1,0));
+			UVcoords.add(new Vector2f(1,1));
+			last_coord=false;
+		}else{
+			UVcoords.add(new Vector2f(0,0));
+			UVcoords.add(new Vector2f(1,0));
+			UVcoords.add(new Vector2f(0,1));
+			last_coord=true;
+		}
+	}
+	
 	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
 		int[] faceVBOids = new int[3];
 		// Make sure that the face is at least a triangle

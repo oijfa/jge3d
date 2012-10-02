@@ -10,6 +10,7 @@ import engine.entity.*;
 
 import engine.render.Model;
 import engine.render.Shader;
+import engine.render.model_pieces.Texture;
 import engine.render.primitives.Box;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
@@ -98,6 +99,9 @@ public class Main {
 			shitbox.setProperty(Entity.NAME, "shitbox" + i);
 			shitbox.setProperty(Entity.POSITION, new Vector3f(-5,i,-5));
 			shitbox.setProperty(Entity.GRAVITY,new Vector3f(0, -1, 0));
+			((Model)shitbox.getProperty(Entity.MODEL)).setTexture(
+				(Texture) engine.resource_manager.getResource("test","textures")
+			);
 			engine.addEntity(shitbox);
 		}
 		//Make some parallax stars
@@ -106,7 +110,7 @@ public class Main {
 		
 		//Create the player
 		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
-		player.setProperty(Entity.POSITION,new Vector3f(0, 1, 5));
+		player.setProperty(Entity.POSITION,new Vector3f(0, 3, 5));
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		/*

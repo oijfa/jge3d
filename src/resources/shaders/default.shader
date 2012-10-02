@@ -28,9 +28,11 @@
 		float alpha;
 	} material;
 
+	uniform sampler2D texture_data;
+
 	smooth in vec3 vertex_mod;
 	smooth in vec3 normal_mod;
-	
+	in vec2 tex_coord;
 	out vec4 frag_color;
 	
 	vec4 phongSpotPass(int light_id) {		
@@ -91,7 +93,7 @@
 	  	return frag;
 	}
 	
-		vec4 phongPointPass(int light_id) {		
+	vec4 phongPointPass(int light_id) {		
 	    float nDotVP;       // normal * light direction
 	    float nDotR;        // normal * light reflection vector
 	    float pf;           // power factor
@@ -140,7 +142,12 @@
 		if(material.alpha == 0.0) {
 	  		discard;
 	  	}
-	  	frag_color = vec4(0,0,0,0);
+	  	
+	  	//frag_color = vec4(0,0,0,0);
+	  	vec4 texture_test = texture2D(texture_data,tex_coord); 
+	  	if(texture_test != 0) {
+	  		frag_color = vec4(0,0,0,0);
+	  	}
 		for(int i=0;i<2;i++) {
 			frag_color += phongPointPass(i);
 		}
@@ -162,6 +169,7 @@
 	uniform vec4 scale;
 	smooth out vec3 vertex_mod;
 	smooth out vec3 normal_mod;
+	out vec2 tex_coord;
 	
 	void main() {
 		vec4 vertex_cast;
@@ -179,6 +187,8 @@
 	
 		// Calculate the normal value for this vertex, in world coordinates
 	    normal_mod = vec3(transform * vec4(normal.x,normal.y,normal.z,1.0));
+	
+		tex_coord = texture;
 	
 	    // Set the front color to the color passed through with glColor
 		//color_mod = color;

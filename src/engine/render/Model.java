@@ -30,6 +30,7 @@ import engine.importing.FileLoader;
 
 import engine.render.model_pieces.Face;
 import engine.render.model_pieces.Mesh;
+import engine.render.model_pieces.Texture;
 import engine.resource.Resource;
 import engine.resource.ResourceManager;
 
@@ -46,6 +47,7 @@ public class Model implements RenderObject, Resource {
 	private Shader shader;
 	private CollisionShape shape;
 	private int total_vertices=0;
+	private Texture opengl_tex;
 
 	//private Boolean immediate_scale_rotate = false;
 
@@ -511,6 +513,8 @@ public class Model implements RenderObject, Resource {
 			int last = index_buffer.get(index_buffer.limit() - 1);
 	
 			shader.startShader(modelVBOID, ent);
+				if(opengl_tex != null)
+					opengl_tex.draw(shader);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
 			shader.stopShader();
 		
@@ -586,6 +590,10 @@ public class Model implements RenderObject, Resource {
 			//m.setMaterial(new Material(zero,zero,zero,zero,0f,0f));
 			m.getMaterial().setAlpha(0.0f);
 		}
+	}
+	
+	public void setTexture(Texture texture) {
+		this.opengl_tex = texture;  
 	}
 	
 	public void setCollisionShape(CollisionShape shape) {

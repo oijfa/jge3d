@@ -175,23 +175,6 @@ public class RagDoll extends Entity {
         joint.setLimit(3, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(4, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
         joint.setLimit(5, -BulletGlobals.SIMD_PI, BulletGlobals.SIMD_PI);
-        /*
-        joint.setAngularLowerLimit(
-        	new Vector3f(
-        		-BulletGlobals.SIMD_PI,
-        		-BulletGlobals.SIMD_PI,
-        		-BulletGlobals.SIMD_PI
-        	)
-        );
-        joint.setAngularUpperLimit(
-        	new Vector3f(
-        		BulletGlobals.SIMD_PI,
-        		BulletGlobals.SIMD_PI,
-        		BulletGlobals.SIMD_PI
-        	)
-        );
-         */
-        
         
         HashMap<String, TypedConstraint> join = new HashMap<String, TypedConstraint>();
         join.put(A.getProperty(Entity.NAME)+":"+B.getProperty(Entity.NAME),joint);

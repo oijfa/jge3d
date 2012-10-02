@@ -14,6 +14,7 @@ import engine.Engine;
 import engine.input.InputMap;
 import engine.render.Model;
 import engine.render.Shader;
+import engine.render.model_pieces.Texture;
 
 public class ResourceManager {
 	/*
@@ -121,9 +122,9 @@ public class ResourceManager {
 		cat_to_class.put("inputmaps", InputMap.class);
 		cat_to_class.put("models", Model.class);
 		cat_to_class.put("shaders", Shader.class);
+		cat_to_class.put("textures", Texture.class);
 	}
 
-	
 	/*
 	 * Write out any changes that have been made to the resource.
 	 */

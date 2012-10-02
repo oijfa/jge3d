@@ -107,4 +107,8 @@ public class Box extends Entity {
 		
 		return model;
 	}
+	
+	public Model getModel() {
+		return model;
+	}
 }
