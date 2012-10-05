@@ -42,7 +42,8 @@ public class RagDoll extends Entity {
     	this.addSubEntity("uLegR",	  createLimb("uLegR",	  1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -1.2f, 0), false));
     	this.addSubEntity("lLegL",	  createLimb("lLegL",     1.0f, 0.2f, 0.5f, new Vector3f(-0.25f,-2.2f, 0), false));
     	this.addSubEntity("lLegR",	  createLimb("lLegR",     1.0f, 0.2f, 0.5f, new Vector3f(0.25f, -2.2f, 0), false));
-        
+        this.addSubEntity("head",     createLimb("head",      1.0f, 0.3f, 0.1f, new Vector3f(0.00f,  2.0f, 0), false));
+    	
     	HashMap<String, TypedConstraint> constraints = new HashMap<String, TypedConstraint>();
     	
         constraints.putAll(join(subEntities.getItem("body"), subEntities.getItem("shoulders"), new Vector3f(0f, 1.4f, 0)));
@@ -57,6 +58,8 @@ public class RagDoll extends Entity {
         constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("body"), new Vector3f(.25f, -0.5f, 0)));
         constraints.putAll(join(subEntities.getItem("uLegL"), subEntities.getItem("lLegL"), new Vector3f(-.25f, -1.7f, 0)));
         constraints.putAll(join(subEntities.getItem("uLegR"), subEntities.getItem("lLegR"), new Vector3f(.25f, -1.7f, 0)));
+        
+        constraints.putAll(join(subEntities.getItem("shoulders"), subEntities.getItem("head"), new Vector3f(0, 2.0f, 0)));
         
         setProperty(Entity.CONSTRAINTS, constraints);
     }

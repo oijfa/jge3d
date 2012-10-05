@@ -141,44 +141,44 @@ public class Shader implements Resource{
     * we run normal drawing code.
     */
     public void startShader(int vbo_id, Entity ent){
-    	if(useShader) {            
-     		//Adjust the position and rotation of the object from physics
-    		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-    		float[] body_matrix = new float[16];
-    		ent.getTransformation(body_matrix);
-    		buf.put(body_matrix);
-    		buf.flip();
-
-        	//*****UBO setup*****//
-    		//world space transform
-    		ARBShaderObjects.glUseProgramObjectARB(shader);
-    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
-    		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
-    		
-    		//world space scale op
-    		buf.clear();
-    		buf = BufferUtils.createFloatBuffer(4);
-    		
-    		Vector3f scalevec = ((CollisionObject)ent.getProperty("collision_object")).getCollisionShape().getLocalScaling(new Vector3f());
-    		buf.put(scalevec.x);
-    		buf.put(scalevec.y);
-    		buf.put(scalevec.z);
-    		buf.put(1.0f);
-    		buf.flip();
-    		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
-    		ARBShaderObjects.glUniform4ARB(scale, buf);
-    		buf.clear();
-    		
-    		//TODO: Check to make sure actually is a model class
-    		Object ent_model = ent.getProperty("model");
-    		
-    		ubo_interfaces.get("Material").setInterface(((Model)ent_model).getMesh(0).getMaterial());
-    		
-    		//parse material and light uniforms
-    		for(UBO ubo: ubo_interfaces.values()) {
-    			ubo.bufferData();
-    		}
-        }
+    	if(useShader) {
+			Object ent_model = ent.getProperty("model");
+    		if(ent_model.getClass() == Model.class) {
+	     		//Adjust the position and rotation of the object from physics
+	    		FloatBuffer buf = BufferUtils.createFloatBuffer(16);
+	    		float[] body_matrix = new float[16];
+	    		ent.getTransformation(body_matrix);
+	    		buf.put(body_matrix);
+	    		buf.flip();
+	
+	        	//*****UBO setup*****//
+	    		//world space transform
+	    		ARBShaderObjects.glUseProgramObjectARB(shader);
+	    		int transform = ARBShaderObjects.glGetUniformLocationARB(shader, "transform");
+	    		ARBShaderObjects.glUniformMatrix4ARB(transform, false, buf);
+	    		
+	    		//world space scale op
+	    		buf.clear();
+	    		buf = BufferUtils.createFloatBuffer(4);
+	    		
+	    		Vector3f scalevec = ((CollisionObject)ent.getProperty("collision_object")).getCollisionShape().getLocalScaling(new Vector3f());
+	    		buf.put(scalevec.x);
+	    		buf.put(scalevec.y);
+	    		buf.put(scalevec.z);
+	    		buf.put(1.0f);
+	    		buf.flip();
+	    		int scale = ARBShaderObjects.glGetUniformLocationARB(shader, "scale");
+	    		ARBShaderObjects.glUniform4ARB(scale, buf);
+	    		buf.clear();
+	    		
+	    		ubo_interfaces.get("Material").setInterface(((Model)ent_model).getMesh(0).getMaterial());
+	    		
+	    		//parse material and light uniforms
+	    		for(UBO ubo: ubo_interfaces.values()) {
+	    			ubo.bufferData();
+	    		}
+	        }
+    	}
     }
     
     public void stopShader() {

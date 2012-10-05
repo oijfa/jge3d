@@ -129,6 +129,17 @@ public class Engine {
 		return entity;
 	}
 	
+	public Actor addActor(Actor actor) {
+		if( !actor.getProperty(Entity.NAME).equals(Camera.CAMERA_NAME)){
+			entity_list.addEntity(actor);
+			addSubEntities(actor);
+			return actor;
+		} else {
+			return null;
+		}
+		
+	}
+	
 	public void addSubEntities(Entity entity) {
 		for(Entity ent: entity.getSubEntities()) {
 			entity_list.addEntity(ent);

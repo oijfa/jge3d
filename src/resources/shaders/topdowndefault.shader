@@ -143,10 +143,10 @@
 	  		discard;
 	  	}
 	  	
-	  	//frag_color = vec4(0,0,0,0);
-	  	frag_color = texture2D(texture_data,tex_coord);
+	  	frag_color = vec4(material.ambient.r,material.ambient.g,material.ambient.b,material.ambient.a);
+	  	//frag_color = texture2D(texture_data,tex_coord);
 		for(int i=0;i<2;i++) {
-			frag_color += phongPointPass(i);
+			frag_color += phongSpotPass(i);
 		}
 	}
 ###ENDFRAG###

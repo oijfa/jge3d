@@ -1,4 +1,4 @@
-package test;
+package topdownshooter;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -15,11 +15,12 @@ import engine.render.primitives.Box;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
+import engine.stars.Stars;
 
 public class Main {
 	private Engine engine;
 	
-	private Actor player;
+	private Player player;
 	/*
 	private Actor model;
 	private Entity model2;
@@ -47,54 +48,63 @@ public class Main {
 
 	public Main() {
 		engine = new Engine();
-		/*
-		//Uncomment if you need to import a model into a different format
-		Parser import_model = new Obj_Parser();
-		try {
-			import_model.readFile(new FileInputStream("/home/adam/workspace/jge3d/src/resources/models/armadillo.obj"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Model export_model = import_model.createModel();
-		export_model.saveXGL("/home/adam/workspace/jge3d/src/resources/models/misc/armadillo.xgl");
-		*/
+			
+		//Create a camera
+		camera = engine.addCamera(1f, false, "box2");
+		camera.setDistance(30f);
+		addUBOsToDefaultShader();
 		
-		//Create the ground to stand on
-		/*
-		Terrain terrain = new Terrain(
+		//Create the player
+		player = new Player(
+			"player", 
+			10.0f, 
+			0.5f, 
+			(Model) engine.resource_manager.getResource("box","models"), 
+			(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
+		);
+		player = (Player) engine.addActor(player);
+		player.setProperty(Entity.POSITION,new Vector3f(0, 0, 0));
+		((Model)player.getProperty(Entity.MODEL)).setTexture(
+			(Texture) engine.resource_manager.getResource("test1","textures")
+		);
+		((Model)player.getProperty(Entity.MODEL)).getCollisionShape().setLocalScaling(new Vector3f(5,5,5));
+
+		camera.focusOn(player);
+				
+		//Make sure the player doesn't wander off the lefthand side of the screen
+		Box left_limit = new Box(
 			0,
 			true,
-			(engine.render.Model) engine.resource_manager.getResource("subdivided_cube","models"),
-			(engine.render.Shader) engine.resource_manager.getResource("default","shaders")
+			new Vector3f(1,10000,100)
+			,(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
 		);
-		terrain.setProperty(Entity.NAME, "terrain");
-		terrain.setProperty(Entity.POSITION,new Vector3f(0,-10,0));
-		terrain.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
-		terrain.createTerrain(10);
-		engine.addEntity(terrain);
-		*/
+		left_limit.setProperty(Entity.NAME, "left_limit");
+		left_limit.setProperty(Entity.POSITION, camera.getRayTo(0, Display.getHeight()/2));
+		((Model)left_limit.getProperty(Entity.MODEL)).setTexture(
+			(Texture) engine.resource_manager.getResource("test1","textures")
+		);
+		engine.addEntity(left_limit);
 		
-		Box land = new Box(
+		//Make sure the player doesn't wander off the righthand side of the screen
+		Box right_limit = new Box(
 			0,
 			true,
-			new Vector3f(100,5,100)
-			,(Shader) engine.resource_manager.getResource("default","shaders")
+			new Vector3f(1,10000,100)
+			,(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
 		);
-		land.setProperty(Entity.NAME, "land");
-		land.setProperty(Entity.POSITION, new Vector3f(0,-5f,0));
-		land.setProperty(Entity.GRAVITY,new Vector3f(0, 0, 0));
-		engine.addEntity(land);
+		right_limit.setProperty(Entity.NAME, "right_limit");
+		right_limit.setProperty(Entity.POSITION, camera.getRayTo(Display.getWidth(), Display.getHeight()/2));
+		((Model)left_limit.getProperty(Entity.MODEL)).setTexture(
+			(Texture) engine.resource_manager.getResource("test2","textures")
+		);
+		engine.addEntity(right_limit);
 		
 		for(int i=0;i<10;i++) {
 			Box shitbox = new Box(
 				1,
 				true,
 				new Vector3f(1,1,1)
-				,(Shader) engine.resource_manager.getResource("default","shaders")
+				,(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
 			);
 			shitbox.setProperty(Entity.NAME, "shitbox" + i);
 			shitbox.setProperty(Entity.POSITION, new Vector3f(-5,i,-5));
@@ -104,13 +114,14 @@ public class Main {
 			);
 			engine.addEntity(shitbox);
 		}
-		//Make some parallax stars
-		//Stars stars = new Stars(engine,1000,10000,200,5,400);
-		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
-		//Create the player
-		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
-		player.setProperty(Entity.POSITION,new Vector3f(0, 3, 5));
+		//Make some parallax stars
+		Stars stars = new Stars(engine,1000,10000,200,5,400);
+		stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
+		((Model)stars.getEntity().getProperty(Entity.MODEL)).setTexture(
+			(Texture) engine.resource_manager.getResource("test1","textures")
+		);
+		
 		//player.setScale(new Vector3f(1,1,1));
 		//player.setFallSpeed(1);
 		/*
@@ -161,23 +172,7 @@ public class Main {
 		test.setScale(new Vector3f(100.00f,100.00f,100.00f));
 		*/
 		
-		RagDoll ragdoll = new RagDoll(
-			1.0f, 
-			true, 
-			new Vector3f(4,2,0),
-			(Model)engine.resource_manager.getResource("box", "models"), 
-			(Shader)engine.resource_manager.getResource("default", "shaders")
-		);
-		ragdoll.setProperty(Entity.NAME, "ragdoll");
-		ragdoll.setProperty(Entity.GRAVITY, new Vector3f(0,-5,0));
-		engine.addEntity(ragdoll);
-
-		//Create a camera
-		camera = engine.addCamera(1f, false, "box2");
-		camera.setDistance(20f);
-		camera.focusOn(player);
 		
-		addUBOsToDefaultShader();
 		/*
 		lightmenu = new LightMenu();
 		lightmenu.setTheme("lightmenu");
@@ -197,7 +192,7 @@ public class Main {
 	public void addUBOsToDefaultShader() {
 		lights = new Lights();
 		
-		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
+		Shader shader = (Shader)engine.resource_manager.getResource("topdowndefault", "shaders");
 		light = new Light(
 			new Vector4f(10.0f,5.0f,0.0f,1.0f),
 			new Vector4f(5.0f,5.0f,1.0f,255.0f),

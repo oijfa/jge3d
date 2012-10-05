@@ -8,6 +8,7 @@ import javax.vecmath.Vector4f;
 import engine.Engine;
 import engine.entity.Entity;
 import engine.render.Model;
+import engine.render.Shader;
 import engine.render.model_pieces.Mesh;
 import engine.render.ubos.Material;
 
@@ -15,11 +16,9 @@ public class Stars {
 	private Entity ent;
 	
 	public Stars(Engine engine, int rows, int columns, int space_between_levels, int num_levels, int starting_distance) {
-		ent = engine.addEntity("stars", 1f, true, "box", "default");
-		
 		Model base_model = (Model) engine.resource_manager.getResource("singlebox","models");
-		Model full_model = new Model(base_model.getShader());
-
+		Model full_model = new Model((Shader)engine.resource_manager.getResource("topdowndefault", "shaders"));
+		
 		for(int i=0;i<num_levels;i++) {
 			for(int j=0;j<rows;j++) {
 				for(int k=0;k<columns;k++) {
@@ -59,9 +58,10 @@ public class Stars {
 			}
 		}
 		
-		ent.setProperty("model",full_model);
-		ent.setProperty("gravity",new Vector3f(0,0,0));
+		ent = new Entity("Stars",1,true,full_model,(Shader)engine.resource_manager.getResource("topdowndefault", "shaders"));
+		ent = engine.addEntity(ent);
 		ent.activate();
+		
 	}
 
 	public Entity getEntity() {

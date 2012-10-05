@@ -516,6 +516,8 @@ public class Model implements RenderObject, Resource {
 				if(opengl_tex != null)
 					opengl_tex.draw(shader);
 				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+				if(opengl_tex != null)
+					opengl_tex.unbind();
 			shader.stopShader();
 		
 			ARBVertexBufferObject.glBindBufferARB(

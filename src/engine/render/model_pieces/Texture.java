@@ -50,6 +50,10 @@ public class Texture implements Resource {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, opengl_texture.getTextureID());
 	}
 	
+	public void unbind() {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+	}
+	
 	@Override
 	public String toXML() {
 		return "<texture><extension>"+extension+"</extension></texture>";
