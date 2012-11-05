@@ -75,28 +75,24 @@ public class Main {
 		Box left_limit = new Box(
 			0,
 			true,
-			new Vector3f(1,10000,100)
+			new Vector3f(5,10000,100)
 			,(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
 		);
 		left_limit.setProperty(Entity.NAME, "left_limit");
 		left_limit.setProperty(Entity.POSITION, camera.getRayTo(0, Display.getHeight()/2));
-		((Model)left_limit.getProperty(Entity.MODEL)).setTexture(
-			(Texture) engine.resource_manager.getResource("test1","textures")
-		);
+
 		engine.addEntity(left_limit);
 		
 		//Make sure the player doesn't wander off the righthand side of the screen
 		Box right_limit = new Box(
 			0,
 			true,
-			new Vector3f(1,10000,100)
+			new Vector3f(5,10000,100)
 			,(Shader) engine.resource_manager.getResource("topdowndefault","shaders")
 		);
 		right_limit.setProperty(Entity.NAME, "right_limit");
 		right_limit.setProperty(Entity.POSITION, camera.getRayTo(Display.getWidth(), Display.getHeight()/2));
-		((Model)left_limit.getProperty(Entity.MODEL)).setTexture(
-			(Texture) engine.resource_manager.getResource("test2","textures")
-		);
+
 		engine.addEntity(right_limit);
 		
 		for(int i=0;i<10;i++) {
