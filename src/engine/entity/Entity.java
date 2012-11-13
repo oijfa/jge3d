@@ -35,7 +35,8 @@ public class Entity{
 	//protected CollisionObject collision_object;
 	protected HashMap<String, Object> data;
 	private ArrayList<EntityListener> listeners;
-	private Shader shader;
+	protected HashMap<String, TypedConstraint> constraints = new HashMap<String, TypedConstraint>();
+	protected Shader shader;
 
 	private ArrayList<Method> collision_functions = new ArrayList<Method>(); 
 	
