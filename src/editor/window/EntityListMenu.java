@@ -1,5 +1,7 @@
 package editor.window;
 
+import java.util.HashMap;
+
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
@@ -7,8 +9,10 @@ import editor.action_listener.ActionEvent;
 import editor.action_listener.ActionListener;
 import engine.Engine;
 import engine.entity.Entity;
+import engine.resource.ResourceManager.ResourceItem;
 import engine.window.components.CollapsiblePanel;
 import engine.window.components.CollapsiblePanel.Direction;
+import engine.window.components.ComboBox;
 import engine.window.components.RGBAAdjuster;
 import engine.window.components.Tree;
 import engine.window.components.Window;
@@ -95,6 +99,7 @@ public class EntityListMenu extends Window implements ActionListener {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void createPropertyMenu() {
 		if(ent != null) {
 			DialogLayout dialog_layout = new DialogLayout();
@@ -141,6 +146,18 @@ public class EntityListMenu extends Window implements ActionListener {
 					field = new RGBAAdjuster(prop);
 					((RGBAAdjuster)field).setValue((Vector4f)ent.getProperty(prop));
 					((RGBAAdjuster)field).setTheme("rgbaadjuster");
+				} else if (ent.getProperty(prop).getClass() == engine.render.Model.class) {
+					field = new ComboBox<String>();
+					for(ResourceItem item: engine.resource_manager.getResourcesInCategory("models")) {
+						((ComboBox<String>)field).addItem(item.name);
+					}
+					((ComboBox<String>)field).setTheme("combobox");
+				} else if (ent.getProperty(prop).getClass() == HashMap.class) {
+					field = new ComboBox<String>();
+					for(String item: ((HashMap<String,Object>)ent.getProperty(prop)).keySet()) {
+						((ComboBox<String>)field).addItem(item);
+					}
+					((ComboBox<String>)field).setTheme("combobox");
 				} else{
 					field = new Label();
 					((Label)field).setText((String)ent.getProperty(prop));
