@@ -244,7 +244,7 @@ public class Face {
 
 	// *************VBO methods************************
 	public FloatBuffer createFaceBufferVNTC(Mesh mesh) {
-		float faceVNTC[] = new float[36];
+		float faceVNTC[] = new float[vertices.size()*12];
 		// Make sure that the face is at least a triangle
 		if (vertices.size() >= 3) {
 			for (int i = 0; i < vertices.size() * 12; i += 12) {
@@ -306,7 +306,7 @@ public class Face {
 	}
 	
 	public IntBuffer createIndexBufferVNTC(Integer pointIndex) {
-		int[] faceVBOids = new int[3];
+		int[] faceVBOids = new int[vertices.size()];
 		// Make sure that the face is at least a triangle
 		if (vertices.size() >= 3) {
 			for (int i = 0; i < vertices.size(); i++) {
