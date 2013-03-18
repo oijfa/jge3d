@@ -20,6 +20,7 @@ import editor.window.ToolMenu;
 //import editor.window.ToolBox;
 import engine.Engine;
 import engine.entity.*;
+import engine.render.Model;
 import engine.render.Shader;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
@@ -101,6 +102,7 @@ public class Main implements ActionListener {
 		// engine.addWindow(tool_box, 200, 300);
 		
 		edit_model = engine.addEntity("edit_model", 0f, true, "box", "default");
+		((Model)edit_model.getProperty(Entity.MODEL)).setWireFrame(true);
 		edit_model.setProperty(Entity.NAME, "edit_model");
 		edit_model.setProperty(Entity.POSITION, new Vector3f(0,0,0));
 		edit_model.setProperty("gravity",new Vector3f(0,0,0));

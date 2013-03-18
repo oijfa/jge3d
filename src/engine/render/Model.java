@@ -48,6 +48,7 @@ public class Model implements RenderObject, Resource {
 	private CollisionShape shape;
 	private int total_vertices=0;
 	private Texture opengl_tex;
+	private boolean wire_frame = false;
 
 	//private Boolean immediate_scale_rotate = false;
 
@@ -430,6 +431,9 @@ public class Model implements RenderObject, Resource {
 	}
 
 	public void drawProgrammablePipe(Entity ent, Shader shader) {
+		//get number of vertices in a face
+		int num_verts = meshes.get(0).getFace(0).getVertices().size();
+		
 		if(shader == null) {
 			shader = this.shader;
 		}
@@ -515,7 +519,16 @@ public class Model implements RenderObject, Resource {
 			shader.startShader(modelVBOID, ent);
 				if(opengl_tex != null)
 					opengl_tex.draw(shader);
-				GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+				
+				//check for wireframe rendering
+				if(wire_frame ) {
+					GL12.glDrawRangeElements(GL11.GL_LINES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+				} else {
+					if(num_verts == 3) 
+						GL12.glDrawRangeElements(GL11.GL_TRIANGLES, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+					else if(num_verts == 4)
+						GL12.glDrawRangeElements(GL11.GL_QUADS, first, last, total_vertices, GL11.GL_UNSIGNED_INT, 0);
+				}
 				if(opengl_tex != null)
 					opengl_tex.unbind();
 			shader.stopShader();
@@ -619,6 +632,10 @@ public class Model implements RenderObject, Resource {
 			destroyVBO();
 		}
 		createVBO();
+	}
+	
+	public void setWireFrame(boolean enabled) {
+		wire_frame = enabled;
 	}
 
 	@Override
