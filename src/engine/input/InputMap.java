@@ -140,7 +140,22 @@ public class InputMap implements Resource {
 		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subMovement(new Vector3f(0,-1,0));
 		stopMovement();
 	}
-	
+	public void zoomCameraIn(Event e){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subDistance(Camera.distance_speed);
+		stopMovement();
+	}
+	public void zoomCameraOut(Event e){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addDistance(Camera.distance_speed);
+		stopMovement();
+	}
+	public void stopCamZoomIn(Event e){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).addDistance(Camera.distance_speed);
+		stopMovement();
+	}
+	public void stopCamZoomOut(Event e){
+		((Camera)entity_list.getItem(Camera.CAMERA_NAME)).subDistance(Camera.distance_speed);
+		stopMovement();
+	}
 	
 	/*public void moveCameraForward(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementPosition();}
 	public void moveCameraBack(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
@@ -149,8 +164,7 @@ public class InputMap implements Resource {
 	public void moveCameraUp(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}
 	public void moveCameraDown(){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDeclination(-0.05d);}*/
 	
-	public void zoomCameraIn(Event e){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(-0.25d);}
-	public void zoomCameraOut(Event e){((Camera)entity_list.getItem(Camera.CAMERA_NAME)).incrementDistance(0.25d);}
+	
 	
 	public void playerForward(Event e){
 		Vector3f move_dir = new Vector3f();
@@ -338,7 +352,6 @@ public class InputMap implements Resource {
 		    enums_to_function.get(String.valueOf(e.getKeyCode()) + e.getType()),
 		    enums_to_function.get(String.valueOf(e.getType()))
   		};
-		
 		for(String function_name : function_names){
 			if( function_name != null){
 				

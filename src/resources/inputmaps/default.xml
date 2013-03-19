@@ -10,6 +10,8 @@
 		<key ID="DOWN" EVENT="RELEASED">stopCamDown</key>
 		<key ID="PRIOR" EVENT="PRESSED">zoomCameraIn</key>
 		<key ID="NEXT" EVENT="PRESSED">zoomCameraOut</key>
+		<key ID="PRIOR" EVENT="RELEASED">stopCamZoomIn</key>
+		<key ID="NEXT" EVENT="RELEASED">stopCamZoomOut</key>
 		<key ID="W" EVENT="PRESSED">playerForward</key>
 		<key ID="S" EVENT="PRESSED">playerBack</key>
 		<key ID="A" EVENT="PRESSED">playerLeft</key>

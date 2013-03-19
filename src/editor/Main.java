@@ -101,7 +101,7 @@ public class Main implements ActionListener {
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
-		edit_model = engine.addEntity("edit_model", 0f, true, "quad_cube", "default");
+		edit_model = engine.addEntity("edit_model", 0f, true, "box", "default");
 		((Model)edit_model.getProperty(Entity.MODEL)).setWireFrame(true);
 		edit_model.setProperty(Entity.NAME, "edit_model");
 		edit_model.setProperty(Entity.POSITION, new Vector3f(0,0,0));

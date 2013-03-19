@@ -22,6 +22,8 @@ public class Camera extends Entity {
 	private static float minimum_distance = 0.1f;
 	private static float maximum_distance = 1000f;
 	public static final String CAMERA_NAME = "camera";
+	public static final double distance_speed = 10f;
+	public static final double movement_speed = 1f;
 	private float fov = 45.0f;
 	private float aspect = 1.0f;
 	private static float speed_scale = 0.0000000000000002f;
@@ -32,6 +34,7 @@ public class Camera extends Entity {
 	private double distance; // distance from focus
 	private Vector3f up_vector; // vector pointing up
 	private Vector3f movement; //user control
+	private double distance_movement;
 	private long prev_time; //last update in nanosecs
 	private TransformationMatrices matrices;
 
@@ -204,6 +207,14 @@ public class Camera extends Entity {
 		this.movement.sub(movement);
 	}
 	
+	public void addDistance(double distance_movement) {
+		this.distance_movement += distance_movement;
+	}
+	
+	public void subDistance(double distance_movement) {
+		this.distance_movement -= distance_movement;
+	}
+	
 	public void updatePosition() {
 		float a = 0;
 
@@ -214,11 +225,12 @@ public class Camera extends Entity {
 			incrementDeclination(((Float)adjusted_movementVector3f.y).doubleValue());
 			incrementDistance(((Float)adjusted_movementVector3f.z).doubleValue());
 		}
+		incrementDistance(prev_time*speed_scale*distance_movement);
 		prev_time = System.nanoTime();
 		
 		Vector3f position = new Vector3f();
 		Vector3f focPos = getFocusPosition();
-
+		
 		// calculate positions from angles as if focus were (0,0,0)
 		position.y = (float) ((distance * Math.sin(declination)));
 		a = (float) ((distance * Math.cos(declination)));
