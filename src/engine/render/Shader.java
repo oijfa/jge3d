@@ -171,7 +171,8 @@ public class Shader implements Resource{
 	    		ARBShaderObjects.glUniform4ARB(scale, buf);
 	    		buf.clear();
 	    		
-	    		ubo_interfaces.get("Material").setInterface(((Model)ent_model).getMesh(0).getMaterial());
+	    		if(ubo_interfaces.containsKey("Material"))
+	    			ubo_interfaces.get("Material").setInterface(((Model)ent_model).getMesh(0).getMaterial());
 	    		
 	    		//parse material and light uniforms
 	    		for(UBO ubo: ubo_interfaces.values()) {

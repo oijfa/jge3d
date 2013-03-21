@@ -336,7 +336,7 @@ public class Model implements RenderObject, Resource {
 				for (Face f : m.getFaces()) {
 					vertex_buffer.put(f.createFaceBufferVNTC(m));
 					index_buffer.put(f.createIndexBufferVNTC(pointIndex));
-					pointIndex += 3;
+					pointIndex += num_vertices;
 				}
 			}
 
@@ -361,6 +361,9 @@ public class Model implements RenderObject, Resource {
 	}
 	
 	public void drawFixedPipe(Entity ent) {
+		//get number of vertices in a face
+		int num_verts = meshes.get(0).getFace(0).getVertices().size();
+		
 		//Non VBO drawing
 		/*
 		 * GL11.glPushMatrix();
@@ -392,7 +395,7 @@ public class Model implements RenderObject, Resource {
 		// vertices
 		int offset = 0 * 4; // 0 as its the first in the chunk, i.e. no offset.
 							// * 4 to convert to bytes.
-		GL11.glVertexPointer(3, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
+		GL11.glVertexPointer(num_verts, GL11.GL_FLOAT, Face.VERTEX_STRIDE, offset);
 
 		// normals
 		offset = 3 * 4; // 3 components is the initial offset from 0, then

@@ -22,6 +22,7 @@ import engine.Engine;
 import engine.entity.*;
 import engine.render.Model;
 import engine.render.Shader;
+import engine.render.model_pieces.Texture;
 import engine.render.ubos.Light;
 import engine.render.ubos.Lights;
 import engine.render.ubos.Material;
@@ -46,10 +47,6 @@ public class Main implements ActionListener {
 
 	private Entity edit_model;
 	private Camera camera;
-	
-	private Lights lights;
-	private Light light;
-	private Light light2;
 	
 	private boolean multiThreaded = true;
 
@@ -101,8 +98,12 @@ public class Main implements ActionListener {
 		//engine.addWindow(new FileMenu(), 300, 300;);
 		// engine.addWindow(tool_box, 200, 300);
 		
-		edit_model = engine.addEntity("edit_model", 0f, true, "box", "default");
-		((Model)edit_model.getProperty(Entity.MODEL)).setWireFrame(true);
+		
+		edit_model = engine.addEntity("edit_model", 0f, true, "tri_cube", "transparent_textured");
+		((Model)edit_model.getProperty(Entity.MODEL)).setTexture(
+			(Texture) engine.resource_manager.getResource("test3","textures")
+		);
+		//((Model)edit_model.getProperty(Entity.MODEL)).setWireFrame(true);
 		edit_model.setProperty(Entity.NAME, "edit_model");
 		edit_model.setProperty(Entity.POSITION, new Vector3f(0,0,0));
 		edit_model.setProperty("gravity",new Vector3f(0,0,0));
@@ -116,7 +117,8 @@ public class Main implements ActionListener {
 		engine.getWindowManager().getWindows().hideAll();
 		tool_menu.setVisible(true);
 		
-		addUBOsToDefaultShader();
+		//addUBOsToShader("default");
+		addUBOsToTexturedShader("transparent_textured");			
 	}
 
 	public void run() {
@@ -144,10 +146,14 @@ public class Main implements ActionListener {
 	}
 	
 	//This function is just for testing; we'll need to set this stuff at the map level
-	public void addUBOsToDefaultShader() {
+	public void addUBOsToShader(String shader_name) {
+		Lights lights;
+		Light light;
+		Light light2;
+				
 		lights = new Lights();
 		
-		Shader shader = (Shader)engine.resource_manager.getResource("default", "shaders");
+		Shader shader = (Shader)engine.resource_manager.getResource(shader_name, "shaders");
 		light = new Light(
 			new Vector4f(0.0f,2.0f,10.0f,1.0f),
 			new Vector4f(10.0f,0.0f,0.0f,255.0f),
@@ -180,6 +186,11 @@ public class Main implements ActionListener {
     	shader.addUBO(camera.getMVPmatrix());
     	
     	shader.addUBO(new Material());
+	}
+	
+	public void addUBOsToTexturedShader(String shader_name) {
+		Shader shader = (Shader)engine.resource_manager.getResource(shader_name, "shaders");
+    	shader.addUBO(camera.getMVPmatrix());
 	}
 	
 	@Override

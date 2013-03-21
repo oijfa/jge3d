@@ -196,7 +196,12 @@ public class ResourceManager {
 	}
 	
 	private String getName(String file_path) {
-		return file_path.substring(file_path.lastIndexOf("/") + 1, file_path.lastIndexOf(".") );
+		try {
+			return file_path.substring(file_path.lastIndexOf("/") + 1, file_path.lastIndexOf(".") );
+		} catch ( java.lang.StringIndexOutOfBoundsException e) {
+			System.out.println(file_path + " is missing a file extension");
+		}
+		return null;
 	}
 
 	private String getCategory(String file_path) {

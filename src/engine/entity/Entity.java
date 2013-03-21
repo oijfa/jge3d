@@ -131,6 +131,7 @@ public class Entity{
 		//TODO: Generate this based on model instead
 		//this.model = model;
 		setProperty(Entity.MODEL,model);
+		this.shader = shader; 
 				
 		CollisionShape shape = model.getCollisionShape();
 		if(c){
