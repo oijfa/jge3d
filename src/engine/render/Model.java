@@ -461,7 +461,7 @@ public class Model implements RenderObject, Resource {
 			GL20.glEnableVertexAttribArray(vertex);
 			GL20.glEnableVertexAttribArray(normal);
 			GL20.glEnableVertexAttribArray(texture);
-			GL20.glEnableVertexAttribArray(color);
+			if(color != -1 ) GL20.glEnableVertexAttribArray(color);
 	
 			// Bind the index of the object
 			ARBVertexBufferObject.glBindBufferARB(
@@ -506,16 +506,18 @@ public class Model implements RenderObject, Resource {
 			);
 	
 			// colors
-			offset = (3 + 3 + 2) * 4; // (6*4) skip to color bytes
-			GL20.glVertexAttribPointer(
-				color, 
-				4,
-				GL11.GL_FLOAT,
-				false,
-				Face.VERTEX_STRIDE, 
-				offset		
-			);
-	
+			if(color != -1 ) {
+				offset = (3 + 3 + 2) * 4; // (6*4) skip to color bytes
+				GL20.glVertexAttribPointer(
+					color, 
+					4,
+					GL11.GL_FLOAT,
+					false,
+					Face.VERTEX_STRIDE, 
+					offset		
+				);
+			}	
+
 			int first = index_buffer.get(0);
 			int last = index_buffer.get(index_buffer.limit() - 1);
 	
@@ -541,7 +543,7 @@ public class Model implements RenderObject, Resource {
 			ARBVertexBufferObject.glBindBufferARB(
 				ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 			
-			GL20.glDisableVertexAttribArray(color);
+			if(color != -1 ) GL20.glDisableVertexAttribArray(color);
 			GL20.glDisableVertexAttribArray(texture);
 			GL20.glDisableVertexAttribArray(normal);
 			GL20.glDisableVertexAttribArray(vertex);

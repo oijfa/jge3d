@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: controller.Controller
-Class-Path: ./ lwjgl.jar jbullet.jar lwjgl_util.jar lwjgl.jar slick.jar TWL.jar vecmath.jar xpp3-1.1.4c.jar

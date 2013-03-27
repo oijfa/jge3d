@@ -43,10 +43,16 @@
 			<!-- include our resources folder in the jar -->
 			<fileset dir="${src.dir}" includes="${resources.dir}/**"/>
         </jar>
+		<!--
+		<copy todir="${bin.dir}/jar/${resources.dir}">
+			<fileset dir="${src.dir}/${resources.dir}"/>
+		</copy>
+		-->
     </target>
 
 	<!-- Run the jar -->
     <target name="run" depends="jar">
+		<echo message="Platform is: ${os.name}" />
         <java  fork="true" classname="${main-class}">
 			<classpath>
 				<path refid="classpath"/>
@@ -54,7 +60,7 @@
 			</classpath>
 
 			<!-- native libraries in path -->
-			<sysproperty key="java.library.path" value="${lib.dir}/native"/>
+			<sysproperty key="java.library.path" value="${lib.dir}/native/${os.name}"/>
 		</java>
     </target>
 
