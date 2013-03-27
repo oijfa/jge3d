@@ -549,9 +549,9 @@ public class Model implements RenderObject, Resource {
 			GL20.glDisableVertexAttribArray(vertex);
 			
 			//if there is an error
-			if(GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
+			if(GL20.glGetProgrami(shader.getShaderID(), GL20.GL_LINK_STATUS)!=GL11.GL_TRUE) {
 				//find out how large it is and print
-				int maxLength = GL20.glGetProgram(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
+				int maxLength = GL20.glGetProgrami(shader.getShaderID(), GL20.GL_LINK_STATUS) + 1;
 				System.out.println("length: " + maxLength + " " + GL20.glGetProgramInfoLog(shader.getShaderID(), maxLength));
 			}
 		} else {

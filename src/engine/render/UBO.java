@@ -54,7 +54,7 @@ public class UBO {
 		);
 		
 		//get the size of the block you just found
-		block_size = ARBUniformBufferObject.glGetActiveUniformBlock(
+		block_size = ARBUniformBufferObject.glGetActiveUniformBlocki(
 			shader.getShaderID(),
 			block_index,
 			ARBUniformBufferObject.GL_UNIFORM_BLOCK_DATA_SIZE
