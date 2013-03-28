@@ -36,7 +36,15 @@ public class BasicGame {
 		System.out.println("Creating Player");
 		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
 		player.setProperty(Entity.POSITION, new Vector3f(0, 3, 5));
+
+		//Create camera
+		System.out.println("Creating Camera");
+		camera = engine.addCamera(1f, false, "box2");
+		camera.setDistance(20f);
+		camera.focusOn(player);
+
 	}
+
 	public void runMultiThread() {
 		engine.run();
 	}
