@@ -56,8 +56,13 @@ public class ProgrammableRenderer extends RendererInterface {
 		if (camera != null) {
 			camera.updatePosition();
 		} else {
-			camera = (Camera) object_list.getItem(Camera.NAME);
-			camera.updatePosition();
+			camera = (Camera) object_list.getItem(Camera.CAMERA_NAME);
+			if( camera != null ){
+				camera.updatePosition();
+			}else{
+				System.out.println("WARNING: Tried to draw without camera set...");
+				return;
+			}
 		}
 		
 		// Draw the 3d stuff
@@ -139,8 +144,6 @@ public class ProgrammableRenderer extends RendererInterface {
 			} else {
 				zoom = 0.1f; // TODO: I guess this is the smallest zoom we'd want?
 			}
-		} else {
-			System.out.println("Camera not set at setPerspective");
 		}
 	}
 
