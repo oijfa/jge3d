@@ -109,10 +109,11 @@ public class Main {
 		//stars.getEntity().applyImpulse(new Vector3f(0,-100,0), new Vector3f(0,0,0));
 		
 		//Create the player
-		player = (Actor) engine.addActor("player", 10.0f, 0.5f, "box", "default");
-		player.setProperty(Entity.POSITION,new Vector3f(0, 3, 5));
+		player = (Actor) engine.addActor("player", 10.0f, 0.0f, "box", "default");
+		player.setProperty(Entity.POSITION,new Vector3f(0, 6, 5));
 		//player.setScale(new Vector3f(1,1,1));
-		//player.setFallSpeed(1);
+		player.setFallSpeed(0);
+		player.setGravity(0);
 		/*
 		//Heat seeking box (if box makes contact with player then model5 explodes)
 		model = engine.addActor("model1", 1.0f, "test", "default");
