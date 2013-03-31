@@ -1,15 +1,11 @@
 package test;
 
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.Display;
 
 import engine.Engine;
 import engine.entity.*;
-
-import engine.render.Model;
-import engine.render.Shader;
 
 public class BasicGame {
 	private Engine engine;

@@ -90,7 +90,9 @@ public class Model implements RenderObject, Resource {
 		//modelVBOindexID = model.getVBOindexID();
 		this.shape = model.getCollisionShape();
 		this.shader = model.shader;
-		//verify();
+		
+		if(meshes.get(0).getFace(0).getNormals().size() == 0)
+			verify();
 	}
 
 	public void init() {
